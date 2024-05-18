@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
@@ -12,6 +12,7 @@ import axios from "axios";
 
 const Login = () => {
 	var theme = useTheme();
+	const navigate = useNavigate();
 
 	const formLabel = {
 		color: "text.main",
@@ -55,11 +56,16 @@ const Login = () => {
 				username: user.username,
 				password: user.password,
 			});
-			console.log(response);
 
-			localStorage.setItem("token", response.data.token);
+			if (response.status === 200) {
+				localStorage.setItem("user", response.data.token);
+				alert("Login successful!");
+				navigate("/user/home");
+			}
 		} catch (err) {
-			console.log(err);
+			if (err.code === "ERR_BAD_REQUEST") {
+				alert(err.response.data.error);
+			}
 		}
 	};
 

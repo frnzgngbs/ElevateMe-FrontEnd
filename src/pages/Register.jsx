@@ -56,19 +56,24 @@ const Register = () => {
 			}
 		} catch (err) {
 			console.error(err);
-			if (err.response.status === 400) {
-				if (err.response.data.username !== undefined) {
-					alert(err.response.data.username[0]);
-					setUserData((prev) => ({
-						...prev,
-						username: "",
-					}));
-				} else {
-					setUserData((prev) => ({
-						...prev,
-						email: "",
-					}));
-					alert(err.response.data.email[0]);
+
+			if (err.response && err.response.status == 400) {
+				const { data } = err.response;
+
+				if (data.status === 400) {
+					if (data.username) {
+						alert(data.username[0]);
+						setUserData((prev) => ({
+							...prev,
+							username: "",
+						}));
+					} else if (data.email) {
+						setUserData((prev) => ({
+							...prev,
+							email: "",
+						}));
+						alert(data.email[0]);
+					}
 				}
 			}
 		}
