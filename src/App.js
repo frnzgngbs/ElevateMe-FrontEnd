@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import {
 	BrowserRouter as Router,
 	Routes,
@@ -15,8 +14,9 @@ import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import createTheme from "@mui/material/styles/createTheme";
 import CssBaseline from "@mui/material/CssBaseline";
 import PageNotFound from "./pages/PageNotFound";
+// This is the theme for the web app
 
-const theme = createTheme({
+var theme = createTheme({
 	typography: {
 		fontFamily: '"Lexend Deca", "Lexend", sans-serif',
 		button: {
@@ -45,16 +45,39 @@ const theme = createTheme({
 	},
 });
 
-function App() {
-	// Check for token existence on component mount
-	useEffect(() => {
-		const token = localStorage.getItem("token");
-		if (!token) {
-			// Redirect to login if token doesn't exist
-			window.location.href = "/login";
-		}
-	}, []);
+// const entry = createTheme({
+//   typography: {
+//     fontFamily: '"Lexend Deca", "Lexend", sans-serif',
+//     button: {
+//       textTransform: 'none',
+//     },
+//   },
+//   palette: {
+//     background: {
+//       default: '#c5dcc2',
+//     },
+//     primary: {
+//       main: '#186F65',
+//     },
+//     secondary: {
+//       main: '#C5DCC2',
+//     },
+//     text: {
+//       main: '#071C29',
+//     },
+//     stroke: {
+//       main: '#035082',
+//     },
+//     gray: {
+//       main: '#DADADA',
+//     },
+//   },
+// });
 
+// createContext(entry);
+
+// https://stackoverflow.com/questions/61600091/react-router-and-material-ui-applying-custom-themes-depending-on-route
+function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />

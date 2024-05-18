@@ -1,27 +1,30 @@
+// useLogout.js
 import axios from "axios";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function useLogout() {
 	const handleLogout = async () => {
 		console.log("LOGOUT");
 		try {
 			let token = localStorage.getItem("token");
+
 			let response = await axios.post(
 				"http://localhost:8000/api/user/logout/",
+				{},
 				{
 					headers: { Authorization: `Token ${token}` },
 				}
 			);
-			console.log(response);
-			clearSession();
+
+			localStorage.removeItem("token");
+			alert("Logout successful!");
+			console.log("REMOVED: " + localStorage.getItem("token"));
 		} catch (err) {
-			console.err(err);
+			console.error(err);
 		}
 	};
 
-	const clearSession = () => {
-		localStorage.removeItem("token");
-	};
+	return { handleLogout }; // Return the handleLogout function to be used externally
 }
 
 export default useLogout;

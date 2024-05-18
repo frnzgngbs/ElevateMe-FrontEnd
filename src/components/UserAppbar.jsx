@@ -9,7 +9,7 @@ import useLogout from "./../hooks/useLogout";
 
 const UserAppbar = () => {
 	const navs = ["Home", "Saved", "List", "5-Whys", "HMW", "Log out"];
-	const links = ["home", "saved", "list", "5-whys", "hmw", "login"];
+	const links = ["home", "saved", "list", "5-whys", "hmw", "log out"];
 
 	var outlet = <Outlet />;
 	var currentLink = "";
@@ -20,7 +20,7 @@ const UserAppbar = () => {
 
 	var theme = useTheme();
 
-	const handleLogout = useLogout();
+	const { handleLogout } = useLogout();
 
 	return (
 		<>
@@ -63,13 +63,15 @@ const UserAppbar = () => {
 											width: "5.5rem",
 											height: "2.5rem",
 											borderRadius: "32px",
-										}}
-										onClick={value === "Log out" ? handleLogout : null}>
+										}}>
 										{value}
 									</Button>
 								</Link>
 							) : (
-								<Link key={index} to={links[index]}>
+								<Link
+									key={index}
+									to={value === "Log out" ? "/login" : links[index]}
+									onClick={handleLogout}>
 									<Button>{value}</Button>
 								</Link>
 							);

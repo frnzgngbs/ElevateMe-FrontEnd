@@ -58,7 +58,7 @@ const Login = () => {
 			});
 
 			if (response.status === 200) {
-				localStorage.setItem("user", response.data.token);
+				localStorage.setItem("token", response.data.token);
 				alert("Login successful!");
 				navigate("/user/home");
 			}
@@ -69,9 +69,14 @@ const Login = () => {
 		}
 	};
 
-	useEffect(() => {
-		console.log(user);
-	}, [user]);
+	useEffect(
+		() => {
+			console.log(user);
+			console.log(localStorage.getItem("token"));
+		},
+		[user],
+		[localStorage.getItem("token")]
+	);
 
 	return (
 		<Grid
