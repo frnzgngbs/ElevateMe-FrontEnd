@@ -5,10 +5,11 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Grid from "@mui/material/Grid";
+import useLogout from "./../hooks/useLogout";
 
 const UserAppbar = () => {
 	const navs = ["Home", "Saved", "List", "5-Whys", "HMW", "Log out"];
-	const links = ["home", "saved", "list", "5-whys", "hmw", "log-out"];
+	const links = ["home", "saved", "list", "5-whys", "hmw", "login"];
 
 	var outlet = <Outlet />;
 	var currentLink = "";
@@ -18,6 +19,9 @@ const UserAppbar = () => {
 	currentLink = pathname[pathname.length - 1];
 
 	var theme = useTheme();
+
+	const handleLogout = useLogout();
+
 	return (
 		<>
 			<AppBar
@@ -59,7 +63,8 @@ const UserAppbar = () => {
 											width: "5.5rem",
 											height: "2.5rem",
 											borderRadius: "32px",
-										}}>
+										}}
+										onClick={value === "Log out" ? handleLogout : null}>
 										{value}
 									</Button>
 								</Link>
