@@ -1,5 +1,7 @@
 import {
-	BrowserRouter as Router,
+	createBrowserRouter,
+	createRoutesFromElements,
+	RouterProvider,
 	Routes,
 	Route,
 	Navigate,
@@ -14,6 +16,7 @@ import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import createTheme from "@mui/material/styles/createTheme";
 import CssBaseline from "@mui/material/CssBaseline";
 import PageNotFound from "./pages/PageNotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 // This is the theme for the web app
 
 var theme = createTheme({
@@ -77,24 +80,30 @@ var theme = createTheme({
 // createContext(entry);
 
 // https://stackoverflow.com/questions/61600091/react-router-and-material-ui-applying-custom-themes-depending-on-route
+
+const router = createBrowserRouter(
+	createRoutesFromElements(
+		<>
+			<Route path="/" element={<Navigate to="/login" />} />
+			<Route path="/login" element={<Login />} />
+			<Route path="/register" element={<Register />} />
+			<Route path="/user" element={<ProtectedRoute />}>
+				<Route element={<UserAppbar />}>
+					<Route path="home" element={<Home />} />
+					<Route path="saved" element={<Saved />} />
+					<Route path="list" element={<List />} />
+				</Route>
+			</Route>
+			<Route path="*" element={<PageNotFound />} />
+		</>
+	)
+);
+
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Router>
-				<Routes>
-					<Route path="/" element={<Navigate to="login" />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/register" element={<Register />} />
-					<Route path="/user" element={<UserAppbar />}>
-						<Route path="saved" element={<Saved />} />
-						<Route path="home" element={<Home />} />
-						<Route path="list" element={<List />} />
-						<Route path="*" element={<PageNotFound />} />
-					</Route>
-					<Route path="*" element={<PageNotFound />} />
-				</Routes>
-			</Router>
+			<RouterProvider router={router} />
 		</ThemeProvider>
 	);
 }
