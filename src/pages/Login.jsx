@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
@@ -69,15 +69,6 @@ const Login = () => {
 		}
 	};
 
-	useEffect(
-		() => {
-			console.log(user);
-			console.log(localStorage.getItem("token"));
-		},
-		[user],
-		[localStorage.getItem("token")]
-	);
-
 	return (
 		<Grid
 			container
@@ -141,6 +132,7 @@ const Login = () => {
 							</Box>
 							<Button
 								type="submit"
+								color="primary"
 								variant="contained"
 								sx={{
 									borderRadius: "50rem",
