@@ -1,148 +1,134 @@
-import React from "react";
-import useTheme from "@mui/material/styles/useTheme";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import CheckCircle from "@mui/icons-material/CheckCircle";
-import CheckCircleOutlined from "@mui/icons-material/CheckCircleOutlined";
+import {
+	Box,
+	Button,
+	Card,
+	CardActionArea,
+	CardContent,
+	CardMedia,
+	Grid,
+	Typography,
+	useTheme,
+} from "@mui/material";
 
-// NOTE(hans): Subject for change (Not final)
-
-// The layout
-/*
-  +--------------------------------------------------------+
-  |                     App bar                            |
-  |                                                        |
-  +--------------------------------------------------------+
-  |                                                        |
-  |  Left div                       Right div              |
-  |  +------------------------+     +--------------------+ |
-  |  | Problem Statement      |     |                    | |
-  |  | Generator              |     |                    | |
-  |  |                        |     |                    | |
-  |  |                        |     |     Diagram        | |
-  |  |                        |     |                    | |
-  |  |                        |     |                    | |
-  |  | Generate               |     |                    | |
-  |  +------------------------+     +--------------------+ |
-  |                     Problem Statement                  |
-  +--------------------------------------------------------+
-  |    Problem                                             |
-  |    [] Inneficient waste collection                     |
-  |    [] Limited availability of recycled products        |
-  |    [] Limited access to recycling                      |
-  |                                                        |
-  +--------------------------------------------------------+
-*/
+import clover from "../res/clover.svg";
 
 const HomePage = () => {
+	const cards = {
+		venn: {
+			icon: "Test",
+			title: "Venn Diagram",
+			description:
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+		},
+		saved_list: {
+			icon: "Test",
+			title: "Saved List",
+			description:
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+		},
+		statement_list: {
+			icon: "Test",
+			title: "Saved List",
+			description:
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+		},
+		five_whys: {
+			icon: "Test",
+			title: "5 Why's",
+			description:
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+		},
+		hmw: {
+			icon: "Test",
+			title: "How Might We",
+			description:
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+		},
+		elevator_pitch: {
+			icon: "Test",
+			title: "Elevator Pitch",
+			description:
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+		},
+	};
+
 	var theme = useTheme();
-	const problemStatements = [
-		"Inneficient waste collection",
-		"Limited availability",
-		"Limited access to recycling",
-		"Accumulation of waste",
-		"Resource depletion",
-	];
 
 	return (
-		<Box sx={{ userSelect: "none" }}>
-			<Box
-				paddingTop="3rem"
-				paddingBottom="3rem"
-				paddingLeft="8rem"
-				paddingRight="8rem">
-				{/* The div that holds the two div side by side */}
-				<Grid container display="flex" justifyContent={"space-around"}>
-					{/* left div */}
-					<Grid item lg={6} xl={6}>
-						<h1 style={{ color: theme.palette.primary.main }}>
-							Problem Statement
-							<br />
-							Generator
-						</h1>
-
-						<Grid xl={6} paddingTop={10} paddingBottom={15} maxWidth={300}>
-							<p>
-								Specify first the number of Venn Diagram and input the scopes of
-								your problem statement you want to be generated
-							</p>
-						</Grid>
-
-						<Button
-							variant="contained"
-							sx={{
-								paddingTop: "10px",
-								paddingBottom: "10px",
-								paddingLeft: "30px",
-								paddingRight: "30px",
-								borderRadius: "32px",
-								fontWeight: "normal",
-							}}>
-							Generate
+		<Box>
+			<Box sx={{ py: 10, px: 13 }}>
+				<Grid container spacing={6}>
+					{/* This is the left div*/}
+					<Grid item xs={12} md={6}>
+						<Typography variant="h1">ElevateMe</Typography>
+						<br />
+						<Typography variant="body1" fontWeight={"bold"}>
+							ElevateMe is an app that generates problem statements. It follows
+							the Technopreneurship Workbook. A group of CIT-U students made
+							this app to automate the current and long process of
+							technopreneurship workbook
+						</Typography>
+						<br />
+						<Typography variant="body1">
+							Its goal is to shorten the time lorem ipsum setrsa nerates problem
+							statements. It follows the Technopreneurship Workbook. A group of
+							CIT-U students made this app to automate the current and long
+							process of technopreneurship workbook
+						</Typography>
+						<br />
+						<Button variant="contained" sx={{ py: 1, px: 5, borderRadius: 4 }}>
+							About
 						</Button>
 					</Grid>
-					{/* right div */}
-					<Grid item lg={6} xl={6}>
-						{/* TODO(hans): Add actual venn diagram */}
-						<h1 style={{ color: theme.palette.primary.main }}>Venn Diagram</h1>
+					{/* This is the right div */}
+					<Grid item xs={12} md={6}>
+						<Box sx={{ bgcolor: theme.palette.secondary.main, height: 200 }}>
+							Item 2
+						</Box>
 					</Grid>
 				</Grid>
 			</Box>
-			<Box>
-				<Box
-					textAlign={"center"}
-					sx={{
-						userSelect: "none",
-					}}>
-					<h1 style={{ color: theme.palette.primary.main }}>
-						Problem Statement
-					</h1>
+			<Box sx={{ px: 30 }}>
+				<Box>
+					<Typography variant="h1" textAlign={"center"}>
+						Features
+					</Typography>
+					<br />
+					<Typography variant="body1" textAlign={"center"}>
+						ElevateMe is an app that generates problem statements. It follows
+						the Technopreneurship Workbook. A group of CIT-U students made this
+						app to automate the current and long process of technopreneurship
+						workbook
+					</Typography>
 				</Box>
 			</Box>
-			{/* Grid that holds gray area */}
-			<Box>
-				{/* Gray area */}
-				<Box
-					xl={12}
-					xs={12}
-					md={12}
-					sx={{
-						userSelect: "none",
-						backgroundColor: "gray.main",
-						paddingTop: "3rem",
-						paddingBottom: "3rem",
-						paddingLeft: "10rem",
-						paddingRight: "10rem",
-					}}>
-					<strong
-						style={{ fontWeight: "bold", color: "black", fontSize: "1.2rem" }}>
-						Problem
-					</strong>
-					<FormGroup>
-						{problemStatements.map((problemStatement, index) => (
-							<FormControlLabel
-								key={index}
-								control={
-									<Checkbox
-										defaultChecked
-										icon={
-											<CheckCircleOutlined
-												sx={{ fill: theme.palette.primary.main }}
-											/>
-										}
-										checkedIcon={<CheckCircle />}
-									/>
-								}
-								label={problemStatement}
-							/>
-						))}
-					</FormGroup>
-				</Box>
-			</Box>
+			<Grid
+				container
+				spacing={2}
+				sx={{ px: 26, marginTop: 2, marginBottom: 4 }}>
+				{Object.entries(cards).map(([key, card]) => (
+					<Grid item xs={12} md={4} key={key}>
+						<Card
+							variant="outlined"
+							sx={{
+								borderRadius: 5,
+								boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 15px 0px",
+							}}>
+							<CardActionArea>
+								<CardContent>
+									<CardMedia component="img" src={clover} />
+									<Typography variant="h5" textAlign={"center"}>
+										{card.title}
+									</Typography>
+									<Typography variant="body1" textAlign={"center"}>
+										{card.description}
+									</Typography>
+								</CardContent>
+							</CardActionArea>
+						</Card>
+					</Grid>
+				))}
+			</Grid>
 		</Box>
 	);
 };

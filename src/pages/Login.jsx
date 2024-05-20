@@ -132,6 +132,7 @@ const Login = () => {
 							</Box>
 							<Button
 								type="submit"
+								color="primary"
 								variant="contained"
 								sx={{
 									borderRadius: "50rem",

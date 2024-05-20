@@ -18,12 +18,25 @@ import CssBaseline from "@mui/material/CssBaseline";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 // This is the theme for the web app
-
 var theme = createTheme({
 	typography: {
 		fontFamily: '"Lexend Deca", "Lexend", sans-serif',
 		button: {
 			textTransform: "none",
+		},
+		h1: {
+			fontSize: "3rem",
+			fontWeight: "bold",
+			color: "#186F65",
+		},
+		body1: {
+			fontSize: "0.9rem",
+			color: "#071C29",
+		},
+		h5: {
+			color: "#6A6A6A",
+			fontSize: "1.3rem",
+			fontWeight: "bold",
 		},
 	},
 	palette: {
@@ -35,9 +48,6 @@ var theme = createTheme({
 		},
 		secondary: {
 			main: "#C5DCC2",
-		},
-		text: {
-			main: "#071C29",
 		},
 		stroke: {
 			main: "#035082",
