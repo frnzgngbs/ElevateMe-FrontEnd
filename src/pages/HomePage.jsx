@@ -10,45 +10,51 @@ import {
 	useTheme,
 } from "@mui/material";
 
-import clover from "../res/clover.svg";
+import venn from "../res/venn.svg";
+import save from "../res/save.svg";
+import list from "../res/list.svg";
+import five_whys from "../res/WHY’S.svg";
+import HMW from "../res/HMW.svg";
+import elevator from "../res/elevator.svg";
+import notebook from "../res/techno-book.svg";
 
 const HomePage = () => {
 	const cards = {
 		venn: {
-			icon: "Test",
+			icon: venn,
 			title: "Venn Diagram",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
 		saved_list: {
-			icon: "Test",
+			icon: save,
 			title: "Saved List",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
 		statement_list: {
-			icon: "Test",
+			icon: list,
 			title: "Saved List",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
 		five_whys: {
-			icon: "Test",
+			icon: five_whys,
 			title: "5 Why's",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
 		hmw: {
-			icon: "Test",
+			icon: HMW,
 			title: "How Might We",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
 		elevator_pitch: {
-			icon: "Test",
+			icon: elevator,
 			title: "Elevator Pitch",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook",
+				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
 	};
 
@@ -56,7 +62,7 @@ const HomePage = () => {
 
 	return (
 		<Box>
-			<Box sx={{ py: 10, px: 13 }}>
+			<Box sx={{ paddingTop: 10, px: 13 }}>
 				<Grid container spacing={6}>
 					{/* This is the left div*/}
 					<Grid item xs={12} md={6}>
@@ -66,14 +72,14 @@ const HomePage = () => {
 							ElevateMe is an app that generates problem statements. It follows
 							the Technopreneurship Workbook. A group of CIT-U students made
 							this app to automate the current and long process of
-							technopreneurship workbook
+							technopreneurship workbook.
 						</Typography>
 						<br />
 						<Typography variant="body1">
 							Its goal is to shorten the time lorem ipsum setrsa nerates problem
 							statements. It follows the Technopreneurship Workbook. A group of
 							CIT-U students made this app to automate the current and long
-							process of technopreneurship workbook
+							process of technopreneurship workbook.
 						</Typography>
 						<br />
 						<Button variant="contained" sx={{ py: 1, px: 5, borderRadius: 4 }}>
@@ -82,9 +88,7 @@ const HomePage = () => {
 					</Grid>
 					{/* This is the right div */}
 					<Grid item xs={12} md={6}>
-						<Box sx={{ bgcolor: theme.palette.secondary.main, height: 200 }}>
-							Item 2
-						</Box>
+						<Box component="img" src={notebook} />
 					</Grid>
 				</Grid>
 			</Box>
@@ -98,7 +102,7 @@ const HomePage = () => {
 						ElevateMe is an app that generates problem statements. It follows
 						the Technopreneurship Workbook. A group of CIT-U students made this
 						app to automate the current and long process of technopreneurship
-						workbook
+						workbook.
 					</Typography>
 				</Box>
 			</Box>
@@ -116,7 +120,7 @@ const HomePage = () => {
 							}}>
 							<CardActionArea>
 								<CardContent>
-									<CardMedia component="img" src={clover} />
+									<CardMedia component="img" src={card.icon} sx={{ p: 5 }} />
 									<Typography variant="h5" textAlign={"center"}>
 										{card.title}
 									</Typography>
