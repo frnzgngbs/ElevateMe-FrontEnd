@@ -97,13 +97,13 @@ const router = createBrowserRouter(
 			<Route path="/" element={<Navigate to="/login" />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-			<Route path="/user" element={<ProtectedRoute />}>
-				<Route element={<UserAppbar />}>
-					<Route path="home" element={<Home />} />
-					<Route path="saved" element={<Saved />} />
-					<Route path="list" element={<List />} />
-				</Route>
+			{/* <Route path="/user" element={<ProtectedRoute />}> */}
+			<Route path="/user" element={<UserAppbar />}>
+				<Route path="home" element={<Home />} />
+				<Route path="saved" element={<Saved />} />
+				<Route path="list" element={<List />} />
 			</Route>
+			{/* </Route> */}
 			<Route path="*" element={<PageNotFound />} />
 		</>
 	)

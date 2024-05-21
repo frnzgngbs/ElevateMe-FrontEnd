@@ -63,7 +63,9 @@ const UserAppbar = () => {
 											width: "5.5rem",
 											height: "2.5rem",
 											borderRadius: "32px",
-										}}>
+										}}
+										to={value === "Log out" ? "/login" : links[index]}
+										onClick={handleLogout}>
 										{value}
 									</Button>
 								</Link>
