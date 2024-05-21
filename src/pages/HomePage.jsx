@@ -88,13 +88,30 @@ const HomePage = () => {
 					</Grid>
 					{/* This is the right div */}
 					<Grid item xs={12} md={6}>
-						<Box component="img" src={notebook} />
+						<Box
+							sx={{
+								bgcolor: "primary.main",
+							}}>
+							RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT
+							DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV
+							HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE
+							RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT
+							DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV
+							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
+							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
+							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
+							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
+							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
+							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
+							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
+						</Box>
+						{/* <Box component="img" src={notebook} /> */}
 					</Grid>
 				</Grid>
 			</Box>
-			<Box sx={{ px: 30 }}>
+			<Box sx={{ px: 30, py: 5 }}>
 				<Box>
-					<Typography variant="h1" textAlign={"center"}>
+					<Typography variant="h2" textAlign={"center"}>
 						Features
 					</Typography>
 					<br />
@@ -106,10 +123,7 @@ const HomePage = () => {
 					</Typography>
 				</Box>
 			</Box>
-			<Grid
-				container
-				spacing={2}
-				sx={{ px: 26, marginTop: 2, marginBottom: 4 }}>
+			<Grid container spacing={2} sx={{ px: 26, marginBottom: 8 }}>
 				{Object.entries(cards).map(([key, card]) => (
 					<Grid item xs={12} md={4} key={key}>
 						<Card

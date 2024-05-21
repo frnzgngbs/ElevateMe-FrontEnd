@@ -1,87 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
-import useTheme from "@mui/material/styles/useTheme";
-import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import Grid from "@mui/material/Grid";
-import useLogout from "./../hooks/useLogout";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
+import useLogout from "../hooks/useLogout";
 
 const UserAppbar = () => {
-	const navs = ["Home", "Saved", "List", "5-Whys", "HMW", "Log out"];
-	const links = ["home", "saved", "list", "5-whys", "hmw", "log out"];
+	const [anchorEl, setAnchorEl] = useState(null);
+	const open = Boolean(anchorEl);
+	const navigate = useNavigate();
+	const logout = useLogout();
 
-	var outlet = <Outlet />;
-	var currentLink = "";
-	const location = useLocation();
-	location.pathname.split("/");
-	const pathname = location.pathname.split("/").filter((crumb) => crumb !== "");
-	currentLink = pathname[pathname.length - 1];
+	const handleClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
 
-	var theme = useTheme();
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
 
-	const { handleLogout } = useLogout();
+	const handleLogoClick = () => {
+		navigate("/user/home", { replace: true });
+	};
+
+	const handleMenuOptionClick = (path) => {
+		if (path === "logout") {
+		} else {
+			navigate(`/user/${path}`, { replace: true });
+		}
+		handleClose();
+	};
+
+	const outlet = <Outlet />;
 
 	return (
 		<>
-			<AppBar
-				position="static"
-				elevation={0}
-				sx={{
-					background: "transparent",
-					paddingTop: "3rem",
-					paddingLeft: "5rem",
-					paddingRight: "5rem",
-					paddingBottom: "1rem",
-					userSelect: "none",
-					display: "flexbox",
-					flexDirection: "row",
-					justifyContent: "space-between",
-				}}>
-				<Grid container xl={12}>
-					<Grid md={6} xl={8}>
-						<Box>
-							<h2 style={{ color: theme.palette.primary.main }}>ElevateMe</h2>
-						</Box>
-					</Grid>
-					<Grid
-						width={"100%"}
-						md={6}
-						xl={4}
-						alignContent="center"
-						alignItems="center"
-						display="flex"
-						gap="2rem">
-						{navs.map((value, index) => {
-							return !value.localeCompare(currentLink, "en", {
-								sensitivity: "base",
-							}) ? (
-								<Link key={index} to={currentLink}>
-									<Button
-										variant="contained"
-										sx={{
-											width: "5.5rem",
-											height: "2.5rem",
-											borderRadius: "32px",
-										}}
-										to={value === "Log out" ? "/login" : links[index]}
-										onClick={handleLogout}>
-										{value}
-									</Button>
-								</Link>
-							) : (
-								<Link
-									key={index}
-									to={value === "Log out" ? "/login" : links[index]}
-									onClick={handleLogout}>
-									<Button>{value}</Button>
-								</Link>
-							);
-						})}
-					</Grid>
-				</Grid>
+			<AppBar position="static" elevation={0} sx={{ bgcolor: "white" }}>
+				<Box
+					sx={{
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center",
+						px: 7,
+						py: 5,
+					}}>
+					<Typography
+						variant="h3"
+						onClick={handleLogoClick}
+						sx={{ cursor: "pointer" }}>
+						ElevateMe
+					</Typography>
+					<IconButton onClick={handleClick}>
+						<Avatar sx={{ bgcolor: "#6A6A6A" }} alt="Remy Sharp">
+							B
+						</Avatar>
+					</IconButton>
+					<Menu
+						id="avatar-menu"
+						anchorEl={anchorEl}
+						open={open}
+						onClose={handleClose}
+						MenuListProps={{
+							"aria-labelledby": "avatar-menu-button",
+						}}>
+						<MenuItem onClick={() => handleMenuOptionClick("home")}>
+							Home
+						</MenuItem>
+						<MenuItem onClick={() => handleMenuOptionClick("saved")}>
+							Saved
+						</MenuItem>
+						<MenuItem onClick={() => handleMenuOptionClick("list")}>
+							List
+						</MenuItem>
+						<MenuItem onClick={() => handleMenuOptionClick("logout")}>
+							Logout
+						</MenuItem>
+					</Menu>
+				</Box>
 			</AppBar>
-
 			{outlet}
 		</>
 	);

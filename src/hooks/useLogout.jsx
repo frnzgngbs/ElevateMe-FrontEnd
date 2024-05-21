@@ -24,7 +24,7 @@ function useLogout() {
 		}
 	};
 
-	return { handleLogout }; // Return the handleLogout function to be used externally
+	return { handleLogout };
 }
 
 export default useLogout;
