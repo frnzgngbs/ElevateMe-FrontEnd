@@ -29,7 +29,7 @@ const Saved = () => {
 
 	return (
 		<Box>
-			<Box sx={{ px: 12, py: 5 }}>
+			<Box sx={{ px: 12, paddingTop: 4, paddingBottom: 5 }}>
 				<Box sx={{ px: 35 }}>
 					<Typography variant="h2" textAlign={"center"}>
 						Saved List

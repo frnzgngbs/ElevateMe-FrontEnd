@@ -2,6 +2,7 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
@@ -18,6 +19,9 @@ const CardCotent = ({ text, index, onDelete }) => {
 				px: 1,
 				borderRadius: 5,
 			}}>
+			<IconButton onClick={onDelete}>
+				<EditIcon sx={{ marginLeft: 1 }} />
+			</IconButton>
 			<CardContent sx={{ flex: 1 }}>
 				<Typography variant="body1">{text}</Typography>
 			</CardContent>

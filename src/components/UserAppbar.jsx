@@ -43,7 +43,8 @@ const UserAppbar = () => {
 						justifyContent: "space-between",
 						alignItems: "center",
 						px: 7,
-						py: 5,
+						paddingTop: 5,
+						paddingBottom: 5,
 					}}>
 					<Typography
 						variant="h3"
