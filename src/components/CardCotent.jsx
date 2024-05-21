@@ -22,7 +22,7 @@ const CardCotent = ({ text, index, onDelete }) => {
 			<IconButton onClick={onDelete}>
 				<EditIcon sx={{ marginLeft: 1 }} />
 			</IconButton>
-			<CardContent sx={{ flex: 1 }}>
+			<CardContent>
 				<Typography variant="body1">{text}</Typography>
 			</CardContent>
 			<IconButton>

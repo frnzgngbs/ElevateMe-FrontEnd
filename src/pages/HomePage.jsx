@@ -1,6 +1,7 @@
 import {
 	Box,
 	Button,
+	ButtonBase,
 	Card,
 	CardActionArea,
 	CardContent,
@@ -17,8 +18,11 @@ import five_whys from "../res/WHY’S.svg";
 import HMW from "../res/HMW.svg";
 import elevator from "../res/elevator.svg";
 import notebook from "../res/techno-book.svg";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+	const navigate = useNavigate();
+
 	const cards = {
 		venn: {
 			icon: venn,
@@ -26,13 +30,13 @@ const HomePage = () => {
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
-		saved_list: {
+		saved: {
 			icon: save,
 			title: "Saved List",
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
-		statement_list: {
+		list: {
 			icon: list,
 			title: "Saved List",
 			description:
@@ -56,6 +60,10 @@ const HomePage = () => {
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
+	};
+
+	const handleCardClick = (card) => {
+		navigate(`/user/${card}`, { replace: true });
 	};
 
 	var theme = useTheme();
@@ -127,22 +135,23 @@ const HomePage = () => {
 				{Object.entries(cards).map(([key, card]) => (
 					<Grid item xs={12} md={4} key={key}>
 						<Card
-							variant="outlined"
 							sx={{
 								borderRadius: 5,
 								boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 15px 0px",
 							}}>
-							<CardActionArea>
-								<CardContent>
-									<CardMedia component="img" src={card.icon} sx={{ p: 5 }} />
-									<Typography variant="h5" textAlign={"center"}>
-										{card.title}
-									</Typography>
-									<Typography variant="body1" textAlign={"center"}>
-										{card.description}
-									</Typography>
-								</CardContent>
-							</CardActionArea>
+							<ButtonBase onClick={() => handleCardClick(key)}>
+								<CardActionArea>
+									<CardContent>
+										<CardMedia component="img" src={card.icon} sx={{ p: 5 }} />
+										<Typography variant="h5" textAlign={"center"}>
+											{card.title}
+										</Typography>
+										<Typography variant="body1" textAlign={"center"}>
+											{card.description}
+										</Typography>
+									</CardContent>
+								</CardActionArea>
+							</ButtonBase>
 						</Card>
 					</Grid>
 				))}

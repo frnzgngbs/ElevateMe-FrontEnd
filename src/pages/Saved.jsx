@@ -5,8 +5,6 @@ import { Typography } from "@mui/material";
 import CardCotent from "../components/CardCotent";
 
 const Saved = () => {
-	const theme = useTheme();
-
 	const [cards, setCards] = useState({
 		two_venn: [],
 		three_venn: [],
