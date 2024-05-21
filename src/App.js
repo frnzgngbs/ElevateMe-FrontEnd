@@ -29,14 +29,29 @@ var theme = createTheme({
 			fontWeight: "bold",
 			color: "#186F65",
 		},
-		body1: {
-			fontSize: "0.9rem",
-			color: "#071C29",
+		h2: {
+			fontSize: "2.5rem",
+			fontWeight: "bold",
+			color: "#186F65",
+		},
+		h3: {
+			fontSize: "2rem",
+			fontWeight: "bold",
+			color: "#186F65",
+		},
+		h4: {
+			color: "#186F65",
+			fontSize: "1.5rem",
+			fontWeight: "bold",
 		},
 		h5: {
 			color: "#6A6A6A",
 			fontSize: "1.3rem",
 			fontWeight: "bold",
+		},
+		body1: {
+			fontSize: "0.9rem",
+			color: "#071C29",
 		},
 	},
 	palette: {
@@ -97,13 +112,13 @@ const router = createBrowserRouter(
 			<Route path="/" element={<Navigate to="/login" />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-			<Route path="/user" element={<ProtectedRoute />}>
-				<Route element={<UserAppbar />}>
-					<Route path="home" element={<Home />} />
-					<Route path="saved" element={<Saved />} />
-					<Route path="list" element={<List />} />
-				</Route>
+			{/* <Route path="/user" element={<ProtectedRoute />}> */}
+			<Route path="/user" element={<UserAppbar />}>
+				<Route path="home" element={<Home />} />
+				<Route path="saved" element={<Saved />} />
+				<Route path="list" element={<List />} />
 			</Route>
+			{/* </Route> */}
 			<Route path="*" element={<PageNotFound />} />
 		</>
 	)
