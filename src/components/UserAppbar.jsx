@@ -12,7 +12,13 @@ const UserAppbar = () => {
 	const navigate = useNavigate();
 	const { handleLogout } = useLogout();
 
-	const menuItem = ["home", "venn", "saved", "list", "logout"];
+	const menuItems = {
+		home: "Home",
+		venn: "Venn",
+		saved: "Saved",
+		list: "List",
+		logout: "Log Out",
+	};
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -62,13 +68,14 @@ const UserAppbar = () => {
 						MenuListProps={{
 							"aria-labelledby": "avatar-menu-button",
 						}}>
-						{menuItem.map((value) => {
+						{Object.entries(menuItems).map((instance) => {
+							const [key, value] = instance;
 							return (
 								<MenuItem
 									onClick={() =>
-										value === "logout"
-											? handleMenuOptionClick(handleLogout)
-											: handleMenuOptionClick(value)
+										value === "Log Out"
+											? handleLogout()
+											: handleMenuOptionClick(key)
 									}>
 									{value}
 								</MenuItem>
