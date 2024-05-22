@@ -1,14 +1,15 @@
-// useLogout.js
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function useLogout() {
+	const navigate = useNavigate();
+
 	const handleLogout = async () => {
 		console.log("LOGOUT");
 		try {
 			let token = localStorage.getItem("token");
 
-			let response = await axios.post(
+			await axios.post(
 				"http://localhost:8000/api/user/logout/",
 				{},
 				{
@@ -19,8 +20,13 @@ function useLogout() {
 			localStorage.removeItem("token");
 			alert("Logout successful!");
 			console.log("REMOVED: " + localStorage.getItem("token"));
+
+			// Navigate to the login page after successful logout
+			navigate("/login", { replace: true });
+			console.log("ASDASDA");
 		} catch (err) {
 			console.error(err);
+			navigate("/login", { replace: true });
 		}
 	};
 

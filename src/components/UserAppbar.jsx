@@ -10,7 +10,7 @@ const UserAppbar = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const navigate = useNavigate();
-	const logout = useLogout();
+	const { handleLogout } = useLogout();
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -25,14 +25,9 @@ const UserAppbar = () => {
 	};
 
 	const handleMenuOptionClick = (path) => {
-		if (path === "logout") {
-		} else {
-			navigate(`/user/${path}`, { replace: true });
-		}
+		navigate(`/user/${path}`, { replace: true });
 		handleClose();
 	};
-
-	const outlet = <Outlet />;
 
 	return (
 		<>
@@ -74,13 +69,11 @@ const UserAppbar = () => {
 						<MenuItem onClick={() => handleMenuOptionClick("list")}>
 							List
 						</MenuItem>
-						<MenuItem onClick={() => handleMenuOptionClick("logout")}>
-							Logout
-						</MenuItem>
+						<MenuItem onClick={handleLogout}>Logout</MenuItem>
 					</Menu>
 				</Box>
 			</AppBar>
-			{outlet}
+			<Outlet />
 		</>
 	);
 };

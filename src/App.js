@@ -17,6 +17,7 @@ import createTheme from "@mui/material/styles/createTheme";
 import CssBaseline from "@mui/material/CssBaseline";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Venn from "./pages/Venn";
 // This is the theme for the web app
 var theme = createTheme({
 	typography: {
@@ -50,7 +51,7 @@ var theme = createTheme({
 			fontWeight: "bold",
 		},
 		body1: {
-			fontSize: "0.9rem",
+			fontSize: "1rem",
 			color: "#071C29",
 		},
 	},
@@ -116,6 +117,7 @@ const router = createBrowserRouter(
 			<Route path="/user" element={<UserAppbar />}>
 				<Route path="home" element={<Home />} />
 				<Route path="saved" element={<Saved />} />
+				<Route path="venn" element={<Venn />} />
 				<Route path="list" element={<List />} />
 			</Route>
 			{/* </Route> */}

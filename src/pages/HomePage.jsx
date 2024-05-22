@@ -100,18 +100,7 @@ const HomePage = () => {
 							sx={{
 								bgcolor: "primary.main",
 							}}>
-							RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT
-							DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV
-							HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE
-							RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT
-							DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV HERE RIGHT DIV
-							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
-							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
-							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
-							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
-							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
-							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
-							HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE HERE
+							LATER PUT THE IMAGE HERE
 						</Box>
 						{/* <Box component="img" src={notebook} /> */}
 					</Grid>
@@ -137,8 +126,9 @@ const HomePage = () => {
 						<Card
 							sx={{
 								borderRadius: 5,
-								boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 15px 0px",
-							}}>
+								boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+							}}
+							elevation={3}>
 							<ButtonBase onClick={() => handleCardClick(key)}>
 								<CardActionArea>
 									<CardContent>

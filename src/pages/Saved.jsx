@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import useTheme from "@mui/material/styles/useTheme";
 import { Typography } from "@mui/material";
 import CardCotent from "../components/CardCotent";
 
