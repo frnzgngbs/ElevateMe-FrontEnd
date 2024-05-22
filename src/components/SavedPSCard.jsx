@@ -7,7 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 import { Button, Grid } from "@mui/material";
 
-const CardCotent = ({ text, index, onDelete }) => {
+const SavedPSCard = ({ text, index, onDelete }) => {
 	return (
 		<Card
 			sx={{
@@ -44,4 +44,4 @@ const CardCotent = ({ text, index, onDelete }) => {
 	);
 };
 
-export default CardCotent;
+export default SavedPSCard;

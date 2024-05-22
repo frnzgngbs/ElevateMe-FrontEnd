@@ -2,7 +2,7 @@ import { Checkbox } from "@mui/material";
 import { Card, CardContent, FormControlLabel, Typography } from "@mui/material";
 import React from "react";
 
-const GeneratedCardContent = ({ text }) => {
+const VennPSCard = ({ text }) => {
 	return (
 		<Card sx={{ width: "100%", maxWidth: 1000, borderRadius: 8, boxShadow: 3 }}>
 			<CardContent sx={{ display: "flex", alignItems: "center" }}>
@@ -30,4 +30,4 @@ const GeneratedCardContent = ({ text }) => {
 	);
 };
 
-export default GeneratedCardContent;
+export default VennPSCard;

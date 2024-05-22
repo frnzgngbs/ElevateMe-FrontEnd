@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { Stack, Typography } from "@mui/material";
-import CardCotent from "../components/CardCotent";
+import SavedPSCard from "../components/SavedPSCard";
 
 const Saved = () => {
 	const [cards, setCards] = useState({
@@ -49,7 +49,7 @@ const Saved = () => {
 					</Typography>
 					<Box sx={{ marginTop: 4 }}>
 						{cards.two_venn.map((text, index) => (
-							<CardCotent
+							<SavedPSCard
 								key={index}
 								index={index}
 								text={text}
@@ -65,7 +65,7 @@ const Saved = () => {
 					<Stack direction={"row"}>
 						<Box sx={{ marginTop: 5 }}>
 							{cards.two_venn.map((text, index) => (
-								<CardCotent
+								<SavedPSCard
 									key={index}
 									text={text}
 									onDelete={() => handleDelete("three_venn", index)}

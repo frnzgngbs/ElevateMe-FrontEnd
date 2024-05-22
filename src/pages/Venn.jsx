@@ -1,7 +1,7 @@
 import { Box, Button, Card, IconButton, Typography } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { CheckBox } from "@mui/icons-material";
-import GeneratedCardContent from "./../components/GeneratedCardContent";
+import VennPSCard from "../components/VennPSCard";
 
 function Venn() {
 	const data = [
@@ -100,7 +100,7 @@ function Venn() {
 					gap={2}
 					sx={{ padding: 2 }}>
 					{data.map((text, index) => (
-						<GeneratedCardContent key={index} text={text} />
+						<VennPSCard key={index} text={text} />
 					))}
 					<Box
 						sx={{
