@@ -10,7 +10,15 @@ const UserAppbar = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const navigate = useNavigate();
-	const logout = useLogout();
+	const { handleLogout } = useLogout();
+
+	const menuItems = {
+		home: "Home",
+		venn: "Venn",
+		saved: "Saved",
+		list: "List",
+		logout: "Log Out",
+	};
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -25,14 +33,9 @@ const UserAppbar = () => {
 	};
 
 	const handleMenuOptionClick = (path) => {
-		if (path === "logout") {
-		} else {
-			navigate(`/user/${path}`, { replace: true });
-		}
+		navigate(`/user/${path}`, { replace: true });
 		handleClose();
 	};
-
-	const outlet = <Outlet />;
 
 	return (
 		<>
@@ -65,7 +68,20 @@ const UserAppbar = () => {
 						MenuListProps={{
 							"aria-labelledby": "avatar-menu-button",
 						}}>
-						<MenuItem onClick={() => handleMenuOptionClick("home")}>
+						{Object.entries(menuItems).map((instance) => {
+							const [key, value] = instance;
+							return (
+								<MenuItem
+									onClick={() =>
+										value === "Log Out"
+											? handleLogout()
+											: handleMenuOptionClick(key)
+									}>
+									{value}
+								</MenuItem>
+							);
+						})}
+						{/* <MenuItem onClick={() => handleMenuOptionClick("home")}>
 							Home
 						</MenuItem>
 						<MenuItem onClick={() => handleMenuOptionClick("saved")}>
@@ -74,13 +90,11 @@ const UserAppbar = () => {
 						<MenuItem onClick={() => handleMenuOptionClick("list")}>
 							List
 						</MenuItem>
-						<MenuItem onClick={() => handleMenuOptionClick("logout")}>
-							Logout
-						</MenuItem>
+						<MenuItem onClick={handleLogout}>Logout</MenuItem> */}
 					</Menu>
 				</Box>
 			</AppBar>
-			{outlet}
+			<Outlet />
 		</>
 	);
 };
