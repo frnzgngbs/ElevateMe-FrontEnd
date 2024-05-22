@@ -106,46 +106,69 @@ const HomePage = () => {
 					</Grid>
 				</Grid>
 			</Box>
-			<Box sx={{ px: 30, py: 5 }}>
+			<Box>
 				<Box>
 					<Typography variant="h2" textAlign={"center"}>
 						Features
 					</Typography>
 					<br />
-					<Typography variant="body1" textAlign={"center"}>
-						ElevateMe is an app that generates problem statements. It follows
-						the Technopreneurship Workbook. A group of CIT-U students made this
-						app to automate the current and long process of technopreneurship
-						workbook.
-					</Typography>
+					<Box
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+						}}>
+						<Typography
+							variant="body1"
+							sx={{ textAlign: "center", width: "1000px", marginBottom: 4 }}>
+							ElevateMe is an app that generates problem statements. It follows
+							the Technopreneurship Workbook. A group of CIT-U students made
+							this app to automate the current and long process of
+							technopreneurship workbook.
+						</Typography>
+					</Box>
 				</Box>
 			</Box>
-			<Grid container spacing={2} sx={{ px: 26, marginBottom: 8 }}>
-				{Object.entries(cards).map(([key, card]) => (
-					<Grid item xs={12} md={4} key={key}>
-						<Card
-							sx={{
-								borderRadius: 5,
-								boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-							}}
-							elevation={3}>
-							<ButtonBase onClick={() => handleCardClick(key)}>
-								<CardActionArea>
-									<CardContent>
-										<CardMedia component="img" src={card.icon} sx={{ p: 5 }} />
-										<Typography variant="h5" textAlign={"center"}>
-											{card.title}
-										</Typography>
-										<Typography variant="body1" textAlign={"center"}>
-											{card.description}
-										</Typography>
-									</CardContent>
-								</CardActionArea>
-							</ButtonBase>
-						</Card>
-					</Grid>
-				))}
-			</Grid>
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					mx: 15,
+				}}>
+				<Grid container spacing={2} sx={{ marginBottom: 8 }}>
+					{Object.entries(cards).map(([key, card]) => (
+						<Grid item xs={12} md={4} key={key}>
+							<Card
+								sx={{
+									borderRadius: 5,
+									boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+								}}
+								elevation={3}>
+								<ButtonBase onClick={() => handleCardClick(key)}>
+									<CardActionArea>
+										<CardContent>
+											<CardMedia component="img" src={card.icon} />
+											<Typography
+												variant="h5"
+												textAlign={"center"}
+												sx={{ mt: 2 }}>
+												{card.title}
+											</Typography>
+											<Typography
+												variant="body1"
+												textAlign={"center"}
+												sx={{ mt: 1 }}>
+												{card.description}
+											</Typography>
+										</CardContent>
+									</CardActionArea>
+								</ButtonBase>
+							</Card>
+						</Grid>
+					))}
+				</Grid>
+			</Box>
 		</Box>
 	);
 };
