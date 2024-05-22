@@ -31,7 +31,7 @@ var theme = createTheme({
 			color: "#186F65",
 		},
 		h2: {
-			fontSize: "2.5rem",
+			fontSize: "2.7rem",
 			fontWeight: "bold",
 			color: "#186F65",
 		},

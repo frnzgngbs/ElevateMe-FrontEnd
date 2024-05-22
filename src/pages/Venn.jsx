@@ -1,4 +1,4 @@
-import { Box, Button, Card, IconButton, Typography } from "@mui/material";
+import { Box, Button, Card, Grid, IconButton, Typography } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { CheckBox } from "@mui/icons-material";
 import VennPSCard from "../components/VennPSCard";
@@ -14,26 +14,15 @@ function Venn() {
 
 	return (
 		<Box paddingBottom={4}>
-			<Typography variant="h1" textAlign="center" gutterBottom>
+			<Typography variant="h2" textAlign="center" gutterBottom>
 				Venn Diagram
 			</Typography>
-			<Box
-				sx={{
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-					paddingTop: 5,
-				}}>
-				<Box
-					sx={{
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-					}}>
+			<Grid container spacing={6} justifyContent="center" alignItems="center">
+				<Grid item>
 					<Card
 						sx={{
-							width: 400,
-							height: 460,
+							width: 370,
+							height: 440,
 							p: 3.7,
 							borderRadius: 6,
 							boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
@@ -62,6 +51,8 @@ function Venn() {
 							<Typography>DIRI SUD ANG VENN</Typography>
 						</Box>
 					</Card>
+				</Grid>
+				<Grid item>
 					<Box sx={{ marginLeft: 4, width: "360px" }}>
 						<Typography variant="h3">Problem Statement Generator</Typography>
 						<Typography variant="body1" sx={{ mt: 2 }}>
@@ -81,15 +72,15 @@ function Venn() {
 							Generate
 						</Button>
 					</Box>
-				</Box>
-			</Box>
+				</Grid>
+			</Grid>
 			<Box sx={{ mt: 16 }}>
 				<Typography variant="h3" textAlign={"center"}>
 					Generated Problem Statement
 				</Typography>
 				<Typography variant="body1" textAlign={"center"} marginTop={2.7}>
 					This are the generated problem statements, you can always edit the
-					generated problem statements if you want{" "}
+					generated problem statements if you want
 				</Typography>
 				<Box
 					component="form"
