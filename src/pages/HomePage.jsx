@@ -76,14 +76,17 @@ const HomePage = () => {
 					<Grid item xs={12} md={6}>
 						<Typography variant="h1">ElevateMe</Typography>
 						<br />
-						<Typography variant="body1" fontWeight={"bold"}>
+						<Typography
+							variant="body1"
+							fontWeight={"bold"}
+							textAlign={"justify"}>
 							ElevateMe is an app that generates problem statements. It follows
 							the Technopreneurship Workbook. A group of CIT-U students made
 							this app to automate the current and long process of
 							technopreneurship workbook.
 						</Typography>
 						<br />
-						<Typography variant="body1">
+						<Typography variant="body1" textAlign={"justify"}>
 							Its goal is to shorten the time lorem ipsum setrsa nerates problem
 							statements. It follows the Technopreneurship Workbook. A group of
 							CIT-U students made this app to automate the current and long
