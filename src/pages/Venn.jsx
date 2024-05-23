@@ -12,8 +12,12 @@ import { CheckBox } from "@mui/icons-material";
 import PSCard from "../components/PSCard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Venn2 from "../res/venn.png";
+import { useState } from "react";
+import VennSettings from "../components/VennSettings";
 
 function Venn() {
+	const [showSetting, setShowSetting] = useState(false);
+
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
@@ -21,6 +25,9 @@ function Venn() {
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 	];
+	const toggleShowSetting = () => {
+		setShowSetting((prevState) => !prevState);
+	};
 
 	return (
 		<Box paddingBottom={4}>
@@ -61,8 +68,9 @@ function Venn() {
 										padding: 0,
 										height: "40px",
 										width: "40px",
-									}}>
-									<SettingsIcon sx={{ fontSize: 30 }} />
+									}}
+									onClick={toggleShowSetting}>
+									<SettingsIcon variant="outlined" sx={{ fontSize: 30 }} />
 								</IconButton>
 							</Box>
 							<Box sx={{ position: "relative", marginBottom: "20px" }}>
@@ -160,6 +168,23 @@ function Venn() {
 					</Button>
 				</Box>
 			</Box>
+			{showSetting && (
+				<Box
+					sx={{
+						position: "absolute",
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}>
+					<Box sx={{ position: "relative" }}>
+						<VennSettings toggleShowSetting={toggleShowSetting} />
+					</Box>
+				</Box>
+			)}
 		</Box>
 	);
 }
