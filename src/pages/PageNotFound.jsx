@@ -19,7 +19,7 @@ const PageNotFound = () => {
 				<Box sx={{ fontWeight: "500" }}>
 					It appears something went wrong. Please proceed to our homepage
 				</Box>
-				<Link to="/user/home">
+				<Link to="/home">
 					<Button
 						variant="contained"
 						sx={{

@@ -1,105 +1,88 @@
-import React from 'react';
-import useTheme from '@mui/material/styles/useTheme';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import FormGroup from '@mui/material/FormGroup';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import React from "react";
+import Box from "@mui/material/Box";
+import { Button, Grid, Typography } from "@mui/material";
+import PSCard from "../components/PSCard";
 
 const FiveWhys = () => {
-  const theme = useTheme();
-  return (
-    <Box
-      paddingTop='3rem'
-      paddingBottom='3rem'
-      paddingLeft='8rem'
-      paddingRight='8rem'
-      sx={{ userSelect: 'none' }}
-    >
-      <h1 style={{ color: theme.palette.primary.main }}>
-        Selected Problem Statement
-      </h1>
-      <Box
-        sx={{
-          padding: '48px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'end',
-        }}
-      >
-        <Box>
-          <h3>Problem</h3>
-          Inefficient waste collection
-        </Box>
-        <Box>
-          <Button
-            variant='contained'
-            sx={{
-              paddingTop: '10px',
-              paddingBottom: '10px',
-              paddingLeft: '30px',
-              paddingRight: '30px',
-              borderRadius: '32px',
-              fontWeight: 'normal',
-            }}
-          >
-            Show
-          </Button>
-        </Box>
-      </Box>
-      <Box paddingRight={'48px'} paddingLeft={'48px'}>
-        <Button
-          variant='contained'
-          sx={{
-            paddingTop: '10px',
-            paddingBottom: '10px',
-            paddingLeft: '30px',
-            paddingRight: '30px',
-            borderRadius: '32px',
-            fontWeight: 'normal',
-            float: 'right',
-          }}
-        >
-          Generate 5 Whys
-        </Button>
-      </Box>
-      <Box>
-        <h1 style={{ color: theme.palette.primary.main }}>Generated 5 Whys</h1>
-      </Box>
-      <Box paddingLeft={'48px'}>
-        Enumerate 5 HMW statement(s) by specifying an ACTION (what you want to
-        achieve), a SUBJECT (to be influenced or affected), and a WHAT (outcome
-        or what you like to achieve).
-      </Box>
-      <Box marginTop={'56px'}>
-        <FormGroup>
-          <Box display='flex' flexDirection='row'>
-            {/* Div for the checkboxes */}
-            <Box display='flex' flexDirection='column'>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <FormControlLabel key={index} control={<Checkbox />} />
-              ))}
-            </Box>
-            {/* Div for the gray box */}
-            <Box
-              sx={{
-                paddingLeft: '32px',
-                backgroundColor: 'gray.main',
-                width: '100%',
-                borderRadius: '24px',
-              }}
-            >
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Box key={index} paddingTop={'16px'}>
-                  <strong>Why?</strong>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        </FormGroup>
-      </Box>
-    </Box>
-  );
+	const data = [
+		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
+		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
+		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
+		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
+		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
+	];
+
+	return (
+		<Box>
+			<Box sx={{ px: 12, py: 2 }}>
+				<Typography variant="h4">Selected Problem Statement</Typography>
+				<Box sx={{ mt: 6, ml: 7 }}>
+					<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+						Problem Statement
+					</Typography>
+					<br></br>
+					<Grid container sx={{ ml: 2 }}>
+						<Grid item xs>
+							<Typography variant="body1">Problem Statement</Typography>
+						</Grid>
+						<Grid item sx={{ mr: 2.2 }}>
+							<Button
+								variant="contained"
+								sx={{ borderRadius: 5.6, color: "#FFFB" }}>
+								Show
+							</Button>
+						</Grid>
+					</Grid>
+					<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 5 }}>
+						<Button
+							variant="contained"
+							sx={{
+								px: 2.3,
+								py: 1.2,
+								borderRadius: 5.6,
+								color: "#FFFB",
+							}}>
+							Generate 5 Whys
+						</Button>
+					</Box>
+				</Box>
+				<Box sx={{ mt: 5 }}>
+					<Typography variant="h4">Generated 5 Why's</Typography>
+					<Box sx={{ mt: 1, ml: 7 }}>
+						<Box>
+							<Typography variant="body2" textAlign={"justify"}>
+								Enumerate 5 HMW statement(s) by specifying an ACTION (what you
+								want to achieve), a SUBJECT (to be influenced or affected), and
+								a WHAT (outcome or what you like to achieve).
+							</Typography>
+							<Box sx={{ my: 5 }}>
+								<Box component={"form"}>
+									{data.map((text, index) => (
+										<Box sx={{ mt: 2 }}>
+											<PSCard key={index} text={text} />
+										</Box>
+									))}
+									<Box
+										sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+										<Button
+											variant="contained"
+											sx={{
+												px: 2.3,
+												py: 1.2,
+												borderRadius: 5.6,
+												color: "#FFFB",
+											}}>
+											Generate Root
+										</Button>
+									</Box>
+								</Box>
+							</Box>
+						</Box>
+					</Box>
+				</Box>
+			</Box>
+		</Box>
+	);
 };
 
 export default FiveWhys;
