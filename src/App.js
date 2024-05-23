@@ -18,6 +18,7 @@ import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Venn from "./pages/Venn";
 import FiveWhys from "./pages/FiveWhys";
+import HMW from "./pages/HMW";
 // This is the theme for the web app
 var theme = createTheme({
 	typography: {
@@ -52,6 +53,10 @@ var theme = createTheme({
 		},
 		body1: {
 			fontSize: "1rem",
+			color: "#071C29",
+		},
+		body2: {
+			fontSize: "0.93rem",
 			color: "#071C29",
 		},
 	},
@@ -120,6 +125,7 @@ const router = createBrowserRouter(
 				<Route path="venn" element={<Venn />} />
 				<Route path="list" element={<List />} />
 				<Route path="five_whys" element={<FiveWhys />} />
+				<Route path="hmw" element={<HMW />} />
 			</Route>
 			{/* </Route> */}
 			<Route path="*" element={<PageNotFound />} />

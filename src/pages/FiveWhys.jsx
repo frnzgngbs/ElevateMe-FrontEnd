@@ -22,8 +22,8 @@ const FiveWhys = () => {
 					</Typography>
 					<br></br>
 					<Grid container sx={{ ml: 2 }}>
-						<Grid item xs>
-							<Typography variant="body1">Problem Statement</Typography>
+						<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
+							<Typography variant="body2">Problem Statement</Typography>
 						</Grid>
 						<Grid item sx={{ mr: 2.2 }}>
 							<Button

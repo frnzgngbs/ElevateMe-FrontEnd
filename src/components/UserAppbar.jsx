@@ -18,6 +18,7 @@ const UserAppbar = () => {
 		saved: "Saved",
 		five_whys: "Five-Whys",
 		list: "List",
+		hmw: "How Might We",
 		logout: "Log Out",
 	};
 
