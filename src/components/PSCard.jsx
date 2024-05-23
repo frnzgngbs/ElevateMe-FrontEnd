@@ -19,7 +19,7 @@ const PSCard = ({ text }) => {
 						/>
 					}
 					label={
-						<Typography variant="body1" sx={{ mt: 1, color: "#8e8e8e"}}>
+						<Typography variant="body1" sx={{ mt: 1 }}>
 							{text}
 						</Typography>
 					}

@@ -1,46 +1,34 @@
 import React from "react";
 import useTheme from "@mui/material/styles/useTheme";
-import Box from "@mui/material/Box";
-import ProblemStatementList from "../components/ProblemStatementList";
+import ProblemStmtList from "../components/ProblemStmtList";
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { Checkbox } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+  FormGroup,
+  Checkbox,
+  Button,
+} from "@mui/material";
 
-/*
-  +---------------------------------------------------------------------+
-  |                                Appbar                               |
-  +---------------------------------------------------------------------+
-  |                                                                     |
-  | Problem Statement List                                              |
-  | +-----------------------------------------------------------------+ |
-  | | [] +-1. Inneficient waste collection--------------------------+ | |
-  | | [] +-2. Limited avaialability of recycled products------------+ | |
-  | | [] +-3. Limited Access to recycling---------------------------+ | |
-  | | [] +-4. Accumulation of waste---------------------------------+ | |
-  | |                                                           Add   | |
-  | +-----------------------------------------------------------------+ |
-  |                                                                     |
-  |                                                                     |
-  |                                                                     |
-  |                                                                     |
-  |                                                                     |
-
-*/
-
-const List = () => {
-  const theme = useTheme();
+const ProblemList = () => {
+  var theme = useTheme();
 
   const ranks = [1, 2, 3, 4, 5];
 
-  const test = [
-    "1. Inneficient waste collection",
-    "2. Limited availability of recycled products",
-    "3. Limited Access to recycling",
-    "4. Accumulation of waste",
+  const ListOfProblems = [
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
   ];
 
-  const terms = [
+  const criteria = [
     {
       term: "Impact",
       description:
@@ -83,11 +71,43 @@ const List = () => {
         userSelect: "none",
       }}
     >
-      <Box>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "30px",
+          marginTop: "-50px",
+          textAlign: "center",
+        }}
+      >
         <h1 style={{ color: theme.palette.primary.main }}>
-          Problem Statement List
+          Problem <br />
+          Statement List
         </h1>
-        <ProblemStatementList list={test} />
+      </Box>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "right",
+          alignItems: "center",
+          marginBottom: "10px",
+        }}
+      >
+        <FormControl>
+          <FormLabel id="venn-scope"></FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="venn-scope"
+            name="venn-diagram-scope"
+          >
+            <FormControlLabel value="2" control={<Radio />} label="2" />
+            <FormControlLabel value="3" control={<Radio />} label="3" />
+          </RadioGroup>
+        </FormControl>
+      </Box>
+      <Box>
+        <ProblemStmtList list={ListOfProblems} />
       </Box>
       <Box
         sx={{
@@ -98,7 +118,7 @@ const List = () => {
         <h1 style={{ color: theme.palette.primary.main }}>
           Problem Statement Ranking
         </h1>
-        {terms.map((item, index) => (
+        {criteria.map((item, index) => (
           <Box
             key={index}
             sx={{
@@ -119,15 +139,22 @@ const List = () => {
       </Box>
       <Box>
         <Box sx={{ display: "flex", flexDirection: "row" }}>
-          <CheckIcon sx={{ fill: theme.palette.primary.main }} />
+          <Box
+            sx={{
+              display: "flex",
+              paddingTop: "30px",
+              marginRight: "30px",
+            }}
+          >
+            <CheckIcon sx={{ fill: theme.palette.primary.main }} />
+          </Box>
+
           <Box
             sx={{
               justifyContent: "space-evenly",
               width: "100%",
               paddingTop: "8px",
               paddingBottom: "8px",
-              paddingLeft: "32px",
-              paddingRight: "32px",
               borderRadius: "32px",
               marginTop: "25px",
               backgroundColor: "gray.main",
@@ -138,7 +165,7 @@ const List = () => {
             <Box>
               <strong>Problem Statement</strong>
             </Box>
-            {terms.map((term, index) => (
+            {criteria.map((term, index) => (
               <Box key={index}>
                 <strong>{term.term}</strong>
               </Box>
@@ -148,7 +175,6 @@ const List = () => {
             </Box>
           </Box>
         </Box>
-        {/* Gray box part */}
         <Box>
           {ranks.map((rank, index) => (
             <Box
@@ -158,7 +184,13 @@ const List = () => {
               alignItems="center"
               gap="8px"
             >
-              <Checkbox sx={{ color: theme.palette.primary.main }} />
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox sx={{ color: theme.palette.primary.main }} />
+                  }
+                />
+              </FormGroup>
               <Box
                 sx={{
                   width: "100%",
@@ -172,15 +204,30 @@ const List = () => {
                   justifyContent: "space-between",
                 }}
               >
-                {rank}
+                <Box sx={{ paddingLeft: "70px" }}>{rank}</Box>
                 <DeleteOutlinedIcon sx={{ fill: theme.palette.primary.main }} />
               </Box>
             </Box>
           ))}
+          <Button
+            variant="contained"
+            sx={{
+              float: "right",
+              paddingTop: "8px",
+              paddingBottom: "8px",
+              paddingLeft: "30px",
+              paddingRight: "30px",
+              borderRadius: "32px",
+              fontWeight: "normal",
+              margin: "20px 0 20px 0",
+            }}
+          >
+            Next
+          </Button>
         </Box>
       </Box>
     </Box>
   );
 };
 
-export default List;
+export default ProblemList;
