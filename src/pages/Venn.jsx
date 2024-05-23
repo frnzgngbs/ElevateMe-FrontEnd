@@ -5,7 +5,9 @@ import PSCard from "../components/PSCard";
 import SettingsIcon from '@mui/icons-material/Settings';
 import Venn2 from '../res/venn.png'
 
+
 function Venn() {
+	
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
@@ -15,7 +17,7 @@ function Venn() {
 	];
 
 	return (
-		<Box paddingBottom={4}>
+		<Box paddingBottom={4} sx={{position:"relative", zIndex:10}}>
 			<Typography variant="h2" textAlign="center" gutterBottom>
 				Venn Diagram
 			</Typography>
@@ -46,9 +48,10 @@ function Venn() {
 								<Box width={200}>
 									<Typography variant="h4">Venn Diagram Scopes</Typography>
 								</Box>
-								<IconButton sx={{ marginTop: -4, marginRight: -1, padding: 0, height: '40px', width: '40px' }}>
+								<IconButton  sx={{ marginTop: -4, marginRight: -1, padding: 0, height: '40px', width: '40px' }}>
 									<SettingsIcon sx={{ fontSize: 30 }} />
 								</IconButton>
+						
 							</Box>
 							<Box sx={{ position: 'relative', marginBottom: '20px' }}>
 								<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
