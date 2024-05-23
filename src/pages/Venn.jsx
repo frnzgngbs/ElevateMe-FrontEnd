@@ -74,7 +74,7 @@ function Venn() {
 					</Box>
 				</Grid>
 			</Grid>
-			<Box sx={{ mt: 16 }}>
+			<Box sx={{ mt: 16, px: 15 }}>
 				<Typography variant="h3" textAlign={"center"}>
 					Generated Problem Statement
 				</Typography>
