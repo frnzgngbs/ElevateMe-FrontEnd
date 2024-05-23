@@ -4,13 +4,13 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
-import useLogout from "../hooks/useLogout";
+import useAuth from "../hooks/useAuth";
 
 const UserAppbar = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
+	const { Logout } = useAuth();
 	const open = Boolean(anchorEl);
 	const navigate = useNavigate();
-	const { handleLogout } = useLogout();
 
 	const menuItems = {
 		home: "Home",
@@ -31,7 +31,7 @@ const UserAppbar = () => {
 	};
 
 	const handleLogoClick = () => {
-		navigate("/user/home", { replace: true });
+		navigate("/home", { replace: true });
 	};
 
 	const handleMenuOptionClick = (path) => {
@@ -75,9 +75,7 @@ const UserAppbar = () => {
 							return (
 								<MenuItem
 									onClick={() =>
-										value === "Log Out"
-											? handleLogout()
-											: handleMenuOptionClick(key)
+										value === "Log Out" ? Logout() : handleMenuOptionClick(key)
 									}>
 									{value}
 								</MenuItem>
