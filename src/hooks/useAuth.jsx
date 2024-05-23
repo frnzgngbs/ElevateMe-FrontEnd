@@ -16,6 +16,7 @@ const useAuth = () => {
 				localStorage.setItem("token", response.data.token);
 				navigate("/home", { replace: true });
 			}
+			alert("Login successfully!");
 		} catch (err) {
 			if (err.code === "ERR_BAD_REQUEST") {
 				alert(err.response.data.error);

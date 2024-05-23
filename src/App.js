@@ -19,6 +19,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Venn from "./pages/Venn";
 import FiveWhys from "./pages/FiveWhys";
 import HMW from "./pages/HMW";
+import AppRoute from "./components/AppRoute";
 // This is the theme for the web app
 var theme = createTheme({
 	typography: {
@@ -115,20 +116,22 @@ var theme = createTheme({
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<>
-			<Route path="/" element={<Navigate to="/login" />} />
-			<Route path="/login" element={<Login />} />
-			<Route path="/register" element={<Register />} />
-			<Route path="" element={<ProtectedRoute />}>
-				<Route path="" element={<UserAppbar />}>
-					<Route path="home" element={<Home />} />
-					<Route path="saved" element={<Saved />} />
-					<Route path="venn" element={<Venn />} />
-					<Route path="list" element={<List />} />
-					<Route path="five_whys" element={<FiveWhys />} />
-					<Route path="hmw" element={<HMW />} />
+			<Route element={<AppRoute />}>
+				<Route path="/" element={<Navigate to="/login" />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
+				<Route path="" element={<ProtectedRoute />}>
+					<Route path="" element={<UserAppbar />}>
+						<Route path="home" element={<Home />} />
+						<Route path="saved" element={<Saved />} />
+						<Route path="venn" element={<Venn />} />
+						<Route path="list" element={<List />} />
+						<Route path="five_whys" element={<FiveWhys />} />
+						<Route path="hmw" element={<HMW />} />
+					</Route>
 				</Route>
+				<Route path="*" element={<PageNotFound />} />
 			</Route>
-			<Route path="*" element={<PageNotFound />} />
 		</>
 	)
 );
