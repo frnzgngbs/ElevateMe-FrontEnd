@@ -63,52 +63,47 @@ const HomePage = () => {
 	};
 
 	const handleCardClick = (card) => {
-		navigate(`/user/${card}`, { replace: true });
+		navigate(`/${card}`, { replace: true });
 	};
 
 	var theme = useTheme();
 
 	return (
 		<Box>
-			<Box sx={{ paddingTop: 10, px: 13 }}>
-				<Grid container spacing={6}>
-					{/* This is the left div*/}
-					<Grid item xs={12} md={6}>
-						<Typography variant="h1">ElevateMe</Typography>
-						<br />
-						<Typography
-							variant="body1"
-							fontWeight={"bold"}
-							textAlign={"justify"}>
-							ElevateMe is an app that generates problem statements. It follows
-							the Technopreneurship Workbook. A group of CIT-U students made
-							this app to automate the current and long process of
-							technopreneurship workbook.
-						</Typography>
-						<br />
-						<Typography variant="body1" textAlign={"justify"}>
-							Its goal is to shorten the time lorem ipsum setrsa nerates problem
-							statements. It follows the Technopreneurship Workbook. A group of
-							CIT-U students made this app to automate the current and long
-							process of technopreneurship workbook.
-						</Typography>
-						<br />
-						<Button variant="contained" sx={{ py: 1, px: 5, borderRadius: 4 }}>
-							About
-						</Button>
-					</Grid>
-					{/* This is the right div */}
-					<Grid item xs={12} md={6}>
-						<Box
-							sx={{
-								bgcolor: "primary.main",
-							}}>
-							LATER PUT THE IMAGE HERE
-						</Box>
-						{/* <Box component="img" src={notebook} /> */}
-					</Grid>
+			<Grid container spacing={6} justifyContent={"center"} px={13}>
+				{/* This is the left div*/}
+				<Grid item xs={12} md={6}>
+					<Typography variant="h1">ElevateMe</Typography>
+					<br />
+					<Typography variant="body1" fontWeight={"bold"} textAlign={"justify"}>
+						ElevateMe is an app that generates problem statements. It follows
+						the Technopreneurship Workbook. A group of CIT-U students made this
+						app to automate the current and long process of technopreneurship
+						workbook.
+					</Typography>
+					<br />
+					<Typography variant="body1" textAlign={"justify"}>
+						Its goal is to shorten the time lorem ipsum setrsa nerates problem
+						statements. It follows the Technopreneurship Workbook. A group of
+						CIT-U students made this app to automate the current and long
+						process of technopreneurship workbook.
+					</Typography>
+					<br />
+					<Button variant="contained" sx={{ py: 1, px: 5, borderRadius: 4 }}>
+						About
+					</Button>
 				</Grid>
-			</Box>
+				{/* This is the right div */}
+				<Grid item xs={12} md={6}>
+					<Box
+						sx={{
+							bgcolor: "primary.main",
+						}}>
+						LATER PUT THE IMAGE HERE
+					</Box>
+					{/* <Box component="img" src={notebook} /> */}
+				</Grid>
+			</Grid>
 			<Box>
 				<Box>
 					<Typography variant="h2" textAlign={"center"}>
@@ -145,7 +140,7 @@ const HomePage = () => {
 							<Card
 								sx={{
 									borderRadius: 5,
-									boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+									boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
 								}}
 								elevation={3}>
 								<ButtonBase onClick={() => handleCardClick(key)}>

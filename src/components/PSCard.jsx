@@ -2,9 +2,9 @@ import { Checkbox } from "@mui/material";
 import { Card, CardContent, FormControlLabel, Typography } from "@mui/material";
 import React from "react";
 
-const VennPSCard = ({ text }) => {
+const PSCard = ({ text }) => {
 	return (
-		<Card sx={{ width: "100%", maxWidth: 1000, borderRadius: 8, boxShadow: 3 }}>
+		<Card sx={{ width: "100%", borderRadius: 6.2, boxShadow: 3 }}>
 			<CardContent sx={{ display: "flex", alignItems: "center" }}>
 				<FormControlLabel
 					control={
@@ -14,7 +14,7 @@ const VennPSCard = ({ text }) => {
 								"&.Mui-checked": {
 									color: "primary.main",
 								},
-								borderRadius: "50%", // This line makes the checkbox circular
+								borderRadius: "50%",
 							}}
 						/>
 					}
@@ -30,4 +30,4 @@ const VennPSCard = ({ text }) => {
 	);
 };
 
-export default VennPSCard;
+export default PSCard;

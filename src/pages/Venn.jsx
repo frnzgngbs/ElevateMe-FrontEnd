@@ -1,7 +1,7 @@
 import { Box, Button, Card, Grid, IconButton, Typography } from "@mui/material";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { CheckBox } from "@mui/icons-material";
-import VennPSCard from "../components/VennPSCard";
+import PSCard from "../components/PSCard";
 
 function Venn() {
 	const data = [
@@ -45,7 +45,7 @@ function Venn() {
 									<Typography variant="h4">Venn Diagram Scopes</Typography>
 								</Box>
 								<IconButton>
-									<FilterListIcon />
+									<FilterAltIcon color="primary" />
 								</IconButton>
 							</Box>
 							<Typography>DIRI SUD ANG VENN</Typography>
@@ -62,10 +62,10 @@ function Venn() {
 						<Button
 							variant="contained"
 							sx={{
-								mt: 4,
-								py: 1.8,
-								px: 6.5,
-								borderRadius: 5,
+								mt: 4.3,
+								py: 1.3,
+								px: 6.2,
+								borderRadius: 5.6,
 								color: "#FFFB",
 								fontSize: "1rem",
 							}}>
@@ -74,7 +74,7 @@ function Venn() {
 					</Box>
 				</Grid>
 			</Grid>
-			<Box sx={{ mt: 16 }}>
+			<Box sx={{ mt: 16, px: 15 }}>
 				<Typography variant="h3" textAlign={"center"}>
 					Generated Problem Statement
 				</Typography>
@@ -89,24 +89,16 @@ function Venn() {
 					flexDirection="column"
 					alignItems="center"
 					gap={2}
-					sx={{ padding: 2 }}>
+					sx={{ mt: 2, mb: 4 }}>
 					{data.map((text, index) => (
-						<VennPSCard key={index} text={text} />
+						<PSCard key={index} text={text} />
 					))}
-					<Box
-						sx={{
-							width: "100%",
-							display: "flex",
-							justifyContent: "flex-end",
-							marginRight: 125,
-						}}>
-						<Button
-							type="submit"
-							variant="contained"
-							sx={{ py: 1.3, px: 5.3, borderRadius: 5 }}>
-							Save
-						</Button>
-					</Box>
+					<Button
+						type="submit"
+						variant="contained"
+						sx={{ py: 1.3, px: 5.3, borderRadius: 5 }}>
+						Save
+					</Button>
 				</Box>
 			</Box>
 		</Box>

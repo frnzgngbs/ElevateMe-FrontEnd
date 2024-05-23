@@ -2,7 +2,6 @@ import {
 	createBrowserRouter,
 	createRoutesFromElements,
 	RouterProvider,
-	Routes,
 	Route,
 	Navigate,
 } from "react-router-dom";
@@ -18,6 +17,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import PageNotFound from "./pages/PageNotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Venn from "./pages/Venn";
+import FiveWhys from "./pages/FiveWhys";
+import HMW from "./pages/HMW";
 // This is the theme for the web app
 var theme = createTheme({
 	typography: {
@@ -52,6 +53,10 @@ var theme = createTheme({
 		},
 		body1: {
 			fontSize: "1rem",
+			color: "#071C29",
+		},
+		body2: {
+			fontSize: "0.93rem",
 			color: "#071C29",
 		},
 	},
@@ -114,11 +119,13 @@ const router = createBrowserRouter(
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
 			{/* <Route path="/user" element={<ProtectedRoute />}> */}
-			<Route path="/user" element={<UserAppbar />}>
+			<Route path="" element={<UserAppbar />}>
 				<Route path="home" element={<Home />} />
 				<Route path="saved" element={<Saved />} />
 				<Route path="venn" element={<Venn />} />
 				<Route path="list" element={<List />} />
+				<Route path="five_whys" element={<FiveWhys />} />
+				<Route path="hmw" element={<HMW />} />
 			</Route>
 			{/* </Route> */}
 			<Route path="*" element={<PageNotFound />} />

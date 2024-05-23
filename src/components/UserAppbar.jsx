@@ -16,7 +16,9 @@ const UserAppbar = () => {
 		home: "Home",
 		venn: "Venn",
 		saved: "Saved",
+		five_whys: "Five-Whys",
 		list: "List",
+		hmw: "How Might We",
 		logout: "Log Out",
 	};
 
@@ -33,7 +35,7 @@ const UserAppbar = () => {
 	};
 
 	const handleMenuOptionClick = (path) => {
-		navigate(`/user/${path}`, { replace: true });
+		navigate(`/${path}`, { replace: true });
 		handleClose();
 	};
 
