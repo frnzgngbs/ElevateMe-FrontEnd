@@ -5,19 +5,21 @@ import SavedPSCard from "../components/SavedPSCard";
 
 const Saved = () => {
 	const [cards, setCards] = useState({
-		two_venn: [],
-		three_venn: [],
+		two_venn: [
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+		],
+		three_venn: [
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
+		],
 	});
-
-	useEffect(() => {
-		const dummyText =
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis earum temporibus laborum assumenda voluptate aliquam dignissimos, harum vel, totam repellat qui. Itaque natus ex quis, quae sunt commodi beatae perferendis!";
-		setCards((prev) => ({
-			...prev, // Spread the previous state
-			two_venn: Array(5).fill(dummyText), // 5 dummy items for two_venn
-			three_venn: Array(3).fill(dummyText), // 3 dummy items for three_venn
-		}));
-	}, []);
 
 	// Note(Franz): Initial delete implementation just for display purposes
 	const handleDelete = (settings, index) => {
