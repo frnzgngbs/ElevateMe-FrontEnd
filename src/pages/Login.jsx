@@ -9,10 +9,12 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import useTheme from "@mui/material/styles/useTheme";
 import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
 	var theme = useTheme();
-	const navigate = useNavigate();
+
+	const { Login } = useAuth();
 
 	const formLabel = {
 		color: "text.main",
@@ -50,23 +52,7 @@ const Login = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		try {
-			let response = await axios.post("http://localhost:8000/api/user/login/", {
-				username: user.username,
-				password: user.password,
-			});
-
-			if (response.status === 200) {
-				localStorage.setItem("token", response.data.token);
-				alert("Login successful!");
-				navigate("/user/home");
-			}
-		} catch (err) {
-			if (err.code === "ERR_BAD_REQUEST") {
-				alert(err.response.data.error);
-			}
-		}
+		await Login(user);
 	};
 
 	return (

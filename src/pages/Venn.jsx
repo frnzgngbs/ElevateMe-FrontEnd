@@ -1,13 +1,25 @@
-import { Box, Button, Card, Grid, IconButton, Typography, TextField } from "@mui/material";
+import {
+	Box,
+	Button,
+	Card,
+	Grid,
+	IconButton,
+	Typography,
+	TextField,
+} from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { CheckBox } from "@mui/icons-material";
 import PSCard from "../components/PSCard";
-import SettingsIcon from '@mui/icons-material/Settings';
-import Venn2 from '../res/venn.png'
+import SettingsIcon from "@mui/icons-material/Settings";
+import Venn2 from "../res/venn.png";
+import { useState } from "react";
+import VennSettings from "../components/VennSettings";
 
 
 function Venn() {
 	
+	const [showSetting, setShowSetting] = useState(false);
+  
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
@@ -15,6 +27,9 @@ function Venn() {
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 	];
+	const toggleShowSetting = () => {
+		setShowSetting((prevState) => !prevState);
+	};
 
 	return (
 		<Box paddingBottom={4} sx={{position:"relative", zIndex:10}}>
@@ -48,26 +63,63 @@ function Venn() {
 								<Box width={200}>
 									<Typography variant="h4">Venn Diagram Scopes</Typography>
 								</Box>
-								<IconButton  sx={{ marginTop: -4, marginRight: -1, padding: 0, height: '40px', width: '40px' }}>
-									<SettingsIcon sx={{ fontSize: 30 }} />
+
+								<IconButton
+									sx={{
+										marginTop: -4,
+										marginRight: -1,
+										padding: 0,
+										height: "40px",
+										width: "40px",
+									}}
+									onClick={toggleShowSetting}>
+									<SettingsIcon variant="outlined" sx={{ fontSize: 30 }} />
 								</IconButton>
 						
 							</Box>
-							<Box sx={{ position: 'relative', marginBottom: '20px' }}>
-								<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-									<Typography variant="h6" sx={{ position: 'absolute', top: '80px', left: '35px', color: '#8E8E8E', fontSize: '14px' }}>
+							<Box sx={{ position: "relative", marginBottom: "20px" }}>
+								<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+									<Typography
+										variant="h6"
+										sx={{
+											position: "absolute",
+											top: "80px",
+											left: "35px",
+											color: "#8E8E8E",
+											fontSize: "14px",
+										}}>
 										TextBox 1
 									</Typography>
-									<Typography variant="h6" sx={{ position: 'absolute', top: '80px', right: '35px', color: '#8E8E8E', fontSize: '14px' }}>
+									<Typography
+										variant="h6"
+										sx={{
+											position: "absolute",
+											top: "80px",
+											right: "35px",
+											color: "#8E8E8E",
+											fontSize: "14px",
+										}}>
 										TextBox 2
 									</Typography>
 								</Box>
-								<Typography variant="h6" sx={{ position: 'absolute', bottom: '50px', left: '50%', transform: 'translate(-50%)', color: '#8E8E8E', fontSize: '14px' }}>
+								<Typography
+									variant="h6"
+									sx={{
+										position: "absolute",
+										bottom: "50px",
+										left: "50%",
+										transform: "translate(-50%)",
+										color: "#8E8E8E",
+										fontSize: "14px",
+									}}>
 									TextBox 3
 								</Typography>
-								<img src={Venn2} alt="Venn Diagram" style={{ zIndex: 0, width: '325px', Height: '50px' }} />
+								<img
+									src={Venn2}
+									alt="Venn Diagram"
+									style={{ zIndex: 0, width: "325px", Height: "50px" }}
+								/>
 							</Box>
-
 						</Box>
 					</Card>
 				</Grid>
@@ -104,7 +156,7 @@ function Venn() {
 				<Box
 					component="form"
 					color="#8E8E8E"
-					display="flex"	
+					display="flex"
 					flexDirection="column"
 					alignItems="center"
 					gap={2}
@@ -120,6 +172,23 @@ function Venn() {
 					</Button>
 				</Box>
 			</Box>
+			{showSetting && (
+				<Box
+					sx={{
+						position: "absolute",
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}>
+					<Box sx={{ position: "relative" }}>
+						<VennSettings toggleShowSetting={toggleShowSetting} />
+					</Box>
+				</Box>
+			)}
 		</Box>
 	);
 }
