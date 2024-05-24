@@ -15,9 +15,11 @@ import Venn2 from "../res/venn.png";
 import { useState } from "react";
 import VennSettings from "../components/VennSettings";
 
-function Venn() {
-	const [showSetting, setShowSetting] = useState(false);
 
+function Venn() {
+	
+	const [showSetting, setShowSetting] = useState(false);
+  
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
@@ -30,7 +32,7 @@ function Venn() {
 	};
 
 	return (
-		<Box paddingBottom={4}>
+		<Box paddingBottom={4} sx={{position:"relative", zIndex:10}}>
 			<Typography variant="h2" textAlign="center" gutterBottom>
 				Venn Diagram
 			</Typography>
@@ -61,6 +63,7 @@ function Venn() {
 								<Box width={200}>
 									<Typography variant="h4">Venn Diagram Scopes</Typography>
 								</Box>
+
 								<IconButton
 									sx={{
 										marginTop: -4,
@@ -72,6 +75,7 @@ function Venn() {
 									onClick={toggleShowSetting}>
 									<SettingsIcon variant="outlined" sx={{ fontSize: 30 }} />
 								</IconButton>
+						
 							</Box>
 							<Box sx={{ position: "relative", marginBottom: "20px" }}>
 								<Box sx={{ display: "flex", justifyContent: "space-between" }}>
