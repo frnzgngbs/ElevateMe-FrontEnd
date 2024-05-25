@@ -14,18 +14,26 @@ import {
 	Typography,
 } from "@mui/material";
 
-const VennSettings = ({ toggleShowSetting }) => {
-	const [selectedButton, setSelectedButton] = useState("2");
-	const [textFields, setTextFields] = useState(["", ""]);
+const VennSettings = ({ toggleShowSetting, textFields, setTextFields }) => {
+	const [selectedButton, setSelectedButton] = useState(2);
 
 	const handleChangeButton = (e) => {
-		const value = e.target.value;
+		const value = +e.target.value;
 		setSelectedButton(value);
 
-		if (value === "2") {
-			setTextFields(["", ""]);
-		} else if (value === "3") {
-			setTextFields(["", "", ""]);
+		if (value === 2) {
+			setTextFields({
+				field1: "",
+				field2: "",
+				filter: textFields.filter,
+			});
+		} else if (value === 3) {
+			setTextFields({
+				field1: "",
+				field2: "",
+				field3: "",
+				filter: textFields.filter,
+			});
 		}
 	};
 
@@ -53,93 +61,54 @@ const VennSettings = ({ toggleShowSetting }) => {
 							</Grid>
 						</Grid>
 						<form>
-							<Box sx={{ mt: 1 }}>
-								<FormLabel
-									sx={{
-										fontSize: "0.7rem",
-										color: "#8E8E8E",
-									}}>{`Field 1:`}</FormLabel>
-								<TextField
-									sx={{
-										fontSize: "0.7rem",
-										color: "#8E8E8E",
-										"& .MuiOutlinedInput-root": {
-											borderRadius: 2.3, // Adjust the value as needed
-										},
-									}}
-									placeholder={`Scope 1...`}
-									InputProps={{
-										style: {
-											height: 40,
-											width: 340,
-											fontSize: "0.7rem",
-										},
-									}}
-								/>
-							</Box>
+							{Object.keys(textFields)
+								.filter(
+									(key) =>
+										key !== "filter" &&
+										(selectedButton === 3 || key !== "field3")
+								)
+								.map((key, index) => (
+									<Box key={key} sx={{ mt: 2 }}>
+										<FormLabel sx={{ fontSize: "0.7rem", color: "#8E8E8E" }}>
+											{`Field ${index + 1}:`}
+										</FormLabel>
+										<TextField
+											sx={{
+												fontSize: "0.7rem",
+												color: "#8E8E8E",
+												"& .MuiOutlinedInput-root": {
+													borderRadius: 2.3,
+												},
+											}}
+											placeholder={`Scope ${index + 1}...`}
+											InputProps={{
+												style: {
+													height: 40,
+													width: 340,
+													fontSize: "0.7rem",
+												},
+											}}
+											value={textFields[key]}
+											onChange={(e) =>
+												setTextFields({ ...textFields, [key]: e.target.value })
+											}
+										/>
+									</Box>
+								))}
+
 							<Box sx={{ mt: 1.2 }}>
-								<FormLabel
-									sx={{
-										fontSize: "0.7rem",
-										color: "#8E8E8E",
-									}}>{`Field 2:`}</FormLabel>
+								<FormLabel sx={{ fontSize: "0.7rem", color: "#8E8E8E" }}>
+									Filter
+								</FormLabel>
 								<TextField
 									sx={{
 										fontSize: "0.7rem",
 										color: "#8E8E8E",
 										"& .MuiOutlinedInput-root": {
-											borderRadius: 2.3, // Adjust the value as needed
+											borderRadius: 2.3,
 										},
 									}}
-									placeholder={`Scope 2...`}
-									InputProps={{
-										style: {
-											height: 40,
-											width: 340,
-											fontSize: "0.7rem",
-										},
-									}}
-								/>
-							</Box>
-							<Box sx={{ mt: 1.2 }}>
-								<FormLabel
-									sx={{
-										fontSize: "0.7rem",
-										color: "#8E8E8E",
-									}}>{`Field 3:`}</FormLabel>
-								<TextField
-									sx={{
-										fontSize: "0.7rem",
-										color: "#8E8E8E",
-										"& .MuiOutlinedInput-root": {
-											borderRadius: 2.3, // Adjust the value as needed
-										},
-									}}
-									placeholder={`Scope 3...`}
-									InputProps={{
-										style: {
-											height: 40,
-											width: 340,
-											fontSize: "0.7rem",
-										},
-									}}
-								/>
-							</Box>
-							<Box sx={{ mt: 1.2 }}>
-								<FormLabel
-									sx={{
-										fontSize: "0.7rem",
-										color: "#8E8E8E",
-									}}>{`Filter`}</FormLabel>
-								<TextField
-									sx={{
-										fontSize: "0.7rem",
-										color: "#8E8E8E",
-										"& .MuiOutlinedInput-root": {
-											borderRadius: 2.3, // Adjust the value as needed
-										},
-									}}
-									placeholder={`Write your desired filter here.......`}
+									placeholder="Write your desired filter here......"
 									InputProps={{
 										style: {
 											height: 80,
@@ -147,6 +116,10 @@ const VennSettings = ({ toggleShowSetting }) => {
 											fontSize: "0.7rem",
 										},
 									}}
+									value={textFields.filter}
+									onChange={(e) =>
+										setTextFields({ ...textFields, filter: e.target.value })
+									}
 								/>
 							</Box>
 							<Box
@@ -171,35 +144,12 @@ const VennSettings = ({ toggleShowSetting }) => {
 									Close
 								</Button>
 								<Button
+									type="submit"
 									variant="contained"
 									sx={{ mx: 1, px: 5, borderRadius: 4 }}>
 									Apply
 								</Button>
 							</Box>
-							{/* {textFields.map((field, index) => (
-								<Box key={index} sx={{ mt: 2 }}>
-									<FormLabel
-										sx={{ fontSize: "0.9rem", color: "#8E8E8E" }}>{`Field ${
-										index + 1
-									}`}</FormLabel>
-									<TextField
-										sx={{ fontSize: "0.9rem", color: "#8E8E8E" }}
-										placeholder={`Scope ${index + 1}...`}
-										InputProps={{
-											style: {
-												height: 45,
-												width: 340,
-											},
-										}}
-										value={field}
-										onChange={(e) => {
-											const newFields = [...textFields];
-											newFields[index] = e.target.value;
-											setTextFields(newFields);
-										}}
-									/>
-								</Box>
-							))} */}
 						</form>
 					</Box>
 				</CardContent>

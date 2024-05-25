@@ -15,11 +15,14 @@ import Venn2 from "../res/venn.png";
 import { useState } from "react";
 import VennSettings from "../components/VennSettings";
 
-
 function Venn() {
-	
 	const [showSetting, setShowSetting] = useState(false);
-  
+	const [textFields, setTextFields] = useState({
+		field1: "",
+		field2: "",
+		filter: "",
+	});
+
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
@@ -32,7 +35,7 @@ function Venn() {
 	};
 
 	return (
-		<Box paddingBottom={4} sx={{position:"relative", zIndex:10}}>
+		<Box paddingBottom={4} sx={{}}>
 			<Typography variant="h2" textAlign="center" gutterBottom>
 				Venn Diagram
 			</Typography>
@@ -75,7 +78,6 @@ function Venn() {
 									onClick={toggleShowSetting}>
 									<SettingsIcon variant="outlined" sx={{ fontSize: 30 }} />
 								</IconButton>
-						
 							</Box>
 							<Box sx={{ position: "relative", marginBottom: "20px" }}>
 								<Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -153,24 +155,24 @@ function Venn() {
 					This are the generated problem statements, you can always edit the
 					generated problem statements if you want
 				</Typography>
-				<Box
-					component="form"
-					color="#8E8E8E"
-					display="flex"
-					flexDirection="column"
-					alignItems="center"
-					gap={2}
-					sx={{ mt: 2, mb: 4 }}>
-					{data.map((text, index) => (
-						<PSCard key={index} text={text} />
-					))}
-					<Button
-						type="submit"
-						variant="contained"
-						sx={{ py: 1.3, px: 5.3, borderRadius: 5 }}>
-						Save
-					</Button>
-				</Box>
+				<form>
+					<Box
+						display="flex"
+						flexDirection="column"
+						alignItems="center"
+						gap={2}
+						sx={{ mt: 2, mb: 4 }}>
+						{data.map((text, index) => (
+							<PSCard key={index} text={text} />
+						))}
+						<Button
+							type="submit"
+							variant="contained"
+							sx={{ py: 1.3, px: 5.3, borderRadius: 5 }}>
+							Save
+						</Button>
+					</Box>
+				</form>
 			</Box>
 			{showSetting && (
 				<Box
@@ -185,7 +187,11 @@ function Venn() {
 						alignItems: "center",
 					}}>
 					<Box sx={{ position: "relative" }}>
-						<VennSettings toggleShowSetting={toggleShowSetting} />
+						<VennSettings
+							toggleShowSetting={toggleShowSetting}
+							textFields={textFields}
+							setTextFields={setTextFields}
+						/>
 					</Box>
 				</Box>
 			)}
