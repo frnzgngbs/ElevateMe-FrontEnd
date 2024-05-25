@@ -27,6 +27,41 @@ function Venn() {
 	});
 	const [ProblemStatements, setProblemStatements] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [selectedProblemStatements, setSelectedProblemStatements] = useState({
+		statement: [],
+	});
+
+	const handleCheckChange = (text) => {
+		setSelectedProblemStatements((prevState) => {
+			const { statement } = prevState;
+			if (statement.includes(text)) {
+				return {
+					...prevState,
+					statement: statement.filter((item) => item !== text),
+				};
+			} else {
+				return { ...prevState, statement: [...statement, text] };
+			}
+		});
+	};
+
+	const handleSaveProblemStatement = async () => {
+		let token = localStorage.getItem("token");
+		try {
+			let response = await axios.post(
+				"http://localhost:8000/api/three_venn_ps/",
+				{
+					venn: { ...textFields },
+					...selectedProblemStatements,
+				},
+				{
+					headers: { Authorization: `Token ${token}` },
+				}
+			);
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
@@ -189,25 +224,27 @@ function Venn() {
 							This are the generated problem statements, you can always edit the
 							generated problem statements if you want
 						</Typography>
-						<form>
-							<Box
-								display="flex"
-								flexDirection="column"
-								alignItems="center"
-								gap={2}
-								sx={{ mt: 2, mb: 4 }}>
-								{Array.isArray(ProblemStatements) &&
-									ProblemStatements.map((text, index) => (
-										<PSCard key={index} text={text} />
-									))}
-								<Button
-									type="submit"
-									variant="contained"
-									sx={{ py: 1.3, px: 5.3, borderRadius: 5 }}>
-									Save
-								</Button>
-							</Box>
-						</form>
+						<Box
+							display="flex"
+							flexDirection="column"
+							alignItems="center"
+							gap={2}
+							sx={{ mt: 2, mb: 4 }}>
+							{Array.isArray(ProblemStatements) &&
+								ProblemStatements.map((text, index) => (
+									<PSCard
+										key={index}
+										text={text}
+										handleCheckChange={handleCheckChange}
+									/>
+								))}
+							<Button
+								onClick={handleSaveProblemStatement}
+								variant="contained"
+								sx={{ py: 1.3, px: 5.3, borderRadius: 5 }}>
+								Save
+							</Button>
+						</Box>
 					</Box>
 					{showSetting && (
 						<Box

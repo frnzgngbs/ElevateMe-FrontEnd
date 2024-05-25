@@ -2,25 +2,28 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { Stack, Typography } from "@mui/material";
 import SavedPSCard from "../components/SavedPSCard";
+import axios from "axios";
 
 const Saved = () => {
-	const [cards, setCards] = useState({
-		two_venn: [
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-		],
-		three_venn: [
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-			"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, voluptatibus ipsam, provident harum cumque obcaecati quasi praesentium, accusantium inventore quod libero nam veniam voluptatum at! Iste, necessitatibus. Aliquid, ullam mollitia!",
-		],
+	const [savedProblemStatement, setSavedProblemStatement] = useState({
+		details: {},
 	});
 
+	useEffect(() => {
+		const getSavedProblemStatement = async () => {
+			try {
+				let token = localStorage.getItem("token");
+				let response = await axios.get(
+					"http://localhost:8000/api/three_venn_ps/",
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+				console.log(response.data);
+			} catch (err) {}
+		};
+		getSavedProblemStatement();
+	}, [savedProblemStatement.two_venn, savedProblemStatement.three_venn]);
 	// Note(Franz): Initial delete implementation just for display purposes
 	const handleDelete = (settings, index) => {
 		return null;
@@ -50,14 +53,14 @@ const Saved = () => {
 						2 Venn Diagram List
 					</Typography>
 					<Box sx={{ marginTop: 4 }}>
-						{cards.two_venn.map((text, index) => (
+						{/* {savedProblemStatement.two_venn.map((text, index) => (
 							<SavedPSCard
 								key={index}
 								index={index}
 								text={text}
 								onDelete={() => handleDelete("two_venn", index)}
 							/>
-						))}
+						))} */}
 					</Box>
 				</Box>
 				<Box sx={{ mx: 10 }}>
@@ -66,13 +69,13 @@ const Saved = () => {
 					</Typography>
 					<Stack direction={"row"}>
 						<Box sx={{ marginTop: 5 }}>
-							{cards.two_venn.map((text, index) => (
+							{/* {savedProblemStatement.three_venn.map((text, index) => (
 								<SavedPSCard
 									key={index}
 									text={text}
 									onDelete={() => handleDelete("three_venn", index)}
 								/>
-							))}
+							))} */}
 						</Box>
 					</Stack>
 				</Box>
