@@ -13,13 +13,14 @@ import {
 	Typography,
 } from "@mui/material";
 
-const VennSettings = ({ toggleShowSetting, textFields, setTextFields }) => {
-	const getLastCheckButton = sessionStorage.getItem("setting");
-
-	const [selectedButton, setSelectedButton] = useState(
-		getLastCheckButton == null ? getLastCheckButton : 3
-	);
-
+const VennSettings = ({
+	toggleShowSetting,
+	textFields,
+	setTextFields,
+	selectedButton,
+	setSelectedButton,
+	setProblemStatements,
+}) => {
 	const handleChangeButton = (e) => {
 		const value = +e.target.value;
 		setSelectedButton((prev) => (prev = value));
@@ -31,6 +32,7 @@ const VennSettings = ({ toggleShowSetting, textFields, setTextFields }) => {
 		} else {
 			setTextFields((prev) => ({ ...prev, field3: "" }));
 		}
+		setProblemStatements([]);
 	};
 	const handleApplyButtonClick = () => {
 		sessionStorage.setItem("setting", selectedButton);

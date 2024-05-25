@@ -31,6 +31,12 @@ function Venn() {
 		statement: [],
 	});
 
+	const getLastCheckButton = sessionStorage.getItem("setting");
+
+	const [selectedButton, setSelectedButton] = useState(
+		getLastCheckButton == null ? getLastCheckButton : 3
+	);
+
 	const handleCheckChange = (text) => {
 		setSelectedProblemStatements((prevState) => {
 			const { statement } = prevState;
@@ -68,22 +74,32 @@ function Venn() {
 	};
 
 	const handleGenerateButtonClick = async () => {
+		setIsLoading(true);
+		let token = localStorage.getItem("token");
 		try {
-			setIsLoading(true);
-			let token = localStorage.getItem("token");
-			let response = await axios.post(
-				"http://localhost:8000/api/ai/three_venn/",
-				{
-					field1: textFields.field1,
-					field2: textFields.field2,
-					field3: textFields.field3,
-					filter_field: textFields.filter,
-				},
-				{
-					headers: { Authorization: `Token ${token}` },
-				}
-			);
-			setProblemStatements((prev) => [...response.data.response]);
+			if (selectedButton === 2) {
+				let two_response = await axios.post(
+					"http://localhost:8000/api/ai/two_venn/",
+					{
+						...textFields,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+				setProblemStatements((prev) => [...two_response.data.response]);
+			} else if (selectedButton === 3) {
+				let three_response = await axios.post(
+					"http://localhost:8000/api/ai/three_venn/",
+					{
+						...textFields,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+				setProblemStatements((prev) => [...three_response.data.response]);
+			}
 		} catch (err) {
 			console.log(err);
 		} finally {
@@ -263,6 +279,9 @@ function Venn() {
 									toggleShowSetting={toggleShowSetting}
 									textFields={textFields}
 									setTextFields={setTextFields}
+									selectedButton={selectedButton}
+									setSelectedButton={setSelectedButton}
+									setProblemStatements={setProblemStatements}
 								/>
 							</Box>
 						</Box>

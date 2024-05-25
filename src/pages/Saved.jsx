@@ -20,10 +20,11 @@ const Saved = () => {
 					}
 				);
 				console.log(response.data);
+				setSavedProblemStatement(response.data);
 			} catch (err) {}
 		};
 		getSavedProblemStatement();
-	}, [savedProblemStatement.two_venn, savedProblemStatement.three_venn]);
+	}, []);
 	// Note(Franz): Initial delete implementation just for display purposes
 	const handleDelete = (settings, index) => {
 		return null;
