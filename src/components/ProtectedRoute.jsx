@@ -7,7 +7,6 @@ const ProtectedRoute = () => {
 
 	useEffect(() => {
 		if (!token) {
-			alert("HERERERES");
 			navigate("/login", { replace: true });
 		}
 	}, [navigate, token]);

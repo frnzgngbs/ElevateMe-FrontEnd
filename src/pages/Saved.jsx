@@ -6,8 +6,44 @@ import axios from "axios";
 
 const Saved = () => {
 	const [savedProblemStatement, setSavedProblemStatement] = useState({
-		details: {},
+		two_venn: {},
+		three_venn: {}, // Initialize with an empty object
 	});
+
+	function mapData(response, setting) {
+		if (Array.isArray(response.data)) {
+			setSavedProblemStatement((prev) => {
+				const newItems = {};
+				response.data.forEach((item) => {
+					newItems[item.id] = item;
+				});
+
+				if (setting === "three_venn") {
+					return {
+						...prev,
+						two_venn: {
+							...prev.two_venn,
+						},
+						three_venn: {
+							...prev.three_venn,
+							...newItems,
+						},
+					};
+				} else {
+					return {
+						...prev,
+						two_venn: {
+							...prev.two_venn,
+							...newItems,
+						},
+						three_venn: {
+							...prev.three_venn,
+						},
+					};
+				}
+			});
+		}
+	}
 
 	useEffect(() => {
 		const getSavedProblemStatement = async () => {
@@ -19,12 +55,16 @@ const Saved = () => {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				console.log(response.data);
-				setSavedProblemStatement(response.data);
-			} catch (err) {}
+
+				mapData(response, "three_venn");
+				console.log(savedProblemStatement);
+			} catch (err) {
+				console.log("Error fetching saved problem statements:", err);
+			}
 		};
 		getSavedProblemStatement();
 	}, []);
+
 	// Note(Franz): Initial delete implementation just for display purposes
 	const handleDelete = (settings, index) => {
 		return null;
@@ -70,13 +110,16 @@ const Saved = () => {
 					</Typography>
 					<Stack direction={"row"}>
 						<Box sx={{ marginTop: 5 }}>
-							{/* {savedProblemStatement.three_venn.map((text, index) => (
+							{Object.values(savedProblemStatement.three_venn).map((item) => (
 								<SavedPSCard
-									key={index}
-									text={text}
-									onDelete={() => handleDelete("three_venn", index)}
+									key={item.id}
+									id={item.id}
+									text={item.statement}
+									venn={item.venn}
+									user={item.user}
+									onDelete={() => handleDelete("three_venn", item.id)}
 								/>
-							))} */}
+							))}
 						</Box>
 					</Stack>
 				</Box>
