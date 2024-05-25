@@ -14,6 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Venn2 from "../res/venn.png";
 import { useState } from "react";
 import VennSettings from "../components/VennSettings";
+import axios from "axios";
 
 function Venn() {
 	const [showSetting, setShowSetting] = useState(false);
@@ -24,15 +25,32 @@ function Venn() {
 		filter: "",
 	});
 
-	const data = [
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-	];
+	const [ProblemStatements, setProblemStatements] = useState([]);
+
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
+	};
+
+	const handleGenerateButtonClick = async () => {
+		try {
+			alert("CLICK");
+			let token = localStorage.getItem("token");
+			let response = await axios.post(
+				"http://localhost:8000/api/ai/three_venn/",
+				{
+					field1: textFields.field1,
+					field2: textFields.field2,
+					field3: textFields.field3,
+					filter_field: textFields.filter,
+				},
+				{
+					headers: { Authorization: `Token ${token}` },
+				}
+			);
+			setProblemStatements((prev) => [...response.data.response]);
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	return (
@@ -134,6 +152,7 @@ function Venn() {
 							your problem statement you want to be generated
 						</Typography>
 						<Button
+							onClick={handleGenerateButtonClick}
 							variant="contained"
 							sx={{
 								mt: 4.3,
@@ -163,9 +182,10 @@ function Venn() {
 						alignItems="center"
 						gap={2}
 						sx={{ mt: 2, mb: 4 }}>
-						{data.map((text, index) => (
-							<PSCard key={index} text={text} />
-						))}
+						{Array.isArray(ProblemStatements) &&
+							ProblemStatements.map((text, index) => (
+								<PSCard key={index} text={text} />
+							))}
 						<Button
 							type="submit"
 							variant="contained"

@@ -15,11 +15,12 @@ const PSCard = ({ text }) => {
 									color: "primary.main",
 								},
 								borderRadius: "50%",
+								display: "flex",
 							}}
 						/>
 					}
 					label={
-						<Typography variant="body1" sx={{ mt: 1, color: "#8e8e8e"}}>
+						<Typography variant="body1" sx={{ mt: 1, color: "#8e8e8e" }}>
 							{text}
 						</Typography>
 					}
