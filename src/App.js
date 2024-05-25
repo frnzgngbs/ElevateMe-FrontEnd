@@ -20,6 +20,7 @@ import Venn from "./pages/Venn";
 import FiveWhys from "./pages/FiveWhys";
 import HMW from "./pages/HMW";
 import ProblemList from "./pages/ProblemList";
+import ElevatorPitch from "./components/ElevatorPitch";
 
 // This is the theme for the web app
 var theme = createTheme({
@@ -128,6 +129,7 @@ const router = createBrowserRouter(
         <Route path="five_whys" element={<FiveWhys />} />
         <Route path="hmw" element={<HMW />} />
         <Route path="list" element={<ProblemList />} />
+        <Route path="elevator_pitch" element={<ElevatorPitch />} />
       </Route>
       {/* </Route> */}
       <Route path="*" element={<PageNotFound />} />
