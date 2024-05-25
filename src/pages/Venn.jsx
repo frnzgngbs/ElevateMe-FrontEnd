@@ -20,6 +20,7 @@ function Venn() {
 	const [textFields, setTextFields] = useState({
 		field1: "",
 		field2: "",
+		field3: "",
 		filter: "",
 	});
 
@@ -35,7 +36,7 @@ function Venn() {
 	};
 
 	return (
-		<Box paddingBottom={4} sx={{}}>
+		<Box paddingBottom={4}>
 			<Typography variant="h2" textAlign="center" gutterBottom>
 				Venn Diagram
 			</Typography>
@@ -90,7 +91,7 @@ function Venn() {
 											color: "#8E8E8E",
 											fontSize: "14px",
 										}}>
-										TextBox 1
+										{textFields.field1 ? textFields.field1 : "Field 1..."}
 									</Typography>
 									<Typography
 										variant="h6"
@@ -101,7 +102,7 @@ function Venn() {
 											color: "#8E8E8E",
 											fontSize: "14px",
 										}}>
-										TextBox 2
+										{textFields.field2 ? textFields.field2 : "Field 2..."}
 									</Typography>
 								</Box>
 								<Typography
@@ -114,7 +115,7 @@ function Venn() {
 										color: "#8E8E8E",
 										fontSize: "14px",
 									}}>
-									TextBox 3
+									{textFields.field3 ? textFields.field3 : "Field 3..."}
 								</Typography>
 								<img
 									src={Venn2}

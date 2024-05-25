@@ -15,30 +15,26 @@ import {
 } from "@mui/material";
 
 const VennSettings = ({ toggleShowSetting, textFields, setTextFields }) => {
-	const [selectedButton, setSelectedButton] = useState(2);
+	const [selectedButton, setSelectedButton] = useState(3);
 
 	const handleChangeButton = (e) => {
 		const value = +e.target.value;
-		setSelectedButton(value);
-
-		if (value === 2) {
-			setTextFields({
-				field1: "",
-				field2: "",
-				filter: textFields.filter,
+		setSelectedButton((prev) => (prev = value));
+		if (value === 2 && textFields.field3 !== undefined) {
+			setTextFields((prev) => {
+				const { field3, ...rest } = prev;
+				return rest; // Return the new state without field3
 			});
-		} else if (value === 3) {
-			setTextFields({
-				field1: "",
-				field2: "",
-				field3: "",
-				filter: textFields.filter,
-			});
+		} else {
+			setTextFields((prev) => ({ ...prev, field3: "" }));
 		}
+	};
+	const handleApplyButtonClick = () => {
+		toggleShowSetting();
 	};
 
 	return (
-		<Box sx={{ height: "550px", width: "450px" }}>
+		<Box sx={{ height: "560px", width: "450px" }}>
 			<Card sx={{ borderRadius: 6, width: "100%", height: "100%" }}>
 				<CardContent sx={{ m: 1.6 }}>
 					<Typography variant="h5" sx={{ color: "#186F65" }}>
@@ -60,97 +56,94 @@ const VennSettings = ({ toggleShowSetting, textFields, setTextFields }) => {
 								</RadioGroup>
 							</Grid>
 						</Grid>
-						<form>
-							{Object.keys(textFields)
-								.filter(
-									(key) =>
-										key !== "filter" &&
-										(selectedButton === 3 || key !== "field3")
-								)
-								.map((key, index) => (
-									<Box key={key} sx={{ mt: 2 }}>
-										<FormLabel sx={{ fontSize: "0.7rem", color: "#8E8E8E" }}>
-											{`Field ${index + 1}:`}
-										</FormLabel>
-										<TextField
-											sx={{
-												fontSize: "0.7rem",
-												color: "#8E8E8E",
-												"& .MuiOutlinedInput-root": {
-													borderRadius: 2.3,
-												},
-											}}
-											placeholder={`Scope ${index + 1}...`}
-											InputProps={{
-												style: {
-													height: 40,
-													width: 340,
-													fontSize: "0.7rem",
-												},
-											}}
-											value={textFields[key]}
-											onChange={(e) =>
-												setTextFields({ ...textFields, [key]: e.target.value })
-											}
-										/>
-									</Box>
-								))}
-
-							<Box sx={{ mt: 1.2 }}>
-								<FormLabel sx={{ fontSize: "0.7rem", color: "#8E8E8E" }}>
-									Filter
-								</FormLabel>
-								<TextField
-									sx={{
-										fontSize: "0.7rem",
-										color: "#8E8E8E",
-										"& .MuiOutlinedInput-root": {
-											borderRadius: 2.3,
-										},
-									}}
-									placeholder="Write your desired filter here......"
-									InputProps={{
-										style: {
-											height: 80,
-											width: 340,
+						{Object.keys(textFields)
+							.filter(
+								(key) =>
+									key !== "filter" && (selectedButton === 3 || key !== "field3")
+							)
+							.map((key, index) => (
+								<Box key={key} sx={{ mt: 2 }}>
+									<FormLabel sx={{ fontSize: "0.7rem", color: "#8E8E8E" }}>
+										{`Field ${index + 1}:`}
+									</FormLabel>
+									<TextField
+										sx={{
 											fontSize: "0.7rem",
-										},
-									}}
-									value={textFields.filter}
-									onChange={(e) =>
-										setTextFields({ ...textFields, filter: e.target.value })
-									}
-								/>
-							</Box>
-							<Box
+											color: "#8E8E8E",
+											"& .MuiOutlinedInput-root": {
+												borderRadius: 2.3,
+											},
+										}}
+										placeholder={`Scope ${index + 1}...`}
+										InputProps={{
+											style: {
+												height: 40,
+												width: 340,
+												fontSize: "0.7rem",
+											},
+										}}
+										value={textFields[key]}
+										onChange={(e) =>
+											setTextFields({ ...textFields, [key]: e.target.value })
+										}
+									/>
+								</Box>
+							))}
+
+						<Box sx={{ mt: 1.2 }}>
+							<FormLabel sx={{ fontSize: "0.7rem", color: "#8E8E8E" }}>
+								Filter
+							</FormLabel>
+							<TextField
 								sx={{
-									display: "flex",
-									justifyContent: "center",
-									mt: 3,
-								}}>
-								<Button
-									variant="contained"
-									sx={{
-										mx: 1,
-										px: 5,
-										background: "#BAD4D1",
-										color: "#186F65",
-										borderRadius: 4,
-										"&:hover": {
-											background: "#C2DBD8",
-										},
-									}}
-									onClick={toggleShowSetting}>
-									Close
-								</Button>
-								<Button
-									type="submit"
-									variant="contained"
-									sx={{ mx: 1, px: 5, borderRadius: 4 }}>
-									Apply
-								</Button>
-							</Box>
-						</form>
+									fontSize: "0.7rem",
+									color: "#8E8E8E",
+									"& .MuiOutlinedInput-root": {
+										borderRadius: 2.3,
+									},
+								}}
+								placeholder="Write your desired filter here......"
+								InputProps={{
+									style: {
+										height: 80,
+										width: 340,
+										fontSize: "0.7rem",
+									},
+								}}
+								value={textFields.filter}
+								onChange={(e) =>
+									setTextFields({ ...textFields, filter: e.target.value })
+								}
+							/>
+						</Box>
+						<Box
+							sx={{
+								display: "flex",
+								justifyContent: "center",
+								mt: 3,
+							}}>
+							<Button
+								variant="contained"
+								sx={{
+									mx: 1,
+									px: 5,
+									background: "#BAD4D1",
+									color: "#186F65",
+									borderRadius: 4,
+									"&:hover": {
+										background: "#C2DBD8",
+									},
+								}}
+								onClick={toggleShowSetting}>
+								Close
+							</Button>
+							<Button
+								onClick={handleApplyButtonClick}
+								variant="contained"
+								sx={{ mx: 1, px: 5, borderRadius: 4 }}>
+								Apply
+							</Button>
+						</Box>
 					</Box>
 				</CardContent>
 			</Card>
