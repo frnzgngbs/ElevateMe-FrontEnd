@@ -14,7 +14,11 @@ import {
 } from "@mui/material";
 
 const VennSettings = ({ toggleShowSetting, textFields, setTextFields }) => {
-	const [selectedButton, setSelectedButton] = useState(3);
+	const getLastCheckButton = sessionStorage.getItem("setting");
+
+	const [selectedButton, setSelectedButton] = useState(
+		getLastCheckButton == null ? getLastCheckButton : 3
+	);
 
 	const handleChangeButton = (e) => {
 		const value = +e.target.value;
@@ -22,13 +26,15 @@ const VennSettings = ({ toggleShowSetting, textFields, setTextFields }) => {
 		if (value === 2 && textFields.field3 !== undefined) {
 			setTextFields((prev) => {
 				const { field3, ...rest } = prev;
-				return rest; // Return the new state without field3
+				return rest;
 			});
 		} else {
 			setTextFields((prev) => ({ ...prev, field3: "" }));
 		}
 	};
 	const handleApplyButtonClick = () => {
+		sessionStorage.setItem("setting", selectedButton);
+
 		toggleShowSetting();
 	};
 

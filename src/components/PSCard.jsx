@@ -15,7 +15,6 @@ const PSCard = ({ text }) => {
 									color: "primary.main",
 								},
 								borderRadius: "50%",
-								display: "flex",
 							}}
 						/>
 					}
