@@ -46,6 +46,7 @@ const useAuth = () => {
 
 			// Navigate to the login page after successful logout
 			navigate("/login", { replace: true });
+			console.log("ASDASDA");
 		} catch (err) {
 			console.log(err);
 		}

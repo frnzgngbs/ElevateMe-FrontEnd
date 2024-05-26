@@ -75,7 +75,7 @@ const HomePage = () => {
 	return (
 		<Box>
 			{/* put background  image here: gridbackgroundpng , make sure it is behind*/}
-			 <Grid container spacing={6} justifyContent={"center"} px={13} alignItems={"center"} sx={{backgroundImage: `url(${GridBackground})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}} >
+			 <Grid container spacing={6} justifyContent={"center"} px={13} alignItems={"center"} sx={{backgroundImage: `url(${GridBackground})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', marginBottom:'50px'}} >
             {/* Adjusted left div size and font sizes */}
             <Grid item xs={11} md={5}sx={{width:"900px"}}> 
 				<div sx={{marginLeft:"100px"}}>
