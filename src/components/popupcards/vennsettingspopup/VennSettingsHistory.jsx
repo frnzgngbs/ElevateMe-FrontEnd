@@ -18,11 +18,10 @@ import Venn3Paper from "../../venndiagram/VennDiagramPaper2";
 
 const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 	const [inputValues, setInputValues] = useState({
-		field1: "",
-		field2: "",
-		field3: "",
-		field4: "",
+		...venn,
 	});
+
+	console.log(venn);
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
@@ -49,7 +48,7 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 							justifyContent="center"
 							alignItems="center"
 							height="100%">
-							<Venn3Paper />
+							<Venn3Paper venn={inputValues} />
 						</Box>
 					</Grid>
 
@@ -154,7 +153,11 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 									</Typography>
 									<InputBase
 										name="field4"
-										value={inputValues.field4}
+										value={
+											inputValues.filter
+												? inputValues.filter
+												: "Write your desired filter here..."
+										}
 										onChange={handleInputChange}
 										multiline
 										minRows={5}
