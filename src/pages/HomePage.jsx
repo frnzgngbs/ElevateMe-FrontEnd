@@ -20,13 +20,14 @@ import elevator from "../res/elevator.svg";
 import notebook from "../res/techno-book.svg";
 import { useNavigate } from "react-router-dom";
 import Bookpng from "../res/book.png";
-import GridBackground from "../res/gridbackground.png"
+import GridBackground from "../res/gridbackground.png";
+import HomePageCards from "../components/HomePageCards";
 
 const HomePage = () => {
 	const navigate = useNavigate();
-//To Do: Update the statements in the cards here
-//		 Connect the API and populate the fields
-//       Saave Session
+	//To Do: Update the statements in the cards here
+	//		 Connect the API and populate the fields
+	//       Saave Session
 	const cards = {
 		venn: {
 			icon: venn,
@@ -75,106 +76,78 @@ const HomePage = () => {
 	return (
 		<Box>
 			{/* put background  image here: gridbackgroundpng , make sure it is behind*/}
-			 <Grid container spacing={6} justifyContent={"center"} px={13} alignItems={"center"} sx={{backgroundImage: `url(${GridBackground})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', marginBottom:'50px'}} >
-            {/* Adjusted left div size and font sizes */}
-            <Grid item xs={11} md={5}sx={{width:"900px"}}> 
-				<div sx={{marginLeft:"100px"}}>
-                <Typography variant="h1" fontSize="50px">ElevateMe</Typography>
-                <br />
-                <Typography variant="body1" fontWeight={"bold"} textAlign={"left"} fontSize="14px" width="650px">
-                    ElevateMe is an app that generates problem statements. It follows
-                    the Technopreneurship Workbook. A group of CIT-U students made this
-                    app to automate the current and long process of technopreneurship
-                    workbook.
-                </Typography>
-                <br />
-                <Typography variant="body1" textAlign={"left"} fontSize="14px" width="650px">
-                    Its goal is to shorten the time lorem ipsum setrsa nerates problem
-                    statements. It follows the Technopreneurship Workbook. A group of
-                    CIT-U students made this app to automate the current and long
-                    process of technopreneurship workbook.
-                </Typography>
-                <br />
-                <Button variant="contained" sx={{ py: 1, px: 5, borderRadius: 4 }}>
-                    About
-                </Button>
-				</div>
-            </Grid>
-            {/* Right div remains unchanged */}
-            <Grid item xs={12} md={6} width={"800px"}>
-                <Box
-                    sx={{ display: "flex", justifyContent: "right", flexDirection: "row", alignItems: "center" }}>
-                    <img src={Bookpng} alt="Techno Book" style={{ maxWidth: '450px', maxHeight: 'auto' }} />
-                </Box>
-            </Grid>
-        </Grid>
-			<Box>
-				<Box>
-					<Typography variant="h2" textAlign={"center"}>
-						Features
-					</Typography>
-					<br />
-					<Box
-						sx={{
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-						}}>
+			<Grid
+				container
+				spacing={6}
+				justifyContent={"center"}
+				alignItems={"center"}
+				sx={{
+					backgroundImage: `url(${GridBackground})`,
+					backgroundSize: "cover",
+					backgroundRepeat: "no-repeat",
+					marginBottom: "50px",
+				}}>
+				{/* Adjusted left div size and font sizes */}
+				<Grid item xs={10} md={5} pr={5}>
+					<div>
+						<Typography variant="h1" fontSize="50px">
+							ElevateMe
+						</Typography>
+						<br />
 						<Typography
 							variant="body1"
-							sx={{ textAlign: "center", width: "1000px", marginBottom: 4 }}>
+							fontWeight={"bold"}
+							textAlign={"justify"}
+							fontSize="14px">
 							ElevateMe is an app that generates problem statements. It follows
 							the Technopreneurship Workbook. A group of CIT-U students made
 							this app to automate the current and long process of
 							technopreneurship workbook.
 						</Typography>
+						<br />
+						<Typography variant="body1" textAlign={"justify"} fontSize="14px">
+							Its goal is to shorten the time lorem ipsum setrsa nerates problem
+							statements. It follows the Technopreneurship Workbook. A group of
+							CIT-U students made this app to automate the current and long
+							process of technopreneurship workbook.
+						</Typography>
+						<br />
+						<Button variant="contained" sx={{ py: 1, px: 5, borderRadius: 4 }}>
+							About
+						</Button>
+					</div>
+				</Grid>
+				{/* Right div remains unchanged */}
+				<Grid item xs={10} md={5}>
+					<Box>
+						<img
+							src={Bookpng}
+							alt="Techno Book"
+							style={{
+								maxWidth: "450px",
+								maxHeight: "auto",
+							}}
+						/>
 					</Box>
-				</Box>
-			</Box>
+				</Grid>
+			</Grid>
 			<Box
 				sx={{
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "center",
-					mx: 15,
-					width:"900px",
-					margin: "auto"
+					width: "900px",
+					margin: "auto",
 				}}>
 				<Grid container spacing={2} sx={{ marginBottom: 8 }}>
 					{Object.entries(cards).map(([key, card]) => (
-						<Grid item xs={12} md={4} key={key}>
-							<Card
-								sx={{
-									borderRadius: 5,
-									boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
-									width:"280px",
-									height:"350px",
-									
-								}}
-								elevation={3}>
-								<ButtonBase onClick={() => handleCardClick(key)}>
-									<CardActionArea>
-										<CardContent>
-										<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px', marginTop: 2 }}>
-												<CardMedia component="img" src={card.icon} sx={{ maxHeight: "100px", maxWidth: "100%", objectFit: 'contain' }} />
-											</Box>
-											<Typography
-												variant="h5"
-												textAlign={"center"}
-												sx={{ mt: 2 }}>
-												{card.title}
-											</Typography>
-											<Typography
-												variant="body1"
-												textAlign={"center"}
-												fontSize={"13px"}
-												sx={{ mt: 1 }}>
-												{card.description}
-											</Typography>
-										</CardContent>
-									</CardActionArea>
-								</ButtonBase>
-							</Card>
+						<Grid item key={key}>
+							<HomePageCards
+								key={key}
+								card={key}
+								{...card}
+								handleCardClick={handleCardClick}
+							/>
 						</Grid>
 					))}
 				</Grid>

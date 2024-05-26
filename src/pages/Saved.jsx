@@ -1,62 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Box from "@mui/material/Box";
 import { Stack, Typography } from "@mui/material";
 import SavedPSCard from "../components/SavedPSCard";
 import axios from "axios";
 
-const Saved = () => {
-	const [savedProblemStatement, setSavedProblemStatement] = useState({
-		two_venn: {},
-		three_venn: {}, // Initialize with an empty object
-	});
-
-	function mapData(response, setting) {
-		if (Array.isArray(response.data)) {
-			setSavedProblemStatement((prev) => {
-				const newItems = {};
-				response.data.forEach((item) => {
-					newItems[item.id] = item;
-				});
-
-				if (setting === "three_venn") {
-					return {
-						...prev,
-						two_venn: {
-							...prev.two_venn,
-						},
-						three_venn: {
-							...prev.three_venn,
-							...newItems,
-						},
-					};
-				} else if (setting === "two_venn") {
-					return {
-						...prev,
-						two_venn: {
-							...prev.two_venn,
-							...newItems,
-						},
-						three_venn: {
-							...prev.three_venn,
-						},
-					};
-				}
-			});
-		}
+function problemStatementReducer(state, action) {
+	switch (action.type) {
+		case "SET_TWO_VENN":
+			return {
+				...state,
+				two_venn: action.payload,
+			};
+		case "SET_THREE_VENN":
+			return {
+				...state,
+				three_venn: action.payload,
+			};
+		default:
+			return state;
 	}
+}
+
+const Saved = () => {
+	const [savedProblemStatement, dispatch] = useReducer(
+		problemStatementReducer,
+		{
+			two_venn: {},
+			three_venn: {},
+		}
+	);
 
 	useEffect(() => {
 		const getSavedProblemStatement = async () => {
 			try {
 				let token = localStorage.getItem("token");
-				let response = await axios.get(
-					"http://localhost:8000/api/three_venn_ps/",
-					{
-						headers: { Authorization: `Token ${token}` },
-					}
-				);
-
-				mapData(response, "three_venn");
 
 				let response1 = await axios.get(
 					"http://localhost:8000/api/two_venn_ps/",
@@ -64,18 +41,33 @@ const Saved = () => {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
+				dispatch({ type: "SET_TWO_VENN", payload: mapData(response1.data) });
 
-				mapData(response1, "two_venn");
-				console.log(savedProblemStatement);
+				let response = await axios.get(
+					"http://localhost:8000/api/three_venn_ps/",
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+				dispatch({ type: "SET_THREE_VENN", payload: mapData(response.data) });
 			} catch (err) {
 				console.log("Error fetching saved problem statements:", err);
 			}
 		};
+
 		getSavedProblemStatement();
 	}, []);
 
-	// Note(Franz): Initial delete implementation just for display purposes
+	const mapData = (data) => {
+		const newItems = {};
+		data.forEach((item) => {
+			newItems[item.id] = item;
+		});
+		return newItems;
+	};
+
 	const handleDelete = (settings, index) => {
+		// Implement delete functionality here
 		return null;
 	};
 

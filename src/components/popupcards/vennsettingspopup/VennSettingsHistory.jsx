@@ -21,8 +21,6 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 		...venn,
 	});
 
-	console.log(venn);
-
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setInputValues({ ...inputValues, [name]: value });
