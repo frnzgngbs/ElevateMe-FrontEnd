@@ -1,13 +1,4 @@
-import {
-	Box,
-	Button,
-	Card,
-	Grid,
-	IconButton,
-	Typography,
-	TextField,
-} from "@mui/material";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { Box, Button, Card, Grid, IconButton, Typography } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import PSCard from "../components/PSCard";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -53,17 +44,34 @@ function Venn() {
 
 	const handleSaveProblemStatement = async () => {
 		let token = localStorage.getItem("token");
+		let response;
 		try {
-			let response = await axios.post(
-				"http://localhost:8000/api/three_venn_ps/",
-				{
-					venn: { ...textFields },
-					...selectedProblemStatements,
-				},
-				{
-					headers: { Authorization: `Token ${token}` },
-				}
-			);
+			if (selectedButton === 2) {
+				response = await axios.post(
+					"http://localhost:8000/api/two_venn_ps/",
+					{
+						venn: { ...textFields },
+						...selectedProblemStatements,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+			} else if (selectedButton === 3) {
+				response = await axios.post(
+					"http://localhost:8000/api/three_venn_ps/",
+					{
+						venn: { ...textFields },
+						...selectedProblemStatements,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+			}
+			if (response.status === 201) {
+				alert("Saved successfully");
+			}
 		} catch (err) {
 			console.log(err);
 		}

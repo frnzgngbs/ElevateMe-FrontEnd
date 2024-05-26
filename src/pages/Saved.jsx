@@ -29,7 +29,7 @@ const Saved = () => {
 							...newItems,
 						},
 					};
-				} else {
+				} else if (setting === "two_venn") {
 					return {
 						...prev,
 						two_venn: {
@@ -57,6 +57,15 @@ const Saved = () => {
 				);
 
 				mapData(response, "three_venn");
+
+				let response1 = await axios.get(
+					"http://localhost:8000/api/two_venn_ps/",
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+
+				mapData(response1, "two_venn");
 				console.log(savedProblemStatement);
 			} catch (err) {
 				console.log("Error fetching saved problem statements:", err);
@@ -93,35 +102,35 @@ const Saved = () => {
 					<Typography variant="h4" sx={{ marginTop: 10 }}>
 						2 Venn Diagram List
 					</Typography>
-					<Box sx={{ marginTop: 4 }}>
-						{/* {savedProblemStatement.two_venn.map((text, index) => (
+					<Box sx={{ marginTop: 5 }}>
+						{Object.values(savedProblemStatement.two_venn).map((item) => (
 							<SavedPSCard
-								key={index}
-								index={index}
-								text={text}
-								onDelete={() => handleDelete("two_venn", index)}
+								key={item.id}
+								id={item.id}
+								text={item.statement}
+								venn={item.venn}
+								user={item.user}
+								onDelete={() => handleDelete("three_venn", item.id)}
 							/>
-						))} */}
+						))}
 					</Box>
 				</Box>
 				<Box sx={{ mx: 10 }}>
 					<Typography variant="h4" sx={{ marginTop: 10 }}>
 						3 Venn Diagram List
 					</Typography>
-					<Stack direction={"row"}>
-						<Box sx={{ marginTop: 5 }}>
-							{Object.values(savedProblemStatement.three_venn).map((item) => (
-								<SavedPSCard
-									key={item.id}
-									id={item.id}
-									text={item.statement}
-									venn={item.venn}
-									user={item.user}
-									onDelete={() => handleDelete("three_venn", item.id)}
-								/>
-							))}
-						</Box>
-					</Stack>
+					<Box sx={{ marginTop: 5 }}>
+						{Object.values(savedProblemStatement.three_venn).map((item) => (
+							<SavedPSCard
+								key={item.id}
+								id={item.id}
+								text={item.statement}
+								venn={item.venn}
+								user={item.user}
+								onDelete={() => handleDelete("three_venn", item.id)}
+							/>
+						))}
+					</Box>
 				</Box>
 			</Box>
 		</Box>
