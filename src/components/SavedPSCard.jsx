@@ -8,55 +8,57 @@ import Typography from "@mui/material/Typography";
 import { Button, Grid } from "@mui/material";
 import { useState } from "react";
 
+import VennSettingsHistoryPopup from "../components/popupcards/vennsettingspopup/VennSettingsHistory";
 
-import VennSettingsHistoryPopup from "../components/popupcards/vennsettingspopup/VennSettingsHistory"; 
-
-const SavedPSCard = ({ text, index, onDelete }) => {
-
+const SavedPSCard = ({ id, text, venn, onDelete }) => {
 	const [openPopup, setOpenPopup] = React.useState(false);
 
-
-    const handleOpenPopup = () => {
-        setOpenPopup(!openPopup);
+	const handleOpenPopup = () => {
+		setOpenPopup(!openPopup);
 	};
 	return (
 		<>
-		<Card
-			sx={{
-				display: "flex",
-				position:"relative",
-				marginX: 7,
-				zIndex:1,
-				marginY: 1.5,
-				borderRadius: 5,
-				boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
-			}}>
-			<Grid container alignItems="center" sx={{position:"relative"}}>
-				<Grid item sx={{ ml: 1 }}>
-					<IconButton onClick={onDelete}>
-						<EditIcon />
-					</IconButton>
+			<Card
+				key={id}
+				sx={{
+					display: "flex",
+					position: "relative",
+					marginX: 7,
+					zIndex: 1,
+					marginY: 1.5,
+					borderRadius: 5,
+					boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
+				}}>
+				<Grid container alignItems="center" sx={{ position: "relative" }}>
+					<Grid item sx={{ ml: 1 }}>
+						<IconButton onClick={onDelete}>
+							<EditIcon />
+						</IconButton>
+					</Grid>
+					<Grid item xs>
+						<CardContent>
+							<Typography variant="body1">{text}</Typography>
+						</CardContent>
+					</Grid>
+					<Grid item sx={{ mx: 1 }}>
+						<IconButton onClick={handleOpenPopup}>
+							<Button variant="contained" sx={{ px: 3, borderRadius: 5 }}>
+								Show
+							</Button>
+						</IconButton>
+					</Grid>
+					<Grid item sx={{ mr: 1 }}>
+						<IconButton onClick={onDelete}>
+							<DeleteIcon color="error" />
+						</IconButton>
+					</Grid>
 				</Grid>
-				<Grid item xs>
-					<CardContent>
-						<Typography variant="body1">{text}</Typography>
-					</CardContent>
-				</Grid>
-				<Grid item sx={{ mx: 1 }}>
-					<IconButton onClick={handleOpenPopup}>
-						<Button variant="contained" sx={{ px: 3, borderRadius: 5 }}>
-							Show
-						</Button>
-					</IconButton>
-				</Grid>
-				<Grid item sx={{ mr: 1 }}>
-					<IconButton onClick={onDelete}>
-						<DeleteIcon color="error" />
-					</IconButton>
-				</Grid>
-			</Grid>
-		</Card>
-		<VennSettingsHistoryPopup open={openPopup} onClose={() => setOpenPopup(false)} />
+			</Card>
+			<VennSettingsHistoryPopup
+				venn={venn}
+				open={openPopup}
+				onClose={() => setOpenPopup(false)}
+			/>
 		</>
 	);
 };
