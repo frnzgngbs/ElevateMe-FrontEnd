@@ -20,6 +20,7 @@ import Venn from "./pages/Venn";
 import FiveWhys from "./pages/FiveWhys";
 import HMW from "./pages/HMW";
 import AppRoute from "./components/AppRoute";
+import LoadingScreen from "./components/LoadingScreen";
 // This is the theme for the web app
 var theme = createTheme({
 	typography: {
