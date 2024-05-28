@@ -1,33 +1,23 @@
-import { Checkbox } from "@mui/material";
-import { Card, CardContent, FormControlLabel, Typography } from "@mui/material";
-import React from "react";
+import { Card, CardContent, Typography, IconButton } from "@mui/material";
+import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import React, { useState } from "react";
 
-const PSCard = ({ text, handleCheckChange }) => {
+const PSCard = ({ checked, text, handleCheckChange }) => {
+	const [click, setClick] = useState(checked);
 	return (
 		<Card sx={{ width: "100%", borderRadius: 6.2, boxShadow: 3 }}>
 			<CardContent sx={{ display: "flex", alignItems: "center" }}>
-				<FormControlLabel
-					control={
-						<Checkbox
-							sx={{
-								color: "primary.main",
-								"&.Mui-checked": {
-									color: "primary.main",
-								},
-								borderRadius: "50%",
-							}}
-							onChange={() => {
-								handleCheckChange(text);
-							}}
-						/>
-					}
-					label={
-						<Typography variant="body1" sx={{ mt: 1, color: "#8e8e8e" }}>
-							{text}
-						</Typography>
-					}
-					sx={{ flex: 1, margin: 0 }}
-				/>
+				<IconButton
+					onClick={() => {
+						handleCheckChange(text);
+						setClick((prev) => !prev);
+					}}>
+					{!click ? <CheckBoxOutlineBlankOutlinedIcon /> : <CheckBoxIcon />}
+				</IconButton>
+				<Typography variant="body1" sx={{ mt: 1, color: "#8e8e8e" }}>
+					{text}
+				</Typography>
 			</CardContent>
 		</Card>
 	);
