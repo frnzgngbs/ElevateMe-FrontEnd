@@ -116,24 +116,22 @@ var theme = createTheme({
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<>
-			<Route element={<AppRoute />}>
-				<Route path="/" element={<Navigate to="/login" />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/register" element={<Register />} />
-				<Route path="" element={<ProtectedRoute />}>
-					<Route path="" element={<UserAppbar />}>
-						<Route path="home" element={<Home />} />
-						<Route path="saved" element={<Saved />} />
-						<Route path="venn" element={<Venn />} />
-						<Route path="list" element={<List />} />
-						<Route path="five_whys" element={<FiveWhys />} />
-						<Route path="hmw" element={<HMW />} />
-					</Route>
+		<Route element={<AppRoute />}>
+			<Route path="/" element={<Navigate to="/login" />} />
+			<Route path="/login" element={<Login />} />
+			<Route path="/register" element={<Register />} />
+			<Route path="" element={<ProtectedRoute />}>
+				<Route path="" element={<UserAppbar />}>
+					<Route path="home" element={<Home />} />
+					<Route path="saved" element={<Saved />} />
+					<Route path="venn" element={<Venn />} />
+					<Route path="list" element={<List />} />
+					<Route path="five_whys" element={<FiveWhys />} />
+					<Route path="hmw" element={<HMW />} />
 				</Route>
-				<Route path="*" element={<PageNotFound />} />
 			</Route>
-		</>
+			<Route path="*" element={<PageNotFound />} />
+		</Route>
 	)
 );
 
