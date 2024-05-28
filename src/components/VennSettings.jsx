@@ -19,7 +19,6 @@ const VennSettings = ({
 	setTextFields,
 	selectedButton,
 	setSelectedButton,
-	setProblemStatements,
 }) => {
 	const handleChangeButton = (e) => {
 		const value = +e.target.value;
@@ -32,9 +31,15 @@ const VennSettings = ({
 		} else {
 			setTextFields((prev) => ({ ...prev, field3: "" }));
 		}
-		setProblemStatements([]);
 	};
 	const handleApplyButtonClick = () => {
+		sessionStorage.setItem("setting", selectedButton);
+		sessionStorage.setItem("field1", textFields.field1);
+		sessionStorage.setItem("field2", textFields.field2);
+		if (textFields.field3 !== undefined) {
+			sessionStorage.setItem("field3", textFields.field3);
+		}
+		sessionStorage.setItem("filter", textFields.filter);
 		sessionStorage.setItem("setting", selectedButton);
 
 		toggleShowSetting();

@@ -17,7 +17,7 @@ const AppRoute = () => {
 
 	useEffect(() => {
 		handleRedirection();
-	}, [navigate, token]);
+	});
 
 	return <Outlet />;
 };
