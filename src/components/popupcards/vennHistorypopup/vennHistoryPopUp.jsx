@@ -77,10 +77,8 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										}}>
 										Field 1:
 									</Typography>
-									<InputBase
-										name="field1"
-										value={inputValues.field1}
-										onChange={handleInputChange}
+									<Typography
+									
 										sx={{
 											flex: 1,
 											p: 0.5,
@@ -88,9 +86,12 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 											boxShadow: 2,
 											backgroundColor: "white",
 											fontSize: "12px",
+                                            height:"32px",
+                                            alignItems:"center",
+                                            justifyContent:"center",
 										}}
 										fullWidth
-									/>
+									>{inputValues.field1}</Typography>
 								</Box>
 								<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
 									<Typography
@@ -103,10 +104,8 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										}}>
 										Field 2:
 									</Typography>
-									<InputBase
-										name="field2"
-										value={inputValues.field2}
-										onChange={handleInputChange}
+									<Typography
+										
 										sx={{
 											flex: 1,
 											p: 0.5,
@@ -114,9 +113,11 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 											boxShadow: 2,
 											backgroundColor: "white",
 											fontSize: "12px",
+                                            height:"32px",
+                                            alignItems:"center",
 										}}
 										fullWidth
-									/>
+									>{inputValues.field2} </Typography>
 								</Box>
 								<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
 									<Typography
@@ -129,10 +130,9 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										}}>
 										Field 3:
 									</Typography>
-									<InputBase
-										name="field3"
-										value={inputValues.field3}
-										onChange={handleInputChange}
+									<Typography
+										
+										
 										sx={{
 											flex: 1,
 											p: 0.5,
@@ -140,9 +140,13 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 											boxShadow: 2,
 											backgroundColor: "white",
 											fontSize: "12px",
+                                            height:"32px",
+                                           alignItems:"center",
+                                            
+                                            
 										}}
 										fullWidth
-									/>
+									>{inputValues.field3}</Typography>
 								</Box>
 								<Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
 									<Typography
@@ -169,7 +173,7 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										sx={{
 											flex: 1,
 											p: 2,
-											maxHeight: "7.5rem", // Adjust this value to match the height of 5 lines
+											maxHeight: "7.5rem", 
 											borderRadius: 2,
 											boxShadow: 2,
 											backgroundColor: "white",
