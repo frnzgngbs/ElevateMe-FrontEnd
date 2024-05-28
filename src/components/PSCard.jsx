@@ -7,7 +7,8 @@ const PSCard = ({ checked, text, handleCheckChange }) => {
 	const [click, setClick] = useState(checked);
 	return (
 		<Card sx={{ width: "100%", borderRadius: 6.2, boxShadow: 3 }}>
-			<CardContent sx={{ display: "flex", alignItems: "center" }}>
+			<CardContent
+				sx={{ height: "80px", display: "flex", alignItems: "center" }}>
 				<IconButton
 					onClick={() => {
 						handleCheckChange(text);
