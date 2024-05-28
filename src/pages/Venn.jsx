@@ -65,11 +65,15 @@ function Venn() {
 					headers: { Authorization: `Token ${token}` },
 				}
 			);
+
+			//for venn 2 post
+		
+			//
 		} catch (err) {
 			console.log(err);
 		}
 	};
-
+	
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
 	};

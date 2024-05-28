@@ -17,36 +17,33 @@ const Saved = () => {
 				response.data.forEach((item) => {
 					newItems[item.id] = item;
 				});
-	
-				let updatedTwoVenn = { ...prev.two_venn };
-				let updatedThreeVenn = { ...prev.three_venn };
-	
-				// Filter out duplicates for two_venn
-				if (setting !== "three_venn") {
-					Object.keys(newItems).forEach((id) => {
-						if (!updatedTwoVenn[id]) {
-							updatedTwoVenn[id] = newItems[id];
-						}
-					});
-				}
-				
-				// Filter out duplicates for three_venn
+
 				if (setting === "three_venn") {
-					Object.keys(newItems).forEach((id) => {
-						if (!updatedThreeVenn[id]) {
-							updatedThreeVenn[id] = newItems[id];
-						}
-					});
+					return {
+						...prev,
+						two_venn: {
+							...prev.two_venn,
+						},
+						three_venn: {
+							...prev.three_venn,
+							...newItems,
+						},
+					};
+				} else {
+					return {
+						...prev,
+						two_venn: {
+							...prev.two_venn,
+							...newItems,
+						},
+						three_venn: {
+							...prev.three_venn,
+						},
+					};
 				}
-	
-				return {
-					two_venn: updatedTwoVenn,
-					three_venn: updatedThreeVenn,
-				};
 			});
 		}
 	}
-	
 
 	useEffect(() => {
 		const getSavedProblemStatement = async () => {
