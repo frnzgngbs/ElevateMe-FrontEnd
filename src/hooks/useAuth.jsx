@@ -7,13 +7,11 @@ const useAuth = () => {
 
 	const Login = async (user) => {
 		try {
-		
 			let response = await axios.post("http://localhost:8000/api/user/login/", {
 				username: user.username,
 				password: user.password,
-				
 			});
-		
+
 			if (response.status === 200) {
 				localStorage.setItem("token", response.data.token);
 				navigate("/home", { replace: true });
@@ -41,12 +39,10 @@ const useAuth = () => {
 			);
 
 			localStorage.removeItem("token");
+			sessionStorage.clear();
 			alert("Logout successful!");
-			console.log("REMOVED: " + localStorage.getItem("token"));
 
-			// Navigate to the login page after successful logout
 			navigate("/login", { replace: true });
-			console.log("ASDASDA");
 		} catch (err) {
 			console.log(err);
 		}
