@@ -7,20 +7,21 @@ import axios from "axios";
 function problemStatementReducer(state, action) {
 	switch (action.type) {
 		case "SET_TWO_VENN":
-			return {
-				...state,
-				two_venn: action.payload,
-			};
+			return { ...state, two_venn: action.statements };
 		case "SET_THREE_VENN":
-			return {
-				...state,
-				three_venn: action.payload,
-			};
+			return { ...state, three_venn: action.statements };
+		case "DELETE_TWO_VENN":
+			const { [action.id]: discardedTwoStatementValue, ...updatedTwoVenn } =
+				state.two_venn;
+			return { ...state, two_venn: updatedTwoVenn };
+		case "DELETE_THREE_VENN":
+			const { [action.id]: discardedThreeStatementValue, ...updatedThreeVenn } =
+				state.three_venn;
+			return { ...state, three_venn: updatedThreeVenn };
 		default:
 			return state;
 	}
 }
-
 const Saved = () => {
 	const [savedProblemStatement, dispatch] = useReducer(
 		problemStatementReducer,
@@ -41,7 +42,7 @@ const Saved = () => {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				dispatch({ type: "SET_TWO_VENN", payload: mapData(response1.data) });
+				dispatch({ type: "SET_TWO_VENN", statements: mapData(response1.data) });
 
 				let response = await axios.get(
 					"http://localhost:8000/api/three_venn_ps/",
@@ -49,7 +50,10 @@ const Saved = () => {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				dispatch({ type: "SET_THREE_VENN", payload: mapData(response.data) });
+				dispatch({
+					type: "SET_THREE_VENN",
+					statements: mapData(response.data),
+				});
 			} catch (err) {
 				console.log("Error fetching saved problem statements:", err);
 			}
@@ -66,9 +70,35 @@ const Saved = () => {
 		return newItems;
 	};
 
-	const handleDelete = (settings, index) => {
-		// Implement delete functionality here
+	const handleEdit = async (setting, id, statement) => {
+		// if (setting === "two_venn") {
+		// } else if (setting === "three_venn") {
+		// }
 		return null;
+	};
+
+	const handleDelete = async (setting, id) => {
+		if (setting === "two_venn") {
+			try {
+				let token = localStorage.getItem("token");
+				await axios.delete(`http://localhost:8000/api/two_venn_ps/${id}/`, {
+					headers: { Authorization: `Token ${token}` },
+				});
+				dispatch({ type: "DELETE_TWO_VENN", id });
+			} catch (err) {
+				console.log("Error deleting problem statement:", err);
+			}
+		} else if (setting === "three_venn") {
+			try {
+				let token = localStorage.getItem("token");
+				await axios.delete(`http://localhost:8000/api/three_venn_ps/${id}/`, {
+					headers: { Authorization: `Token ${token}` },
+				});
+				dispatch({ type: "DELETE_THREE_VENN", id });
+			} catch (err) {
+				console.log("Error deleting problem statement:", err);
+			}
+		}
 	};
 
 	return (
@@ -102,7 +132,7 @@ const Saved = () => {
 								text={item.statement}
 								venn={item.venn}
 								user={item.user}
-								onDelete={() => handleDelete("three_venn", item.id)}
+								onDelete={() => handleDelete("two_venn", item.id)}
 							/>
 						))}
 					</Box>
@@ -119,6 +149,7 @@ const Saved = () => {
 								text={item.statement}
 								venn={item.venn}
 								user={item.user}
+								// onEdit={() => handleEdit("three_venn", item.id, statement)}
 								onDelete={() => handleDelete("three_venn", item.id)}
 							/>
 						))}

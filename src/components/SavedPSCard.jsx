@@ -11,11 +11,17 @@ import { useState } from "react";
 import VennSettingsHistoryPopup from "../components/popupcards/vennsettingspopup/VennSettingsHistory";
 
 const SavedPSCard = ({ id, text, venn, onDelete }) => {
-	const [openPopup, setOpenPopup] = React.useState(false);
+	const [openPopup, setOpenPopup] = useState(false);
+	const [isEditable, setIsEditable] = useState(false);
 
 	const handleOpenPopup = () => {
 		setOpenPopup(!openPopup);
 	};
+
+	const setTextFieldToEditable = () => {
+		setIsEditable((prev) => !prev);
+	};
+
 	return (
 		<>
 			<Card
@@ -31,13 +37,32 @@ const SavedPSCard = ({ id, text, venn, onDelete }) => {
 				}}>
 				<Grid container alignItems="center" sx={{ position: "relative" }}>
 					<Grid item sx={{ ml: 1 }}>
-						<IconButton onClick={onDelete}>
+						<IconButton>
+							{/* 
+							TODO: Add this later on the icon button functionality
+							onClick={() => setIsEditable((prev) => !prev)}
+							*/}
 							<EditIcon />
 						</IconButton>
 					</Grid>
 					<Grid item xs>
 						<CardContent>
-							<Typography variant="body1">{text}</Typography>
+							<Grid container>
+								<Grid
+									item
+									xs
+									sx={{
+										display: "flex",
+										alignItems: "center",
+									}}>
+									<Typography variant="body1">
+										{/*
+										TODO: Add this later
+										 contenteditable={isEditable ? "true" : "false"} */}
+										{text}
+									</Typography>
+								</Grid>
+							</Grid>
 						</CardContent>
 					</Grid>
 					<Grid item sx={{ mx: 1 }}>

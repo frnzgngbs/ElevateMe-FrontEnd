@@ -141,7 +141,7 @@ const HomePage = () => {
 				}}>
 				<Grid container spacing={2} sx={{ marginBottom: 8 }}>
 					{Object.entries(cards).map(([key, card]) => (
-						<Grid item key={key}>
+						<Grid item key={key} xs={4} sx={{ width: "280px" }}>
 							<HomePageCards
 								key={key}
 								card={key}
