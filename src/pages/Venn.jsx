@@ -16,6 +16,7 @@ import { useState } from "react";
 import VennSettings from "../components/VennSettings";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
+import GridBackground from "../res/gridbackground.png"
 
 function Venn() {
 	const [showSetting, setShowSetting] = useState(false);
@@ -110,9 +111,18 @@ function Venn() {
 	return (
 		<>
 			{isLoading ? (
+				<Box 
+				sx={{
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					height: '100vh', // Full viewport height
+				}}
+			>
 				<LoadingScreen />
+			</Box>
 			) : (
-				<Box paddingBottom={4}>
+				<Box paddingBottom={4}sx={{backgroundImage: `url(${GridBackground})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', marginBottom:'60px', backgroundPositionY:"-124px" }}>
 					<Typography variant="h2" textAlign="center" gutterBottom>
 						Venn Diagram
 					</Typography>
@@ -167,21 +177,35 @@ function Venn() {
 												variant="h6"
 												sx={{
 													position: "absolute",
-													top: "80px",
-													left: "35px",
+													top: "72px",
+													left: "24px",
 													color: "#8E8E8E",
 													fontSize: "14px",
-												}}>
+													width: "81px",
+													textAlign: "center",
+													overflow: "hidden",
+													display: "-webkit-box",
+													WebkitLineClamp: 3,
+													WebkitBoxOrient: "vertical",
+												}}
+											>
 												{textFields.field1 ? textFields.field1 : "Field 1..."}
 											</Typography>
+
 											<Typography
 												variant="h6"
 												sx={{
 													position: "absolute",
-													top: "80px",
+													top: "72px",
 													right: "35px",
 													color: "#8E8E8E",
 													fontSize: "14px",
+													width: "81px",
+													textAlign: "center",
+													overflow: "hidden",
+													display: "-webkit-box",
+													WebkitLineClamp: 3,
+													WebkitBoxOrient: "vertical",
 												}}>
 												{textFields.field2 ? textFields.field2 : "Field 2..."}
 											</Typography>
@@ -195,6 +219,12 @@ function Venn() {
 												transform: "translate(-50%)",
 												color: "#8E8E8E",
 												fontSize: "14px",
+												width: "81px",
+												textAlign: "center",
+												overflow: "hidden",
+												display: "-webkit-box",
+												WebkitLineClamp: 3,
+												WebkitBoxOrient: "vertical",
 											}}>
 											{textFields.field3 ? textFields.field3 : "Field 3..."}
 										</Typography>
