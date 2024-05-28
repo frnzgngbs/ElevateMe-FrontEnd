@@ -3,27 +3,40 @@ import { CheckBox } from "@mui/icons-material";
 import PSCard from "../components/PSCard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Venn2 from "../res/venn.png";
-import { useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import VennSettings from "../components/VennSettings";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
 
+function problemStatementDispatch(state, action) {
+	switch (action.type) {
+		case "SET_PROBLEM_STATEMENT":
+			sessionStorage.setItem("generated_PS", JSON.stringify(action.ps_list));
+			return [...action.ps_list];
+		case "SAVE_PROBLEM_STATEMENT":
+			return state.filter((item) => !action.saved_ps_list.includes(item));
+		default:
+			return [...state];
+	}
+}
+
 function Venn() {
 	const [showSetting, setShowSetting] = useState(false);
 	const [textFields, setTextFields] = useState({
-		field1: "",
-		field2: "",
-		field3: "",
-		filter: "",
+		field1: sessionStorage.getItem("field1"),
+		field2: sessionStorage.getItem("field2"),
+		field3: sessionStorage.getItem("field3"),
+		filter: sessionStorage.getItem("filter"),
 	});
-	const [ProblemStatements, setProblemStatements] = useState([]);
+	const [ProblemStatements, dispatch] = useReducer(
+		problemStatementDispatch,
+		JSON.parse(sessionStorage.getItem("generated_PS"))
+	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [selectedProblemStatements, setSelectedProblemStatements] = useState({
 		statement: [],
 	});
-
 	const getLastCheckButton = sessionStorage.getItem("setting");
-
 	const [selectedButton, setSelectedButton] = useState(
 		getLastCheckButton == null ? getLastCheckButton : 3
 	);
@@ -41,6 +54,10 @@ function Venn() {
 			}
 		});
 	};
+
+	useEffect(() => {
+		console.log("BEFORE ", selectedProblemStatements);
+	}, [selectedProblemStatements]);
 
 	const handleSaveProblemStatement = async () => {
 		let token = localStorage.getItem("token");
@@ -69,9 +86,11 @@ function Venn() {
 					}
 				);
 			}
-			if (response.status === 201) {
-				alert("Saved successfully");
-			}
+			setSelectedProblemStatements({ statement: [] });
+			dispatch({
+				type: "SAVE_PROBLEM_STATEMENT",
+				saved_ps_list: selectedProblemStatements.statement,
+			});
 		} catch (err) {
 			console.log(err);
 		}
@@ -95,7 +114,10 @@ function Venn() {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				setProblemStatements((prev) => [...two_response.data.response]);
+				dispatch({
+					type: "SET_PROBLEM_STATEMENT",
+					ps_list: [two_response.data.response],
+				});
 			} else if (selectedButton === 3) {
 				let three_response = await axios.post(
 					"http://localhost:8000/api/ai/three_venn/",
@@ -106,7 +128,10 @@ function Venn() {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				setProblemStatements((prev) => [...three_response.data.response]);
+				dispatch({
+					type: "SET_PROBLEM_STATEMENT",
+					ps_list: three_response.data.response,
+				});
 			}
 		} catch (err) {
 			console.log(err);
@@ -258,6 +283,7 @@ function Venn() {
 								ProblemStatements.map((text, index) => (
 									<PSCard
 										key={index}
+										checked={false}
 										text={text}
 										handleCheckChange={handleCheckChange}
 									/>
@@ -289,7 +315,6 @@ function Venn() {
 									setTextFields={setTextFields}
 									selectedButton={selectedButton}
 									setSelectedButton={setSelectedButton}
-									setProblemStatements={setProblemStatements}
 								/>
 							</Box>
 						</Box>
