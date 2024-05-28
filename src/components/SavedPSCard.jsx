@@ -1,18 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
-import { Box, Button, Grid } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import { useState, useRef } from "react";
 
 import VennSettingsHistoryPopup from "../components/popupcards/vennsettingspopup/VennSettingsHistory";
 
 const SavedPSCard = ({ id, text, venn, onDelete }) => {
 	const [openPopup, setOpenPopup] = useState(false);
 	const [isEditable, setIsEditable] = useState(false);
+	const [editedStatement, setEditedStatement] = useState("");
 
 	const handleOpenPopup = () => {
 		setOpenPopup(!openPopup);
@@ -39,7 +40,7 @@ const SavedPSCard = ({ id, text, venn, onDelete }) => {
 					sx={{ display: "flex", alignItems: "center", width: "100%" }}>
 					<Grid container alignItems="center">
 						<Grid item>
-							<IconButton onClick={() => setIsEditable((prev) => !prev)}>
+							<IconButton onClick={setTextFieldToEditable}>
 								{/* 
 							TODO: Add this later on the icon button functionality
 							onClick={() => setIsEditable((prev) => !prev)}
@@ -56,14 +57,31 @@ const SavedPSCard = ({ id, text, venn, onDelete }) => {
 											alignItems: "center",
 											justifyContent: "space-between",
 										}}>
-										<Typography
-											variant="body1"
-											contentEditable={isEditable.toString()}>
-											{text}
-										</Typography>
-										<Box>
-											<Button>Yes</Button>
-											<Button>No</Button>
+										<TextField
+											sx={{ width: "100%" }}
+											defaultValue={text}
+											autoFocus={isEditable}
+										/>
+										<Box
+											sx={{
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "end",
+											}}>
+											<Box sx={{ mr: 1 }}>
+												<Button variant="outlined" color="error">
+													Edit
+												</Button>
+											</Box>
+											<Box>
+												<Button
+													variant="outlined"
+													onClick={() => {
+														setIsEditable((prev) => !prev)
+													}}>
+													Cancel
+												</Button>
+											</Box>
 										</Box>
 									</Box>
 								) : (
