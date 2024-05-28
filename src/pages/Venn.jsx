@@ -116,13 +116,13 @@ function Venn() {
 					display: 'flex',
 					justifyContent: 'center',
 					alignItems: 'center',
-					height: '100vh', // Full viewport height
+					height: '100vh',
 				}}
 			>
 				<LoadingScreen />
 			</Box>
 			) : (
-				<Box paddingBottom={4}sx={{backgroundImage: `url(${GridBackground})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', marginBottom:'60px', backgroundPositionY:"-124px" }}>
+				<Box paddingBottom={4}sx={{backgroundImage: `url(${GridBackground})`, backgroundSize: '90%', backgroundRepeat: 'no-repeat', marginBottom:'60px', backgroundPositionY:"-124px" }}>
 					<Typography variant="h2" textAlign="center" gutterBottom>
 						Venn Diagram
 					</Typography>
