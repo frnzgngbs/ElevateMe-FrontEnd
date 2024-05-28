@@ -1,23 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
-import { Button, Grid } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import { useState, useRef } from "react";
 
 import VennSettingsHistoryPopup from "../components/popupcards/vennsettingspopup/VennSettingsHistory";
 
-const SavedPSCard = ({ id, text, venn, onDelete }) => {
-	const [openPopup, setOpenPopup] = React.useState(false);
+const SavedPSCard = ({ id, statement, venn, onDelete, setting, onEdit }) => {
+	const [openPopup, setOpenPopup] = useState(false);
+	const [isEditable, setIsEditable] = useState(false);
+	const [editedStatement, setEditedStatement] = useState(statement);
 
 	const handleOpenPopup = () => {
 		setOpenPopup(!openPopup);
 	};
+
+	const setTextFieldToEditable = () => {
+		setIsEditable((prev) => !prev);
+	};
+
 	return (
-		<>
+		<Box>
 			<Card
 				key={id}
 				sx={{
@@ -25,41 +32,96 @@ const SavedPSCard = ({ id, text, venn, onDelete }) => {
 					position: "relative",
 					marginX: 7,
 					zIndex: 1,
-					marginY: 1.5,
+					marginY: 1.4,
 					borderRadius: 5,
 					boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
 				}}>
-				<Grid container alignItems="center" sx={{ position: "relative" }}>
-					<Grid item sx={{ ml: 1 }}>
-						<IconButton onClick={onDelete}>
-							<EditIcon />
-						</IconButton>
+				<CardContent
+					sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+					<Grid container alignItems="center">
+						<Grid item>
+							<IconButton onClick={setTextFieldToEditable}>
+								{/* 
+							TODO: Add this later on the icon button functionality
+							onClick={() => setIsEditable((prev) => !prev)}
+							*/}
+								<EditIcon />
+							</IconButton>
+						</Grid>
+						<Grid item xs>
+							<Box>
+								{isEditable ? (
+									<form
+										onSubmit={() => {
+											onEdit(setting, id, editedStatement);
+										}}>
+										<Box
+											sx={{
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "space-between",
+											}}>
+											<TextField
+												sx={{ width: "100%" }}
+												onChange={(e) => {
+													setEditedStatement((prev) => e.target.value);
+												}}
+												defaultValue={statement}
+												autoFocus={isEditable}
+											/>
+											<Box
+												sx={{
+													display: "flex",
+													alignItems: "center",
+													justifyContent: "end",
+												}}>
+												<Box sx={{ mx: 1 }}>
+													<Button
+														type="submit"
+														variant="outlined"
+														color="error">
+														Edit
+													</Button>
+												</Box>
+												<Box>
+													<Button
+														variant="outlined"
+														onClick={() => {
+															setEditedStatement("");
+															setIsEditable((prev) => !prev);
+														}}>
+														Cancel
+													</Button>
+												</Box>
+											</Box>
+										</Box>
+									</form>
+								) : (
+									<Typography variant="body1">{statement}</Typography>
+								)}
+							</Box>
+						</Grid>
+						<Grid item sx={{ mx: 1 }}>
+							<IconButton onClick={handleOpenPopup}>
+								<Button variant="contained" sx={{ px: 3, borderRadius: 5 }}>
+									Show
+								</Button>
+							</IconButton>
+						</Grid>
+						<Grid item sx={{ mr: 1 }}>
+							<IconButton onClick={() => onDelete(setting, id)}>
+								<DeleteIcon color="error" />
+							</IconButton>
+						</Grid>
 					</Grid>
-					<Grid item xs>
-						<CardContent>
-							<Typography variant="body1">{text}</Typography>
-						</CardContent>
-					</Grid>
-					<Grid item sx={{ mx: 1 }}>
-						<IconButton onClick={handleOpenPopup}>
-							<Button variant="contained" sx={{ px: 3, borderRadius: 5 }}>
-								Show
-							</Button>
-						</IconButton>
-					</Grid>
-					<Grid item sx={{ mr: 1 }}>
-						<IconButton onClick={onDelete}>
-							<DeleteIcon color="error" />
-						</IconButton>
-					</Grid>
-				</Grid>
+				</CardContent>
 			</Card>
 			<VennSettingsHistoryPopup
 				venn={venn}
 				open={openPopup}
 				onClose={() => setOpenPopup(false)}
 			/>
-		</>
+		</Box>
 	);
 };
 
