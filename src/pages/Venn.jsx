@@ -64,22 +64,6 @@ function Venn() {
 		let token = localStorage.getItem("token");
 		let response;
 		try {
-<<<<<<< HEAD
-			let response = await axios.post(
-				"http://localhost:8000/api/three_venn_ps/",
-				{
-					venn: { ...textFields },
-					...selectedProblemStatements,
-				},
-				{
-					headers: { Authorization: `Token ${token}` },
-				}
-			);
-
-			//for venn 2 post
-		
-			//
-=======
 			if (selectedButton === 2) {
 				response = await axios.post(
 					"http://localhost:8000/api/two_venn_ps/",
@@ -108,12 +92,11 @@ function Venn() {
 				type: "SAVE_PROBLEM_STATEMENT",
 				saved_ps_list: selectedProblemStatements.statement,
 			});
->>>>>>> c7daa9c55a03f4b0e44872d93ce6979eb643baca
 		} catch (err) {
 			console.log(err);
 		}
 	};
-	
+
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
 	};

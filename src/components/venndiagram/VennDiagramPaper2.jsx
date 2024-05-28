@@ -37,6 +37,12 @@ const VennDiagramPaper = ({ venn }) => {
 							left: "35px",
 							color: "#8E8E8E",
 							fontSize: "14px",
+							width: "81px",
+							textAlign: "center",
+							overflow: "hidden",
+							display: "-webkit-box",
+							WebkitLineClamp: 3,
+							WebkitBoxOrient: "vertical",
 						}}>
 						{venn.field1}
 					</Typography>
@@ -48,6 +54,12 @@ const VennDiagramPaper = ({ venn }) => {
 							right: "35px",
 							color: "#8E8E8E",
 							fontSize: "14px",
+							width: "81px",
+							textAlign: "center",
+							overflow: "hidden",
+							display: "-webkit-box",
+							WebkitLineClamp: 3,
+							WebkitBoxOrient: "vertical",
 						}}>
 						{venn.field2}
 					</Typography>

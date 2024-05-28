@@ -37,42 +37,6 @@ function problemStatementReducer(state, action) {
 			};
 			return { ...state, three_venn: updatedThreeVen };
 
-<<<<<<< HEAD
-	function mapData(response, setting) {
-		if (Array.isArray(response.data)) {
-			setSavedProblemStatement((prev) => {
-				const newItems = {};
-				response.data.forEach((item) => {
-					newItems[item.id] = item;
-				});
-
-				if (setting === "three_venn") {
-					return {
-						...prev,
-						two_venn: {
-							...prev.two_venn,
-						},
-						three_venn: {
-							...prev.three_venn,
-							...newItems,
-						},
-					};
-				} else {
-					return {
-						...prev,
-						two_venn: {
-							...prev.two_venn,
-							...newItems,
-						},
-						three_venn: {
-							...prev.three_venn,
-						},
-					};
-				}
-			});
-		}
-	}
-=======
 		default:
 			return state;
 	}
@@ -85,7 +49,6 @@ const Saved = () => {
 			three_venn: {},
 		}
 	);
->>>>>>> c7daa9c55a03f4b0e44872d93ce6979eb643baca
 
 	useEffect(() => {
 		const getSavedProblemStatement = async () => {
