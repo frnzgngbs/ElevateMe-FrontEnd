@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
-import { Button, Grid } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import { useState } from "react";
 
 import VennSettingsHistoryPopup from "../components/popupcards/vennsettingspopup/VennSettingsHistory";
@@ -23,7 +23,7 @@ const SavedPSCard = ({ id, text, venn, onDelete }) => {
 	};
 
 	return (
-		<>
+		<Box>
 			<Card
 				key={id}
 				sx={{
@@ -31,60 +31,67 @@ const SavedPSCard = ({ id, text, venn, onDelete }) => {
 					position: "relative",
 					marginX: 7,
 					zIndex: 1,
-					marginY: 1.5,
+					marginY: 1.4,
 					borderRadius: 5,
 					boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
 				}}>
-				<Grid container alignItems="center" sx={{ position: "relative" }}>
-					<Grid item sx={{ ml: 1 }}>
-						<IconButton>
-							{/* 
+				<CardContent
+					sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+					<Grid container alignItems="center">
+						<Grid item>
+							<IconButton onClick={() => setIsEditable((prev) => !prev)}>
+								{/* 
 							TODO: Add this later on the icon button functionality
 							onClick={() => setIsEditable((prev) => !prev)}
 							*/}
-							<EditIcon />
-						</IconButton>
+								<EditIcon />
+							</IconButton>
+						</Grid>
+						<Grid item xs>
+							<Box>
+								{isEditable ? (
+									<Box
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											justifyContent: "space-between",
+										}}>
+										<Typography
+											variant="body1"
+											contentEditable={isEditable.toString()}>
+											{text}
+										</Typography>
+										<Box>
+											<Button>Yes</Button>
+											<Button>No</Button>
+										</Box>
+									</Box>
+								) : (
+									<Typography variant="body1">{text}</Typography>
+								)}
+							</Box>
+						</Grid>
+						<Grid item sx={{ mx: 1 }}>
+							<IconButton onClick={handleOpenPopup}>
+								<Button variant="contained" sx={{ px: 3, borderRadius: 5 }}>
+									Show
+								</Button>
+							</IconButton>
+						</Grid>
+						<Grid item sx={{ mr: 1 }}>
+							<IconButton onClick={onDelete}>
+								<DeleteIcon color="error" />
+							</IconButton>
+						</Grid>
 					</Grid>
-					<Grid item xs>
-						<CardContent>
-							<Grid container>
-								<Grid
-									item
-									xs
-									sx={{
-										display: "flex",
-										alignItems: "center",
-									}}>
-									<Typography variant="body1">
-										{/*
-										TODO: Add this later
-										 contenteditable={isEditable ? "true" : "false"} */}
-										{text}
-									</Typography>
-								</Grid>
-							</Grid>
-						</CardContent>
-					</Grid>
-					<Grid item sx={{ mx: 1 }}>
-						<IconButton onClick={handleOpenPopup}>
-							<Button variant="contained" sx={{ px: 3, borderRadius: 5 }}>
-								Show
-							</Button>
-						</IconButton>
-					</Grid>
-					<Grid item sx={{ mr: 1 }}>
-						<IconButton onClick={onDelete}>
-							<DeleteIcon color="error" />
-						</IconButton>
-					</Grid>
-				</Grid>
+				</CardContent>
 			</Card>
 			<VennSettingsHistoryPopup
 				venn={venn}
 				open={openPopup}
 				onClose={() => setOpenPopup(false)}
 			/>
-		</>
+		</Box>
 	);
 };
 
