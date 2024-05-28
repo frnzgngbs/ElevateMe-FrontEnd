@@ -15,9 +15,10 @@ const VennDiagramPaper = () => {
             sx={{
               position: "absolute",
               top: "80px",
-              left: "35px",
+              left: "10px",
               color: "#8E8E8E",
               fontSize: "14px",
+              width:"40px",
             }}
           >
             TextBox 1
