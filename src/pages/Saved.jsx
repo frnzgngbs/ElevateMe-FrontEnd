@@ -11,13 +11,32 @@ function problemStatementReducer(state, action) {
 		case "SET_THREE_VENN":
 			return { ...state, three_venn: action.statements };
 		case "DELETE_TWO_VENN":
-			const { [action.id]: discardedTwoStatementValue, ...updatedTwoVenn } =
-				state.two_venn;
-			return { ...state, two_venn: updatedTwoVenn };
+			const {
+				[action.id]: discardedTwoStatementValue,
+				...deletedStatementTwoVenn
+			} = state.two_venn;
+			return { ...state, two_venn: deletedStatementTwoVenn };
 		case "DELETE_THREE_VENN":
-			const { [action.id]: discardedThreeStatementValue, ...updatedThreeVenn } =
-				state.three_venn;
-			return { ...state, three_venn: updatedThreeVenn };
+			const {
+				[action.id]: discardedThreeStatementValue,
+				...deletedStatementThreeVenn
+			} = state.three_venn;
+			return { ...state, three_venn: deletedStatementThreeVenn };
+		case "UPDATE_TWO_VENN_STATEMENT":
+			const updatedTwoVenn = { ...state.two_venn };
+			updatedTwoVenn[action.id] = {
+				...updatedTwoVenn[action.id],
+				statement: action.statement,
+			};
+			return { ...state, two_venn: updatedTwoVenn };
+		case "UPDATE_THREE_VENN_STATEMENT":
+			const updatedThreeVen = { ...state.three_venn };
+			updatedThreeVen[action.id] = {
+				...updatedThreeVen[action.id],
+				statement: action.statement,
+			};
+			return { ...state, three_venn: updatedThreeVen };
+
 		default:
 			return state;
 	}
@@ -71,9 +90,49 @@ const Saved = () => {
 	};
 
 	const handleEdit = async (setting, id, statement) => {
-		// if (setting === "two_venn") {
-		// } else if (setting === "three_venn") {
-		// }
+		let token = localStorage.getItem("token");
+
+		if (setting === "two_venn") {
+			try {
+				let response = await axios.put(
+					`http://localhost:8000/api/two_venn_ps/${id}/`,
+					{
+						statement: statement,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+				dispatch({
+					type: "UPDATE_TWO_VENN_STATEMENT",
+					payload: {
+						id: id,
+						statement: statement,
+					},
+				});
+			} catch (error) {}
+		} else if (setting === "three_venn") {
+			try {
+				let response = await axios.put(
+					`http://localhost:8000/api/three_venn_ps/${id}/`,
+					{
+						statement: statement,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+				dispatch({
+					type: "UPDATE_THREE_VENN_STATEMENT",
+					payload: {
+						id: id,
+						statement: statement,
+					},
+				});
+			} catch (err) {
+				console.log(err);
+			}
+		}
 		return null;
 	};
 
@@ -128,11 +187,10 @@ const Saved = () => {
 						{Object.values(savedProblemStatement.two_venn).map((item) => (
 							<SavedPSCard
 								key={item.id}
-								id={item.id}
-								text={item.statement}
-								venn={item.venn}
-								user={item.user}
-								onDelete={() => handleDelete("two_venn", item.id)}
+								{...item}
+								setting="two_venn"
+								onDelete={handleDelete}
+								onEdit={handleEdit}
 							/>
 						))}
 					</Box>
@@ -145,12 +203,10 @@ const Saved = () => {
 						{Object.values(savedProblemStatement.three_venn).map((item) => (
 							<SavedPSCard
 								key={item.id}
-								id={item.id}
-								text={item.statement}
-								venn={item.venn}
-								user={item.user}
-								// onEdit={() => handleEdit("three_venn", item.id, statement)}
+								{...item}
 								onDelete={() => handleDelete("three_venn", item.id)}
+								setting="three_venn"
+								onEdit={handleEdit}
 							/>
 						))}
 					</Box>

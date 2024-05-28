@@ -10,10 +10,10 @@ import { useState, useRef } from "react";
 
 import VennSettingsHistoryPopup from "../components/popupcards/vennsettingspopup/VennSettingsHistory";
 
-const SavedPSCard = ({ id, text, venn, onDelete }) => {
+const SavedPSCard = ({ id, statement, venn, onDelete, setting, onEdit }) => {
 	const [openPopup, setOpenPopup] = useState(false);
 	const [isEditable, setIsEditable] = useState(false);
-	const [editedStatement, setEditedStatement] = useState("");
+	const [editedStatement, setEditedStatement] = useState(statement);
 
 	const handleOpenPopup = () => {
 		setOpenPopup(!openPopup);
@@ -51,41 +51,53 @@ const SavedPSCard = ({ id, text, venn, onDelete }) => {
 						<Grid item xs>
 							<Box>
 								{isEditable ? (
-									<Box
-										sx={{
-											display: "flex",
-											alignItems: "center",
-											justifyContent: "space-between",
+									<form
+										onSubmit={() => {
+											onEdit(setting, id, editedStatement);
 										}}>
-										<TextField
-											sx={{ width: "100%" }}
-											defaultValue={text}
-											autoFocus={isEditable}
-										/>
 										<Box
 											sx={{
 												display: "flex",
 												alignItems: "center",
-												justifyContent: "end",
+												justifyContent: "space-between",
 											}}>
-											<Box sx={{ mr: 1 }}>
-												<Button variant="outlined" color="error">
-													Edit
-												</Button>
-											</Box>
-											<Box>
-												<Button
-													variant="outlined"
-													onClick={() => {
-														setIsEditable((prev) => !prev)
-													}}>
-													Cancel
-												</Button>
+											<TextField
+												sx={{ width: "100%" }}
+												onChange={(e) => {
+													setEditedStatement((prev) => e.target.value);
+												}}
+												defaultValue={statement}
+												autoFocus={isEditable}
+											/>
+											<Box
+												sx={{
+													display: "flex",
+													alignItems: "center",
+													justifyContent: "end",
+												}}>
+												<Box sx={{ mx: 1 }}>
+													<Button
+														type="submit"
+														variant="outlined"
+														color="error">
+														Edit
+													</Button>
+												</Box>
+												<Box>
+													<Button
+														variant="outlined"
+														onClick={() => {
+															setEditedStatement("");
+															setIsEditable((prev) => !prev);
+														}}>
+														Cancel
+													</Button>
+												</Box>
 											</Box>
 										</Box>
-									</Box>
+									</form>
 								) : (
-									<Typography variant="body1">{text}</Typography>
+									<Typography variant="body1">{statement}</Typography>
 								)}
 							</Box>
 						</Grid>
@@ -97,7 +109,7 @@ const SavedPSCard = ({ id, text, venn, onDelete }) => {
 							</IconButton>
 						</Grid>
 						<Grid item sx={{ mr: 1 }}>
-							<IconButton onClick={onDelete}>
+							<IconButton onClick={() => onDelete(setting, id)}>
 								<DeleteIcon color="error" />
 							</IconButton>
 						</Grid>
