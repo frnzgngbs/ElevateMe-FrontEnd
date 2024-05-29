@@ -7,7 +7,7 @@ import { useEffect, useReducer, useState } from "react";
 import VennSettings from "../components/VennSettings";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
-import GridBackground from "../res/gridbackground.png"
+import GridBackground from "../res/gridbackground.png";
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
@@ -15,7 +15,7 @@ function problemStatementDispatch(state, action) {
 			sessionStorage.setItem("generated_PS", JSON.stringify(action.ps_list));
 			return [...action.ps_list];
 		case "SAVE_PROBLEM_STATEMENT":
-			return state.filter((item) => !action.saved_ps_list.includes(item));
+			return state.filter((item) => item !== action.statement);
 		default:
 			return [...state];
 	}
@@ -34,68 +34,10 @@ function Venn() {
 		JSON.parse(sessionStorage.getItem("generated_PS"))
 	);
 	const [isLoading, setIsLoading] = useState(false);
-	const [selectedProblemStatements, setSelectedProblemStatements] = useState({
-		statement: [],
-	});
 	const getLastCheckButton = sessionStorage.getItem("setting");
 	const [selectedButton, setSelectedButton] = useState(
 		getLastCheckButton == null ? getLastCheckButton : 3
 	);
-
-	const handleCheckChange = (text) => {
-		setSelectedProblemStatements((prevState) => {
-			const { statement } = prevState;
-			if (statement.includes(text)) {
-				return {
-					...prevState,
-					statement: statement.filter((item) => item !== text),
-				};
-			} else {
-				return { ...prevState, statement: [...statement, text] };
-			}
-		});
-	};
-
-	useEffect(() => {
-		console.log("BEFORE ", selectedProblemStatements);
-	}, [selectedProblemStatements]);
-
-	const handleSaveProblemStatement = async () => {
-		let token = localStorage.getItem("token");
-		let response;
-		try {
-			if (selectedButton === 2) {
-				response = await axios.post(
-					"http://localhost:8000/api/two_venn_ps/",
-					{
-						venn: { ...textFields },
-						...selectedProblemStatements,
-					},
-					{
-						headers: { Authorization: `Token ${token}` },
-					}
-				);
-			} else if (selectedButton === 3) {
-				response = await axios.post(
-					"http://localhost:8000/api/three_venn_ps/",
-					{
-						venn: { ...textFields },
-						...selectedProblemStatements,
-					},
-					{
-						headers: { Authorization: `Token ${token}` },
-					}
-				);
-			}
-			setSelectedProblemStatements({ statement: [] });
-			dispatch({
-				type: "SAVE_PROBLEM_STATEMENT",
-				saved_ps_list: selectedProblemStatements.statement,
-			});
-		} catch (err) {
-			console.log(err);
-		}
-	};
 
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
@@ -141,21 +83,64 @@ function Venn() {
 		}
 	};
 
+	const handleSaveProblemStatement = async (text) => {
+		console.log(text);
+		let token = localStorage.getItem("token");
+		let response;
+		try {
+			if (selectedButton === 2) {
+				response = await axios.post(
+					"http://localhost:8000/api/two_venn_ps/",
+					{
+						venn: { ...textFields },
+						statement: text,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+			} else if (selectedButton === 3) {
+				response = await axios.post(
+					"http://localhost:8000/api/three_venn_ps/",
+					{
+						venn: { ...textFields },
+						statement: text,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+			}
+			dispatch({
+				type: "SAVE_PROBLEM_STATEMENT",
+				statement: text,
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
 	return (
 		<>
 			{isLoading ? (
-				<Box 
-				sx={{
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-					height: '100vh',
-				}}
-			>
-				<LoadingScreen />
-			</Box>
+				<Box
+					sx={{
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						height: "100vh",
+					}}>
+					<LoadingScreen />
+				</Box>
 			) : (
-				<Box paddingBottom={4}sx={{backgroundImage: `url(${GridBackground})`, backgroundSize: '90%', backgroundRepeat: 'no-repeat', marginBottom:'60px', backgroundPositionY:"-124px" }}>
+				<Box
+					paddingBottom={4}
+					sx={{
+						backgroundImage: `url(${GridBackground})`,
+						backgroundSize: "90%",
+						backgroundRepeat: "no-repeat",
+						marginBottom: "60px",
+						backgroundPositionY: "-124px",
+					}}>
 					<Typography variant="h2" textAlign="center" gutterBottom>
 						Venn Diagram
 					</Typography>
@@ -220,8 +205,7 @@ function Venn() {
 													display: "-webkit-box",
 													WebkitLineClamp: 3,
 													WebkitBoxOrient: "vertical",
-												}}
-											>
+												}}>
 												{textFields.field1 ? textFields.field1 : "Field 1..."}
 											</Typography>
 
@@ -313,17 +297,10 @@ function Venn() {
 								ProblemStatements.map((text, index) => (
 									<PSCard
 										key={index}
-										checked={false}
 										text={text}
-										handleCheckChange={handleCheckChange}
+										handleSaveProblemStatement={handleSaveProblemStatement}
 									/>
 								))}
-							<Button
-								onClick={handleSaveProblemStatement}
-								variant="contained"
-								sx={{ py: 1.3, px: 5.3, borderRadius: 5 }}>
-								Save
-							</Button>
 						</Box>
 					</Box>
 					{showSetting && (

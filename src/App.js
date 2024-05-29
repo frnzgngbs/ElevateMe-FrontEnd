@@ -125,7 +125,7 @@ const router = createBrowserRouter(
 					<Route path="home" element={<Home />} />
 					<Route path="saved" element={<Saved />} />
 					<Route path="venn" element={<Venn />} />
-					<Route path="list" element={<Ranking />} />
+					<Route path="rank" element={<Ranking />} />
 					<Route path="five_whys" element={<FiveWhys />} />
 					<Route path="hmw" element={<HMW />} />
 				</Route>
