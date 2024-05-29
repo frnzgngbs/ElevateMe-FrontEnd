@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import Box from "@mui/material/Box";
 import { Stack, Typography } from "@mui/material";
 import SavedPSCard from "../components/SavedPSCard";
@@ -50,7 +50,14 @@ const Saved = () => {
 		}
 	);
 
+	const memoizedMapData = useMemo(() => {
+		return (data) => {
+			return mapData(data);
+		};
+	}, []);
+
 	useEffect(() => {
+		console.log("DID I COME IN HERE?");
 		const getSavedProblemStatement = async () => {
 			try {
 				let token = localStorage.getItem("token");
@@ -61,7 +68,10 @@ const Saved = () => {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				dispatch({ type: "SET_TWO_VENN", statements: mapData(response1.data) });
+				dispatch({
+					type: "SET_TWO_VENN",
+					statements: memoizedMapData(response1.data),
+				});
 
 				let response = await axios.get(
 					"http://localhost:8000/api/three_venn_ps/",
@@ -71,7 +81,7 @@ const Saved = () => {
 				);
 				dispatch({
 					type: "SET_THREE_VENN",
-					statements: mapData(response.data),
+					statements: memoizedMapData(response.data),
 				});
 			} catch (err) {
 				console.log("Error fetching saved problem statements:", err);
@@ -179,11 +189,11 @@ const Saved = () => {
 						categories. 2 Venn Diagram List and the 3 Venn Diagram List
 					</Typography>
 				</Box>
-				<Box sx={{ mx: 10 }}>
+				<Box sx={{ mx: 13 }}>
 					<Typography variant="h4" sx={{ marginTop: 10 }}>
 						2 Venn Diagram List
 					</Typography>
-					<Box sx={{ marginTop: 5 }}>
+					<Box sx={{ marginTop: 5, overflowY: "auto", maxHeight: "500px" }}>
 						{Object.values(savedProblemStatement.two_venn).map((item) => (
 							<SavedPSCard
 								key={item.id}
@@ -195,11 +205,11 @@ const Saved = () => {
 						))}
 					</Box>
 				</Box>
-				<Box sx={{ mx: 10 }}>
+				<Box sx={{ mx: 13 }}>
 					<Typography variant="h4" sx={{ marginTop: 10 }}>
 						3 Venn Diagram List
 					</Typography>
-					<Box sx={{ marginTop: 5 }}>
+					<Box sx={{ marginTop: 5, overflowY: "auto", maxHeight: "500px" }}>
 						{Object.values(savedProblemStatement.three_venn).map((item) => (
 							<SavedPSCard
 								key={item.id}
