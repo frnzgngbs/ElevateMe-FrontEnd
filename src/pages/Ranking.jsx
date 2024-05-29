@@ -80,15 +80,37 @@ const Ranking = () => {
 						</Box>
 					))}
 				</Box>
-				<Box sx={{ display: "flex", justifyContent: "end" }}>
-					<Button variant="contained" sx={{ px: 5, py: 1.2, borderRadius: 5 }}>
-						Rank
-					</Button>
-				</Box>
 			</Box>
 
-			<Box sx={{ mx: 13.3, py: 5 }}>
+			<Box sx={{ mx: 13.3, mb: 3 }}>
 				<Typography variant="h3">Problem Statement Ranking</Typography>
+			</Box>
+
+			<Box sx={{ display: "flex", gap: 10, mx: 17, mb: 10 }}>
+				<Box
+					sx={{
+						display: "flex",
+						flexDirection: "column",
+					}}>
+					{criteria.map(({ criteria_title }, index) => (
+						<Box key={index}>
+							<Typography variant="body1" sx={{ fontWeight: "bold" }}>
+								{criteria_title}-
+							</Typography>
+						</Box>
+					))}
+				</Box>
+				<Box
+					sx={{
+						display: "flex",
+						flexDirection: "column",
+					}}>
+					{criteria.map(({ description }, index) => (
+						<Box key={index}>
+							<Typography variant="body1">{description}</Typography>
+						</Box>
+					))}
+				</Box>
 			</Box>
 
 			<Box>

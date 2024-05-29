@@ -1,5 +1,6 @@
 import { Card, CardContent, Typography, IconButton } from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+
 import React from "react";
 
 const PSListCard = ({ text }) => {
@@ -13,7 +14,7 @@ const PSListCard = ({ text }) => {
 				}}>
 				<CardContent sx={{ display: "flex", alignItems: "center" }}>
 					<IconButton>
-						<CheckCircleOutlineIcon />
+						<AddCircleOutlineIcon />
 					</IconButton>
 					<Typography variant="body1" sx={{ mt: 1, color: "#8e8e8e" }}>
 						{text}

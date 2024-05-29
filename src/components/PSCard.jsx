@@ -1,6 +1,4 @@
 import { Card, CardContent, Typography, IconButton } from "@mui/material";
-import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import React, { useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
