@@ -9,10 +9,14 @@ import {
 	CardContent,
 	Grid,
 	IconButton,
+	FormControl,
+	Select,
+	MenuItem,
 } from "@mui/material";
 import React from "react";
 import PSListCard from "../components/RankingPSCard";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 const Ranking = () => {
 	const data = [
@@ -86,7 +90,7 @@ const Ranking = () => {
 				<Typography variant="h3">Problem Statement Ranking</Typography>
 			</Box>
 
-			<Box sx={{ display: "flex", gap: 10, mx: 17, mb: 10 }}>
+			<Box sx={{ display: "flex", gap: 10, mx: 17, mb: 7 }}>
 				<Box
 					sx={{
 						display: "flex",
@@ -95,7 +99,7 @@ const Ranking = () => {
 					{criteria.map(({ criteria_title }, index) => (
 						<Box key={index}>
 							<Typography variant="body1" sx={{ fontWeight: "bold" }}>
-								{criteria_title}-
+								{criteria_title} -
 							</Typography>
 						</Box>
 					))}
@@ -113,14 +117,14 @@ const Ranking = () => {
 				</Box>
 			</Box>
 
-			<Box>
+			<Box sx={{ mr: 14, ml: 17, mb: 2 }}>
 				<Card
 					sx={{
-						mr: 14,
-						ml: 22,
 						background: "#D9D9D9",
 						borderRadius: 5,
+						width: "95%",
 						mb: 2,
+						ml: 5,
 					}}>
 					<CardContent
 						sx={{
@@ -130,8 +134,8 @@ const Ranking = () => {
 							borderRadius: 5,
 						}}>
 						<Grid container sx={{ justifyContent: "space-between" }}>
-							<Grid item xs>
-								<Typography sx={{ width: "100px", textAlign: "center" }}>
+							<Grid item xs={5}>
+								<Typography sx={{ textAlign: "center" }}>
 									Problem Statement
 								</Typography>
 							</Grid>
@@ -169,7 +173,7 @@ const Ranking = () => {
 
 				{sample.map((value) => {
 					return (
-						<Box sx={{ display: "flex", mr: 14, ml: 17, mb: 2 }}>
+						<Box sx={{ display: "flex", mb: 2 }}>
 							<IconButton>
 								<CheckCircleOutlineIcon />
 							</IconButton>
@@ -177,7 +181,7 @@ const Ranking = () => {
 								sx={{
 									background: "#D9D9D9",
 									borderRadius: 5,
-									width: "100%",
+									width: "95%",
 								}}>
 								<CardContent
 									sx={{
@@ -187,42 +191,123 @@ const Ranking = () => {
 										borderRadius: 5,
 									}}>
 									<Grid container sx={{ justifyContent: "space-between" }}>
-										<Grid item xs>
-											<Typography sx={{ width: "100px", textAlign: "center" }}>
-												{value}
+										<Grid item xs={5}>
+											<Typography sx={{ textAlign: "center" }}>
+												Lorem ipsum dolor sit amet, consectetur adipisicing
+												elit. Ipsam qui corrupti saepe placeat nihil ipsum sit
+												quisquam quam dignissimos totam, perspiciatis tempora
+												sapiente eaque voluptatum, id impedit quae, repellendus
+												dolor!
 											</Typography>
 										</Grid>
-										<Grid item xs>
-											<Typography textAlign={"center"}></Typography>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
+											<FormControl sx={{ justifyContent: "center" }}>
+												<Select label="Age">
+													<MenuItem value={1}>1</MenuItem>
+													<MenuItem value={2}>2</MenuItem>
+													<MenuItem value={3}>3</MenuItem>
+													<MenuItem value={4}>4</MenuItem>
+													<MenuItem value={5}>5</MenuItem>
+												</Select>
+											</FormControl>
 										</Grid>
-										<Grid item xs>
-											<Typography textAlign={"center"}></Typography>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
+											<FormControl sx={{ justifyContent: "center" }}>
+												<Select label="Age">
+													<MenuItem value={1}>1</MenuItem>
+													<MenuItem value={2}>2</MenuItem>
+													<MenuItem value={3}>3</MenuItem>
+													<MenuItem value={4}>4</MenuItem>
+													<MenuItem value={5}>5</MenuItem>
+												</Select>
+											</FormControl>
 										</Grid>
-										<Grid item xs>
-											<Typography textAlign={"center"}></Typography>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
+											<FormControl sx={{ justifyContent: "center" }}>
+												<Select label="Age">
+													<MenuItem value={1}>1</MenuItem>
+													<MenuItem value={2}>2</MenuItem>
+													<MenuItem value={3}>3</MenuItem>
+													<MenuItem value={4}>4</MenuItem>
+													<MenuItem value={5}>5</MenuItem>
+												</Select>
+											</FormControl>
 										</Grid>
-										<Grid item xs>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
+											<FormControl sx={{ justifyContent: "center" }}>
+												<Select label="Age">
+													<MenuItem value={1}>1</MenuItem>
+													<MenuItem value={2}>2</MenuItem>
+													<MenuItem value={3}>3</MenuItem>
+													<MenuItem value={4}>4</MenuItem>
+													<MenuItem value={5}>5</MenuItem>
+												</Select>
+											</FormControl>
+										</Grid>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
+											<FormControl sx={{ justifyContent: "center" }}>
+												<Select label="Age">
+													<MenuItem value={1}>1</MenuItem>
+													<MenuItem value={2}>2</MenuItem>
+													<MenuItem value={3}>3</MenuItem>
+													<MenuItem value={4}>4</MenuItem>
+													<MenuItem value={5}>5</MenuItem>
+												</Select>
+											</FormControl>
+										</Grid>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
+											<FormControl sx={{ justifyContent: "center" }}>
+												<Select label="Age">
+													<MenuItem value={1}>1</MenuItem>
+													<MenuItem value={2}>2</MenuItem>
+													<MenuItem value={3}>3</MenuItem>
+													<MenuItem value={4}>4</MenuItem>
+													<MenuItem value={5}>5</MenuItem>
+												</Select>
+											</FormControl>
+										</Grid>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
 											<Typography
-												sx={{
-													width: "100px",
-													textAlign: "center",
-												}}></Typography>
+												sx={{ display: "flex", alignItems: "center" }}>
+												0
+											</Typography>
 										</Grid>
-										<Grid item xs>
-											<Typography textAlign={"center"}></Typography>
-										</Grid>
-										<Grid item xs textAlign={"center"}>
-											<Typography></Typography>
-										</Grid>
-										<Grid item xs textAlign={"center"}>
-											<Typography></Typography>
-										</Grid>
-										<Grid item xs textAlign={"center"}>
-											<Typography></Typography>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
+											<Typography
+												sx={{ display: "flex", alignItems: "center" }}>
+												{value}
+											</Typography>
 										</Grid>
 									</Grid>
 								</CardContent>
 							</Card>
+							<IconButton>
+								<DeleteOutlineIcon fontSize={"medium"} color="error" />
+							</IconButton>
 						</Box>
 					);
 				})}
