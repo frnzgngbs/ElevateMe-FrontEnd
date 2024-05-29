@@ -48,7 +48,7 @@ function Venn() {
 		let token = localStorage.getItem("token");
 		try {
 			if (selectedButton === 2) {
-				alert("HERE");
+				// alert("HERE");
 				let two_response = await axios.post(
 					"http://localhost:8000/api/ai/two_venn/",
 					{
