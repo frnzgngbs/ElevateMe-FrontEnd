@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Grid, Typography } from "@mui/material";
 import PSCard from "../components/PSCard";
+import RootProblemHistoryPopup from "../components/popupcards/potentialRootHistoryPopup/potentialRootHistoryPopup";
 
 const HMW = () => {
 	const data = [
@@ -12,6 +13,21 @@ const HMW = () => {
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 	];
+
+	const problemStatement = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore";
+	const whyStatements = [
+	  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+	  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+	  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+	  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore esasasasasasasasasasasa asdasdasdddddddddddd asddddddddddddddd asddddddddddddddddd adsssssssssssssss asddddddddddddddd asddddddddddddddd asddddddddddddd  doloredasssssssss safaf asfsaf asf asfa sfa fsa",
+	  "Lorem ipsum dolor sit amet, c",
+	];
+
+
+const [open, setOpen] = React.useState(false);
+const handleOpen = () => setOpen(true);
+const handleClose = () => setOpen(false);
+
 	return (
 		<Box>
 			<Box sx={{ px: 12, py: 2 }}>
@@ -31,6 +47,7 @@ const HMW = () => {
 						<Grid item sx={{ mr: 2.2 }}>
 							<Button
 								variant="contained"
+								onClick={handleOpen}
 								sx={{
 									borderRadius: 5.6,
 									color: "#FFFB",
@@ -87,6 +104,12 @@ const HMW = () => {
 					</Box>
 				</Box>
 			</Box>
+			<RootProblemHistoryPopup
+        open={open}
+        onClose={() => setOpen(false)}
+        problemStatement={problemStatement}
+        whyStatements={whyStatements}
+      />
 		</Box>
 	);
 };
