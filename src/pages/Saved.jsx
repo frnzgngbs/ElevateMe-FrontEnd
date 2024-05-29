@@ -183,7 +183,7 @@ const Saved = () => {
 					<Typography variant="h4" sx={{ marginTop: 10 }}>
 						2 Venn Diagram List
 					</Typography>
-					<Box sx={{ marginTop: 5 }}>
+					<Box sx={{ marginTop: 5, overflowY: "auto", maxHeight: "500px" }}>
 						{Object.values(savedProblemStatement.two_venn).map((item) => (
 							<SavedPSCard
 								key={item.id}
@@ -199,7 +199,7 @@ const Saved = () => {
 					<Typography variant="h4" sx={{ marginTop: 10 }}>
 						3 Venn Diagram List
 					</Typography>
-					<Box sx={{ marginTop: 5 }}>
+					<Box sx={{ marginTop: 5, overflowY: "auto", maxHeight: "500px" }}>
 						{Object.values(savedProblemStatement.three_venn).map((item) => (
 							<SavedPSCard
 								key={item.id}
