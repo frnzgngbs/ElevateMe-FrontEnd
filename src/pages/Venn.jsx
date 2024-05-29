@@ -139,10 +139,10 @@ function Venn() {
 					paddingBottom={4}
 					sx={{
 						backgroundImage: `url(${GridBackground})`,
-						backgroundSize: "90%",
+						backgroundSize: "100%",
 						backgroundRepeat: "no-repeat",
 						marginBottom: "60px",
-						backgroundPositionY: "-124px",
+						backgroundPositionY: "-330px",
 					}}>
 					<Typography variant="h2" textAlign="center" gutterBottom>
 						Venn Diagram
