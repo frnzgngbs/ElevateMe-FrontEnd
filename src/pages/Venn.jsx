@@ -2,7 +2,8 @@ import { Box, Button, Card, Grid, IconButton, Typography } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import PSCard from "../components/PSCard";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Venn2 from "../res/venn.png";
+import Venn2 from "../res/venn2.png";
+import Venn3 from "../res/venn.png"
 import { useEffect, useReducer, useState } from "react";
 import VennSettings from "../components/VennSettings";
 import axios from "axios";
@@ -151,7 +152,9 @@ function Venn() {
 						spacing={6}
 						justifyContent="center"
 						alignItems="center">
+						{/* Venn Scopes section card */}
 						<Grid item>
+
 							<Card
 								sx={{
 									width: 370,
@@ -190,69 +193,126 @@ function Venn() {
 											<SettingsIcon variant="outlined" sx={{ fontSize: 30 }} />
 										</IconButton>
 									</Box>
-									<Box sx={{ position: "relative", marginBottom: "20px" }}>
-										<Box
-											sx={{ display: "flex", justifyContent: "space-between" }}>
-											<Typography
-												variant="h6"
-												sx={{
-													position: "absolute",
-													top: "72px",
-													left: "24px",
-													color: "#8E8E8E",
-													fontSize: "14px",
-													width: "81px",
-													textAlign: "center",
-													overflow: "hidden",
-													display: "-webkit-box",
-													WebkitLineClamp: 3,
-													WebkitBoxOrient: "vertical",
-												}}>
-												{textFields.field1 ? textFields.field1 : "Field 1..."}
-											</Typography>
 
-											<Typography
-												variant="h6"
-												sx={{
-													position: "absolute",
-													top: "72px",
-													right: "35px",
-													color: "#8E8E8E",
-													fontSize: "14px",
-													width: "81px",
-													textAlign: "center",
-													overflow: "hidden",
-													display: "-webkit-box",
-													WebkitLineClamp: 3,
-													WebkitBoxOrient: "vertical",
-												}}>
-												{textFields.field2 ? textFields.field2 : "Field 2..."}
-											</Typography>
-										</Box>
-										<Typography
-											variant="h6"
-											sx={{
-												position: "absolute",
-												bottom: "50px",
-												left: "50%",
-												transform: "translate(-50%)",
-												color: "#8E8E8E",
-												fontSize: "14px",
-												width: "81px",
-												textAlign: "center",
-												overflow: "hidden",
-												display: "-webkit-box",
-												WebkitLineClamp: 3,
-												WebkitBoxOrient: "vertical",
-											}}>
-											{textFields.field3 ? textFields.field3 : "Field 3..."}
-										</Typography>
-										<img
-											src={Venn2}
-											alt="Venn Diagram"
-											style={{ zIndex: 0, width: "325px", Height: "50px" }}
-										/>
+
+									<Box sx={{ position: "relative", marginBottom: "20px" }}>
+										{selectedButton === 3 ? (
+											<>
+												<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+													<Typography
+														variant="h6"
+														sx={{
+															position: "absolute",
+															top: "72px",
+															left: "24px",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}
+													>
+														{textFields.field1 ? textFields.field1 : "Field 1..."}
+													</Typography>
+
+													<Typography
+														variant="h6"
+														sx={{
+															position: "absolute",
+															top: "72px",
+															right: "35px",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}
+													>
+														{textFields.field2 ? textFields.field2 : "Field 2..."}
+													</Typography>
+												</Box>
+												<Typography
+													variant="h6"
+													sx={{
+														position: "absolute",
+														bottom: "50px",
+														left: "50%",
+														transform: "translate(-50%)",
+														color: "#8E8E8E",
+														fontSize: "14px",
+														width: "81px",
+														textAlign: "center",
+														overflow: "hidden",
+														display: "-webkit-box",
+														WebkitLineClamp: 3,
+														WebkitBoxOrient: "vertical",
+													}}
+												>
+													{textFields.field3 ? textFields.field3 : "Field 3..."}
+												</Typography>
+												<img
+													src={Venn3} // Replace with the path to your Venn3 image
+													alt="Venn Diagram"
+													style={{ zIndex: 0, width: "325px", height: "auto" }}
+												/>
+											</>
+										) : (
+											<>
+												<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+													<Typography
+														variant="h6"
+														sx={{
+															position: "absolute",
+															top: "110px",
+															left: "24px",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}
+													>
+														{textFields.field1 ? textFields.field1 : "Field 1..."}
+													</Typography>
+
+													<Typography
+														variant="h6"
+														sx={{
+															position: "absolute",
+															top: "110px",
+															right: "35px",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}
+													>
+														{textFields.field2 ? textFields.field2 : "Field 2..."}
+													</Typography>
+												</Box>
+																			
+												<img
+													src={Venn2} // Ensure this is the correct path to your Venn2 image
+													alt="Venn Diagram"
+													style={{ zIndex: 0, marginTop:"40px", width: "325px", height: "auto", display: "block" }}
+												/>
+											</>
+										)}
 									</Box>
+
 								</Box>
 							</Card>
 						</Grid>
