@@ -119,7 +119,7 @@ const HomePage = () => {
 				</Grid>
 				{/* Right div remains unchanged */}
 				<Grid item xs={10} md={5}>
-					<Box>
+					<Box sx={{ display: "flex", justifyContent: "flex-end" }}>
 						<img
 							src={Bookpng}
 							alt="Techno Book"
