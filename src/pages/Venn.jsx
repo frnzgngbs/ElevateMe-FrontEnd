@@ -48,6 +48,7 @@ function Venn() {
 		let token = localStorage.getItem("token");
 		try {
 			if (selectedButton === 2) {
+				alert("HERE");
 				let two_response = await axios.post(
 					"http://localhost:8000/api/ai/two_venn/",
 					{
@@ -59,8 +60,9 @@ function Venn() {
 				);
 				dispatch({
 					type: "SET_PROBLEM_STATEMENT",
-					ps_list: [two_response.data.response],
+					ps_list: two_response.data.response,
 				});
+				console.log(two_response.data.response);
 			} else if (selectedButton === 3) {
 				let three_response = await axios.post(
 					"http://localhost:8000/api/ai/three_venn/",
@@ -284,8 +286,7 @@ function Venn() {
 							Generated Problem Statement
 						</Typography>
 						<Typography variant="body1" textAlign={"center"} marginTop={2.7}>
-							This are the generated problem statements, you can always edit the
-							generated problem statements if you want
+							Here are the generated problem statements from the given scopes:
 						</Typography>
 						<Box
 							display="flex"

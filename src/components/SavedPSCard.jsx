@@ -38,7 +38,6 @@ const SavedPSCard = ({ id, statement, venn, onDelete, setting, onEdit }) => {
 				}}>
 				<CardContent
 					sx={{
-						height: "80px",
 						display: "flex",
 						alignItems: "center",
 						width: "100%",
