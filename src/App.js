@@ -9,7 +9,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/HomePage";
 import Saved from "./pages/Saved";
-import List from "./pages/List";
 import UserAppbar from "./components/UserAppbar";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import createTheme from "@mui/material/styles/createTheme";
@@ -21,6 +20,7 @@ import FiveWhys from "./pages/FiveWhys";
 import HMW from "./pages/HMW";
 import AppRoute from "./components/AppRoute";
 import LoadingScreen from "./components/LoadingScreen";
+import Ranking from "./pages/Ranking";
 // This is the theme for the web app
 var theme = createTheme({
 	typography: {
@@ -125,7 +125,7 @@ const router = createBrowserRouter(
 					<Route path="home" element={<Home />} />
 					<Route path="saved" element={<Saved />} />
 					<Route path="venn" element={<Venn />} />
-					<Route path="list" element={<List />} />
+					<Route path="rank" element={<Ranking />} />
 					<Route path="five_whys" element={<FiveWhys />} />
 					<Route path="hmw" element={<HMW />} />
 				</Route>

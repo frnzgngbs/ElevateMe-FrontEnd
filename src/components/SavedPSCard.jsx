@@ -34,10 +34,15 @@ const SavedPSCard = ({ id, statement, venn, onDelete, setting, onEdit }) => {
 					zIndex: 1,
 					marginY: 1.4,
 					borderRadius: 5,
-					boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
+					boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 0px",
 				}}>
 				<CardContent
-					sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+					sx={{
+						height: "80px",
+						display: "flex",
+						alignItems: "center",
+						width: "100%",
+					}}>
 					<Grid container alignItems="center">
 						<Grid item>
 							<IconButton onClick={setTextFieldToEditable}>
