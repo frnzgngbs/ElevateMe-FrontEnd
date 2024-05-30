@@ -3,7 +3,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import React from "react";
 
-const PSListCard = ({ text }) => {
+const PSListCard = ({ id, venn, statement, addStatement }) => {
 	return (
 		<div>
 			<Card
@@ -13,11 +13,14 @@ const PSListCard = ({ text }) => {
 					boxShadow: 3,
 				}}>
 				<CardContent sx={{ display: "flex", alignItems: "center" }}>
-					<IconButton>
+					<IconButton
+						onClick={() => {
+							addStatement(id, venn, statement);
+						}}>
 						<AddCircleOutlineIcon />
 					</IconButton>
 					<Typography variant="body1" sx={{ mt: 1, color: "#8e8e8e" }}>
-						{text}
+						{statement}
 					</Typography>
 				</CardContent>
 			</Card>
