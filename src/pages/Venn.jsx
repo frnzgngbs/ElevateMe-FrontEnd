@@ -13,6 +13,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import CircleUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'; // Unchecked icon
 import CircleCheckedIcon from '@mui/icons-material/CheckCircleOutline'; // Checked icon
+import zIndex from "@mui/material/styles/zIndex";
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
@@ -211,7 +212,7 @@ function Venn() {
 													// indeterminate={!textFields.field1 &&textFields.field2}
 													icon={<CircleUncheckedIcon />}
 													checkedIcon={<CircleCheckedIcon />}
-													sx={{ position: "absolute", zIndex: 50, marginBottom:"120px", marginLeft:"170px" }}
+													sx={{ position: "absolute", zIndex: 4, marginBottom:"120px", marginLeft:"170px" }}
 												  />
 												}
 											  />
@@ -238,13 +239,14 @@ function Venn() {
 										  
 											  {/* Second Checkbox: field 1 union field 3 */}
 											  <FormControlLabel
+										
 												control={
 												  <Checkbox
 													edge="start"
 													// indeterminate={!textFields.field1 &&textFields.field3}
 													icon={<CircleUncheckedIcon />}
 													checkedIcon={<CircleCheckedIcon />}
-													sx={{ position: "absolute", zIndex: 52, marginTop:"10px" , marginLeft:"120px" }}
+													sx={{ position: "absolute", zIndex: 4, marginTop:"10px" , marginLeft:"120px" }}
 												  />
 												}
 											  />
@@ -277,7 +279,7 @@ function Venn() {
 													// indeterminate={!textFields.field2 &&textFields.field3}
 													icon={<CircleUncheckedIcon />}
 													checkedIcon={<CircleCheckedIcon />}
-													sx={{ position: "absolute", zIndex: 51, marginTop:"10px" , marginLeft:"200px" }}
+													sx={{ position: "absolute", zIndex: 1, marginTop:"10px" , marginLeft:"200px" }}
 												  />
 												}
 											  />
@@ -426,14 +428,17 @@ function Venn() {
 								display: "flex",
 								justifyContent: "center",
 								alignItems: "center",
+								zIndex: 300
 							}}>
 							<Box sx={{ position: "relative" }}>
 								<VennSettings
+
 									toggleShowSetting={toggleShowSetting}
 									textFields={textFields}
 									setTextFields={setTextFields}
 									selectedButton={selectedButton}
 									setSelectedButton={setSelectedButton}
+									sx={{zIndex:1000}}
 								/>
 							</Box>
 						</Box>
