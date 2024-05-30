@@ -420,7 +420,7 @@ const [selectedButton, setSelectedButton] = useState(
 						<Box
 							display="flex"
 							flexDirection="column"
-							alignItems="center"
+							alignItems="left"
 							gap={2}
 							sx={{ mt: 2, mb: 4 }}>
 							{Array.isArray(ProblemStatements) &&
