@@ -73,7 +73,7 @@ function queuedProblemStatementReducer(state, action) {
 const Ranking = () => {
 	const [listProblemStatement, listProblemStatementDispatch] = useReducer(
 		listProblemStatementReducer,
-		JSON.parse(sessionStorage.getItem("ranking_list_statements"))
+		JSON.parse(sessionStorage.getItem("ranking_list_statements")) || []
 	);
 	const [queuedProblemStatement, queuedProblemStatementDispatch] = useReducer(
 		queuedProblemStatementReducer,

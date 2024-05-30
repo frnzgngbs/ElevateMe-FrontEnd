@@ -1,11 +1,16 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { Grid, Typography } from "@mui/material";
 import PSCard from "../components/PSCard";
 import RootProblemHistoryPopup from "../components/popupcards/potentialRootHistoryPopup/potentialRootHistoryPopup";
+import { useLocation } from "react-router-dom";
 
 const HMW = () => {
+	const location = useLocation();
+
+	console.log(location.state);
+	const { response } = location.state?.potential_root;
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
@@ -14,19 +19,19 @@ const HMW = () => {
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 	];
 
-	const problemStatement = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore";
+	const problemStatement =
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore";
 	const whyStatements = [
-	  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-	  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-	  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-	  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore esasasasasasasasasasasa asdasdasdddddddddddd asddddddddddddddd asddddddddddddddddd adsssssssssssssss asddddddddddddddd asddddddddddddddd asddddddddddddd  doloredasssssssss safaf asfsaf asf asfa sfa fsa",
-	  "Lorem ipsum dolor sit amet, c",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore esasasasasasasasasasasa asdasdasdddddddddddd asddddddddddddddd asddddddddddddddddd adsssssssssssssss asddddddddddddddd asddddddddddddddd asddddddddddddd  doloredasssssssss safaf asfsaf asf asfa sfa fsa",
+		"Lorem ipsum dolor sit amet, c",
 	];
 
-
-const [open, setOpen] = React.useState(false);
-const handleOpen = () => setOpen(true);
-const handleClose = () => setOpen(false);
+	const [open, setOpen] = React.useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
 
 	return (
 		<Box>
@@ -41,7 +46,7 @@ const handleClose = () => setOpen(false);
 						{/* I want to center the typography horizontally."*/}
 						<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
 							<Typography variant="body2" sx={{ mt: 1 }}>
-								Inefficient Waste Collection
+								{response}
 							</Typography>
 						</Grid>
 						<Grid item sx={{ mr: 2.2 }}>
@@ -105,11 +110,11 @@ const handleClose = () => setOpen(false);
 				</Box>
 			</Box>
 			<RootProblemHistoryPopup
-        open={open}
-        onClose={() => setOpen(false)}
-        problemStatement={problemStatement}
-        whyStatements={whyStatements}
-      />
+				open={open}
+				onClose={() => setOpen(false)}
+				problemStatement={problemStatement}
+				whyStatements={whyStatements}
+			/>
 		</Box>
 	);
 };

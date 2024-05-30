@@ -3,22 +3,23 @@ import Box from "@mui/material/Box";
 import { Button, Grid, Typography } from "@mui/material";
 import PSCard from "../components/PSCard";
 import PopupVennHistory from "../components/popupcards/vennHistorypopup/vennHistoryPopUp";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
+import WhysOrHMWCard from "../components/WhysOrHMWCard";
+import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 const FiveWhys = () => {
-	const data = [
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-	];
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
 	const location = useLocation();
 	const [isLoading, setIsLoading] = useState(false);
-	const [fiveWhys, setFiveWhys] = useState([]);
+	const [fiveWhys, setFiveWhys] = useState(
+		JSON.parse(sessionStorage.getItem("five_whys")) || []
+	);
+	const [selectedWhys, setSelectedWhys] = useState(
+		JSON.parse(sessionStorage.getItem("selected_whys")) || []
+	);
+	const navigate = useNavigate();
 
 	const generateFiveWhys = async (statement) => {
 		setIsLoading((prev) => !prev);
@@ -50,7 +51,9 @@ const FiveWhys = () => {
 	useEffect(() => {
 		sessionStorage.setItem("whys_selected_statement", statement);
 		sessionStorage.setItem("whys_venn", venn);
-	}, [statement, venn]);
+		sessionStorage.setItem("selected_whys", JSON.stringify(selectedWhys));
+		sessionStorage.setItem("five_whys", JSON.stringify(fiveWhys));
+	}, [statement, venn, selectedWhys, fiveWhys]);
 
 	const handleShowPopup = () => {
 		setIsPopupOpen(true);
@@ -59,13 +62,44 @@ const FiveWhys = () => {
 	const handleClosePopup = () => {
 		setIsPopupOpen(false);
 	};
-	const [vennValues, setVennValues] = useState({
-		field1: "john",
-		field2: "jsadas",
-		field3: "asd",
-		filter: "ads",
-		numVenns: 3,
-	});
+
+	const addWhysToList = (why) => {
+		if (selectedWhys !== null) {
+			if (!selectedWhys.includes(why)) {
+				return setSelectedWhys((curr) => [...curr, why]);
+			} else {
+				return setSelectedWhys(selectedWhys.filter((whys) => whys !== why));
+			}
+		}
+		return setSelectedWhys((prev) => [...prev, ...why]);
+	};
+
+	// NOTE: Only used for debugging purposes
+	useEffect(() => {
+		console.log(selectedWhys);
+	}, [selectedWhys]);
+
+	const generatePotentialRootProb = async () => {
+		setIsLoading((prev) => !prev);
+		try {
+			let token = localStorage.getItem("token");
+			let response = await axios.post(
+				"http://localhost:8000/api/ai/potential_root/",
+				{
+					list_of_whys: [...selectedWhys],
+				},
+				{
+					headers: { Authorization: `Token ${token}` },
+				}
+			);
+			console.log(response.data);
+			navigate("/hmw", { state: { potential_root: response.data } });
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading((prev) => !prev);
+		}
+	};
 
 	return (
 		<Box>
@@ -120,10 +154,14 @@ const FiveWhys = () => {
 									and a WHAT (outcome or what you like to achieve).
 								</Typography>
 								<Box sx={{ my: 5 }}>
-									<form onSubmit="">
-										{fiveWhys.map((text, index) => (
+									<Box>
+										{fiveWhys.map((value, index) => (
 											<Box sx={{ mt: 2 }}>
-												<PSCard key={index} text={text} />
+												<WhysOrHMWCard
+													key={index}
+													value={value}
+													addWhysToList={addWhysToList}
+												/>
 											</Box>
 										))}
 										<Box
@@ -134,6 +172,7 @@ const FiveWhys = () => {
 											}}>
 											<Button
 												variant="contained"
+												onClick={generatePotentialRootProb}
 												sx={{
 													px: 2.3,
 													py: 1.2,
@@ -143,7 +182,7 @@ const FiveWhys = () => {
 												Generate Root
 											</Button>
 										</Box>
-									</form>
+									</Box>
 								</Box>
 							</Box>
 						</Box>
