@@ -11,6 +11,7 @@ import {
 	FormControl,
 	Select,
 	MenuItem,
+	Button,
 } from "@mui/material";
 import React, { useEffect, useReducer, useState } from "react";
 import PSListCard from "../components/RankingPSCard";
@@ -76,7 +77,8 @@ const Ranking = () => {
 	const [selectedProblemStatement, selectedProblemStatementDispatch] =
 		useReducer(
 			selectedProblemStatementReducer,
-			JSON.parse(sessionStorage.getItem("ranking_selected_list_statements"))
+			JSON.parse(sessionStorage.getItem("ranking_selected_list_statements")) ||
+				[]
 		);
 	const [selectedButton, setSelectedButton] = useState(
 		sessionStorage.getItem("ranking_selected_button") !== null
@@ -203,9 +205,6 @@ const Ranking = () => {
 			"ranking_selected_list_statements",
 			JSON.stringify(selectedProblemStatement)
 		);
-
-		console.log("THIS IS THE SELECTED PROBLEM STATEMENT");
-		console.log(sessionStorage.getItem("ranking_selected_list_statements"));
 	}, [listProblemStatement, selectedProblemStatement]);
 
 	const handleAddStatement = (id, venn, statement) => {
@@ -445,6 +444,11 @@ const Ranking = () => {
 						</IconButton>
 					</Box>
 				))}
+				<Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+					<Button variant="contained" sx={{ px: 2, py: 1, borderRadius: 3 }}>
+						Generate Root
+					</Button>
+				</Box>
 			</Box>
 		</Box>
 	);
