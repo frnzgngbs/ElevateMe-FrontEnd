@@ -40,14 +40,16 @@ function HomePageCards({ card, icon, title, description, handleCardClick }) {
 										}}
 									/>
 								</Box>
-								<Typography variant="h5" textAlign={"center"} sx={{ mt: 2 }}>
+								<Typography padding={2} variant="h5" textAlign={"left"} sx={{ mt: 2, mb: -3}}>
 									{title}
 								</Typography>
 								<Typography
 									variant="body1"
-									textAlign={"center"}
-									fontSize={"13px"}
-									sx={{ mt: 1 }}>
+									fontSize={"12px"}
+									color="#8E8E8E"
+									padding={2}
+									textAlign={"justify"}
+									>
 									{description}
 								</Typography>
 							</CardContent>
