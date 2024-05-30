@@ -55,53 +55,49 @@ const SavedPSCard = ({ id, statement, venn, onDelete, setting, onEdit }) => {
 						<Grid item xs>
 							<Box>
 								{isEditable ? (
-									<form
-										onSubmit={() => {
-											onEdit(setting, id, editedStatement);
+									<Box
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											justifyContent: "space-between",
 										}}>
+										<TextField
+											sx={{ width: "100%" }}
+											onChange={(e) => {
+												setEditedStatement((prev) => e.target.value);
+											}}
+											defaultValue={editedStatement}
+											autoFocus={isEditable}
+										/>
 										<Box
 											sx={{
 												display: "flex",
 												alignItems: "center",
-												justifyContent: "space-between",
+												justifyContent: "end",
 											}}>
-											<TextField
-												sx={{ width: "100%" }}
-												onChange={(e) => {
-													setEditedStatement((prev) => e.target.value);
-												}}
-												defaultValue={statement}
-												autoFocus={isEditable}
-											/>
-											<Box
-												sx={{
-													display: "flex",
-													alignItems: "center",
-													justifyContent: "end",
-												}}>
-												<Box sx={{ mx: 1 }}>
-													<Button
-														type="submit"
-														variant="outlined"
-														color="error">
-														Edit
-													</Button>
-												</Box>
-												<Box>
-													<Button
-														variant="outlined"
-														onClick={() => {
-															setEditedStatement("");
-															setIsEditable((prev) => !prev);
-														}}>
-														Cancel
-													</Button>
-												</Box>
+											<Box sx={{ mx: 1 }}>
+												<Button
+													variant="outlined"
+													color="error"
+													onClick={() => {
+														setIsEditable((prev) => !prev);
+													}}>
+													Edit
+												</Button>
+											</Box>
+											<Box>
+												<Button
+													variant="outlined"
+													onClick={() => {
+														setIsEditable((prev) => !prev);
+													}}>
+													Cancel
+												</Button>
 											</Box>
 										</Box>
-									</form>
+									</Box>
 								) : (
-									<Typography variant="body1">{statement}</Typography>
+									<Typography variant="body1">{editedStatement}</Typography>
 								)}
 							</Box>
 						</Grid>

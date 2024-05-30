@@ -41,9 +41,9 @@ const HomePage = () => {
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
-		list: {
+		rank: {
 			icon: list,
-			title: "Saved List",
+			title: "Ranking",
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
@@ -119,7 +119,7 @@ const HomePage = () => {
 				</Grid>
 				{/* Right div remains unchanged */}
 				<Grid item xs={10} md={5}>
-					<Box>
+					<Box sx={{ display: "flex", justifyContent: "flex-end" }}>
 						<img
 							src={Bookpng}
 							alt="Techno Book"

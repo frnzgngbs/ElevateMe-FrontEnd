@@ -1,13 +1,18 @@
 import { Box, Button, Card, Grid, IconButton, Typography } from "@mui/material";
-import { CheckBox } from "@mui/icons-material";
+
 import PSCard from "../components/PSCard";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Venn2 from "../res/venn.png";
+import Venn2 from "../res/venn2.png";
+import Venn3 from "../res/venn.png"
 import { useEffect, useReducer, useState } from "react";
 import VennSettings from "../components/VennSettings";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
 import GridBackground from "../res/gridbackground.png";
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import CircleUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'; // Unchecked icon
+import CircleCheckedIcon from '@mui/icons-material/CheckCircleOutline'; // Checked icon
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
@@ -154,10 +159,10 @@ const [selectedButton, setSelectedButton] = useState(
 					paddingBottom={4}
 					sx={{
 						backgroundImage: `url(${GridBackground})`,
-						backgroundSize: "90%",
+						
 						backgroundRepeat: "no-repeat",
 						marginBottom: "60px",
-						backgroundPositionY: "-124px",
+						backgroundPositionY: "-570px",
 					}}>
 					<Typography variant="h2" textAlign="center" gutterBottom>
 						Venn Diagram
@@ -167,7 +172,9 @@ const [selectedButton, setSelectedButton] = useState(
 						spacing={6}
 						justifyContent="center"
 						alignItems="center">
+						{/* Venn Scopes section card */}
 						<Grid item>
+
 							<Card
 								sx={{
 									width: 370,
@@ -206,69 +213,173 @@ const [selectedButton, setSelectedButton] = useState(
 											<SettingsIcon variant="outlined" sx={{ fontSize: 30 }} />
 										</IconButton>
 									</Box>
-									<Box sx={{ position: "relative", marginBottom: "20px" }}>
-										<Box
-											sx={{ display: "flex", justifyContent: "space-between" }}>
-											<Typography
-												variant="h6"
-												sx={{
-													position: "absolute",
-													top: "72px",
-													left: "24px",
-													color: "#8E8E8E",
-													fontSize: "14px",
-													width: "81px",
-													textAlign: "center",
-													overflow: "hidden",
-													display: "-webkit-box",
-													WebkitLineClamp: 3,
-													WebkitBoxOrient: "vertical",
-												}}>
-												{textFields.field1 ? textFields.field1 : "Field 1..."}
-											</Typography>
 
-											<Typography
-												variant="h6"
+
+									<Box sx={{ position: "relative", marginBottom: "20px" }}>
+										{selectedButton === 3 ? (
+											<>
+											<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+											  {/* First Checkbox, placement is unnecessary pero giin ani nalang nako aron naay connection, firstcheckbox:  field1 union field 2*/}
+											  <FormControlLabel
+												control={
+												  <Checkbox
+													edge="start"
+													// indeterminate={!textFields.field1 &&textFields.field2}
+													icon={<CircleUncheckedIcon />}
+													checkedIcon={<CircleCheckedIcon />}
+													sx={{ position: "absolute", zIndex: 50, marginBottom:"120px", marginLeft:"170px" }}
+												  />
+												}
+											  />
+										  
+											  {/* Label for the first Checkbox using Typography */}
+											  <Typography
+												variant="body1"
 												sx={{
-													position: "absolute",
-													top: "72px",
-													right: "35px",
-													color: "#8E8E8E",
-													fontSize: "14px",
-													width: "81px",
-													textAlign: "center",
-													overflow: "hidden",
-													display: "-webkit-box",
-													WebkitLineClamp: 3,
-													WebkitBoxOrient: "vertical",
-												}}>
-												{textFields.field2 ? textFields.field2 : "Field 2..."}
-											</Typography>
-										</Box>
-										<Typography
-											variant="h6"
-											sx={{
-												position: "absolute",
-												bottom: "50px",
-												left: "50%",
-												transform: "translate(-50%)",
-												color: "#8E8E8E",
-												fontSize: "14px",
-												width: "81px",
-												textAlign: "center",
-												overflow: "hidden",
-												display: "-webkit-box",
-												WebkitLineClamp: 3,
-												WebkitBoxOrient: "vertical",
-											}}>
-											{textFields.field3 ? textFields.field3 : "Field 3..."}
-										</Typography>
-										<img
-											src={Venn2}
-											alt="Venn Diagram"
-											style={{ zIndex: 0, width: "325px", Height: "50px" }}
-										/>
+												  position: "absolute",
+												  top: "72px",
+												  left: "24px",
+												  color: "#8E8E8E",
+												  fontSize: "14px",
+												  width: "81px",
+												  textAlign: "center",
+												  overflow: "hidden",
+												  display: "-webkit-box",
+												  WebkitLineClamp: 3,
+												  WebkitBoxOrient: "vertical",
+												}}
+											  >
+												{textFields.field1? textFields.field1 : "Field 1..."}
+											  </Typography>
+										  
+											  {/* Second Checkbox: field 1 union field 3 */}
+											  <FormControlLabel
+												control={
+												  <Checkbox
+													edge="start"
+													// indeterminate={!textFields.field1 &&textFields.field3}
+													icon={<CircleUncheckedIcon />}
+													checkedIcon={<CircleCheckedIcon />}
+													sx={{ position: "absolute", zIndex: 52, marginTop:"10px" , marginLeft:"120px" }}
+												  />
+												}
+											  />
+										  
+											  {/* Label for the second Checkbox using Typography */}
+											  <Typography
+												variant="body1"
+												sx={{
+												  position: "absolute",
+												  top: "72px",
+												  right: "35px",
+												  color: "#8E8E8E",
+												  fontSize: "14px",
+												  width: "81px",
+												  textAlign: "center",
+												  overflow: "hidden",
+												  display: "-webkit-box",
+												  WebkitLineClamp: 3,
+												  WebkitBoxOrient: "vertical",
+												}}
+											  >
+												{textFields.field2? textFields.field2 : "Field 2..."}
+											  </Typography>
+										  
+											  {/* Third Checkbox: field 2 union field 3 */}
+											  <FormControlLabel
+												control={
+												  <Checkbox
+													edge="start"
+													// indeterminate={!textFields.field2 &&textFields.field3}
+													icon={<CircleUncheckedIcon />}
+													checkedIcon={<CircleCheckedIcon />}
+													sx={{ position: "absolute", zIndex: 51, marginTop:"10px" , marginLeft:"200px" }}
+												  />
+												}
+											  />
+										  
+											  {/* Label for the third Checkbox using Typography */}
+											  <Typography
+												variant="body1"
+												sx={{
+												  position: "absolute",
+												  bottom: "50px",
+												  left: "50%",
+												  transform: "translate(-50%)",
+												  color: "#8E8E8E",
+												  fontSize: "14px",
+												  width: "81px",
+												  textAlign: "center",
+												  overflow: "hidden",
+												  display: "-webkit-box",
+												  WebkitLineClamp: 3,
+												  WebkitBoxOrient: "vertical",
+												}}
+											  >
+												{textFields.field3? textFields.field3 : "Field 3..."}
+											  </Typography>
+										  
+											  {/* Venn Diagram Image */}
+											  <img
+												src={Venn3}
+												alt="Venn Diagram"
+												style={{ zIndex: 0, width: "325px", height: "auto" }}
+											  />
+											</Box>
+										  </>
+										  
+										  
+										) : (
+											<>
+												<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+													<Typography
+														variant="h6"
+														sx={{
+															position: "absolute",
+															top: "110px",
+															left: "24px",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}
+													>
+														{textFields.field1 ? textFields.field1 : "Field 1..."}
+													</Typography>
+
+													<Typography
+														variant="h6"
+														sx={{
+															position: "absolute",
+															top: "110px",
+															right: "35px",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}
+													>
+														{textFields.field2 ? textFields.field2 : "Field 2..."}
+													</Typography>
+												</Box>
+
+												<img
+													src={Venn2}
+													alt="Venn Diagram"
+													style={{ zIndex: 0, marginTop: "40px", width: "325px", height: "auto", display: "block" }}
+												/>
+											</>
+										)}
 									</Box>
+
 								</Box>
 							</Card>
 						</Grid>
