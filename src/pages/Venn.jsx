@@ -23,21 +23,37 @@ function problemStatementDispatch(state, action) {
 
 function Venn() {
 	const [showSetting, setShowSetting] = useState(false);
-	const [textFields, setTextFields] = useState({
-		field1: sessionStorage.getItem("field1"),
-		field2: sessionStorage.getItem("field2"),
-		field3: sessionStorage.getItem("field3"),
-		filter: sessionStorage.getItem("filter"),
-	});
+const [textFields, setTextFields] = useState({
+  field1: sessionStorage.getItem("field1"),
+  field2: sessionStorage.getItem("field2"),
+  field3: sessionStorage.getItem("field3"),
+  filter: sessionStorage.getItem("filter"),
+});
+
+const handleTextFieldChange = (event) => {
+  const { name, value } = event.target;
+  setTextFields((prevState) => {
+    const newState = { ...prevState, [name]: value };
+    sessionStorage.setItem("field1", newState.field1);
+    sessionStorage.setItem("field2", newState.field2);
+    sessionStorage.setItem("field3", newState.field3);
+    sessionStorage.setItem("filter", newState.filter);
+    return newState;
+  });
+};
 	const [ProblemStatements, dispatch] = useReducer(
 		problemStatementDispatch,
 		JSON.parse(sessionStorage.getItem("generated_PS"))
 	);
 	const [isLoading, setIsLoading] = useState(false);
-	const getLastCheckButton = sessionStorage.getItem("setting");
-	const [selectedButton, setSelectedButton] = useState(
-		getLastCheckButton == null ? getLastCheckButton : 3
-	);
+const getLastCheckButton = sessionStorage.getItem("setting");
+const [selectedButton, setSelectedButton] = useState(
+  getLastCheckButton !== null ? parseInt(getLastCheckButton) : 3
+);
+	const handleButtonClick = (buttonValue) => {
+  setSelectedButton(buttonValue);
+  sessionStorage.setItem("setting", buttonValue);
+};
 
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
