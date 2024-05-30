@@ -49,7 +49,7 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 							justifyContent="center"
 							alignItems="center"
 							height="100%">
-							{inputValues.numVenns === 3 ? (
+							{venn.field3 !== undefined ? (
 								<Venn3Paper venn={inputValues} />
 							) : (
 								<Venn2Paper venn={inputValues} />

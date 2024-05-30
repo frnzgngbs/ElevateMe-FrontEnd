@@ -45,11 +45,12 @@ const FiveWhys = () => {
 		location.state?.statement ||
 		sessionStorage.getItem("whys_selected_statement");
 
-	const venn = location.state?.venn;
+	const venn = location.state?.venn || sessionStorage.getItem("whys_venn");
 
 	useEffect(() => {
 		sessionStorage.setItem("whys_selected_statement", statement);
-	}, [statement]);
+		sessionStorage.setItem("whys_venn", venn);
+	}, [statement, venn]);
 
 	const handleShowPopup = () => {
 		setIsPopupOpen(true);
@@ -81,11 +82,7 @@ const FiveWhys = () => {
 			) : (
 				<Box sx={{ px: 12, py: 2 }}>
 					<Typography variant="h4">Selected Problem Statement</Typography>
-					<Box sx={{ mt: 6, ml: 7 }}>
-						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-							Problem Statement
-						</Typography>
-						<br></br>
+					<Box sx={{ mt: 1, ml: 7 }}>
 						<Grid container sx={{ ml: 2 }}>
 							<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
 								<Typography variant="body2">{statement}</Typography>
