@@ -18,6 +18,7 @@ import PSListCard from "../components/RankingPSCard";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const PS_action = {
 	SET_PROBLEM_STATEMENT: "SET_PROBLEM_STATEMENT",
@@ -47,7 +48,7 @@ function listProblemStatementReducer(state, action) {
 	}
 }
 
-function selectedProblemStatementReducer(state, action) {
+function queuedProblemStatementReducer(state, action) {
 	switch (action.type) {
 		case PS_action.SET_PROBLEM_STATEMENT:
 			return action.statement;
@@ -74,17 +75,17 @@ const Ranking = () => {
 		listProblemStatementReducer,
 		JSON.parse(sessionStorage.getItem("ranking_list_statements"))
 	);
-	const [selectedProblemStatement, selectedProblemStatementDispatch] =
-		useReducer(
-			selectedProblemStatementReducer,
-			JSON.parse(sessionStorage.getItem("ranking_selected_list_statements")) ||
-				[]
-		);
+	const [queuedProblemStatement, queuedProblemStatementDispatch] = useReducer(
+		queuedProblemStatementReducer,
+		JSON.parse(sessionStorage.getItem("ranking_queued_list_statements")) || []
+	);
 	const [selectedButton, setSelectedButton] = useState(
 		sessionStorage.getItem("ranking_selected_button") !== null
 			? sessionStorage.getItem("ranking_selected_button")
 			: 3
 	);
+	const [selectedProblemStatement, setSelectedProblemStatement] = useState({});
+	const navigate = useNavigate();
 
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi voluptate odio architecto minus eum ipsam aperiam impedit tempora voluptatum! Quam tempora quasi fugiat fugit error modi consectetur deleniti dolorum tempore.",
@@ -202,13 +203,13 @@ const Ranking = () => {
 			JSON.stringify(listProblemStatement)
 		);
 		sessionStorage.setItem(
-			"ranking_selected_list_statements",
-			JSON.stringify(selectedProblemStatement)
+			"ranking_queued_list_statements",
+			JSON.stringify(queuedProblemStatement)
 		);
-	}, [listProblemStatement, selectedProblemStatement]);
+	}, [listProblemStatement, queuedProblemStatement]);
 
 	const handleAddStatement = (id, venn, statement) => {
-		selectedProblemStatementDispatch({
+		queuedProblemStatementDispatch({
 			type: "ADD_PROBLEM_STATEMENT",
 			payload: {
 				id: id,
@@ -228,7 +229,7 @@ const Ranking = () => {
 	};
 
 	const removeSelectedStatement = (index, id, venn, statement) => {
-		selectedProblemStatementDispatch({
+		queuedProblemStatementDispatch({
 			type: PS_action.REMOVE_PROBLEM_STATEMENT,
 			index: index,
 			payload: {
@@ -249,6 +250,11 @@ const Ranking = () => {
 		});
 	};
 
+	const generatePotenialRootProblem = (id, venn, statement) => {
+		setSelectedProblemStatement(statement);
+		navigate("/five_whys", { state: { selected: selectedProblemStatement } });
+	};
+
 	return (
 		<Box pb={5}>
 			<Box
@@ -265,7 +271,7 @@ const Ranking = () => {
 							const value = +e.target.value;
 							sessionStorage.setItem("ranking_selected_button", value);
 							setSelectedButton((prev) => (prev = value));
-							selectedProblemStatementDispatch({
+							queuedProblemStatementDispatch({
 								type: PS_action.SET_PROBLEM_STATEMENT,
 								statement: [],
 							});
@@ -367,9 +373,12 @@ const Ranking = () => {
 					</CardContent>
 				</Card>
 
-				{selectedProblemStatement.map(({ id, venn, statement }, rowIndex) => (
+				{queuedProblemStatement.map(({ id, venn, statement }, rowIndex) => (
 					<Box key={rowIndex} sx={{ display: "flex", mb: 2 }}>
-						<IconButton>
+						<IconButton
+							onClick={() => {
+								generatePotenialRootProblem(id, venn, statement);
+							}}>
 							<CheckCircleOutlineIcon />
 						</IconButton>
 						<Card
@@ -399,6 +408,7 @@ const Ranking = () => {
 											sx={{ display: "flex", justifyContent: "center" }}>
 											<FormControl sx={{ justifyContent: "center" }}>
 												<Select
+													required
 													value={selectedValues[rowIndex][colIndex]}
 													onChange={(e) =>
 														handleSelectChange(
@@ -444,7 +454,10 @@ const Ranking = () => {
 						</IconButton>
 					</Box>
 				))}
-				<Box sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+				<Box
+					type="submit"
+					onSubmit={generatePotenialRootProblem}
+					sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
 					<Button variant="contained" sx={{ px: 2, py: 1, borderRadius: 3 }}>
 						Generate Root
 					</Button>
