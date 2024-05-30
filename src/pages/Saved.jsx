@@ -24,9 +24,9 @@ function problemStatementReducer(state, action) {
 			return { ...state, three_venn: deletedStatementThreeVenn };
 		case "UPDATE_TWO_VENN_STATEMENT":
 			const updatedTwoVenn = { ...state.two_venn };
-			updatedTwoVenn[action.id] = {
-				...updatedTwoVenn[action.id],
-				statement: action.statement,
+			updatedTwoVenn[action.payload.id] = {
+				...updatedTwoVenn[action.payload.id],
+				statement: action.payload.statement,
 			};
 			return { ...state, two_venn: updatedTwoVenn };
 		case "UPDATE_THREE_VENN_STATEMENT":
@@ -89,7 +89,7 @@ const Saved = () => {
 		};
 
 		getSavedProblemStatement();
-	}, []);
+	}, [memoizedMapData]);
 
 	const mapData = (data) => {
 		const newItems = {};
@@ -143,7 +143,6 @@ const Saved = () => {
 				console.log(err);
 			}
 		}
-		return null;
 	};
 
 	const handleDelete = async (setting, id) => {
