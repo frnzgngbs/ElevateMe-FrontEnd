@@ -84,7 +84,6 @@ const Ranking = () => {
 			? sessionStorage.getItem("ranking_selected_button")
 			: 3
 	);
-	const [selectedProblemStatement, setSelectedProblemStatement] = useState({});
 	const navigate = useNavigate();
 
 	const data = [
@@ -251,8 +250,10 @@ const Ranking = () => {
 	};
 
 	const generatePotenialRootProblem = (id, venn, statement) => {
-		setSelectedProblemStatement(statement);
-		navigate("/five_whys", { state: { selected: selectedProblemStatement } });
+		alert(statement);
+		navigate("/five_whys", {
+			state: { id: id, venn: venn, statement: statement },
+		});
 	};
 
 	return (

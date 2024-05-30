@@ -1,8 +1,9 @@
-import React, {useState}from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import { Button, Grid, Typography } from "@mui/material";
 import PSCard from "../components/PSCard";
-import PopupVennHistory from "../components/popupcards/vennHistorypopup/vennHistoryPopUp"
+import PopupVennHistory from "../components/popupcards/vennHistorypopup/vennHistoryPopUp";
+import { useLocation } from "react-router-dom";
 
 const FiveWhys = () => {
 	const data = [
@@ -12,26 +13,34 @@ const FiveWhys = () => {
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 	];
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
+	const [isPopupOpen, setIsPopupOpen] = useState(false);
+	const location = useLocation();
 
-    const handleShowPopup = () => {
-        setIsPopupOpen(true);
-    };
+	const statement =
+		location.state?.statement ||
+		sessionStorage.getItem("whys_selected_statement");
 
-    const handleClosePopup = () => {
-        setIsPopupOpen(false);
-    };
+	useEffect(() => {
+		sessionStorage.setItem("whys_selected_statement", statement);
+	}, [statement]);
+
+	const handleShowPopup = () => {
+		setIsPopupOpen(true);
+	};
+
+	const handleClosePopup = () => {
+		setIsPopupOpen(false);
+	};
 	const [vennValues, setVennValues] = useState({
-        field1: 'john',
-        field2: 'jsadas',
-        field3: 'asd', 
-        filter: 'ads',
-		numVenns: 3
-    });
+		field1: "john",
+		field2: "jsadas",
+		field3: "asd",
+		filter: "ads",
+		numVenns: 3,
+	});
 
 	return (
 		<Box>
-			
 			<Box sx={{ px: 12, py: 2 }}>
 				<Typography variant="h4">Selected Problem Statement</Typography>
 				<Box sx={{ mt: 6, ml: 7 }}>
@@ -41,16 +50,15 @@ const FiveWhys = () => {
 					<br></br>
 					<Grid container sx={{ ml: 2 }}>
 						<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
-							<Typography variant="body2">Problem Statement</Typography>
+							<Typography variant="body2">{statement}</Typography>
 						</Grid>
 						<Grid item sx={{ mr: 2.2 }}>
-						<Button
-                                variant="contained"
-                                sx={{ borderRadius: 5.6, color: "#FFFB" }}
-                                onClick={handleShowPopup}
-                            >
-                                Show
-                            </Button>
+							<Button
+								variant="contained"
+								sx={{ borderRadius: 5.6, color: "#FFFB" }}
+								onClick={handleShowPopup}>
+								Show
+							</Button>
 						</Grid>
 					</Grid>
 					<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 5 }}>
@@ -98,14 +106,16 @@ const FiveWhys = () => {
 								</Box>
 							</Box>
 						</Box>
-				
 					</Box>
 				</Box>
 				{isPopupOpen && (
-                <PopupVennHistory venn={vennValues} open={isPopupOpen} onClose={handleClosePopup} />
-            )}
+					<PopupVennHistory
+						venn={vennValues}
+						open={isPopupOpen}
+						onClose={handleClosePopup}
+					/>
+				)}
 			</Box>
-			
 		</Box>
 	);
 };
