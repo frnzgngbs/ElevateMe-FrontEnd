@@ -27,7 +27,6 @@ const PS_action = {
 function listProblemStatementReducer(state, action) {
 	switch (action.type) {
 		case PS_action.SET_PROBLEM_STATEMENT:
-			console.log(action.statments);
 			return [...action.statements];
 		case PS_action.REMOVE_PROBLEM_STATEMENT:
 			return state.filter(
@@ -40,8 +39,6 @@ function listProblemStatementReducer(state, action) {
 				venn: action.payload.venn,
 				statement: action.payload.statement,
 			});
-			console.log("THIS IS THE NEW STATE");
-			console.log(newState);
 			// console.log(newState);
 			return newState;
 		default:
@@ -74,11 +71,18 @@ function selectedProblemStatementReducer(state, action) {
 const Ranking = () => {
 	const [listProblemStatement, listProblemStatementDispatch] = useReducer(
 		listProblemStatementReducer,
-		[]
+		JSON.parse(sessionStorage.getItem("ranking_list_statements"))
 	);
 	const [selectedProblemStatement, selectedProblemStatementDispatch] =
-		useReducer(selectedProblemStatementReducer, []);
-	const [selectedButton, setSelectedButton] = useState(3);
+		useReducer(
+			selectedProblemStatementReducer,
+			JSON.parse(sessionStorage.getItem("ranking_selected_list_statements"))
+		);
+	const [selectedButton, setSelectedButton] = useState(
+		sessionStorage.getItem("ranking_selected_button") !== null
+			? sessionStorage.getItem("ranking_selected_button")
+			: 3
+	);
 
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi voluptate odio architecto minus eum ipsam aperiam impedit tempora voluptatum! Quam tempora quasi fugiat fugit error modi consectetur deleniti dolorum tempore.",
@@ -179,7 +183,6 @@ const Ranking = () => {
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
-					console.log(listProblemStatement);
 					listProblemStatementDispatch({
 						type: PS_action.SET_PROBLEM_STATEMENT,
 						statements: response.data,
@@ -187,12 +190,23 @@ const Ranking = () => {
 				}
 			} catch (err) {}
 		};
+
 		getSavedPS();
-		selectedProblemStatementDispatch({
-			type: "SET_PROBLEM_STATEMENT",
-			statement: [],
-		});
 	}, [selectedButton]);
+
+	useEffect(() => {
+		sessionStorage.setItem(
+			"ranking_list_statements",
+			JSON.stringify(listProblemStatement)
+		);
+		sessionStorage.setItem(
+			"ranking_selected_list_statements",
+			JSON.stringify(selectedProblemStatement)
+		);
+
+		console.log("THIS IS THE SELECTED PROBLEM STATEMENT");
+		console.log(sessionStorage.getItem("ranking_selected_list_statements"));
+	}, [listProblemStatement, selectedProblemStatement]);
 
 	const handleAddStatement = (id, venn, statement) => {
 		selectedProblemStatementDispatch({
@@ -250,7 +264,12 @@ const Ranking = () => {
 						value={selectedButton}
 						onChange={(e) => {
 							const value = +e.target.value;
+							sessionStorage.setItem("ranking_selected_button", value);
 							setSelectedButton((prev) => (prev = value));
+							selectedProblemStatementDispatch({
+								type: PS_action.SET_PROBLEM_STATEMENT,
+								statement: [],
+							});
 						}}
 						name="radio-button-group"
 						sx={{ flexDirection: "row" }}>
