@@ -27,16 +27,18 @@ function HomePageCards({ card, icon, title, description, handleCardClick }) {
 										display: "flex",
 										justifyContent: "center",
 										alignItems: "center",
-										height: "100px",
+										height: "150px",
 										marginTop: 2,
 									}}>
 									<CardMedia
 										component="img"
 										src={icon}
 										sx={{
-											maxHeight: "100px",
-											maxWidth: "100%",
-											objectFit: "contain",
+											
+											maxWidth: "150%",
+											objectFit: "fill",
+											
+
 										}}
 									/>
 								</Box>
