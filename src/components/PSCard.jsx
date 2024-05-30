@@ -4,7 +4,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const PSCard = ({ text, handleSaveProblemStatement }) => {
 	return (
-		<Card sx={{ borderRadius: 6.2, boxShadow: 3 }}>
+		<Card sx={{ borderRadius: 6.2, boxShadow: 3, width:"80%", margin:"auto" }}>
 			<CardContent sx={{ display: "flex", alignItems: "center" }}>
 				<IconButton onClick={() => handleSaveProblemStatement(text)}>
 					<AddCircleOutlineIcon />
