@@ -40,7 +40,7 @@ const UserAppbar = () => {
 	};
 
 	return (
-		<>
+		<Box>
 			<AppBar position="static" elevation={0} sx={{ bgcolor: "white" }}>
 				<Box
 					sx={{
@@ -95,7 +95,7 @@ const UserAppbar = () => {
 				</Box>
 			</AppBar>
 			<Outlet />
-		</>
+		</Box>
 	);
 };
 
