@@ -93,7 +93,13 @@ const FiveWhys = () => {
 				}
 			);
 			console.log(response.data);
-			navigate("/hmw", { state: { potential_root: response.data } });
+			navigate("/hmw", {
+				state: {
+					potential_root: response.data,
+					statement: statement,
+					list_of_whys: [...selectedWhys],
+				},
+			});
 		} catch (err) {
 			console.error(err);
 		} finally {

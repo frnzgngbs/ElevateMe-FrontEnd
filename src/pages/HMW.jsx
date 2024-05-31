@@ -9,24 +9,17 @@ import { useLocation } from "react-router-dom";
 const HMW = () => {
 	const location = useLocation();
 
-	console.log(location.state);
-	const { response } = location.state?.potential_root;
+	const response =
+		location.state?.potential_root?.root ||
+		sessionStorage.getItem("potential_root");
+	const list_of_whys = location.state?.list_of_whys || [];
+	const selected_statement = location.state?.statement;
 	const data = [
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo illum reprehenderit iste minima ex! Provident deleniti rerum, voluptatum accusantium eius iusto tenetur, inventore rem assumenda ratione voluptate non autem sapiente!",
-	];
-
-	const problemStatement =
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore";
-	const whyStatements = [
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore esasasasasasasasasasasa asdasdasdddddddddddd asddddddddddddddd asddddddddddddddddd adsssssssssssssss asddddddddddddddd asddddddddddddddd asddddddddddddd  doloredasssssssss safaf asfsaf asf asfa sfa fsa",
-		"Lorem ipsum dolor sit amet, c",
 	];
 
 	const [open, setOpen] = React.useState(false);
@@ -112,8 +105,8 @@ const HMW = () => {
 			<RootProblemHistoryPopup
 				open={open}
 				onClose={() => setOpen(false)}
-				problemStatement={problemStatement}
-				whyStatements={whyStatements}
+				problemStatement={selected_statement}
+				whyStatements={list_of_whys}
 			/>
 		</Box>
 	);

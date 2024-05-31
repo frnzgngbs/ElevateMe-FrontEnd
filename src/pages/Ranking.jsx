@@ -251,6 +251,10 @@ const Ranking = () => {
 
 	const generatePotenialRootProblem = (id, venn, statement) => {
 		alert(statement);
+		sessionStorage.removeItem("whys_selected_statement");
+		sessionStorage.removeItem("whys_venn");
+		sessionStorage.removeItem("selected_whys");
+		sessionStorage.removeItem("five_whys");
 		navigate("/five_whys", {
 			state: { id: id, venn: venn, statement: statement },
 		});
