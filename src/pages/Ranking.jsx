@@ -193,6 +193,8 @@ const Ranking = () => {
 		};
 
 		getSavedPS();
+		setSelectedValues([...[...initialSelectedValues]]);
+		setTotalsPerRow([...initialTotalsPerRow]);
 	}, [selectedButton]);
 
 	const initialSelectedValues = queuedProblemStatement?.map(() =>
@@ -216,14 +218,7 @@ const Ranking = () => {
 			return [...prev, ...[...initialSelectedValues]];
 		});
 		setTotalsPerRow((prev) => [...prev, ...initialTotalsPerRow]);
-	}, [queuedProblemStatement]);
-
-	useEffect(() => {
-		console.log("SELECTED");
-		console.log(selectedValues);
-		console.log("ROWS");
-		console.log(totalsPerRow);
-	}, [selectedValues, totalsPerRow]);
+	}, [queuedProblemStatement, listProblemStatement]);
 
 	const handleAddStatement = (id, venn, statement) => {
 		queuedProblemStatementDispatch({
@@ -257,6 +252,14 @@ const Ranking = () => {
 				statement: statement,
 			},
 		});
+
+		const newSelectedValues = selectedValues.filter((_, i) => i !== index);
+		setSelectedValues(newSelectedValues);
+
+		const newTotalsPerRow = newSelectedValues.map((row) =>
+			row.reduce((sum, value) => sum + value, 0)
+		);
+		setTotalsPerRow(newTotalsPerRow);
 
 		listProblemStatementDispatch({
 			type: PS_action.MODIFY_PROBLEM_STATEMENT,
@@ -421,7 +424,14 @@ const Ranking = () => {
 										borderRadius: 5,
 									}}>
 									<Grid container sx={{ justifyContent: "space-between" }}>
-										<Grid item xs={5}>
+										<Grid
+											item
+											xs={5}
+											sx={{
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "center",
+											}}>
 											<Typography sx={{ textAlign: "center" }}>
 												{statement}
 											</Typography>
