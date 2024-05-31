@@ -218,7 +218,12 @@ const Ranking = () => {
 			return [...prev, ...[...initialSelectedValues]];
 		});
 		setTotalsPerRow((prev) => [...prev, ...initialTotalsPerRow]);
-	}, [queuedProblemStatement, listProblemStatement]);
+	}, [
+		queuedProblemStatement,
+		listProblemStatement,
+		initialSelectedValues,
+		initialTotalsPerRow,
+	]);
 
 	const handleAddStatement = (id, venn, statement) => {
 		queuedProblemStatementDispatch({
@@ -229,8 +234,6 @@ const Ranking = () => {
 				statement: statement,
 			},
 		});
-
-		console.log(queuedProblemStatement);
 
 		listProblemStatementDispatch({
 			type: PS_action.REMOVE_PROBLEM_STATEMENT,

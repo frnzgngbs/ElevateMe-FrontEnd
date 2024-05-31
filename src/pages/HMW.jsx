@@ -24,11 +24,12 @@ const HMW = () => {
 		location.state?.potential_root?.root ||
 		sessionStorage.getItem("generated_root");
 
-	const list_of_whys = useMemo(() => {
-		const storedWhys = sessionStorage.getItem("list_of_whys");
-		const parsedWhys = storedWhys ? JSON.parse(storedWhys) : [];
-		return location.state?.list_of_whys || parsedWhys;
-	}, [location.state?.list_of_whys]);
+	const list_of_whys = location.state?.list_of_whys || [];
+	// const list_of_whys = useMemo(() => {
+	// 	const storedWhys = sessionStorage.getItem("list_of_whys");
+	// 	const parsedWhys = storedWhys ? JSON.parse(storedWhys) : [];
+	// 	return location.state?.list_of_whys || parsedWhys;
+	// }, [location.state?.list_of_whys]);
 
 	const selected_statement =
 		location.state?.statement || sessionStorage.getItem("selected_statement");
