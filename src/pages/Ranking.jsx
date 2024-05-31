@@ -215,7 +215,7 @@ const Ranking = () => {
 		setSelectedValues((prev) => {
 			return [...prev, ...[...initialSelectedValues]];
 		});
-		setTotalsPerRow((prev) => [initialTotalsPerRow]);
+		setTotalsPerRow((prev) => [...prev, ...initialTotalsPerRow]);
 	}, [queuedProblemStatement]);
 
 	useEffect(() => {
