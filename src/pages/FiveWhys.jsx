@@ -93,6 +93,7 @@ const FiveWhys = () => {
 				}
 			);
 			console.log(response.data);
+			sessionStorage.setItem("root_five_whys", selectedWhys);
 			navigate("/hmw", {
 				state: {
 					potential_root: response.data,
@@ -103,6 +104,7 @@ const FiveWhys = () => {
 		} catch (err) {
 			console.error(err);
 		} finally {
+			sessionStorage.removeItem("selected_whys");
 			sessionStorage.removeItem("selected_hmws");
 			sessionStorage.removeItem("five_hmws");
 			setIsLoading((prev) => !prev);

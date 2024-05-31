@@ -79,7 +79,7 @@ const HMW = () => {
 		sessionStorage.setItem("selected_hmws", JSON.stringify(selectedHMW));
 		sessionStorage.setItem("five_hmws", JSON.stringify(fiveHMW));
 		sessionStorage.setItem("generated_root", generated_root);
-		sessionStorage.setItem("list_of_whys", JSON.stringify(list_of_whys));
+		sessionStorage.setItem("root_five_whys", JSON.stringify(list_of_whys));
 		sessionStorage.setItem("selected_statement", selected_statement);
 	}, [selectedHMW, fiveHMW, generated_root, list_of_whys, selected_statement]);
 
