@@ -6,7 +6,7 @@ import PopupVennHistory from "../components/popupcards/vennHistorypopup/vennHist
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
-import WhysOrHMWCard from "../components/WhysOrHMWCard";
+import WhysCard from "../components/WhysCard";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
 
 const FiveWhys = () => {
@@ -103,6 +103,8 @@ const FiveWhys = () => {
 		} catch (err) {
 			console.error(err);
 		} finally {
+			sessionStorage.removeItem("selected_hmws");
+			sessionStorage.removeItem("five_hmws");
 			setIsLoading((prev) => !prev);
 		}
 	};
@@ -163,7 +165,7 @@ const FiveWhys = () => {
 									<Box>
 										{fiveWhys.map((value, index) => (
 											<Box sx={{ mt: 2 }}>
-												<WhysOrHMWCard
+												<WhysCard
 													key={index}
 													value={value}
 													addWhysToList={addWhysToList}
