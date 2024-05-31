@@ -24,12 +24,12 @@ const HMW = () => {
 		location.state?.potential_root?.root ||
 		sessionStorage.getItem("generated_root");
 
-	const list_of_whys = location.state?.list_of_whys || [];
-	// const list_of_whys = useMemo(() => {
-	// 	const storedWhys = sessionStorage.getItem("list_of_whys");
-	// 	const parsedWhys = storedWhys ? JSON.parse(storedWhys) : [];
-	// 	return location.state?.list_of_whys || parsedWhys;
-	// }, [location.state?.list_of_whys]);
+	// const list_of_whys = location.state?.list_of_whys || [];
+	const list_of_whys = useMemo(() => {
+		const storedWhys = sessionStorage.getItem("root_five_whys");
+		const parsedWhys = storedWhys ? JSON.parse(storedWhys) : [];
+		return location.state?.list_of_whys || parsedWhys;
+	}, [location.state?.list_of_whys]);
 
 	const selected_statement =
 		location.state?.statement || sessionStorage.getItem("selected_statement");
@@ -98,15 +98,14 @@ const HMW = () => {
 			) : (
 				<Box sx={{ px: 12, py: 2 }}>
 					<Typography variant="h4">Potential Root Problem</Typography>
-					<Box sx={{ mt: 6, ml: 7 }}>
+					<Box sx={{ mt: 3, ml: 7 }}>
 						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-							Generated Root Problem Statement
+							Below, is your generated potential root problem.
 						</Typography>
-						<br></br>
 						<Grid container sx={{ ml: 2 }}>
 							{/* I want to center the typography horizontally."*/}
 							<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
-								<Typography variant="body2" sx={{ mt: 1 }}>
+								<Typography variant="body2" sx={{}}>
 									{generated_root}
 								</Typography>
 							</Grid>

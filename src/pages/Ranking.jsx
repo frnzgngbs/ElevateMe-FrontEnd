@@ -276,10 +276,19 @@ const Ranking = () => {
 	};
 
 	const generatePotenialRootProblem = (id, venn, statement) => {
+		if (queuedProblemStatement.length <= 1) {
+			alert("Cannot proceed with only 1 ranked statement.");
+			return;
+		}
 		sessionStorage.removeItem("whys_selected_statement");
 		sessionStorage.removeItem("whys_venn");
 		sessionStorage.removeItem("selected_whys");
 		sessionStorage.removeItem("five_whys");
+		sessionStorage.removeItem("selected_hmws");
+		sessionStorage.removeItem("five_hmws");
+		sessionStorage.removeItem("generated_root");
+		sessionStorage.removeItem("root_five_whys");
+		sessionStorage.removeItem("selected_statement");
 		navigate("/five_whys", {
 			state: { id: id, venn: venn, statement: statement },
 		});

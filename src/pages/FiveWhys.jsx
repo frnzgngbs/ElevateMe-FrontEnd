@@ -46,11 +46,12 @@ const FiveWhys = () => {
 		location.state?.statement ||
 		sessionStorage.getItem("whys_selected_statement");
 
-	const venn = location.state?.venn || sessionStorage.getItem("whys_venn");
+	const venn =
+		location.state?.venn || JSON.parse(sessionStorage.getItem("whys_venn"));
 
 	useEffect(() => {
 		sessionStorage.setItem("whys_selected_statement", statement);
-		sessionStorage.setItem("whys_venn", venn);
+		sessionStorage.setItem("whys_venn", JSON.stringify(venn));
 		sessionStorage.setItem("selected_whys", JSON.stringify(selectedWhys));
 		sessionStorage.setItem("five_whys", JSON.stringify(fiveWhys));
 	}, [statement, venn, selectedWhys, fiveWhys]);
@@ -93,7 +94,7 @@ const FiveWhys = () => {
 				}
 			);
 			console.log(response.data);
-			sessionStorage.setItem("root_five_whys", selectedWhys);
+			sessionStorage.setItem("root_five_whys", JSON.stringify(selectedWhys));
 			navigate("/hmw", {
 				state: {
 					potential_root: response.data,
@@ -126,7 +127,10 @@ const FiveWhys = () => {
 			) : (
 				<Box sx={{ px: 12, py: 2 }}>
 					<Typography variant="h4">Selected Problem Statement</Typography>
-					<Box sx={{ mt: 1, ml: 7 }}>
+					<Box sx={{ mt: 3, ml: 7 }}>
+						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+							Below, is your selected ranked problem statement.
+						</Typography>
 						<Grid container sx={{ ml: 2 }}>
 							<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
 								<Typography variant="body2">{statement}</Typography>
