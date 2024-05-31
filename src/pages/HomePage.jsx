@@ -11,12 +11,12 @@ import {
 	useTheme,
 } from "@mui/material";
 
-import venn from "../res/venn.svg";
-import save from "../res/save.svg";
-import list from "../res/list.svg";
-import five_whys from "../res/WHY’S.svg";
-import HMW from "../res/HMW.svg";
-import elevator from "../res/elevator.svg";
+import venn from "../res/newHomepageIcons/vennicon.png";
+import save from "../res/newHomepageIcons/saveicon.png";
+import list from "../res/newHomepageIcons/rankingicon.png";
+import five_whys from "../res/newHomepageIcons/whysicon.png";
+import HMW from "../res/newHomepageIcons/hmwicon.png";
+import elevator from "../res/newHomepageIcons/elevator.png";
 import notebook from "../res/techno-book.svg";
 import { useNavigate } from "react-router-dom";
 import Bookpng from "../res/book.png";

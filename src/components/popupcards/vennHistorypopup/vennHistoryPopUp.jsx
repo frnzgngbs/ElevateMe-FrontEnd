@@ -12,21 +12,22 @@ import {
 	Paper as MuiPaper,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import "../vennHistorypopup/vennHistory.css"
+import "../vennHistorypopup/vennHistory.css";
 import Venn3Paper from "../../venndiagram/VennDiagramPaper3";
 import Venn2Paper from "../../venndiagram/VennDiagramPaper2";
 
 const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
-    const [inputValues, setInputValues] = useState({ ...venn });
+	console.log(venn);
+	const [inputValues, setInputValues] = useState({ ...venn });
 
-    useEffect(() => {
-        setInputValues({ ...venn });
-    }, [venn]);
+	useEffect(() => {
+		setInputValues({ ...venn });
+	}, [venn]);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setInputValues({ ...inputValues, [name]: value });
-    };
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
+		setInputValues({ ...inputValues, [name]: value });
+	};
 	return (
 		<Dialog
 			open={open}
@@ -48,11 +49,11 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 							justifyContent="center"
 							alignItems="center"
 							height="100%">
-							  {inputValues.numVenns === 3 ? (
-                                <Venn3Paper venn={inputValues} />
-                            ) : (
-                                <Venn2Paper venn={inputValues} />
-                            )}
+							{venn.field3 !== undefined ? (
+								<Venn3Paper venn={inputValues} />
+							) : (
+								<Venn2Paper venn={inputValues} />
+							)}
 						</Box>
 					</Grid>
 
@@ -78,7 +79,6 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										Field 1:
 									</Typography>
 									<Typography
-									
 										sx={{
 											flex: 1,
 											p: 0.5,
@@ -86,12 +86,13 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 											boxShadow: 2,
 											backgroundColor: "white",
 											fontSize: "12px",
-                                            height:"32px",
-                                            alignItems:"center",
-                                            justifyContent:"center",
+											height: "32px",
+											alignItems: "center",
+											justifyContent: "center",
 										}}
-										fullWidth
-									>{inputValues.field1}</Typography>
+										fullWidth>
+										{inputValues.field1}
+									</Typography>
 								</Box>
 								<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
 									<Typography
@@ -105,7 +106,6 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										Field 2:
 									</Typography>
 									<Typography
-										
 										sx={{
 											flex: 1,
 											p: 0.5,
@@ -113,41 +113,41 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 											boxShadow: 2,
 											backgroundColor: "white",
 											fontSize: "12px",
-                                            height:"32px",
-                                            alignItems:"center",
+											height: "32px",
+											alignItems: "center",
 										}}
-										fullWidth
-									>{inputValues.field2} </Typography>
-								</Box>
-								<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-									<Typography
-										variant="body1"
-										sx={{
-											mr: 2,
-											Width: "60px",
-											color: "#8e8e8e",
-											fontSize: "12px",
-										}}>
-										Field 3:
+										fullWidth>
+										{inputValues.field2}{" "}
 									</Typography>
-									<Typography
-										
-										
-										sx={{
-											flex: 1,
-											p: 0.5,
-											borderRadius: 2,
-											boxShadow: 2,
-											backgroundColor: "white",
-											fontSize: "12px",
-                                            height:"32px",
-                                           alignItems:"center",
-                                            
-                                            
-										}}
-										fullWidth
-									>{inputValues.field3}</Typography>
 								</Box>
+								{venn.field3 && (
+									<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+										<Typography
+											variant="body1"
+											sx={{
+												mr: 2,
+												Width: "60px",
+												color: "#8e8e8e",
+												fontSize: "12px",
+											}}>
+											Field 3:
+										</Typography>
+										<Typography
+											sx={{
+												flex: 1,
+												p: 0.5,
+												borderRadius: 2,
+												boxShadow: 2,
+												backgroundColor: "white",
+												fontSize: "12px",
+												height: "32px",
+												alignItems: "center",
+											}}
+											fullWidth>
+											{inputValues.field3}
+										</Typography>
+									</Box>
+								)}
 								<Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
 									<Typography
 										variant="body1"
@@ -173,7 +173,7 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										sx={{
 											flex: 1,
 											p: 2,
-											maxHeight: "7.5rem", 
+											maxHeight: "7.5rem",
 											borderRadius: 2,
 											boxShadow: 2,
 											backgroundColor: "white",
@@ -195,9 +195,7 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 								justifyContent: "center",
 								mt: 2,
 								marginLeft: 4,
-							}}>
-						
-						</Box>
+							}}></Box>
 					</Grid>
 				</Grid>
 			</DialogContent>
