@@ -51,7 +51,7 @@ function listProblemStatementReducer(state, action) {
 function queuedProblemStatementReducer(state, action) {
 	switch (action.type) {
 		case PS_action.SET_PROBLEM_STATEMENT:
-			return action.statement;
+			return action.statement || [];
 		case "ADD_PROBLEM_STATEMENT":
 			return [
 				...state,
@@ -70,6 +70,39 @@ function queuedProblemStatementReducer(state, action) {
 	}
 }
 
+const criteria = [
+	{
+		criteria_title: "Impact",
+		description:
+			"The problem has a significant impact on various stakeholders, such as individuals, groups, organizations, and the environment.",
+	},
+	{
+		criteria_title: "Capability",
+		description:
+			"The problem solver has the ability to effectively address and solve this problem based on your skills, resources, and expertise.",
+	},
+	{
+		criteria_title: "Development Cost",
+		description:
+			"The potential solution is feasible to develop considering potential costs, investments, and financial resources required.",
+	},
+	{
+		criteria_title: "Urgency",
+		description:
+			"It is urgent to find a solution for this problem in terms of time constraints, market demands, or immediate needs.",
+	},
+	{
+		criteria_title: "Innovation Opportunity",
+		description:
+			"The problem has the potential to present innovative solutions or new approaches that could lead to unique outcomes or competitive advantages.",
+	},
+	{
+		criteria_title: "Market Size",
+		description:
+			"Potential market is large enough to make the solution a viable business.",
+	},
+];
+
 const Ranking = () => {
 	const [listProblemStatement, listProblemStatementDispatch] = useReducer(
 		listProblemStatementReducer,
@@ -86,54 +119,12 @@ const Ranking = () => {
 	);
 	const navigate = useNavigate();
 
-	const data = [
-		"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi voluptate odio architecto minus eum ipsam aperiam impedit tempora voluptatum! Quam tempora quasi fugiat fugit error modi consectetur deleniti dolorum tempore.",
-		"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi voluptate odio architecto minus eum ipsam aperiam impedit tempora voluptatum! Quam tempora quasi fugiat fugit error modi consectetur deleniti dolorum tempore.",
-		"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi voluptate odio architecto minus eum ipsam aperiam impedit tempora voluptatum! Quam tempora quasi fugiat fugit error modi consectetur deleniti dolorum tempore.",
-		"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi voluptate odio architecto minus eum ipsam aperiam impedit tempora voluptatum! Quam tempora quasi fugiat fugit error modi consectetur deleniti dolorum tempore.",
-		"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi voluptate odio architecto minus eum ipsam aperiam impedit tempora voluptatum! Quam tempora quasi fugiat fugit error modi consectetur deleniti dolorum tempore.",
-	];
-
-	const criteria = [
-		{
-			criteria_title: "Impact",
-			description:
-				"The problem has a significant impact on various stakeholders, such as individuals, groups, organizations, and the environment.",
-		},
-		{
-			criteria_title: "Capability",
-			description:
-				"The problem solver has the ability to effectively address and solve this problem based on your skills, resources, and expertise.",
-		},
-		{
-			criteria_title: "Development Cost",
-			description:
-				"The potential solution is feasible to develop considering potential costs, investments, and financial resources required.",
-		},
-		{
-			criteria_title: "Urgency",
-			description:
-				"It is urgent to find a solution for this problem in terms of time constraints, market demands, or immediate needs.",
-		},
-		{
-			criteria_title: "Innovation Opportunity",
-			description:
-				"The problem has the potential to present innovative solutions or new approaches that could lead to unique outcomes or competitive advantages.",
-		},
-		{
-			criteria_title: "Market Size",
-			description:
-				"Potential market is large enough to make the solution a viable business.",
-		},
-	];
-
-	const initialSelectedValues = data.map(() => criteria.map(() => 1));
-	const initialTotalsPerRow = initialSelectedValues.map((row) =>
-		row.reduce((sum, value) => sum + value, 0)
+	const [selectedValues, setSelectedValues] = useState(
+		JSON.parse(sessionStorage.getItem("ranking_selectedValues")) || []
 	);
-
-	const [selectedValues, setSelectedValues] = useState(initialSelectedValues);
-	const [totalsPerRow, setTotalsPerRow] = useState(initialTotalsPerRow);
+	const [totalsPerRow, setTotalsPerRow] = useState(
+		JSON.parse(sessionStorage.getItem("ranking_totalsPerRow")) || []
+	);
 
 	const handleSelectChange = (rowIndex, colIndex, newValue) => {
 		const newSelectedValues = selectedValues.map((row, rIdx) =>
@@ -147,6 +138,14 @@ const Ranking = () => {
 			row.reduce((sum, value) => sum + value, 0)
 		);
 		setTotalsPerRow(newTotalsPerRow);
+		sessionStorage.setItem(
+			"ranking_selectedValues",
+			JSON.stringify(newSelectedValues)
+		);
+		sessionStorage.setItem(
+			"ranking_totalsPerRow",
+			JSON.stringify(newTotalsPerRow)
+		);
 	};
 
 	const getRanks = (totals) => {
@@ -196,6 +195,13 @@ const Ranking = () => {
 		getSavedPS();
 	}, [selectedButton]);
 
+	const initialSelectedValues = queuedProblemStatement?.map(() =>
+		criteria.map(() => 1)
+	);
+	const initialTotalsPerRow = initialSelectedValues?.map((row) =>
+		row.reduce((sum, value) => sum + value, 0)
+	);
+
 	useEffect(() => {
 		sessionStorage.setItem(
 			"ranking_list_statements",
@@ -205,7 +211,19 @@ const Ranking = () => {
 			"ranking_queued_list_statements",
 			JSON.stringify(queuedProblemStatement)
 		);
-	}, [listProblemStatement, queuedProblemStatement]);
+		console.log(queuedProblemStatement);
+		setSelectedValues((prev) => {
+			return [...prev, ...[...initialSelectedValues]];
+		});
+		setTotalsPerRow((prev) => [initialTotalsPerRow]);
+	}, [queuedProblemStatement]);
+
+	useEffect(() => {
+		console.log("SELECTED");
+		console.log(selectedValues);
+		console.log("ROWS");
+		console.log(totalsPerRow);
+	}, [selectedValues, totalsPerRow]);
 
 	const handleAddStatement = (id, venn, statement) => {
 		queuedProblemStatementDispatch({
@@ -216,6 +234,8 @@ const Ranking = () => {
 				statement: statement,
 			},
 		});
+
+		console.log(queuedProblemStatement);
 
 		listProblemStatementDispatch({
 			type: PS_action.REMOVE_PROBLEM_STATEMENT,
@@ -250,7 +270,6 @@ const Ranking = () => {
 	};
 
 	const generatePotenialRootProblem = (id, venn, statement) => {
-		alert(statement);
 		sessionStorage.removeItem("whys_selected_statement");
 		sessionStorage.removeItem("whys_venn");
 		sessionStorage.removeItem("selected_whys");
@@ -378,95 +397,90 @@ const Ranking = () => {
 					</CardContent>
 				</Card>
 
-				{queuedProblemStatement.map(({ id, venn, statement }, rowIndex) => (
-					<Box key={rowIndex} sx={{ display: "flex", mb: 2 }}>
-						<IconButton
-							onClick={() => {
-								generatePotenialRootProblem(id, venn, statement);
-							}}>
-							<CheckCircleOutlineIcon />
-						</IconButton>
-						<Card
-							sx={{
-								background: "#D9D9D9",
-								borderRadius: 5,
-								width: "95%",
-							}}>
-							<CardContent
-								sx={{
-									display: "flex",
-									alignItems: "center",
-									width: "100%",
-									borderRadius: 5,
+				{queuedProblemStatement.length > 0 &&
+					selectedValues.length > 0 &&
+					queuedProblemStatement.map(({ id, venn, statement }, rowIndex) => (
+						<Box key={rowIndex} sx={{ display: "flex", mb: 2 }}>
+							<IconButton
+								onClick={() => {
+									generatePotenialRootProblem(id, venn, statement);
 								}}>
-								<Grid container sx={{ justifyContent: "space-between" }}>
-									<Grid item xs={5}>
-										<Typography sx={{ textAlign: "center" }}>
-											{statement}
-										</Typography>
-									</Grid>
-									{criteria.map((_, colIndex) => (
+								<CheckCircleOutlineIcon />
+							</IconButton>
+							<Card
+								sx={{
+									background: "#D9D9D9",
+									borderRadius: 5,
+									width: "95%",
+								}}>
+								<CardContent
+									sx={{
+										display: "flex",
+										alignItems: "center",
+										width: "100%",
+										borderRadius: 5,
+									}}>
+									<Grid container sx={{ justifyContent: "space-between" }}>
+										<Grid item xs={5}>
+											<Typography sx={{ textAlign: "center" }}>
+												{statement}
+											</Typography>
+										</Grid>
+										{criteria.map((_, colIndex) => (
+											<Grid
+												key={colIndex}
+												item
+												xs
+												sx={{ display: "flex", justifyContent: "center" }}>
+												<FormControl sx={{ justifyContent: "center" }}>
+													<Select
+														required
+														value={selectedValues[rowIndex][colIndex]}
+														onChange={(e) =>
+															handleSelectChange(
+																rowIndex,
+																colIndex,
+																parseInt(e.target.value)
+															)
+														}>
+														<MenuItem value={1}>1</MenuItem>
+														<MenuItem value={2}>2</MenuItem>
+														<MenuItem value={3}>3</MenuItem>
+														<MenuItem value={4}>4</MenuItem>
+														<MenuItem value={5}>5</MenuItem>
+													</Select>
+												</FormControl>
+											</Grid>
+										))}
 										<Grid
-											key={colIndex}
 											item
 											xs
 											sx={{ display: "flex", justifyContent: "center" }}>
-											<FormControl sx={{ justifyContent: "center" }}>
-												<Select
-													required
-													value={selectedValues[rowIndex][colIndex]}
-													onChange={(e) =>
-														handleSelectChange(
-															rowIndex,
-															colIndex,
-															parseInt(e.target.value)
-														)
-													}>
-													<MenuItem value={1}>1</MenuItem>
-													<MenuItem value={2}>2</MenuItem>
-													<MenuItem value={3}>3</MenuItem>
-													<MenuItem value={4}>4</MenuItem>
-													<MenuItem value={5}>5</MenuItem>
-												</Select>
-											</FormControl>
+											<Typography
+												sx={{ display: "flex", alignItems: "center" }}>
+												{totalsPerRow[rowIndex]}
+											</Typography>
 										</Grid>
-									))}
-									<Grid
-										item
-										xs
-										sx={{ display: "flex", justifyContent: "center" }}>
-										<Typography sx={{ display: "flex", alignItems: "center" }}>
-											{totalsPerRow[rowIndex]}{" "}
-											{/* Display the total score for the row */}
-										</Typography>
+										<Grid
+											item
+											xs
+											sx={{ display: "flex", justifyContent: "center" }}>
+											<Typography
+												sx={{ display: "flex", alignItems: "center" }}>
+												{ranks[rowIndex]}
+											</Typography>
+										</Grid>
 									</Grid>
-									<Grid
-										item
-										xs
-										sx={{ display: "flex", justifyContent: "center" }}>
-										<Typography sx={{ display: "flex", alignItems: "center" }}>
-											{ranks[rowIndex]} {/* Display the rank for the row */}
-										</Typography>
-									</Grid>
-								</Grid>
-							</CardContent>
-						</Card>
-						<IconButton
-							onClick={() =>
-								removeSelectedStatement(rowIndex, id, venn, statement)
-							}>
-							<DeleteOutlineIcon fontSize={"medium"} color="error" />
-						</IconButton>
-					</Box>
-				))}
-				<Box
-					type="submit"
-					onSubmit={generatePotenialRootProblem}
-					sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
-					<Button variant="contained" sx={{ px: 2, py: 1, borderRadius: 3 }}>
-						Generate Root
-					</Button>
-				</Box>
+								</CardContent>
+							</Card>
+							<IconButton
+								onClick={() =>
+									removeSelectedStatement(rowIndex, id, venn, statement)
+								}>
+								<DeleteOutlineIcon fontSize={"medium"} color="error" />
+							</IconButton>
+						</Box>
+					))}
 			</Box>
 		</Box>
 	);
