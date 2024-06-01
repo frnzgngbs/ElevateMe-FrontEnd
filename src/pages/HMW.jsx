@@ -83,6 +83,32 @@ const HMW = () => {
 		sessionStorage.setItem("selected_statement", selected_statement);
 	}, [selectedHMW, fiveHMW, generated_root, list_of_whys, selected_statement]);
 
+	const generateElevatorPitch = async () => {
+		setIsLoading((prev) => !prev);
+		console.log([...selectedHMW]);
+
+		try {
+			let token = localStorage.getItem("token");
+			let response = await axios.post(
+				"http://localhost:8000/api/ai/elevator_pitch/",
+				{
+					problem_statement: selected_statement,
+					list_of_whys: [...list_of_whys],
+					root_problem: generated_root,
+					list_of_hmws: [...selectedHMW],
+				},
+				{ headers: { Authorization: `Token ${token}` } }
+			);
+			sessionStorage.removeItem("selected_hmws"); // Remove selected_hmws from session storage
+			console.log(response.data.elevator_pitch);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading((prev) => !prev);
+			sessionStorage.removeItem("selected_hmws");
+			console.log(selectedHMW);
+		}
+	};
 	return (
 		<Box>
 			{isLoading ? (
@@ -163,6 +189,7 @@ const HMW = () => {
 											}}>
 											<Button
 												variant="contained"
+												onClick={generateElevatorPitch}
 												sx={{
 													px: 2.3,
 													py: 1.2,

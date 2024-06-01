@@ -25,9 +25,7 @@ import HomePageCards from "../components/HomePageCards";
 
 const HomePage = () => {
 	const navigate = useNavigate();
-	//To Do: Update the statements in the cards here
-	//		 Connect the API and populate the fields
-	//       Saave Session
+
 	const cards = {
 		venn: {
 			icon: venn,
@@ -59,9 +57,9 @@ const HomePage = () => {
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
-		elevator_pitch: {
+		report: {
 			icon: elevator,
-			title: "Elevator Pitch",
+			title: "Report",
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
