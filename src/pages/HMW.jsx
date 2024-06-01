@@ -84,6 +84,13 @@ const HMW = () => {
 	}, [selectedHMW, fiveHMW, generated_root, list_of_whys, selected_statement]);
 
 	const generateElevatorPitch = async () => {
+		if (selectedHMW.lengt === 0) {
+			alert(
+				"Cannot generate an elevator's pitch with no at least one hmw's selected."
+			);
+			return;
+		}
+
 		setIsLoading((prev) => !prev);
 		console.log([...selectedHMW]);
 
@@ -107,6 +114,7 @@ const HMW = () => {
 			setIsLoading((prev) => !prev);
 			sessionStorage.removeItem("selected_hmws");
 			console.log(selectedHMW);
+			setSelectedHMW([]);
 		}
 	};
 	return (
