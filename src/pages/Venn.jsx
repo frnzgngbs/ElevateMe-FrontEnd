@@ -18,7 +18,6 @@ import zIndex from "@mui/material/styles/zIndex";
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
 		case "SET_PROBLEM_STATEMENT":
-			sessionStorage.setItem("generated_PS", JSON.stringify(action.ps_list));
 			return [...action.ps_list];
 		case "SAVE_PROBLEM_STATEMENT":
 			return state.filter((item) => item !== action.statement);
@@ -36,26 +35,9 @@ function Venn() {
 		filter: sessionStorage.getItem("filter"),
 	});
 
-	const handleTextFieldChange = (event) => {
-		const { name, value } = event.target;
-		setTextFields((prevState) => {
-			const newState = { ...prevState, [name]: value };
-			sessionStorage.setItem("field1", newState.field1);
-			sessionStorage.setItem("field2", newState.field2);
-			sessionStorage.setItem("field3", newState.field3);
-			sessionStorage.setItem("filter", newState.filter);
-			return newState;
-		});
-	};
-
-	// NOTE(Franz) : Used only for debugging
-	useEffect(() => {
-		console.log(textFields);
-	}, [textFields]);
-
 	const [ProblemStatements, dispatch] = useReducer(
 		problemStatementDispatch,
-		JSON.parse(sessionStorage.getItem("generated_PS"))
+		JSON.parse(sessionStorage.getItem("generated_PS") || [])
 	);
 	const [isLoading, setIsLoading] = useState(false);
 	const getLastCheckButton = sessionStorage.getItem("setting");
@@ -71,9 +53,31 @@ function Venn() {
 		false,
 		false,
 	]);
+
+	const [groupLabel, setgroupLabel] = useState({});
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
 	};
+
+	const handleTextFieldChange = (event) => {
+		const { name, value } = event.target;
+		setTextFields((prevState) => {
+			const newState = { ...prevState, [name]: value };
+			return newState;
+		});
+	};
+
+	// NOTE(Franz) : Used only for debugging
+	useEffect(() => {
+		sessionStorage.setItem("generated_PS", JSON.stringify(ProblemStatements));
+	}, [ProblemStatements]);
+
+	useEffect(() => {
+		sessionStorage.setItem("field1", textFields.field1);
+		sessionStorage.setItem("field2", textFields.field2);
+		sessionStorage.setItem("field3", textFields.field3);
+		sessionStorage.setItem("filter", textFields.filter);
+	}, [textFields]);
 
 	const handleSelectCheckBox = async (index) => {
 		if (
@@ -85,8 +89,7 @@ function Venn() {
 				"Cannot generate statement as one of the required fields is empty."
 			);
 			return;
-		}
-		if (
+		} else if (
 			textFields.field1 === null &&
 			textFields.field3 === null &&
 			index === 1
@@ -95,8 +98,7 @@ function Venn() {
 				"Cannot generate statement as one of the required fields is empty."
 			);
 			return;
-		}
-		if (
+		} else if (
 			textFields.field2 === null &&
 			textFields.field3 === null &&
 			index === 2
@@ -107,26 +109,28 @@ function Venn() {
 			return;
 		}
 		setSelectedCheckButton((prev) => {
-			// Create a new array where all elements are false except the one at the given index
-			return prev.map((value, i) => {
-				return i === index ? (prev[index] = true) : (prev[i] = false);
-			});
+			return prev.map((value, i) => (i === index ? true : false));
 		});
-		const groupLabel = {};
 
 		// First group which is field1 and field2
 		if (index === 0) {
-			groupLabel["field1"] = textFields.field1;
-			groupLabel["field2"] = textFields.field2;
-			groupLabel["filter"] = textFields.filter;
+			setgroupLabel({
+				field1: textFields.field1,
+				field2: textFields.field2,
+				filter: textFields.filter,
+			});
 		} else if (index === 1) {
-			groupLabel["field1"] = textFields.field1;
-			groupLabel["field2"] = textFields.field3;
-			groupLabel["filter"] = textFields.filter;
+			setgroupLabel({
+				field1: textFields.field1,
+				field2: textFields.field3,
+				filter: textFields.filter,
+			});
 		} else if (index === 2) {
-			groupLabel["field1"] = textFields.field2;
-			groupLabel["field2"] = textFields.field3;
-			groupLabel["filter"] = textFields.filter;
+			setgroupLabel({
+				field1: textFields.field2,
+				field2: textFields.field3,
+				filter: textFields.filter,
+			});
 		}
 		console.log(groupLabel);
 		try {
@@ -183,6 +187,7 @@ function Venn() {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
+				setSelectedCheckButton(...[false]);
 				dispatch({
 					type: "SET_PROBLEM_STATEMENT",
 					ps_list: three_response.data.response,
@@ -212,16 +217,31 @@ function Venn() {
 					}
 				);
 			} else if (selectedButton === 3) {
-				response = await axios.post(
-					"http://localhost:8000/api/three_venn_ps/",
-					{
-						venn: { ...textFields },
-						statement: text,
-					},
-					{
-						headers: { Authorization: `Token ${token}` },
-					}
-				);
+				const hasCheckedCheckBox = selectedCheckButton.some(Boolean);
+				console.log(groupLabel);
+				if (hasCheckedCheckBox) {
+					response = await axios.post(
+						"http://localhost:8000/api/two_venn_ps/",
+						{
+							venn: { ...groupLabel },
+							statement: text,
+						},
+						{
+							headers: { Authorization: `Token ${token}` },
+						}
+					);
+				} else {
+					response = await axios.post(
+						"http://localhost:8000/api/three_venn_ps/",
+						{
+							venn: { ...textFields },
+							statement: text,
+						},
+						{
+							headers: { Authorization: `Token ${token}` },
+						}
+					);
+				}
 			}
 			dispatch({
 				type: "SAVE_PROBLEM_STATEMENT",
