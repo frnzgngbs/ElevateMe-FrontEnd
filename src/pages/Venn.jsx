@@ -26,6 +26,29 @@ function problemStatementDispatch(state, action) {
 	}
 }
 
+function checkFields(textFields, selectedButton) {
+	if (
+		(textFields.field1 === null ||
+			textFields.field2 === null ||
+			textFields.field3 === null ||
+			textFields.field1 === "" ||
+			textFields.field2 === "" ||
+			textFields.field3 === "") &&
+		selectedButton === 3
+	) {
+		return false;
+	} else if (
+		(textFields.field1 === null ||
+			textFields.field2 === null ||
+			textFields.field1 === "" ||
+			textFields.field2 === "") &&
+		selectedButton === 1
+	) {
+		return false;
+	}
+	return true;
+}
+
 function Venn() {
 	const [showSetting, setShowSetting] = useState(false);
 	const [textFields, setTextFields] = useState({
@@ -37,7 +60,7 @@ function Venn() {
 
 	const [ProblemStatements, dispatch] = useReducer(
 		problemStatementDispatch,
-		JSON.parse(sessionStorage.getItem("generated_PS") || [])
+		JSON.parse(sessionStorage.getItem("generated_PS"))
 	);
 	const [isLoading, setIsLoading] = useState(false);
 	const getLastCheckButton = sessionStorage.getItem("setting");
@@ -81,27 +104,27 @@ function Venn() {
 
 	const handleSelectCheckBox = async (index) => {
 		if (
-			textFields.field1 === null &&
-			textFields.field2 === null &&
-			index === 0
+			textFields.field1 === null ||
+			textFields.field1 === "" ||
+			((textFields.field2 === null || textFields.field2 === "") && index === 0)
 		) {
 			alert(
 				"Cannot generate statement as one of the required fields is empty."
 			);
 			return;
 		} else if (
-			textFields.field1 === null &&
-			textFields.field3 === null &&
-			index === 1
+			textFields.field1 === null ||
+			textFields.field1 === "" ||
+			((textFields.field3 === null || textFields.field3 === "") && index === 1)
 		) {
 			alert(
 				"Cannot generate statement as one of the required fields is empty."
 			);
 			return;
 		} else if (
-			textFields.field2 === null &&
-			textFields.field3 === null &&
-			index === 2
+			textFields.field2 === null ||
+			textFields.field2 === "" ||
+			((textFields.field3 === null || textFields.field3 === "") && index === 2)
 		) {
 			alert(
 				"Cannot generate statement as one of the required fields is empty."
@@ -162,6 +185,10 @@ function Venn() {
 		let token = localStorage.getItem("token");
 		try {
 			if (selectedButton === 2) {
+				if (!checkFields(textFields, selectedButton)) {
+					alert("Cannot generate when other fields are empty.");
+					return;
+				}
 				// alert("HERE");
 				let two_response = await axios.post(
 					"http://localhost:8000/api/ai/two_venn/",
@@ -178,6 +205,10 @@ function Venn() {
 				});
 				console.log(two_response.data.response);
 			} else if (selectedButton === 3) {
+				if (!checkFields(textFields, selectedButton)) {
+					alert("Cannot generate when other fields are empty.");
+					return;
+				}
 				let three_response = await axios.post(
 					"http://localhost:8000/api/ai/three_venn/",
 					{
