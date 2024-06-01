@@ -4,7 +4,7 @@ import PSCard from "../components/PSCard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Venn2 from "../res/venn2.png";
 import Venn3 from "../res/venn.png";
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import VennSettings from "../components/VennSettings";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
@@ -47,6 +47,12 @@ function Venn() {
 			return newState;
 		});
 	};
+
+	// NOTE(Franz) : Used only for debugging
+	useEffect(() => {
+		console.log(textFields);
+	}, [textFields]);
+
 	const [ProblemStatements, dispatch] = useReducer(
 		problemStatementDispatch,
 		JSON.parse(sessionStorage.getItem("generated_PS"))
@@ -70,14 +76,44 @@ function Venn() {
 	};
 
 	const handleSelectCheckBox = async (index) => {
+		if (
+			textFields.field1 === null &&
+			textFields.field2 === null &&
+			index === 0
+		) {
+			alert(
+				"Cannot generate statement as one of the required fields is empty."
+			);
+			return;
+		}
+		if (
+			textFields.field1 === null &&
+			textFields.field3 === null &&
+			index === 1
+		) {
+			alert(
+				"Cannot generate statement as one of the required fields is empty."
+			);
+			return;
+		}
+		if (
+			textFields.field2 === null &&
+			textFields.field3 === null &&
+			index === 2
+		) {
+			alert(
+				"Cannot generate statement as one of the required fields is empty."
+			);
+			return;
+		}
 		setSelectedCheckButton((prev) => {
 			// Create a new array where all elements are false except the one at the given index
 			return prev.map((value, i) => {
 				return i === index ? (prev[index] = true) : (prev[i] = false);
 			});
 		});
-
 		const groupLabel = {};
+
 		// First group which is field1 and field2
 		if (index === 0) {
 			groupLabel["field1"] = textFields.field1;
@@ -92,19 +128,24 @@ function Venn() {
 			groupLabel["field2"] = textFields.field3;
 			groupLabel["filter"] = textFields.filter;
 		}
+		console.log(groupLabel);
 		try {
 			setIsLoading((prev) => !prev);
-			let token = sessionStorage.getItem("token");
+			let token = localStorage.getItem("token");
 			let response = await axios.post(
 				"http://localhost:8000/api/ai/two_venn/",
-				{ ...groupLabel },
 				{
-					headers: {
-						headers: { Authorization: `Token ${token}` },
-					},
+					...groupLabel,
+				},
+				{
+					headers: { Authorization: `Token ${token}` },
 				}
 			);
 			console.log(response.data);
+			dispatch({
+				type: "SET_PROBLEM_STATEMENT",
+				ps_list: response.data.response,
+			});
 		} catch (err) {
 			console.error(err);
 		} finally {
