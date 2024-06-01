@@ -103,33 +103,43 @@ function Venn() {
 	}, [textFields]);
 
 	const handleSelectCheckBox = async (index) => {
-		if (
-			textFields.field1 === null ||
-			textFields.field1 === "" ||
-			((textFields.field2 === null || textFields.field2 === "") && index === 0)
-		) {
-			alert(
-				"Cannot generate statement as one of the required fields is empty."
-			);
-			return;
-		} else if (
-			textFields.field1 === null ||
-			textFields.field1 === "" ||
-			((textFields.field3 === null || textFields.field3 === "") && index === 1)
-		) {
-			alert(
-				"Cannot generate statement as one of the required fields is empty."
-			);
-			return;
-		} else if (
-			textFields.field2 === null ||
-			textFields.field2 === "" ||
-			((textFields.field3 === null || textFields.field3 === "") && index === 2)
-		) {
-			alert(
-				"Cannot generate statement as one of the required fields is empty."
-			);
-			return;
+		if (index === 0) {
+			if (
+				textFields.field1 === null ||
+				textFields.field1 === "" ||
+				textFields.field2 === null ||
+				textFields.field2 === ""
+			) {
+				alert(
+					"Cannot generate statement as one of the required fields is empty."
+				);
+				return;
+			}
+		} else if (index === 1) {
+			console.log(textFields);
+			if (
+				textFields.field1 === null ||
+				textFields.field3 === "" ||
+				textFields.field3 === null ||
+				textFields.field3 === ""
+			) {
+				alert(
+					"Cannot generate statement as one of the required fields is empty."
+				);
+				return;
+			}
+		} else if (index === 2) {
+			if (
+				textFields.field2 === null ||
+				textFields.field2 === "" ||
+				textFields.field3 === null ||
+				textFields.field3 === ""
+			) {
+				alert(
+					"Cannot generate statement as one of the required fields is empty."
+				);
+				return;
+			}
 		}
 		setSelectedCheckButton((prev) => {
 			return prev.map((value, i) => (i === index ? true : false));

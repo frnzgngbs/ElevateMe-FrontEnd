@@ -113,6 +113,7 @@ const FiveWhys = () => {
 			sessionStorage.removeItem("selected_whys");
 			sessionStorage.removeItem("selected_hmws");
 			sessionStorage.removeItem("five_hmws");
+			sessionStorage.removeItem("elevatorPitch");
 			setIsLoading((prev) => !prev);
 		}
 	};

@@ -287,6 +287,7 @@ const Ranking = () => {
 		sessionStorage.removeItem("generated_root");
 		sessionStorage.removeItem("root_five_whys");
 		sessionStorage.removeItem("selected_statement");
+		sessionStorage.removeItem("elevatorPitch");
 		navigate("/five_whys", {
 			state: { id: id, venn: venn, statement: statement },
 		});

@@ -13,18 +13,7 @@ const pitch = [
 	"That",
 ];
 
-const input = [
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud o laboris nisi ut ",
-];
-
-const ElevatorPitch = ({ onClose }) => {
+const ElevatorPitch = ({ data, setOpenElevator }) => {
 	var theme = useTheme();
 	return (
 		<Paper
@@ -100,7 +89,7 @@ const ElevatorPitch = ({ onClose }) => {
 										backgroundColor: theme.palette.grey[300],
 										textAlign: "center",
 									}}>
-									<CardContent>{input[index]}</CardContent>
+									<CardContent>{data[index]}</CardContent>
 								</Card>
 							</Box>
 						</Grid>
@@ -115,15 +104,10 @@ const ElevatorPitch = ({ onClose }) => {
 						<Button
 							variant="contained"
 							sx={{ marginRight: "10px", borderRadius: "25px" }}
-							onClick={onClose}>
-							Close
-						</Button>
-						<Button
-							variant="contained"
-							sx={{
-								borderRadius: "25px",
+							onClick={() => {
+								setOpenElevator((prev) => !prev);
 							}}>
-							Save
+							Close
 						</Button>
 					</Box>
 				</Grid>
