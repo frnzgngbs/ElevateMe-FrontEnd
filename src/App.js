@@ -21,7 +21,8 @@ import HMW from "./pages/HMW";
 import AppRoute from "./components/AppRoute";
 import LoadingScreen from "./components/LoadingScreen";
 import Ranking from "./pages/Ranking";
-import Report from "./pages/Report"
+import Report from "./pages/Report";
+import ElevatorPitch from "./components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 // This is the theme for the web app
 var theme = createTheme({
 	typography: {
@@ -129,8 +130,8 @@ const router = createBrowserRouter(
 					<Route path="rank" element={<Ranking />} />
 					<Route path="five_whys" element={<FiveWhys />} />
 					<Route path="hmw" element={<HMW />} />
+					<Route path="elevator" element={<ElevatorPitch />} />
 					<Route path="report" element={<Report />} />
-					
 				</Route>
 			</Route>
 			<Route path="*" element={<PageNotFound />} />

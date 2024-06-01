@@ -81,12 +81,17 @@ const FiveWhys = () => {
 	}, [selectedWhys]);
 
 	const generatePotentialRootProb = async () => {
+		if (selectedWhys.length === 0) {
+			alert("Cannot generate a potential root problem with no why's selected.");
+			return;
+		}
 		setIsLoading((prev) => !prev);
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
 				"http://localhost:8000/api/ai/potential_root/",
 				{
+					selected_statement: statement,
 					list_of_whys: [...selectedWhys],
 				},
 				{
@@ -108,6 +113,7 @@ const FiveWhys = () => {
 			sessionStorage.removeItem("selected_whys");
 			sessionStorage.removeItem("selected_hmws");
 			sessionStorage.removeItem("five_hmws");
+			sessionStorage.removeItem("elevatorPitch");
 			setIsLoading((prev) => !prev);
 		}
 	};
@@ -132,7 +138,16 @@ const FiveWhys = () => {
 							Below, is your selected ranked problem statement.
 						</Typography>
 						<Grid container sx={{ ml: 2 }}>
-							<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
+							<Grid
+								item
+								xs
+								sx={{
+									display: "flex",
+									alignItems: "center",
+									// border: "1px solid #e0e0e0",
+									// p: 3,
+									// width: "10px",
+								}}>
 								<Typography variant="body2">{statement}</Typography>
 							</Grid>
 							<Grid item sx={{ p: 2 }}>

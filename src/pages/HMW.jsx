@@ -8,6 +8,8 @@ import WhysCard from "../components/WhysCard";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
 import HMWCard from "../components/HMWCard";
+import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
+import { Elevator } from "@mui/icons-material";
 
 const HMW = () => {
 	const [open, setOpen] = React.useState(false);
@@ -20,6 +22,8 @@ const HMW = () => {
 	);
 	const [isLoading, setIsLoading] = useState(false);
 
+	const [openElevator, setOpenElevator] = useState(false);
+
 	const generated_root =
 		location.state?.potential_root?.root ||
 		sessionStorage.getItem("generated_root");
@@ -31,6 +35,8 @@ const HMW = () => {
 		return location.state?.list_of_whys || parsedWhys;
 	}, [location.state?.list_of_whys]);
 
+	const [elevatorPitch, setElevatorPitch] = useState([]);
+
 	const selected_statement =
 		location.state?.statement || sessionStorage.getItem("selected_statement");
 
@@ -38,19 +44,23 @@ const HMW = () => {
 	const handleClose = () => setOpen(false);
 
 	const generateFiveHMW = async () => {
+		if (selectedHMW.lengt === 0) {
+			alert("");
+		}
 		setIsLoading((prev) => !prev);
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
 				"http://localhost:8000/api/ai/five_hmws/",
 				{
+					selected_statement: selected_statement,
+					list_of_whys: list_of_whys,
 					root_problem: generated_root,
 				},
 				{
 					headers: { Authorization: `Token ${token}` },
 				}
 			);
-			console.log(response.data);
 			setFiveHMW([...response.data.five_hmws]);
 		} catch (err) {
 			console.error(err);
@@ -70,9 +80,9 @@ const HMW = () => {
 		return setSelectedHMW((prev) => [...prev, ...hmw]);
 	};
 
-	useEffect(() => {
-		console.log(selectedHMW);
-	}, [selectedHMW]);
+	// useEffect(() => {
+	// 	console.log(selectedHMW);
+	// }, [selectedHMW]);
 
 	// SAVING OF SESSION HERE
 	useEffect(() => {
@@ -81,8 +91,48 @@ const HMW = () => {
 		sessionStorage.setItem("generated_root", generated_root);
 		sessionStorage.setItem("root_five_whys", JSON.stringify(list_of_whys));
 		sessionStorage.setItem("selected_statement", selected_statement);
-	}, [selectedHMW, fiveHMW, generated_root, list_of_whys, selected_statement]);
+		sessionStorage.setItem("elevatorPitch", JSON.stringify(elevatorPitch));
+	}, [
+		selectedHMW,
+		fiveHMW,
+		generated_root,
+		list_of_whys,
+		selected_statement,
+		elevatorPitch,
+	]);
 
+	const generateElevatorPitch = async () => {
+		if (selectedHMW.length === 0) {
+			alert(
+				"Cannot generate an elevator's pitch with no at least one hmw's selected."
+			);
+			return;
+		}
+
+		setIsLoading((prev) => !prev);
+
+		try {
+			let token = localStorage.getItem("token");
+			let response = await axios.post(
+				"http://localhost:8000/api/ai/elevator_pitch/",
+				{
+					problem_statement: selected_statement,
+					list_of_whys: [...list_of_whys],
+					root_problem: generated_root,
+					list_of_hmws: [...selectedHMW],
+				},
+				{ headers: { Authorization: `Token ${token}` } }
+			);
+			sessionStorage.removeItem("selected_hmws");
+			setElevatorPitch(response.data.elevator_pitch);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading((prev) => !prev);
+			sessionStorage.removeItem("selected_hmws");
+			setSelectedHMW([]);
+		}
+	};
 	return (
 		<Box>
 			{isLoading ? (
@@ -161,8 +211,24 @@ const HMW = () => {
 												justifyContent: "flex-end",
 												mt: 3,
 											}}>
+											<Box sx={{ mr: 2 }}>
+												<Button
+													variant="contained"
+													onClick={() => {
+														setOpenElevator((prev) => !prev);
+													}}
+													sx={{
+														px: 2.3,
+														py: 1.2,
+														borderRadius: 5.6,
+														color: "#FFFB",
+													}}>
+													Show Elevator Pitch
+												</Button>
+											</Box>
 											<Button
 												variant="contained"
+												onClick={generateElevatorPitch}
 												sx={{
 													px: 2.3,
 													py: 1.2,
@@ -178,6 +244,9 @@ const HMW = () => {
 						</Box>
 					</Box>
 				</Box>
+			)}
+			{openElevator && (
+				<ElevatorPitch data={elevatorPitch} setOpenElevator={setOpenElevator} />
 			)}
 			<RootProblemHistoryPopup
 				open={open}

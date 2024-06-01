@@ -81,6 +81,7 @@ const SavedPSCard = ({ id, statement, venn, onDelete, setting, onEdit }) => {
 													color="error"
 													onClick={() => {
 														setIsEditable((prev) => !prev);
+														onEdit(setting, id, editedStatement);
 													}}>
 													Edit
 												</Button>

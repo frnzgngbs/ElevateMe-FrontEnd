@@ -3,22 +3,21 @@ import { Box, Button, Card, Grid, IconButton, Typography } from "@mui/material";
 import PSCard from "../components/PSCard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Venn2 from "../res/venn2.png";
-import Venn3 from "../res/venn.png"
+import Venn3 from "../res/venn.png";
 import { useEffect, useReducer, useState } from "react";
 import VennSettings from "../components/VennSettings";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
 import GridBackground from "../res/gridbackground.png";
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import CircleUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'; // Unchecked icon
-import CircleCheckedIcon from '@mui/icons-material/CheckCircleOutline'; // Checked icon
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import CircleUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"; // Unchecked icon
+import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; // Checked icon
 import zIndex from "@mui/material/styles/zIndex";
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
 		case "SET_PROBLEM_STATEMENT":
-			sessionStorage.setItem("generated_PS", JSON.stringify(action.ps_list));
 			return [...action.ps_list];
 		case "SAVE_PROBLEM_STATEMENT":
 			return state.filter((item) => item !== action.statement);
@@ -27,42 +26,168 @@ function problemStatementDispatch(state, action) {
 	}
 }
 
+function checkFields(textFields, selectedButton) {
+	if (
+		(textFields.field1 === null ||
+			textFields.field2 === null ||
+			textFields.field3 === null ||
+			textFields.field1 === "" ||
+			textFields.field2 === "" ||
+			textFields.field3 === "") &&
+		selectedButton === 3
+	) {
+		return false;
+	} else if (
+		(textFields.field1 === null ||
+			textFields.field2 === null ||
+			textFields.field1 === "" ||
+			textFields.field2 === "") &&
+		selectedButton === 1
+	) {
+		return false;
+	}
+	return true;
+}
+
 function Venn() {
 	const [showSetting, setShowSetting] = useState(false);
-const [textFields, setTextFields] = useState({
-  field1: sessionStorage.getItem("field1"),
-  field2: sessionStorage.getItem("field2"),
-  field3: sessionStorage.getItem("field3"),
-  filter: sessionStorage.getItem("filter"),
-});
+	const [textFields, setTextFields] = useState({
+		field1: sessionStorage.getItem("field1"),
+		field2: sessionStorage.getItem("field2"),
+		field3: sessionStorage.getItem("field3"),
+		filter: sessionStorage.getItem("filter"),
+	});
 
-const handleTextFieldChange = (event) => {
-  const { name, value } = event.target;
-  setTextFields((prevState) => {
-    const newState = { ...prevState, [name]: value };
-    sessionStorage.setItem("field1", newState.field1);
-    sessionStorage.setItem("field2", newState.field2);
-    sessionStorage.setItem("field3", newState.field3);
-    sessionStorage.setItem("filter", newState.filter);
-    return newState;
-  });
-};
 	const [ProblemStatements, dispatch] = useReducer(
 		problemStatementDispatch,
 		JSON.parse(sessionStorage.getItem("generated_PS"))
 	);
 	const [isLoading, setIsLoading] = useState(false);
-const getLastCheckButton = sessionStorage.getItem("setting");
-const [selectedButton, setSelectedButton] = useState(
-  getLastCheckButton !== null ? parseInt(getLastCheckButton) : 3
-);
+	const getLastCheckButton = sessionStorage.getItem("setting");
+	const [selectedButton, setSelectedButton] = useState(
+		getLastCheckButton !== null ? parseInt(getLastCheckButton) : 3
+	);
 	const handleButtonClick = (buttonValue) => {
-  setSelectedButton(buttonValue);
-  sessionStorage.setItem("setting", buttonValue);
-};
+		setSelectedButton(buttonValue);
+		sessionStorage.setItem("setting", buttonValue);
+	};
+	const [selectedCheckButton, setSelectedCheckButton] = useState([
+		false,
+		false,
+		false,
+	]);
 
+	const [groupLabel, setgroupLabel] = useState({});
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
+	};
+
+	const handleTextFieldChange = (event) => {
+		const { name, value } = event.target;
+		setTextFields((prevState) => {
+			const newState = { ...prevState, [name]: value };
+			return newState;
+		});
+	};
+
+	// NOTE(Franz) : Used only for debugging
+	useEffect(() => {
+		sessionStorage.setItem("generated_PS", JSON.stringify(ProblemStatements));
+	}, [ProblemStatements]);
+
+	useEffect(() => {
+		sessionStorage.setItem("field1", textFields.field1);
+		sessionStorage.setItem("field2", textFields.field2);
+		sessionStorage.setItem("field3", textFields.field3);
+		sessionStorage.setItem("filter", textFields.filter);
+	}, [textFields]);
+
+	const handleSelectCheckBox = async (index) => {
+		if (index === 0) {
+			if (
+				textFields.field1 === null ||
+				textFields.field1 === "" ||
+				textFields.field2 === null ||
+				textFields.field2 === ""
+			) {
+				alert(
+					"Cannot generate statement as one of the required fields is empty."
+				);
+				return;
+			}
+		} else if (index === 1) {
+			console.log(textFields);
+			if (
+				textFields.field1 === null ||
+				textFields.field3 === "" ||
+				textFields.field3 === null ||
+				textFields.field3 === ""
+			) {
+				alert(
+					"Cannot generate statement as one of the required fields is empty."
+				);
+				return;
+			}
+		} else if (index === 2) {
+			if (
+				textFields.field2 === null ||
+				textFields.field2 === "" ||
+				textFields.field3 === null ||
+				textFields.field3 === ""
+			) {
+				alert(
+					"Cannot generate statement as one of the required fields is empty."
+				);
+				return;
+			}
+		}
+		setSelectedCheckButton((prev) => {
+			return prev.map((value, i) => (i === index ? true : false));
+		});
+
+		// First group which is field1 and field2
+		if (index === 0) {
+			setgroupLabel({
+				field1: textFields.field1,
+				field2: textFields.field2,
+				filter: textFields.filter,
+			});
+		} else if (index === 1) {
+			setgroupLabel({
+				field1: textFields.field1,
+				field2: textFields.field3,
+				filter: textFields.filter,
+			});
+		} else if (index === 2) {
+			setgroupLabel({
+				field1: textFields.field2,
+				field2: textFields.field3,
+				filter: textFields.filter,
+			});
+		}
+		console.log(groupLabel);
+		try {
+			setIsLoading((prev) => !prev);
+			let token = localStorage.getItem("token");
+			let response = await axios.post(
+				"http://localhost:8000/api/ai/two_venn/",
+				{
+					...groupLabel,
+				},
+				{
+					headers: { Authorization: `Token ${token}` },
+				}
+			);
+			console.log(response.data);
+			dispatch({
+				type: "SET_PROBLEM_STATEMENT",
+				ps_list: response.data.response,
+			});
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading((prev) => !prev);
+		}
 	};
 
 	const handleGenerateButtonClick = async () => {
@@ -70,6 +195,10 @@ const [selectedButton, setSelectedButton] = useState(
 		let token = localStorage.getItem("token");
 		try {
 			if (selectedButton === 2) {
+				if (!checkFields(textFields, selectedButton)) {
+					alert("Cannot generate when other fields are empty.");
+					return;
+				}
 				// alert("HERE");
 				let two_response = await axios.post(
 					"http://localhost:8000/api/ai/two_venn/",
@@ -86,6 +215,10 @@ const [selectedButton, setSelectedButton] = useState(
 				});
 				console.log(two_response.data.response);
 			} else if (selectedButton === 3) {
+				if (!checkFields(textFields, selectedButton)) {
+					alert("Cannot generate when other fields are empty.");
+					return;
+				}
 				let three_response = await axios.post(
 					"http://localhost:8000/api/ai/three_venn/",
 					{
@@ -95,6 +228,7 @@ const [selectedButton, setSelectedButton] = useState(
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
+				setSelectedCheckButton(...[false]);
 				dispatch({
 					type: "SET_PROBLEM_STATEMENT",
 					ps_list: three_response.data.response,
@@ -124,16 +258,31 @@ const [selectedButton, setSelectedButton] = useState(
 					}
 				);
 			} else if (selectedButton === 3) {
-				response = await axios.post(
-					"http://localhost:8000/api/three_venn_ps/",
-					{
-						venn: { ...textFields },
-						statement: text,
-					},
-					{
-						headers: { Authorization: `Token ${token}` },
-					}
-				);
+				const hasCheckedCheckBox = selectedCheckButton.some(Boolean);
+				console.log(groupLabel);
+				if (hasCheckedCheckBox) {
+					response = await axios.post(
+						"http://localhost:8000/api/two_venn_ps/",
+						{
+							venn: { ...groupLabel },
+							statement: text,
+						},
+						{
+							headers: { Authorization: `Token ${token}` },
+						}
+					);
+				} else {
+					response = await axios.post(
+						"http://localhost:8000/api/three_venn_ps/",
+						{
+							venn: { ...textFields },
+							statement: text,
+						},
+						{
+							headers: { Authorization: `Token ${token}` },
+						}
+					);
+				}
 			}
 			dispatch({
 				type: "SAVE_PROBLEM_STATEMENT",
@@ -160,7 +309,7 @@ const [selectedButton, setSelectedButton] = useState(
 					paddingBottom={4}
 					sx={{
 						backgroundImage: `url(${GridBackground})`,
-						
+
 						backgroundRepeat: "no-repeat",
 						marginBottom: "60px",
 						backgroundPositionY: "-570px",
@@ -175,7 +324,6 @@ const [selectedButton, setSelectedButton] = useState(
 						alignItems="center">
 						{/* Venn Scopes section card */}
 						<Grid item>
-
 							<Card
 								sx={{
 									width: 370,
@@ -215,125 +363,159 @@ const [selectedButton, setSelectedButton] = useState(
 										</IconButton>
 									</Box>
 
-
 									<Box sx={{ position: "relative", marginBottom: "20px" }}>
 										{selectedButton === 3 ? (
 											<>
-											<Box sx={{ display: "flex", justifyContent: "space-between" }}>
-											  {/* First Checkbox, placement is unnecessary pero giin ani nalang nako aron naay connection, firstcheckbox:  field1 union field 2*/}
-											  <FormControlLabel
-												control={
-												  <Checkbox
-													edge="start"
-													// indeterminate={!textFields.field1 &&textFields.field2}
-													icon={<CircleUncheckedIcon />}
-													checkedIcon={<CircleCheckedIcon />}
-													sx={{ position: "absolute", zIndex: 4, marginBottom:"120px", marginLeft:"170px" }}
-												  />
-												}
-											  />
-										  
-											  {/* Label for the first Checkbox using Typography */}
-											  <Typography
-												variant="body1"
-												sx={{
-												  position: "absolute",
-												  top: "72px",
-												  left: "24px",
-												  color: "#8E8E8E",
-												  fontSize: "14px",
-												  width: "81px",
-												  textAlign: "center",
-												  overflow: "hidden",
-												  display: "-webkit-box",
-												  WebkitLineClamp: 3,
-												  WebkitBoxOrient: "vertical",
-												}}
-											  >
-												{textFields.field1? textFields.field1 : "Field 1..."}
-											  </Typography>
-										  
-											  {/* Second Checkbox: field 1 union field 3 */}
-											  <FormControlLabel
-										
-												control={
-												  <Checkbox
-													edge="start"
-													// indeterminate={!textFields.field1 &&textFields.field3}
-													icon={<CircleUncheckedIcon />}
-													checkedIcon={<CircleCheckedIcon />}
-													sx={{ position: "absolute", zIndex: 4, marginTop:"10px" , marginLeft:"120px" }}
-												  />
-												}
-											  />
-										  
-											  {/* Label for the second Checkbox using Typography */}
-											  <Typography
-												variant="body1"
-												sx={{
-												  position: "absolute",
-												  top: "72px",
-												  right: "35px",
-												  color: "#8E8E8E",
-												  fontSize: "14px",
-												  width: "81px",
-												  textAlign: "center",
-												  overflow: "hidden",
-												  display: "-webkit-box",
-												  WebkitLineClamp: 3,
-												  WebkitBoxOrient: "vertical",
-												}}
-											  >
-												{textFields.field2? textFields.field2 : "Field 2..."}
-											  </Typography>
-										  
-											  {/* Third Checkbox: field 2 union field 3 */}
-											  <FormControlLabel
-												control={
-												  <Checkbox
-													edge="start"
-													// indeterminate={!textFields.field2 &&textFields.field3}
-													icon={<CircleUncheckedIcon />}
-													checkedIcon={<CircleCheckedIcon />}
-													sx={{ position: "absolute", zIndex: 1, marginTop:"10px" , marginLeft:"200px" }}
-												  />
-												}
-											  />
-										  
-											  {/* Label for the third Checkbox using Typography */}
-											  <Typography
-												variant="body1"
-												sx={{
-												  position: "absolute",
-												  bottom: "50px",
-												  left: "50%",
-												  transform: "translate(-50%)",
-												  color: "#8E8E8E",
-												  fontSize: "14px",
-												  width: "81px",
-												  textAlign: "center",
-												  overflow: "hidden",
-												  display: "-webkit-box",
-												  WebkitLineClamp: 3,
-												  WebkitBoxOrient: "vertical",
-												}}
-											  >
-												{textFields.field3? textFields.field3 : "Field 3..."}
-											  </Typography>
-										  
-											  {/* Venn Diagram Image */}
-											  <img
-												src={Venn3}
-												alt="Venn Diagram"
-												style={{ zIndex: 0, width: "325px", height: "auto" }}
-											  />
-											</Box>
-										  </>
-										  
-										  
+												<Box
+													sx={{
+														display: "flex",
+														justifyContent: "space-between",
+													}}>
+													{/* First Checkbox, placement is unnecessary pero giin ani nalang nako aron naay connection, firstcheckbox:  field1 union field 2*/}
+													<FormControlLabel
+														control={
+															<Checkbox
+																edge="start"
+																// indeterminate={!textFields.field1 &&textFields.field2}
+																checked={selectedCheckButton[0]}
+																icon={<CircleUncheckedIcon />}
+																checkedIcon={<CircleCheckedIcon />}
+																onClick={() => handleSelectCheckBox(0)}
+																sx={{
+																	position: "absolute",
+																	zIndex: 4,
+																	marginBottom: "120px",
+																	marginLeft: "170px",
+																}}
+															/>
+														}
+													/>
+
+													{/* Label for the first Checkbox using Typography */}
+													<Typography
+														variant="body1"
+														sx={{
+															position: "absolute",
+															top: "72px",
+															left: "24px",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}>
+														{textFields.field1
+															? textFields.field1
+															: "Field 1..."}
+													</Typography>
+
+													{/* Second Checkbox: field 1 union field 3 */}
+													<FormControlLabel
+														control={
+															<Checkbox
+																edge="start"
+																checked={selectedCheckButton[1]}
+																// indeterminate={!textFields.field1 &&textFields.field3}
+																icon={<CircleUncheckedIcon />}
+																checkedIcon={<CircleCheckedIcon />}
+																onClick={() => handleSelectCheckBox(1)}
+																sx={{
+																	position: "absolute",
+																	zIndex: 4,
+																	marginTop: "10px",
+																	marginLeft: "120px",
+																}}
+															/>
+														}
+													/>
+
+													{/* Label for the second Checkbox using Typography */}
+													<Typography
+														variant="body1"
+														sx={{
+															position: "absolute",
+															top: "72px",
+															right: "35px",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}>
+														{textFields.field2
+															? textFields.field2
+															: "Field 2..."}
+													</Typography>
+
+													{/* Third Checkbox: field 2 union field 3 */}
+													<FormControlLabel
+														control={
+															<Checkbox
+																edge="start"
+																// indeterminate={!textFields.field2 &&textFields.field3}
+																icon={<CircleUncheckedIcon />}
+																checked={selectedCheckButton[2]}
+																checkedIcon={<CircleCheckedIcon />}
+																onClick={() => handleSelectCheckBox(2)}
+																sx={{
+																	position: "absolute",
+																	zIndex: 1,
+																	marginTop: "10px",
+																	marginLeft: "200px",
+																}}
+															/>
+														}
+													/>
+
+													{/* Label for the third Checkbox using Typography */}
+													<Typography
+														variant="body1"
+														sx={{
+															position: "absolute",
+															bottom: "50px",
+															left: "50%",
+															transform: "translate(-50%)",
+															color: "#8E8E8E",
+															fontSize: "14px",
+															width: "81px",
+															textAlign: "center",
+															overflow: "hidden",
+															display: "-webkit-box",
+															WebkitLineClamp: 3,
+															WebkitBoxOrient: "vertical",
+														}}>
+														{textFields.field3
+															? textFields.field3
+															: "Field 3..."}
+													</Typography>
+
+													{/* Venn Diagram Image */}
+													<img
+														src={Venn3}
+														alt="Venn Diagram"
+														style={{
+															zIndex: 0,
+															width: "325px",
+															height: "auto",
+														}}
+													/>
+												</Box>
+											</>
 										) : (
 											<>
-												<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+												<Box
+													sx={{
+														display: "flex",
+														justifyContent: "center",
+														alignItems: "center",
+														flexDirection: "column",
+													}}>
 													<Typography
 														variant="h6"
 														sx={{
@@ -348,9 +530,10 @@ const [selectedButton, setSelectedButton] = useState(
 															display: "-webkit-box",
 															WebkitLineClamp: 3,
 															WebkitBoxOrient: "vertical",
-														}}
-													>
-														{textFields.field1 ? textFields.field1 : "Field 1..."}
+														}}>
+														{textFields.field1
+															? textFields.field1
+															: "Field 1..."}
 													</Typography>
 
 													<Typography
@@ -367,21 +550,27 @@ const [selectedButton, setSelectedButton] = useState(
 															display: "-webkit-box",
 															WebkitLineClamp: 3,
 															WebkitBoxOrient: "vertical",
-														}}
-													>
-														{textFields.field2 ? textFields.field2 : "Field 2..."}
+														}}>
+														{textFields.field2
+															? textFields.field2
+															: "Field 2..."}
 													</Typography>
 												</Box>
 
 												<img
 													src={Venn2}
 													alt="Venn Diagram"
-													style={{ zIndex: 0, marginTop: "40px", width: "325px", height: "auto", display: "block" }}
+													style={{
+														zIndex: 0,
+														marginTop: "40px",
+														width: "325px",
+														height: "auto",
+														display: "block",
+													}}
 												/>
 											</>
 										)}
 									</Box>
-
 								</Box>
 							</Card>
 						</Grid>
@@ -444,17 +633,16 @@ const [selectedButton, setSelectedButton] = useState(
 								display: "flex",
 								justifyContent: "center",
 								alignItems: "center",
-								zIndex: 300
+								zIndex: 300,
 							}}>
 							<Box sx={{ position: "relative" }}>
 								<VennSettings
-
 									toggleShowSetting={toggleShowSetting}
 									textFields={textFields}
 									setTextFields={setTextFields}
 									selectedButton={selectedButton}
 									setSelectedButton={setSelectedButton}
-									sx={{zIndex:1000}}
+									sx={{ zIndex: 1000 }}
 								/>
 							</Box>
 						</Box>

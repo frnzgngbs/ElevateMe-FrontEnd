@@ -22,12 +22,14 @@ import { useNavigate } from "react-router-dom";
 import Bookpng from "../res/book.png";
 import GridBackground from "../res/gridbackground.png";
 import HomePageCards from "../components/HomePageCards";
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
 	const navigate = useNavigate();
-	//To Do: Update the statements in the cards here
-	//		 Connect the API and populate the fields
-	//       Saave Session
+	const [about, setAbout] = useState(false);
+	const [isVisible, setIsVisible] = useState(false);
+	const [buttonScale, setButtonScale] = useState(1);
+
 	const cards = {
 		venn: {
 			icon: venn,
@@ -59,9 +61,9 @@ const HomePage = () => {
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
-		elevator_pitch: {
+		report: {
 			icon: elevator,
-			title: "Elevator Pitch",
+			title: "Report",
 			description:
 				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
 		},
@@ -73,6 +75,23 @@ const HomePage = () => {
 
 	var theme = useTheme();
 
+	useEffect(() => {
+		if (about) {
+			setButtonScale(0.8);
+			const timeout = setTimeout(() => {
+				setIsVisible(true);
+				setButtonScale(1);
+			}, 500);
+
+			return () => clearTimeout(timeout);
+		} else {
+			setIsVisible(false);
+			setButtonScale(0.8);
+			setTimeout(() => {
+				setButtonScale(1);
+			}, 500);
+		}
+	}, [about]);
 	return (
 		<Box>
 			{/* put background  image here: gridbackgroundpng , make sure it is behind*/}
@@ -94,27 +113,51 @@ const HomePage = () => {
 							ElevateMe
 						</Typography>
 						<br />
-						<Typography
-							variant="body1"
-							fontWeight={"bold"}
-							textAlign={"justify"}
-							fontSize="14px">
-							ElevateMe is an app that generates problem statements. It follows
-							the Technopreneurship Workbook. A group of CIT-U students made
-							this app to automate the current and long process of
-							technopreneurship workbook.
-						</Typography>
+						<div
+							style={{
+								opacity: isVisible ? 1 : 0,
+								transition: "opacity 0.5s ease-in-out",
+							}}>
+							{isVisible && (
+								<>
+									<Typography
+										variant="body1"
+										fontWeight={"bold"}
+										textAlign={"justify"}
+										fontSize="14px">
+										ElevateMe is an app that generates problem statements. It
+										follows the Technopreneurship Workbook. A group of CIT-U
+										students made this app to automate the current and long
+										process of technopreneurship workbook.
+									</Typography>
+									<br />
+									<Typography
+										variant="body1"
+										textAlign={"justify"}
+										fontSize="14px">
+										Its goal is to shorten the time lorem ipsum setrsa nerates
+										problem statements. It follows the Technopreneurship
+										Workbook. A group of CIT-U students made this app to
+										automate the current and long process of technopreneurship
+										workbook.
+									</Typography>
+								</>
+							)}
+						</div>
+
 						<br />
-						<Typography variant="body1" textAlign={"justify"} fontSize="14px">
-							Its goal is to shorten the time lorem ipsum setrsa nerates problem
-							statements. It follows the Technopreneurship Workbook. A group of
-							CIT-U students made this app to automate the current and long
-							process of technopreneurship workbook.
-						</Typography>
-						<br />
-						<Button variant="contained" sx={{ py: 1, px: 5, borderRadius: 4 }}>
-							About
-						</Button>
+						<div
+							style={{
+								transform: `scale(${buttonScale})`,
+								transition: "transform 0.3s ease-in-out",
+							}}>
+							<Button
+								onClick={() => setAbout((prev) => !prev)}
+								variant="contained"
+								sx={{ py: 1, px: 5, borderRadius: 4 }}>
+								About
+							</Button>
+						</div>
 					</div>
 				</Grid>
 				{/* Right div remains unchanged */}

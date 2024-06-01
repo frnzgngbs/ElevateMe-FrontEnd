@@ -138,16 +138,18 @@ const Ranking = () => {
 			row.reduce((sum, value) => sum + value, 0)
 		);
 		setTotalsPerRow(newTotalsPerRow);
+	};
+
+	useEffect(() => {
 		sessionStorage.setItem(
 			"ranking_selectedValues",
-			JSON.stringify(newSelectedValues)
+			JSON.stringify(selectedValues)
 		);
 		sessionStorage.setItem(
 			"ranking_totalsPerRow",
-			JSON.stringify(newTotalsPerRow)
+			JSON.stringify(totalsPerRow)
 		);
-	};
-
+	}, [selectedValues, totalsPerRow]);
 	const getRanks = (totals) => {
 		const indexedTotals = totals.map((total, index) => ({ total, index }));
 		indexedTotals.sort((a, b) => b.total - a.total || a.index - b.index);
@@ -200,9 +202,9 @@ const Ranking = () => {
 	const initialSelectedValues = queuedProblemStatement?.map(() =>
 		criteria.map(() => 1)
 	);
-	const initialTotalsPerRow = initialSelectedValues?.map((row) =>
-		row.reduce((sum, value) => sum + value, 0)
-	);
+	const initialTotalsPerRow = initialSelectedValues.map((row) => {
+		return row.reduce((sum, value) => sum + value);
+	});
 
 	useEffect(() => {
 		sessionStorage.setItem(
@@ -213,17 +215,13 @@ const Ranking = () => {
 			"ranking_queued_list_statements",
 			JSON.stringify(queuedProblemStatement)
 		);
-		console.log(queuedProblemStatement);
 		setSelectedValues((prev) => {
-			return [...prev, ...[...initialSelectedValues]];
+			return [...prev, ...[[1, 1, 1, 1, 1, 1]]];
 		});
+		console.log(initialSelectedValues);
 		setTotalsPerRow((prev) => [...prev, ...initialTotalsPerRow]);
-	}, [
-		queuedProblemStatement,
-		listProblemStatement,
-		initialSelectedValues,
-		initialTotalsPerRow,
-	]);
+		console.log(initialTotalsPerRow);
+	}, [queuedProblemStatement, listProblemStatement]);
 
 	const handleAddStatement = (id, venn, statement) => {
 		queuedProblemStatementDispatch({
@@ -289,6 +287,7 @@ const Ranking = () => {
 		sessionStorage.removeItem("generated_root");
 		sessionStorage.removeItem("root_five_whys");
 		sessionStorage.removeItem("selected_statement");
+		sessionStorage.removeItem("elevatorPitch");
 		navigate("/five_whys", {
 			state: { id: id, venn: venn, statement: statement },
 		});
@@ -474,6 +473,7 @@ const Ranking = () => {
 												</FormControl>
 											</Grid>
 										))}
+
 										<Grid
 											item
 											xs

@@ -132,6 +132,7 @@ const Saved = () => {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
+				console.log(response);
 				dispatch({
 					type: "UPDATE_THREE_VENN_STATEMENT",
 					payload: {
