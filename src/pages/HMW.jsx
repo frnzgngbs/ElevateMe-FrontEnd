@@ -44,6 +44,8 @@ const HMW = () => {
 			let response = await axios.post(
 				"http://localhost:8000/api/ai/five_hmws/",
 				{
+					selected_statement: selected_statement,
+					list_of_whys: list_of_whys,
 					root_problem: generated_root,
 				},
 				{
