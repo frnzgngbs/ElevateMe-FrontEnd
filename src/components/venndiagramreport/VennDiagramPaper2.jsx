@@ -6,20 +6,22 @@ import Venn2 from "../../res/venn2.png";
 
 const VennDiagramPaper = ({ venn }) => {
 	return (
-		<MuiPaper
-			elevation={3}
-			sx={{
-				borderRadius: 5,
-				p: 3,
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				justifyContent: "center",
-				height: "100%",
-			}}>
+		<Box
+		sx={{
+		  maxWidth: "450px",
+		  borderRadius: 5,
+		  p: 3,
+		  display: "flex",
+		  flexDirection: "column",
+		  alignItems: "center",
+		  justifyContent: "center",
+		  height: "100%",
+		  margin: "auto",
+		  
+		}}>
 			<Typography
 				variant="h4"
-				sx={{ marginTop: "-8px", marginBottom: "80px", marginLeft: "-140px" }}>
+				sx={{ marginBottom: "30px", marginLeft: "-140px" }}>
 				Venn Diagram
 			</Typography>
 			<Box
@@ -71,7 +73,7 @@ const VennDiagramPaper = ({ venn }) => {
 					style={{ zIndex: 0, width: "325px", Height: "50px" }}
 				/>
 			</Box>
-		</MuiPaper>
+		</Box>
 	);
 };
 
