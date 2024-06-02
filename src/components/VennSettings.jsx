@@ -20,23 +20,25 @@ const VennSettings = ({
 	selectedButton,
 	setSelectedButton,
 }) => {
-
 	const componentRef = useRef(null);
-
 
 	useEffect(() => {
 		const handleClickOutside = (event) => {
-		  if (componentRef.current && !componentRef.current.contains(event.target)) {
-			toggleShowSetting();
-		  }
+			if (
+				componentRef.current &&
+				!componentRef.current.contains(event.target)
+			) {
+				toggleShowSetting();
+			}
 		};
-	  
+
 		document.addEventListener("mousedown", handleClickOutside);
-	  
+
 		return () => {
-		  document.removeEventListener("mousedown", handleClickOutside);
+			document.removeEventListener("mousedown", handleClickOutside);
 		};
-	  }, [toggleShowSetting]);
+	}, [toggleShowSetting]);
+
 	const handleChangeButton = (e) => {
 		const value = +e.target.value;
 		setSelectedButton((prev) => (prev = value));
