@@ -305,13 +305,25 @@ const Ranking = () => {
 
 	return (
 		<Box pb={5}>
+			<Typography variant="h1" textAlign={"center"} fontSize="50px">
+							HMW
+			
+					</Typography>
 			<Box
 				sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
 				<Typography variant="h1" sx={{ textAlign: "center", width: "400px" }}>
-					Problem Statement List
+					Ranking List
 				</Typography>
+				
 			</Box>
+			<Box sx={{ mx: 13.3, mb: .5, mt: 3}}>
+				<Typography variant="h3">Problem Statement List</Typography>
+			</Box>
+			
 			<Box sx={{ mx: 17 }}>
+				
+			
+				
 				<Box sx={{ display: "flex", justifyContent: "end" }}>
 					<RadioGroup
 						value={selectedButton}
@@ -331,7 +343,7 @@ const Ranking = () => {
 					</RadioGroup>
 				</Box>
 				<Box
-					sx={{ maxHeight: "500px", overflowY: "auto", mt: 2, mb: 4, p: 1.3 }}>
+					sx={{ minHeight:"300px", maxHeight: "500px", overflowY: "auto", mt: 2, mb: 4, p: 1.3 }}>
 					{listProblemStatement.map((item, id) => (
 						<Box key={id} sx={{ mb: 1 }}>
 							<PSListCard
@@ -348,24 +360,37 @@ const Ranking = () => {
 				<Typography variant="h3">Problem Statement Ranking</Typography>
 			</Box>
 
-			<Box sx={{ display: "flex", gap: 10, mx: 17, mb: 7 }}>
-				<Box sx={{ display: "flex", flexDirection: "column" }}>
-					{criteria.map(({ criteria_title }, index) => (
-						<Box key={index}>
-							<Typography variant="body1" sx={{ fontWeight: "bold" }}>
-								{criteria_title} -
-							</Typography>
-						</Box>
-					))}
-				</Box>
-				<Box sx={{ display: "flex", flexDirection: "column" }}>
-					{criteria.map(({ description }, index) => (
-						<Box key={index}>
-							<Typography variant="body1">{description}</Typography>
-						</Box>
-					))}
-				</Box>
-			</Box>
+			<Box sx={{ display: "flex", flexDirection: "column", gap: 2, mx: 17, mb: 7 }}>
+  {criteria.map(({ criteria_title, description }, index) => (
+    <Box
+      key={index}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 2,
+		minHeight: "50px",
+        backgroundColor: "rgba(255, 255, 255, 0.1)", // Semi-transparent background
+        borderRadius: 2.5, // Rounded corners
+        padding: .5, // Add some padding
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add a subtle box shadow
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: "primary.main", // Use the primary color for the bullet
+          width: 10,
+          height: 10,
+		  marginLeft: 1,
+          borderRadius: "50%", // Make the bullet a circle
+        }}
+      />
+      <Typography variant="body1" sx={{ fontWeight: "bold", minWidth:"180px", maxWidth:"180px"}}>
+        {criteria_title}:
+      </Typography>
+      <Typography variant="body1"sx={{alignItems:"center"}}>{description}</Typography>
+    </Box>
+  ))}
+</Box>
 
 			<Box sx={{ mr: 14, ml: 17, mb: 2 }}>
 				<Card
@@ -387,8 +412,8 @@ const Ranking = () => {
 							container
 							sx={{ justifyContent: "space-between" }}
 							spacing={2}>
-							<Grid item xs={5}>
-								<Typography sx={{ textAlign: "center" }}>
+							<Grid item xs={4}>
+								<Typography sx={{ textAlign: "center", alignItem:"center" }}>
 									Problem Statement
 								</Typography>
 							</Grid>
