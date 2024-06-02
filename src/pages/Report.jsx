@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Venn3Paper from "../components/venndiagramreport/VennDiagramPaper3";
-import Venn2Paper from "../components/venndiagramreport/VennDiagramPaper2"; 
+import Venn2Paper from "../components/venndiagramreport/VennDiagramPaper2";
 
 const Report = () => {
     const data = {
@@ -26,7 +26,8 @@ const Report = () => {
             field1: "Field 1",
             field2: "Field 2",
             field3: ""
-        }
+        },
+        potentialRoot: "This is a potential root statement that needs to be displayed as a card with no shadows and a border radius.",
     };
 
     return (
@@ -63,6 +64,7 @@ const Report = () => {
             </Box>
 
             {/* Why Statements */}
+
             <Box sx={{ marginTop: 10, marginBottom: 10, width: "70%", margin: "auto", minWidth: "700px", maxWidth: "900px" }}>
                 <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
                     Why Statements
@@ -79,10 +81,25 @@ const Report = () => {
             </Box>
 
             {/* HMW Statements */}
-            <Box sx={{   width: "70%", margin: "auto", minWidth: "700px", maxWidth: "900px" }}>
-                <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 ,  marginTop: 5}}>
-                    How Might We Statements
+
+            <Box sx={{ width: "70%", margin: "auto", minWidth: "700px", maxWidth: "900px" }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2, marginTop: 5 }}>
+                    How Might We 
                 </Typography>
+                <Box sx={{ marginTop: 10, marginBottom: 10, margin: "auto", minWidth: "900px", maxWidth: "900px" }}>
+                    <Typography variant="h5" color="#8E8E8E" fontSize="18px" sx={{ fontWeight: 'bold', marginBottom: .5 }}>
+                        Potential Root Problem
+                    </Typography>
+                    <Paper variant="outlined" sx={{ padding: 2, borderRadius: 4, borderColor: "#8e8e8e", marginBottom: 2 }}>
+                        <Typography variant="body1">
+                            {data.potentialRoot}
+                        </Typography>
+                    </Paper>
+                    <Typography variant="h5" color="#8E8E8E" fontSize="18px" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                        How might we statements
+                    </Typography>
+                </Box>
+
                 <Box>
                     {data.hmwStatements.map((statement, index) => (
                         <Paper key={index} elevation={4} sx={{ padding: 2, marginBottom: 2, borderRadius: 4, minWidth: "600px" }}>
