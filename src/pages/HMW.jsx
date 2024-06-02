@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Grid, Typography, Card,
+import {
+	Grid, Typography, Card,
 	CardActions,
-	CardContent,} from "@mui/material";
+	CardContent,
+} from "@mui/material";
 import RootProblemHistoryPopup from "../components/popupcards/potentialRootHistoryPopup/potentialRootHistoryPopup";
 import { useLocation } from "react-router-dom";
 import WhysCard from "../components/WhysCard";
@@ -148,9 +150,15 @@ const HMW = () => {
 					<LoadingScreen />
 				</Box>
 			) : (
-				<Box sx={{ px: 12, py: 2 }}>
+				<Box sx={{ 
+					px: 12,
+					 py: 2,
+					 width: "90%",
+					margin: "auto",
+					maxWidth: "1000px",
+					 }}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
-						How Migt We
+						How Might We
 					</Typography>
 
 					<Typography
@@ -166,71 +174,71 @@ const HMW = () => {
 						behind a problem. Click the generate button to generate a 5 whys
 						statement
 					</Typography>
-					
+
 					<Typography variant="h4">Potential Root Problem</Typography>
 					<Box sx={{ mt: 3, ml: 7 }}>
 						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
 							Below, is your generated potential root problem.
 						</Typography>
 						<Grid
-    container
-    sx={{ display: "flex", justifyContent: "center" }}>
-    <Box
-        sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            mb: 2,
-            mt: 2,
-            width: "100%",
-        }}>
-        <Card
-            variant="outlined"
-            sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                border: "1px solid #8e8e8e",
-                borderRadius: 4,
-                maxWidth: "800px",
-                height: "80px",
-                boxShadow: "none",
-                width: "95%",
-                margin: "auto",
-            }}>
-            <CardContent
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}>
-                <Typography variant="body2">{generated_root}</Typography>
-            </CardContent>
-            <CardActions>
-                <Button
-                    variant="contained"
-                    sx={{ borderRadius: 5, color: "#FFFB" }}
-                    onClick={handleOpen}>
-                    Show
-                </Button>
-            </CardActions>
-        </Card>
-    </Box>
-</Grid>
-<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 5 }}>
-    <Button
-        variant="contained"
-        onClick={generateFiveHMW}
-        sx={{
-            px: 2.3,
-            py: 1.2,
-            borderRadius: 5.6,
-            color: "#FFFB",
-        }}>
-        Generate 5 HMW's
-    </Button>
-</Box>
+							container
+							sx={{ display: "flex", justifyContent: "center" }}>
+							<Box
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									mb: 2,
+									mt: 2,
+									width: "100%",
+								}}>
+								<Card
+									variant="outlined"
+									sx={{
+										display: "flex",
+										flexDirection: "row",
+										justifyContent: "space-between",
+										border: "1px solid #8e8e8e",
+										borderRadius: 4,
+										maxWidth: "800px",
+										height: "80px",
+										boxShadow: "none",
+										width: "95%",
+										margin: "auto",
+									}}>
+									<CardContent
+										sx={{
+											display: "flex",
+											flexDirection: "column",
+											alignItems: "center",
+											justifyContent: "center",
+										}}>
+										<Typography variant="body2">{generated_root}</Typography>
+									</CardContent>
+									<CardActions>
+										<Button
+											variant="contained"
+											sx={{ borderRadius: 5, color: "#FFFB" }}
+											onClick={handleOpen}>
+											Show
+										</Button>
+									</CardActions>
+								</Card>
+							</Box>
+						</Grid>
+						<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+							<Button
+								variant="contained"
+								onClick={generateFiveHMW}
+								sx={{
+									px: 2.3,
+									py: 1.2,
+									borderRadius: 5.6,
+									color: "#FFFB",
+								}}>
+								Generate 5 HMW's
+							</Button>
+						</Box>
 
 					</Box>
 					<Box sx={{ mt: 5 }}>
