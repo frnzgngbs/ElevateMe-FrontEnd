@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, Box, Card, CardContent, Button, Paper } from "@mui/material";
 import { useTheme } from "@emotion/react";
+import { useEffect, useRef } from "react";
 
 const pitch = [
 	"For",
@@ -15,8 +16,25 @@ const pitch = [
 
 const ElevatorPitch = ({ data, setOpenElevator }) => {
 	var theme = useTheme();
+	const componentRef = useRef(null);
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+		  if (componentRef.current &&!componentRef.current.contains(event.target)) {
+			setOpenElevator(false);
+		  }
+		};
+	  
+		// Change the event type to 'mouseup'
+		document.addEventListener("mouseup", handleClickOutside);
+	  
+		return () => {
+		  document.removeEventListener("mouseup", handleClickOutside);
+		};
+	  }, [setOpenElevator]);
+	  
 	return (
 		<Paper
+		ref={componentRef}
 			sx={{
 				position: "fixed",
 				top: 0,
@@ -107,7 +125,7 @@ const ElevatorPitch = ({ data, setOpenElevator }) => {
 							onClick={() => {
 								setOpenElevator((prev) => !prev);
 							}}>
-							Close
+							Closed
 						</Button>
 					</Box>
 				</Grid>

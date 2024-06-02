@@ -16,6 +16,7 @@ const RootProblemHistoryPopup = ({
 	problemStatement,
 	whyStatements,
 }) => {
+	
 	return (
 		<Dialog
 			open={open}

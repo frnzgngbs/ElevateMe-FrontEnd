@@ -17,6 +17,7 @@ function HomePageCards({ card, icon, title, description, handleCardClick }) {
 					sx={{
 						borderRadius: 5,
 						boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 35px 10px",
+						height:"400px"
 					}}
 					elevation={3}>
 					<ButtonBase onClick={() => handleCardClick(card)}>
