@@ -23,8 +23,6 @@ const WhysCard = ({ value, addWhysToList, setFiveWhys }) => {
 		setFiveWhys((prev) =>
 			prev.map((why, index) => (why === value ? text : why))
 		);
-
-		addWhysToList(text);
 	};
 
 	return (
