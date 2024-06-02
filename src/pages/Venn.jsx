@@ -14,6 +14,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import CircleUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"; // Unchecked icon
 import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; // Checked icon
 import zIndex from "@mui/material/styles/zIndex";
+import { useLocation } from "react-router-dom";
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
@@ -50,12 +51,16 @@ function checkFields(textFields, selectedButton) {
 }
 
 function Venn() {
+	const location = useLocation();
+	const venn = location.state ? location.state.venn : undefined;
+	const setting = location.state ? location.state.setting : undefined;
+
 	const [showSetting, setShowSetting] = useState(false);
 	const [textFields, setTextFields] = useState({
-		field1: sessionStorage.getItem("field1"),
-		field2: sessionStorage.getItem("field2"),
-		field3: sessionStorage.getItem("field3"),
-		filter: sessionStorage.getItem("filter"),
+		field1: venn?.field1 || sessionStorage.getItem("field1") || "",
+		field2: venn?.field2 || sessionStorage.getItem("field2") || "",
+		field3: venn?.field3 || sessionStorage.getItem("field3") || "",
+		filter: venn?.filter || sessionStorage.getItem("filter") || "",
 	});
 
 	const [ProblemStatements, dispatch] = useReducer(
@@ -65,8 +70,9 @@ function Venn() {
 	const [isLoading, setIsLoading] = useState(false);
 	const getLastCheckButton = sessionStorage.getItem("setting");
 	const [selectedButton, setSelectedButton] = useState(
-		getLastCheckButton !== null ? parseInt(getLastCheckButton) : 3
+		setting || (getLastCheckButton !== null ? parseInt(getLastCheckButton) : 3)
 	);
+
 	const handleButtonClick = (buttonValue) => {
 		setSelectedButton(buttonValue);
 		sessionStorage.setItem("setting", buttonValue);
@@ -78,6 +84,7 @@ function Venn() {
 	]);
 
 	const [groupLabel, setgroupLabel] = useState({});
+
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
 	};
@@ -191,6 +198,7 @@ function Venn() {
 	};
 
 	const handleGenerateButtonClick = async () => {
+		console.log(textFields);
 		setIsLoading(true);
 		let token = localStorage.getItem("token");
 		try {

@@ -198,7 +198,7 @@ const Saved = () => {
 							<SavedPSCard
 								key={item.id}
 								{...item}
-								setting="two_venn"
+								setting={2}
 								onDelete={handleDelete}
 								onEdit={handleEdit}
 							/>
@@ -214,8 +214,8 @@ const Saved = () => {
 							<SavedPSCard
 								key={item.id}
 								{...item}
-								onDelete={() => handleDelete("three_venn", item.id)}
-								setting="three_venn"
+								onDelete={handleDelete}
+								setting={3}
 								onEdit={handleEdit}
 							/>
 						))}
