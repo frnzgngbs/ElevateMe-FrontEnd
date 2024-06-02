@@ -62,12 +62,15 @@ const FiveWhys = () => {
 			field3: "",
 		};
 
+	const statement_id = location.state?.id || null;
+
 	useEffect(() => {
 		sessionStorage.setItem("whys_selected_statement", statement);
 		sessionStorage.setItem("whys_venn", JSON.stringify(venn));
 		sessionStorage.setItem("selected_whys", JSON.stringify(selectedWhys));
 		sessionStorage.setItem("five_whys", JSON.stringify(fiveWhys));
-	}, [statement, venn, selectedWhys, fiveWhys]);
+		sessionStorage.setItem("statement_id", statement_id);
+	}, [statement, venn, selectedWhys, fiveWhys, statement_id]);
 
 	const handleShowPopup = () => {
 		setIsPopupOpen(true);
@@ -95,7 +98,9 @@ const FiveWhys = () => {
 
 	const generatePotentialRootProb = async () => {
 		if (selectedWhys.length === 0) {
-			alert("Cannot generate a potential root problem with no why's selected.");
+			alert(
+				"Cannot generate a potential root problem withP no why's selected."
+			);
 			return;
 		}
 		setIsLoading((prev) => !prev);
@@ -116,6 +121,8 @@ const FiveWhys = () => {
 			navigate("/hmw", {
 				state: {
 					potential_root: response.data,
+					statement_id: statement_id,
+					venn: venn,
 					statement: statement,
 					list_of_whys: [...selectedWhys],
 				},

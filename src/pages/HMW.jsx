@@ -9,7 +9,7 @@ import {
 	CardContent,
 } from "@mui/material";
 import RootProblemHistoryPopup from "../components/popupcards/potentialRootHistoryPopup/potentialRootHistoryPopup";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import WhysCard from "../components/WhysCard";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
@@ -43,8 +43,16 @@ const HMW = () => {
 
 	const [elevatorPitch, setElevatorPitch] = useState([]);
 
+	const navigate = useNavigate();
+
 	const selected_statement =
 		location.state?.statement || sessionStorage.getItem("selected_statement");
+
+	const venn =
+		location.state?.venn || JSON.parse(sessionStorage.getItem("whys_venn"));
+
+	const ps_id =
+		location.state?.statement_id || sessionStorage.getItem("statement_id");
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -98,6 +106,7 @@ const HMW = () => {
 		sessionStorage.setItem("root_five_whys", JSON.stringify(list_of_whys));
 		sessionStorage.setItem("selected_statement", selected_statement);
 		sessionStorage.setItem("elevatorPitch", JSON.stringify(elevatorPitch));
+		sessionStorage.setItem("hmw_venn", JSON.stringify(venn));
 	}, [
 		selectedHMW,
 		fiveHMW,
@@ -105,6 +114,7 @@ const HMW = () => {
 		list_of_whys,
 		selected_statement,
 		elevatorPitch,
+		venn,
 	]);
 
 	useEffect(() => {
@@ -120,6 +130,8 @@ const HMW = () => {
 			return;
 		}
 
+		sessionStorage.setItem("root_hmws", JSON.stringify(selectedHMW));
+
 		setIsLoading((prev) => !prev);
 
 		try {
@@ -134,7 +146,6 @@ const HMW = () => {
 				},
 				{ headers: { Authorization: `Token ${token}` } }
 			);
-			sessionStorage.removeItem("selected_hmws");
 			setElevatorPitch(response.data.elevator_pitch);
 		} catch (err) {
 			console.error(err);
@@ -143,6 +154,19 @@ const HMW = () => {
 			sessionStorage.removeItem("selected_hmws");
 			setSelectedHMW([]);
 		}
+	};
+
+	const generateReport = () => {
+		navigate("/report", {
+			state: {
+				venn: venn,
+				statement_id: ps_id,
+				statement: selected_statement,
+				list_of_whys: list_of_whys,
+				potential_root: generated_root,
+				list_of_hmws: selectedHMW,
+			},
+		});
 	};
 	return (
 		<Box>
@@ -276,6 +300,7 @@ const HMW = () => {
 											<Box sx={{ mr: 2 }}>
 												<Button
 													variant="contained"
+													disabled={elevatorPitch.length === 0 ? true : false}
 													onClick={() => {
 														setOpenElevator((prev) => !prev);
 													}}
@@ -290,6 +315,7 @@ const HMW = () => {
 											</Box>
 											<Button
 												variant="contained"
+												disabled={selectedHMW.length === 0 ? true : false}
 												onClick={generateElevatorPitch}
 												sx={{
 													px: 2.3,

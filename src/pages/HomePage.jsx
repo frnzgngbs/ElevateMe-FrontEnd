@@ -93,9 +93,9 @@ const HomePage = () => {
 		}
 	}, [about]);
 	return (
-		<Box >
+		<Box>
 			{/* put background  image here: gridbackgroundpng , make sure it is behind*/}
-			
+
 			{/*  */}
 			<Grid
 				container
@@ -108,11 +108,8 @@ const HomePage = () => {
 					backgroundRepeat: "no-repeat",
 					marginBottom: "50px",
 				}}>
-					
-
-					
 				{/* Adjusted left div size and font sizes */}
-				<Grid item xs={10} md={5} pr={5} >
+				<Grid item xs={10} md={5} pr={5}>
 					<div>
 						<Typography variant="h1" fontSize="50px">
 							ElevateMe
@@ -186,21 +183,20 @@ const HomePage = () => {
 					alignItems: "center",
 					width: "900px",
 					margin: "auto",
-					flexDirection:"column",
+					flexDirection: "column",
 				}}>
-					<Typography variant="h1" textAlign={"center"} fontSize="50px">
-							Features
-			
-					</Typography>
-					<Typography
-										variant="body1"
-										textAlign={"center"}
-										fontSize="14px"
-										marginBottom={"50px"}>
-										Choose from the features below. This is a sequential process
-										but you can always navigate to different cards if you want for easire
-										access. Each cards corresponds to a specific page.
-									</Typography>
+				<Typography variant="h1" textAlign={"center"} fontSize="50px">
+					Features
+				</Typography>
+				<Typography
+					variant="body1"
+					textAlign={"center"}
+					fontSize="14px"
+					marginBottom={"50px"}>
+					Choose from the features below. This is a sequential process but you
+					can always navigate to different cards if you want for easire access.
+					Each cards corresponds to a specific page.
+				</Typography>
 				<Grid container spacing={2} sx={{ marginBottom: 8 }}>
 					{Object.entries(cards).map(([key, card]) => (
 						<Grid item key={key} xs={4} sx={{ width: "280px" }}>
@@ -213,7 +209,6 @@ const HomePage = () => {
 						</Grid>
 					))}
 				</Grid>
-				
 			</Box>
 		</Box>
 	);
