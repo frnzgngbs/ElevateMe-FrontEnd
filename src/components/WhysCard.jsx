@@ -15,10 +15,6 @@ const WhysCard = ({ value, addWhysToList, setFiveWhys }) => {
 	const [text, setText] = useState(value);
 
 	const handleTextChange = (e) => {
-		if (!isSelected) {
-			alert("Cannot modify unselected whys statement.");
-			return;
-		}
 		setText(e.target.value);
 	};
 
@@ -27,9 +23,6 @@ const WhysCard = ({ value, addWhysToList, setFiveWhys }) => {
 		setFiveWhys((prev) =>
 			prev.map((why, index) => (why === value ? text : why))
 		);
-		// Call addWhysToList with the updated text
-
-		addWhysToList(text);
 	};
 
 	return (
@@ -72,7 +65,13 @@ const WhysCard = ({ value, addWhysToList, setFiveWhys }) => {
 							cursor: "pointer",
 							ml: 2,
 						}}
-						onClick={() => setIsEditing(true)}>
+						onClick={() => {
+							if (isSelected) {
+								alert("Cannot modify as already been selected.");
+								return;
+							}
+							setIsEditing(true);
+						}}>
 						{text}
 					</Typography>
 				)}

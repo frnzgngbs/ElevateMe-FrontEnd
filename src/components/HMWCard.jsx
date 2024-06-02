@@ -1,20 +1,31 @@
-import { Box, Card, CardContent, IconButton, InputBase, Typography } from "@mui/material";
+import {
+	Box,
+	Card,
+	CardContent,
+	IconButton,
+	InputBase,
+	Typography,
+} from "@mui/material";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React, { useState } from "react";
 
-const WhysCard = ({ value, addHMWToList }) => {
+const WhysCard = ({ value, addHMWToList, setFiveHMW }) => {
 	const [isSelected, setIsSelected] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 	const [text, setText] = useState(value);
 
-	const handleTextChange = (event) => {
-		setText(event.target.value);
+	const handleTextChange = (e) => {
+		setText(e.target.value);
 	};
 
 	const handleSave = () => {
-		setIsEditing(false);
-		addHMWToList(value);  
+		setIsEditing((prev) => !prev);
+
+		setFiveHMW((prev) =>
+			prev.map((hmw, index) => (hmw === value ? text : hmw))
+		);
+		// Call addWhysToList with the updated text
 	};
 
 	return (
@@ -57,7 +68,13 @@ const WhysCard = ({ value, addHMWToList }) => {
 							cursor: "pointer",
 							ml: 2,
 						}}
-						onClick={() => setIsEditing(true)}>
+						onClick={() => {
+							if (isSelected) {
+								alert("Cannot modify as already been selected.");
+								return;
+							}
+							setIsEditing(true);
+						}}>
 						{text}
 					</Typography>
 				)}

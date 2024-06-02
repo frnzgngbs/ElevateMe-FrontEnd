@@ -2,7 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {
-	Grid, Typography, Card,
+	Grid,
+	Typography,
+	Card,
 	CardActions,
 	CardContent,
 } from "@mui/material";
@@ -105,6 +107,11 @@ const HMW = () => {
 		elevatorPitch,
 	]);
 
+	useEffect(() => {
+		console.log(selectedHMW);
+		console.log(fiveHMW);
+	}, [selectedHMW]);
+
 	const generateElevatorPitch = async () => {
 		if (selectedHMW.length === 0) {
 			alert(
@@ -150,13 +157,14 @@ const HMW = () => {
 					<LoadingScreen />
 				</Box>
 			) : (
-				<Box sx={{ 
-					px: 12,
-					 py: 2,
-					 width: "90%",
-					margin: "auto",
-					maxWidth: "1000px",
-					 }}>
+				<Box
+					sx={{
+						px: 12,
+						py: 2,
+						width: "90%",
+						margin: "auto",
+						maxWidth: "1000px",
+					}}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
 						How Might We
 					</Typography>
@@ -180,9 +188,7 @@ const HMW = () => {
 						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
 							Below, is your generated potential root problem.
 						</Typography>
-						<Grid
-							container
-							sx={{ display: "flex", justifyContent: "center" }}>
+						<Grid container sx={{ display: "flex", justifyContent: "center" }}>
 							<Box
 								sx={{
 									display: "flex",
@@ -239,7 +245,6 @@ const HMW = () => {
 								Generate 5 HMW's
 							</Button>
 						</Box>
-
 					</Box>
 					<Box sx={{ mt: 5 }}>
 						<Typography variant="h4">Generated 5 HMW's</Typography>
@@ -257,6 +262,7 @@ const HMW = () => {
 												<HMWCard
 													key={index}
 													value={value}
+													setFiveHMW={setFiveHMW}
 													addHMWToList={addHMWToList}
 												/>
 											</Box>
