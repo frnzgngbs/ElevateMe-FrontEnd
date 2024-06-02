@@ -186,6 +186,7 @@ const Ranking = () => {
 					listProblemStatementDispatch({
 						type: PS_action.SET_PROBLEM_STATEMENT,
 						statements: response.data,
+						queuedProblemStatement: queuedProblemStatement, // Pass the queuedProblemStatement state
 					});
 				} else if (selectedButton === 3) {
 					let token = localStorage.getItem("token");
