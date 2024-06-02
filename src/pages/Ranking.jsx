@@ -226,7 +226,7 @@ const Ranking = () => {
 			},
 		});
 	};
-
+	console.log(initialSelectedValues);
 	const removeSelectedStatement = (index, id, venn, statement) => {
 		queuedProblemStatementDispatch({
 			type: PS_action.REMOVE_PROBLEM_STATEMENT,
