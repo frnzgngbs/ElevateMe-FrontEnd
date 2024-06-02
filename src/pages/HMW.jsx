@@ -147,6 +147,19 @@ const HMW = () => {
 				</Box>
 			) : (
 				<Box sx={{ px: 12, py: 2 }}>
+					<Typography variant="h1" textAlign={"center"} fontSize="50px">
+							HMW
+			
+					</Typography>
+					<Typography
+										variant="body1"
+										textAlign={"center"}
+										fontSize="14px"
+										marginBottom={"50px"}>
+										Choose from the features below. This is a sequential process
+										but you can always navigate to different cards if you want for easire
+										access. Each cards corresponds to a specific page.
+									</Typography>
 					<Typography variant="h4">Potential Root Problem</Typography>
 					<Box sx={{ mt: 3, ml: 7 }}>
 						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>

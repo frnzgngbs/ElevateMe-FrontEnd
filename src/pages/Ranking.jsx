@@ -305,6 +305,10 @@ const Ranking = () => {
 
 	return (
 		<Box pb={5}>
+			<Typography variant="h1" textAlign={"center"} fontSize="50px">
+							HMW
+			
+					</Typography>
 			<Box
 				sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
 				<Typography variant="h1" sx={{ textAlign: "center", width: "400px" }}>
@@ -408,8 +412,8 @@ const Ranking = () => {
 							container
 							sx={{ justifyContent: "space-between" }}
 							spacing={2}>
-							<Grid item xs={5}>
-								<Typography sx={{ textAlign: "center" }}>
+							<Grid item xs={4}>
+								<Typography sx={{ textAlign: "center", alignItem:"center" }}>
 									Problem Statement
 								</Typography>
 							</Grid>
