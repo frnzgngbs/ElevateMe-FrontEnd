@@ -3,7 +3,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Card, CardContent, IconButton, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-const WhysOrHMWCard = ({ value, addWhysToList }) => {
+const WhysCard = ({ value, addWhysToList }) => {
 	const [isSelected, setIsSelected] = useState(false);
 
 	return (
@@ -30,4 +30,4 @@ const WhysOrHMWCard = ({ value, addWhysToList }) => {
 	);
 };
 
-export default WhysOrHMWCard;
+export default WhysCard;

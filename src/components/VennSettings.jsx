@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
 	Box,
 	Button,
@@ -20,6 +20,23 @@ const VennSettings = ({
 	selectedButton,
 	setSelectedButton,
 }) => {
+
+	const componentRef = useRef(null);
+
+
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+		  if (componentRef.current && !componentRef.current.contains(event.target)) {
+			toggleShowSetting();
+		  }
+		};
+	  
+		document.addEventListener("mousedown", handleClickOutside);
+	  
+		return () => {
+		  document.removeEventListener("mousedown", handleClickOutside);
+		};
+	  }, [toggleShowSetting]);
 	const handleChangeButton = (e) => {
 		const value = +e.target.value;
 		setSelectedButton((prev) => (prev = value));
@@ -46,7 +63,7 @@ const VennSettings = ({
 	};
 
 	return (
-		<Box sx={{ height: "560px", width: "450px" }}>
+		<Box ref={componentRef} sx={{ height: "560px", width: "450px" }}>
 			<Card sx={{ borderRadius: 6, width: "100%", height: "100%" }}>
 				<CardContent sx={{ m: 1.6 }}>
 					<Typography variant="h5" sx={{ color: "#186F65" }}>
