@@ -14,7 +14,8 @@ import {
 import Paper from "@mui/material/Paper";
 import "../vennsettingspopup/VennSettings.css";
 import Venn3 from "../../../res/venn.png";
-import Venn3Paper from "../../venndiagram/VennDiagramPaper2";
+import Venn2Paper from "../../venndiagram/VennDiagramPaper2";
+import Venn3Paper from "../../venndiagram/VennDiagramPaper3"
 import { useNavigate } from "react-router-dom";
 
 const VennSettingsHistoryPopup = ({ setting, venn, open, onClose }) => {
@@ -58,7 +59,12 @@ const VennSettingsHistoryPopup = ({ setting, venn, open, onClose }) => {
 							justifyContent="center"
 							alignItems="center"
 							height="100%">
-							<Venn3Paper venn={inputValues} />
+
+							{setting === 2 ? (
+								<Venn2Paper venn={inputValues} />
+							) : (
+								<Venn3Paper venn={inputValues} />
+							)}
 						</Box>
 					</Grid>
 
@@ -193,12 +199,17 @@ const VennSettingsHistoryPopup = ({ setting, venn, open, onClose }) => {
 								</Box>
 							</form>
 						</Box>
+						<Box sx={{display:"flex", flexDirection:"column-reverse"}}>
+
+						
 						<Box
 							sx={{
 								display: "flex",
+								position: "absolute",
+								bottom: 35,
 								justifyContent: "center",
-								mt: 2,
-								marginLeft: 4,
+								
+								marginLeft: 12,
 							}}>
 							<Button
 								onClick={() => {
@@ -225,6 +236,7 @@ const VennSettingsHistoryPopup = ({ setting, venn, open, onClose }) => {
 								sx={{ py: 1, px: 3.7, borderRadius: 5 }}>
 								Proceed
 							</Button>
+						</Box>
 						</Box>
 					</Grid>
 				</Grid>
