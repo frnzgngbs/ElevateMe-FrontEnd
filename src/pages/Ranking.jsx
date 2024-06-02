@@ -305,10 +305,7 @@ const Ranking = () => {
 
 	return (
 		<Box pb={5}>
-			<Typography variant="h1" textAlign={"center"} fontSize="50px">
-							HMW
-			
-					</Typography>
+	
 			<Box
 				sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
 				<Typography variant="h1" sx={{ textAlign: "center", width: "400px" }}>
