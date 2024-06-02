@@ -93,8 +93,10 @@ const HomePage = () => {
 		}
 	}, [about]);
 	return (
-		<Box>
+		<Box >
 			{/* put background  image here: gridbackgroundpng , make sure it is behind*/}
+			
+			{/*  */}
 			<Grid
 				container
 				spacing={6}
@@ -106,8 +108,11 @@ const HomePage = () => {
 					backgroundRepeat: "no-repeat",
 					marginBottom: "50px",
 				}}>
+					
+
+					
 				{/* Adjusted left div size and font sizes */}
-				<Grid item xs={10} md={5} pr={5}>
+				<Grid item xs={10} md={5} pr={5} >
 					<div>
 						<Typography variant="h1" fontSize="50px">
 							ElevateMe
@@ -194,6 +199,7 @@ const HomePage = () => {
 						</Grid>
 					))}
 				</Grid>
+				
 			</Box>
 		</Box>
 	);
