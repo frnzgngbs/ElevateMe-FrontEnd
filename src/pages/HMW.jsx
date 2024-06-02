@@ -26,7 +26,8 @@ const HMW = () => {
 
 	const generated_root =
 		location.state?.potential_root?.root ||
-		sessionStorage.getItem("generated_root");
+		sessionStorage.getItem("generated_root") ||
+		"";
 
 	// const list_of_whys = location.state?.list_of_whys || [];
 	const list_of_whys = useMemo(() => {
@@ -148,18 +149,17 @@ const HMW = () => {
 			) : (
 				<Box sx={{ px: 12, py: 2 }}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
-							HMW
-			
+						HMW
 					</Typography>
 					<Typography
-										variant="body1"
-										textAlign={"center"}
-										fontSize="14px"
-										marginBottom={"50px"}>
-										Choose from the features below. This is a sequential process
-										but you can always navigate to different cards if you want for easire
-										access. Each cards corresponds to a specific page.
-									</Typography>
+						variant="body1"
+						textAlign={"center"}
+						fontSize="14px"
+						marginBottom={"50px"}>
+						Choose from the features below. This is a sequential process but you
+						can always navigate to different cards if you want for easire
+						access. Each cards corresponds to a specific page.
+					</Typography>
 					<Typography variant="h4">Potential Root Problem</Typography>
 					<Box sx={{ mt: 3, ml: 7 }}>
 						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
@@ -188,6 +188,7 @@ const HMW = () => {
 							<Button
 								variant="contained"
 								onClick={generateFiveHMW}
+								disabled={generated_root === "" ? true : false}
 								sx={{
 									px: 2.3,
 									py: 1.2,
@@ -242,6 +243,7 @@ const HMW = () => {
 											<Button
 												variant="contained"
 												onClick={generateElevatorPitch}
+												disabled={selectedHMW.length === 0 ? true : false}
 												sx={{
 													px: 2.3,
 													py: 1.2,

@@ -21,6 +21,7 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 	const [inputValues, setInputValues] = useState({ ...venn });
 
 	useEffect(() => {
+		console.log(venn);
 		setInputValues({ ...venn });
 	}, [venn]);
 

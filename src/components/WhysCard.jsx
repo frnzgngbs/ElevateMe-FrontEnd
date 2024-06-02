@@ -1,26 +1,46 @@
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Card, CardContent, IconButton, Typography, InputBase } from "@mui/material";
+import {
+	Card,
+	CardContent,
+	IconButton,
+	Typography,
+	InputBase,
+} from "@mui/material";
 import React, { useState } from "react";
 
-const WhysCard = ({ value, addWhysToList }) => {
+const WhysCard = ({ value, addWhysToList, setFiveWhys }) => {
 	const [isSelected, setIsSelected] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 	const [text, setText] = useState(value);
 
 	const handleTextChange = (e) => {
+		if (!isSelected) {
+			alert("Cannot modify unselected whys statement.");
+			return;
+		}
 		setText(e.target.value);
 	};
 
 	const handleSave = () => {
 		setIsEditing(false);
+		setFiveWhys((prev) =>
+			prev.map((why, index) => (why === value ? text : why))
+		);
 		// Call addWhysToList with the updated text
+
 		addWhysToList(text);
 	};
 
 	return (
 		<Card
-			sx={{ borderRadius: 6.2, boxShadow: 3, maxWidth: "800px", width: "95%", margin: "auto" }}>
+			sx={{
+				borderRadius: 6.2,
+				boxShadow: 3,
+				maxWidth: "800px",
+				width: "95%",
+				margin: "auto",
+			}}>
 			<CardContent sx={{ display: "flex", alignItems: "center" }}>
 				<IconButton
 					onClick={() => {
@@ -35,7 +55,7 @@ const WhysCard = ({ value, addWhysToList }) => {
 						onChange={handleTextChange}
 						onBlur={handleSave}
 						onKeyDown={(e) => {
-							if (e.key === 'Enter') {
+							if (e.key === "Enter") {
 								handleSave();
 							}
 						}}
