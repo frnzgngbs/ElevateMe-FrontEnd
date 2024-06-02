@@ -153,7 +153,7 @@ const FiveWhys = () => {
 						maxWidth: "1000px",
 					}}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
-						How Might We
+						5 Whys
 					</Typography>
 					<Typography
 						variant="body1"

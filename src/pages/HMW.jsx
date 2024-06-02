@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Grid, Typography } from "@mui/material";
+import {
+	Grid, Typography, Card,
+	CardActions,
+	CardContent,
+} from "@mui/material";
 import RootProblemHistoryPopup from "../components/popupcards/potentialRootHistoryPopup/potentialRootHistoryPopup";
 import { useLocation } from "react-router-dom";
 import WhysCard from "../components/WhysCard";
@@ -26,8 +30,7 @@ const HMW = () => {
 
 	const generated_root =
 		location.state?.potential_root?.root ||
-		sessionStorage.getItem("generated_root") ||
-		"";
+		sessionStorage.getItem("generated_root");
 
 	// const list_of_whys = location.state?.list_of_whys || [];
 	const list_of_whys = useMemo(() => {
@@ -147,48 +150,86 @@ const HMW = () => {
 					<LoadingScreen />
 				</Box>
 			) : (
-				<Box sx={{ px: 12, py: 2 }}>
+				<Box sx={{ 
+					px: 12,
+					 py: 2,
+					 width: "90%",
+					margin: "auto",
+					maxWidth: "1000px",
+					 }}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
-						HMW
+						How Might We
 					</Typography>
+
 					<Typography
 						variant="body1"
 						textAlign={"center"}
 						fontSize="14px"
-						marginBottom={"50px"}>
-						Choose from the features below. This is a sequential process but you
-						can always navigate to different cards if you want for easire
-						access. Each cards corresponds to a specific page.
+						width="800px"
+						margin="auto"
+						marginBottom={"50px"}
+						marginTop="10px">
+						Now subject the selected problem statement to a 5-Why analysis. In
+						5-Whys, you ask "why" five times to uncover the underlying issue
+						behind a problem. Click the generate button to generate a 5 whys
+						statement
 					</Typography>
+
 					<Typography variant="h4">Potential Root Problem</Typography>
 					<Box sx={{ mt: 3, ml: 7 }}>
 						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
 							Below, is your generated potential root problem.
 						</Typography>
-						<Grid container sx={{ ml: 2 }}>
-							{/* I want to center the typography horizontally."*/}
-							<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
-								<Typography variant="body2" sx={{}}>
-									{generated_root}
-								</Typography>
-							</Grid>
-							<Grid item sx={{ mr: 2.2 }}>
-								<Button
-									variant="contained"
-									onClick={handleOpen}
+						<Grid
+							container
+							sx={{ display: "flex", justifyContent: "center" }}>
+							<Box
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									mb: 2,
+									mt: 2,
+									width: "100%",
+								}}>
+								<Card
+									variant="outlined"
 									sx={{
-										borderRadius: 5.6,
-										color: "#FFFB",
+										display: "flex",
+										flexDirection: "row",
+										justifyContent: "space-between",
+										border: "1px solid #8e8e8e",
+										borderRadius: 4,
+										maxWidth: "800px",
+										height: "80px",
+										boxShadow: "none",
+										width: "95%",
+										margin: "auto",
 									}}>
-									Show
-								</Button>
-							</Grid>
+									<CardContent
+										sx={{
+											display: "flex",
+											flexDirection: "column",
+											alignItems: "center",
+											justifyContent: "center",
+										}}>
+										<Typography variant="body2">{generated_root}</Typography>
+									</CardContent>
+									<CardActions>
+										<Button
+											variant="contained"
+											sx={{ borderRadius: 5, color: "#FFFB" }}
+											onClick={handleOpen}>
+											Show
+										</Button>
+									</CardActions>
+								</Card>
+							</Box>
 						</Grid>
-						<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 5 }}>
+						<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
 							<Button
 								variant="contained"
 								onClick={generateFiveHMW}
-								disabled={generated_root === "" ? true : false}
 								sx={{
 									px: 2.3,
 									py: 1.2,
@@ -198,6 +239,7 @@ const HMW = () => {
 								Generate 5 HMW's
 							</Button>
 						</Box>
+
 					</Box>
 					<Box sx={{ mt: 5 }}>
 						<Typography variant="h4">Generated 5 HMW's</Typography>
@@ -243,7 +285,6 @@ const HMW = () => {
 											<Button
 												variant="contained"
 												onClick={generateElevatorPitch}
-												disabled={selectedHMW.length === 0 ? true : false}
 												sx={{
 													px: 2.3,
 													py: 1.2,
