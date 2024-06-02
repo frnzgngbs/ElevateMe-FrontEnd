@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import { Button, Grid, Typography, Card, CardActions, CardContent } from "@mui/material";
-
+import {
+	Button,
+	Grid,
+	Typography,
+	Card,
+	CardActions,
+	CardContent,
+} from "@mui/material";
 
 import PSCard from "../components/PSCard";
 import PopupVennHistory from "../components/popupcards/vennHistorypopup/vennHistoryPopUp";
@@ -46,10 +52,15 @@ const FiveWhys = () => {
 	};
 	const statement =
 		location.state?.statement ||
-		sessionStorage.getItem("whys_selected_statement");
+		sessionStorage.getItem("whys_selected_statement") ||
+		"";
 
-	const venn =
-		location.state?.venn || JSON.parse(sessionStorage.getItem("whys_venn"));
+	const venn = location.state?.venn ||
+		JSON.parse(sessionStorage.getItem("whys_venn")) || {
+			field1: "",
+			field2: "",
+			field3: "",
+		};
 
 	useEffect(() => {
 		sessionStorage.setItem("whys_selected_statement", statement);
@@ -129,15 +140,20 @@ const FiveWhys = () => {
 						justifyContent: "center",
 						alignItems: "center",
 						height: "100vh",
-					}}
-				>
+					}}>
 					<LoadingScreen />
 				</Box>
 			) : (
-				<Box sx={{ px: 12, py: 2, width: "90%", margin: "auto", maxWidth: "1000px" }}>
+				<Box
+					sx={{
+						px: 12,
+						py: 2,
+						width: "90%",
+						margin: "auto",
+						maxWidth: "1000px",
+					}}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
 						How Might We
-
 					</Typography>
 					<Typography
 						variant="body1"
@@ -147,12 +163,10 @@ const FiveWhys = () => {
 						margin="auto"
 						marginBottom={"50px"}
 						marginTop="10px">
-
-						Now subject the selected problem statement to a 5-Why analysis.
-						In 5-Whys, you ask "why" five times to uncover the underlying
-						issue behind a problem. Click the generate button to generate
-						a 5 whys statement
-
+						Now subject the selected problem statement to a 5-Why analysis. In
+						5-Whys, you ask "why" five times to uncover the underlying issue
+						behind a problem. Click the generate button to generate a 5 whys
+						statement
 					</Typography>
 					{/* Top Part */}
 					<Grid container spacing={2}>
@@ -162,8 +176,18 @@ const FiveWhys = () => {
 								<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
 									Below, is your selected ranked problem statement.
 								</Typography>
-								<Grid container sx={{ display: "flex", justifyContent: "center" }}>
-									<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 2, mt: 2, width: "100%" }}>
+								<Grid
+									container
+									sx={{ display: "flex", justifyContent: "center" }}>
+									<Box
+										sx={{
+											display: "flex",
+											flexDirection: "column",
+											alignItems: "center",
+											mb: 2,
+											mt: 2,
+											width: "100%",
+										}}>
 										<Card
 											variant="outlined"
 											sx={{
@@ -178,35 +202,38 @@ const FiveWhys = () => {
 
 												width: "95%",
 												margin: "auto",
-											}}
-										>
-											<CardContent sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+											}}>
+											<CardContent
+												sx={{
+													display: "flex",
+													flexDirection: "column",
+													alignItems: "center",
+													justifyContent: "center",
+												}}>
 												<Typography variant="body2">{statement}</Typography>
 											</CardContent>
 											<CardActions>
 												<Button
 													variant="contained"
 													sx={{ borderRadius: 5, color: "#FFFB" }}
-													onClick={handleShowPopup}
-												>
+													onClick={handleShowPopup}>
 													Show
 												</Button>
 											</CardActions>
 										</Card>
-
 									</Box>
 								</Grid>
 								<Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
 									<Button
 										variant="contained"
+										disabled={statement === "" ? true : false}
 										onClick={() => generateFiveWhys(statement)}
 										sx={{
-											height:"50px",
+											height: "50px",
 											borderRadius: 5.6,
 											color: "#FFFB",
-										}}
-									>
-										Generate  Whys
+										}}>
+										Generate Whys
 									</Button>
 								</Box>
 							</Box>
@@ -220,9 +247,9 @@ const FiveWhys = () => {
 							<Box sx={{ mt: 1, ml: 7 }}>
 								<Box>
 									<Typography variant="body2" textAlign={"justify"}>
-										Enumerate 5 HMW statement(s) by specifying an ACTION (what you
-										want to achieve), a SUBJECT (to be influenced or affected),
-										and a WHAT (outcome or what you like to achieve).
+										Enumerate 5 HMW statement(s) by specifying an ACTION (what
+										you want to achieve), a SUBJECT (to be influenced or
+										affected), and a WHAT (outcome or what you like to achieve).
 									</Typography>
 									<Box sx={{ my: 5 }}>
 										<Box>
@@ -232,6 +259,7 @@ const FiveWhys = () => {
 														key={index}
 														value={value}
 														addWhysToList={addWhysToList}
+														setFiveWhys={setFiveWhys}
 													/>
 												</Box>
 											))}
@@ -240,19 +268,20 @@ const FiveWhys = () => {
 													display: "flex",
 													justifyContent: "flex-end",
 													mt: 3,
-												}}
-											>
+												}}>
 												<Button
 													variant="contained"
+													disabled={
+														fiveWhys.length === 0 || selectedWhys.length === 0
+													}
 													onClick={generatePotentialRootProb}
 													sx={{
 														px: 2.3,
 														py: 1.2,
 														borderRadius: 5.6,
 														color: "#FFFB",
-														height:"50px"
-													}}
-												>
+														height: "50px",
+													}}>
 													Generate Root
 												</Button>
 											</Box>

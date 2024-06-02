@@ -61,6 +61,7 @@ const Saved = () => {
 
 	useEffect(() => {
 		const getSavedProblemStatement = async () => {
+			setLoading((prev) => !prev);
 			try {
 				let token = localStorage.getItem("token");
 

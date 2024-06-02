@@ -15,6 +15,7 @@ import CircleUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"; // U
 import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; // Checked icon
 import zIndex from "@mui/material/styles/zIndex";
 import { useLocation } from "react-router-dom";
+import { TextField } from "@mui/material/TextField";
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
@@ -599,6 +600,15 @@ function Venn() {
 								<Button
 									onClick={handleGenerateButtonClick}
 									variant="contained"
+									disabled={
+										setting === 2
+											? textFields.field1 === "" && textFields.field2 === ""
+												? true
+												: false
+											: textFields.field1 === "" &&
+											  textFields.field2 === "" &&
+											  textFields.field3 === ""
+									}
 									sx={{
 										mt: 4.3,
 										py: 1.3,
