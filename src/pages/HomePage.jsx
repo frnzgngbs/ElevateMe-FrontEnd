@@ -35,37 +35,37 @@ const HomePage = () => {
 			icon: venn,
 			title: "Venn Diagram",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
+				"Venn diagram page allows you to generate problem statements according to your specified scopes and filters. Save your selected problem statement",
 		},
 		saved: {
 			icon: save,
 			title: "Saved List",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
+				"The Saved List page shows you a list of saved generated problem Statements which is categorized by #2 and #3 Venn diagram. You can also see the scopes/fields of the selected statement.",
 		},
 		rank: {
 			icon: list,
 			title: "Ranking",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
+				"Ranking list, allows you to rank the problem statements in your list. you can also select a specific problem statement of your choice regarding the score of it. The selected statement list will be sent to 5 whys page.",
 		},
 		five_whys: {
 			icon: five_whys,
 			title: "5 Why's",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
+				"The 5 Why’s page allows you to generate 5 Whys based on your selected problem statement. You can also edit the generated 5 whys statements.",
 		},
 		hmw: {
 			icon: HMW,
 			title: "How Might We",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
+				"The HMW page allows you to generate HMW statements based on your selected Why statement. You can also edit the generated statement according to your likings. ",
 		},
 		report: {
 			icon: elevator,
 			title: "Report",
 			description:
-				"ElevateMe is an app that generates problem statements. It follows the Technopreneurship Workbook. A group of CIT-U students make this app to automate the current and long process of tecnopreneurship workbook.",
+				"This page will show you the output statements. You can save it as pdf by click CTRL + P and selecting save as pdf in the option and your pdf will be ready in just seconds ",
 		},
 	};
 
