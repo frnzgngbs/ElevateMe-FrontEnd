@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Dialog,
 	DialogTitle,
@@ -15,15 +15,27 @@ import Paper from "@mui/material/Paper";
 import "../vennsettingspopup/VennSettings.css";
 import Venn3 from "../../../res/venn.png";
 import Venn3Paper from "../../venndiagram/VennDiagramPaper2";
+import { useNavigate } from "react-router-dom";
 
-const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
+const VennSettingsHistoryPopup = ({ setting, venn, open, onClose }) => {
 	const [inputValues, setInputValues] = useState({
 		...venn,
 	});
+	const navigate = useNavigate();
+
+	const originalVenn = { ...venn };
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setInputValues({ ...inputValues, [name]: value });
+	};
+
+	const proceedToVenn = () => {
+		navigate("/venn", { state: { venn: inputValues, setting: setting } });
+	};
+
+	const onClickClose = () => {
+		setInputValues(originalVenn);
 	};
 	return (
 		<Dialog
@@ -112,32 +124,34 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										fullWidth
 									/>
 								</Box>
-								<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-									<Typography
-										variant="body1"
-										sx={{
-											mr: 2,
-											Width: "60px",
-											color: "#8e8e8e",
-											fontSize: "12px",
-										}}>
-										Field 3:
-									</Typography>
-									<InputBase
-										name="field3"
-										value={inputValues.field3}
-										onChange={handleInputChange}
-										sx={{
-											flex: 1,
-											p: 0.5,
-											borderRadius: 2,
-											boxShadow: 2,
-											backgroundColor: "white",
-											fontSize: "12px",
-										}}
-										fullWidth
-									/>
-								</Box>
+								{setting === 3 && (
+									<Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+										<Typography
+											variant="body1"
+											sx={{
+												mr: 2,
+												Width: "60px",
+												color: "#8e8e8e",
+												fontSize: "12px",
+											}}>
+											Field 3:
+										</Typography>
+										<InputBase
+											name="field3"
+											value={inputValues.field3}
+											onChange={handleInputChange}
+											sx={{
+												flex: 1,
+												p: 0.5,
+												borderRadius: 2,
+												boxShadow: 2,
+												backgroundColor: "white",
+												fontSize: "12px",
+											}}
+											fullWidth
+										/>
+									</Box>
+								)}
 								<Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
 									<Typography
 										variant="body1"
@@ -150,7 +164,7 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 										Filter :
 									</Typography>
 									<InputBase
-										name="field4"
+										name="filter"
 										value={
 											inputValues.filter
 												? inputValues.filter
@@ -187,7 +201,10 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 								marginLeft: 4,
 							}}>
 							<Button
-								onClick={onClose}
+								onClick={() => {
+									onClose();
+									onClickClose();
+								}}
 								type="submit"
 								variant="contained"
 								sx={{
@@ -201,10 +218,12 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 								close
 							</Button>
 							<Button
-								type="submit"
+								onClick={() => {
+									proceedToVenn();
+								}}
 								variant="contained"
-								sx={{ py: 1, px: 4.3, borderRadius: 5 }}>
-								Save
+								sx={{ py: 1, px: 3.7, borderRadius: 5 }}>
+								Proceed
 							</Button>
 						</Box>
 					</Grid>
