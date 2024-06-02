@@ -77,6 +77,7 @@ function Venn() {
 		setSelectedButton(buttonValue);
 		sessionStorage.setItem("setting", buttonValue);
 	};
+
 	const [selectedCheckButton, setSelectedCheckButton] = useState([
 		false,
 		false,
@@ -185,7 +186,6 @@ function Venn() {
 					headers: { Authorization: `Token ${token}` },
 				}
 			);
-			console.log(response.data);
 			dispatch({
 				type: "SET_PROBLEM_STATEMENT",
 				ps_list: response.data.response,
@@ -198,7 +198,7 @@ function Venn() {
 	};
 
 	const handleGenerateButtonClick = async () => {
-		console.log(textFields);
+		console.log(selectedCheckButton);
 		setIsLoading(true);
 		let token = localStorage.getItem("token");
 		try {
@@ -236,7 +236,7 @@ function Venn() {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				setSelectedCheckButton(...[false]);
+				setSelectedCheckButton([false, false, false]);
 				dispatch({
 					type: "SET_PROBLEM_STATEMENT",
 					ps_list: three_response.data.response,
@@ -250,7 +250,11 @@ function Venn() {
 	};
 
 	const handleSaveProblemStatement = async (text) => {
+		console.log(selectedButton);
 		console.log(text);
+		const hasCheckedCheckBox = selectedCheckButton.some(
+			(item) => item === true
+		);
 		let token = localStorage.getItem("token");
 		let response;
 		try {
@@ -266,8 +270,7 @@ function Venn() {
 					}
 				);
 			} else if (selectedButton === 3) {
-				const hasCheckedCheckBox = selectedCheckButton.some(Boolean);
-				console.log(groupLabel);
+				console.log(hasCheckedCheckBox);
 				if (hasCheckedCheckBox) {
 					response = await axios.post(
 						"http://localhost:8000/api/two_venn_ps/",
@@ -279,7 +282,9 @@ function Venn() {
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
+					alert("PASOK");
 				} else {
+					alert("PASOK");
 					response = await axios.post(
 						"http://localhost:8000/api/three_venn_ps/",
 						{
