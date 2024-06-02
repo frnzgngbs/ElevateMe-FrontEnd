@@ -188,7 +188,7 @@ const HMW = () => {
 							<Button
 								variant="contained"
 								onClick={generateFiveHMW}
-								disabled={generated_root === "" ? false : true}
+								disabled={generated_root === "" ? true : false}
 								sx={{
 									px: 2.3,
 									py: 1.2,
