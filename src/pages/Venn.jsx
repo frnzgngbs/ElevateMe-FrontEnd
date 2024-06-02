@@ -14,6 +14,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import CircleUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"; // Unchecked icon
 import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; // Checked icon
 import zIndex from "@mui/material/styles/zIndex";
+import { useLocation } from "react-router-dom";
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
@@ -50,12 +51,16 @@ function checkFields(textFields, selectedButton) {
 }
 
 function Venn() {
+	const location = useLocation();
+	const venn = location.state ? location.state.venn : undefined;
+	const setting = location.state ? location.state.setting : undefined;
+
 	const [showSetting, setShowSetting] = useState(false);
 	const [textFields, setTextFields] = useState({
-		field1: sessionStorage.getItem("field1"),
-		field2: sessionStorage.getItem("field2"),
-		field3: sessionStorage.getItem("field3"),
-		filter: sessionStorage.getItem("filter"),
+		field1: venn?.field1 || sessionStorage.getItem("field1") || "",
+		field2: venn?.field2 || sessionStorage.getItem("field2") || "",
+		field3: venn?.field3 || sessionStorage.getItem("field3") || "",
+		filter: venn?.filter || sessionStorage.getItem("filter") || "",
 	});
 
 	const [ProblemStatements, dispatch] = useReducer(
@@ -65,12 +70,14 @@ function Venn() {
 	const [isLoading, setIsLoading] = useState(false);
 	const getLastCheckButton = sessionStorage.getItem("setting");
 	const [selectedButton, setSelectedButton] = useState(
-		getLastCheckButton !== null ? parseInt(getLastCheckButton) : 3
+		setting || (getLastCheckButton !== null ? parseInt(getLastCheckButton) : 3)
 	);
+
 	const handleButtonClick = (buttonValue) => {
 		setSelectedButton(buttonValue);
 		sessionStorage.setItem("setting", buttonValue);
 	};
+
 	const [selectedCheckButton, setSelectedCheckButton] = useState([
 		false,
 		false,
@@ -78,6 +85,7 @@ function Venn() {
 	]);
 
 	const [groupLabel, setgroupLabel] = useState({});
+
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
 	};
@@ -178,7 +186,6 @@ function Venn() {
 					headers: { Authorization: `Token ${token}` },
 				}
 			);
-			console.log(response.data);
 			dispatch({
 				type: "SET_PROBLEM_STATEMENT",
 				ps_list: response.data.response,
@@ -191,6 +198,7 @@ function Venn() {
 	};
 
 	const handleGenerateButtonClick = async () => {
+		console.log(selectedCheckButton);
 		setIsLoading(true);
 		let token = localStorage.getItem("token");
 		try {
@@ -228,7 +236,7 @@ function Venn() {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				setSelectedCheckButton(...[false]);
+				setSelectedCheckButton([false, false, false]);
 				dispatch({
 					type: "SET_PROBLEM_STATEMENT",
 					ps_list: three_response.data.response,
@@ -242,7 +250,11 @@ function Venn() {
 	};
 
 	const handleSaveProblemStatement = async (text) => {
+		console.log(selectedButton);
 		console.log(text);
+		const hasCheckedCheckBox = selectedCheckButton.some(
+			(item) => item === true
+		);
 		let token = localStorage.getItem("token");
 		let response;
 		try {
@@ -258,8 +270,7 @@ function Venn() {
 					}
 				);
 			} else if (selectedButton === 3) {
-				const hasCheckedCheckBox = selectedCheckButton.some(Boolean);
-				console.log(groupLabel);
+				console.log(hasCheckedCheckBox);
 				if (hasCheckedCheckBox) {
 					response = await axios.post(
 						"http://localhost:8000/api/two_venn_ps/",
@@ -271,7 +282,9 @@ function Venn() {
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
+					alert("PASOK");
 				} else {
+					alert("PASOK");
 					response = await axios.post(
 						"http://localhost:8000/api/three_venn_ps/",
 						{

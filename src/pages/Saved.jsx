@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import { Stack, Typography } from "@mui/material";
 import SavedPSCard from "../components/SavedPSCard";
 import axios from "axios";
+import LoadingScreen from "../components/LoadingScreen";
 
 function problemStatementReducer(state, action) {
 	switch (action.type) {
@@ -56,9 +57,11 @@ const Saved = () => {
 		};
 	}, []);
 
+	const [loading, setLoading] = useState(false);
+
 	useEffect(() => {
-		console.log("DID I COME IN HERE?");
 		const getSavedProblemStatement = async () => {
+			if (savedProblemStatement) setLoading((prev) => !prev);
 			try {
 				let token = localStorage.getItem("token");
 
@@ -85,6 +88,8 @@ const Saved = () => {
 				});
 			} catch (err) {
 				console.log("Error fetching saved problem statements:", err);
+			} finally {
+				setLoading((prev) => !prev);
 			}
 		};
 
@@ -172,56 +177,60 @@ const Saved = () => {
 
 	return (
 		<Box>
-			<Box sx={{ paddingTop: 4, paddingBottom: 5 }}>
-				<Typography variant="h2" textAlign={"center"}>
-					Saved List
-				</Typography>
-				<br></br>
-				<Box
-					sx={{
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-					}}>
-					<Typography variant="body1" textAlign={"center"} width={"1000px"}>
-						This pages stores all the problem statements that you want to save.
-						You Can edit with the show button. the section is divided in to two
-						categories. 2 Venn Diagram List and the 3 Venn Diagram List
+			{loading ? (
+				<LoadingScreen />
+			) : (
+				<Box sx={{ paddingTop: 4, paddingBottom: 5 }}>
+					<Typography variant="h2" textAlign={"center"}>
+						Saved List
 					</Typography>
-				</Box>
-				<Box sx={{ mx: 13 }}>
-					<Typography variant="h4" sx={{ marginTop: 10 }}>
-						2 Venn Diagram List
-					</Typography>
-					<Box sx={{ marginTop: 5, overflowY: "auto", maxHeight: "500px" }}>
-						{Object.values(savedProblemStatement.two_venn).map((item) => (
-							<SavedPSCard
-								key={item.id}
-								{...item}
-								setting="two_venn"
-								onDelete={handleDelete}
-								onEdit={handleEdit}
-							/>
-						))}
+					<br></br>
+					<Box
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+						}}>
+						<Typography variant="body1" textAlign={"center"} width={"1000px"}>
+							This pages stores all the problem statements that you want to
+							save. You Can edit with the show button. the section is divided in
+							to two categories. 2 Venn Diagram List and the 3 Venn Diagram List
+						</Typography>
+					</Box>
+					<Box sx={{ mx: 13 }}>
+						<Typography variant="h4" sx={{ marginTop: 10 }}>
+							2 Venn Diagram List
+						</Typography>
+						<Box sx={{ marginTop: 5, overflowY: "auto", maxHeight: "500px" }}>
+							{Object.values(savedProblemStatement.two_venn).map((item) => (
+								<SavedPSCard
+									key={item.id}
+									{...item}
+									setting={2}
+									onDelete={handleDelete}
+									onEdit={handleEdit}
+								/>
+							))}
+						</Box>
+					</Box>
+					<Box sx={{ mx: 13 }}>
+						<Typography variant="h4" sx={{ marginTop: 10 }}>
+							3 Venn Diagram List
+						</Typography>
+						<Box sx={{ marginTop: 5, overflowY: "auto", maxHeight: "500px" }}>
+							{Object.values(savedProblemStatement.three_venn).map((item) => (
+								<SavedPSCard
+									key={item.id}
+									{...item}
+									onDelete={handleDelete}
+									setting={3}
+									onEdit={handleEdit}
+								/>
+							))}
+						</Box>
 					</Box>
 				</Box>
-				<Box sx={{ mx: 13 }}>
-					<Typography variant="h4" sx={{ marginTop: 10 }}>
-						3 Venn Diagram List
-					</Typography>
-					<Box sx={{ marginTop: 5, overflowY: "auto", maxHeight: "500px" }}>
-						{Object.values(savedProblemStatement.three_venn).map((item) => (
-							<SavedPSCard
-								key={item.id}
-								{...item}
-								onDelete={() => handleDelete("three_venn", item.id)}
-								setting="three_venn"
-								onEdit={handleEdit}
-							/>
-						))}
-					</Box>
-				</Box>
-			</Box>
+			)}
 		</Box>
 	);
 };

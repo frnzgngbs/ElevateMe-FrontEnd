@@ -29,7 +29,16 @@ const PS_action = {
 function listProblemStatementReducer(state, action) {
 	switch (action.type) {
 		case PS_action.SET_PROBLEM_STATEMENT:
-			return [...action.statements];
+			const statements = action.statements;
+			const queuedStatements = action.queuedProblemStatement;
+			const filteredStatements = statements.filter(
+				(statement) =>
+					!queuedStatements.some(
+						(queuedStatement) =>
+							queuedStatement.statement === statement.statement
+					)
+			);
+			return [...filteredStatements];
 		case PS_action.REMOVE_PROBLEM_STATEMENT:
 			return state.filter(
 				(item) => item.statement !== action.payload.statement
@@ -186,9 +195,11 @@ const Ranking = () => {
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
+
 					listProblemStatementDispatch({
 						type: PS_action.SET_PROBLEM_STATEMENT,
 						statements: response.data,
+						queuedProblemStatement: queuedProblemStatement, // Pass the queuedProblemStatement state
 					});
 				}
 			} catch (err) {}
@@ -218,9 +229,7 @@ const Ranking = () => {
 		setSelectedValues((prev) => {
 			return [...prev, ...[[1, 1, 1, 1, 1, 1]]];
 		});
-		console.log(initialSelectedValues);
 		setTotalsPerRow((prev) => [...prev, ...initialTotalsPerRow]);
-		console.log(initialTotalsPerRow);
 	}, [queuedProblemStatement, listProblemStatement]);
 
 	const handleAddStatement = (id, venn, statement) => {
@@ -373,7 +382,10 @@ const Ranking = () => {
 							width: "100%",
 							borderRadius: 5,
 						}}>
-						<Grid container sx={{ justifyContent: "space-between" }}>
+						<Grid
+							container
+							sx={{ justifyContent: "space-between" }}
+							spacing={2}>
 							<Grid item xs={5}>
 								<Typography sx={{ textAlign: "center" }}>
 									Problem Statement
@@ -434,7 +446,10 @@ const Ranking = () => {
 										width: "100%",
 										borderRadius: 5,
 									}}>
-									<Grid container sx={{ justifyContent: "space-between" }}>
+									<Grid
+										container
+										sx={{ justifyContent: "space-between" }}
+										spacing={2}>
 										<Grid
 											item
 											xs={5}
@@ -443,7 +458,7 @@ const Ranking = () => {
 												alignItems: "center",
 												justifyContent: "center",
 											}}>
-											<Typography sx={{ textAlign: "center" }}>
+											<Typography variant="body1" align="center">
 												{statement}
 											</Typography>
 										</Grid>

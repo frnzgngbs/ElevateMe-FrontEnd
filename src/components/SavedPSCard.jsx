@@ -119,6 +119,7 @@ const SavedPSCard = ({ id, statement, venn, onDelete, setting, onEdit }) => {
 			</Card>
 			<VennSettingsHistoryPopup
 				venn={venn}
+				setting={setting}
 				open={openPopup}
 				onClose={() => setOpenPopup(false)}
 			/>
