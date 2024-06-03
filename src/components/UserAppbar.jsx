@@ -20,6 +20,7 @@ const UserAppbar = () => {
 		five_whys: "Five-Whys",
 		hmw: "How Might We",
 		logout: "Log Out",
+		report: "Report",
 	};
 
 	const handleClick = (event) => {

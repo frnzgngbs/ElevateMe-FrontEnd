@@ -16,7 +16,7 @@ import LoadingScreen from "../components/LoadingScreen";
 import HMWCard from "../components/HMWCard";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 import { Elevator } from "@mui/icons-material";
-import PrintIcon from '@mui/icons-material/Print';
+import PrintIcon from "@mui/icons-material/Print";
 
 const HMW = () => {
 	const [open, setOpen] = React.useState(false);
@@ -30,6 +30,7 @@ const HMW = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [openElevator, setOpenElevator] = useState(false);
+	const [saveHMWsForReport, setsaveHMWsForReport] = useState([]);
 
 	const generated_root =
 		location.state?.potential_root?.root ||
@@ -42,7 +43,9 @@ const HMW = () => {
 		return location.state?.list_of_whys || parsedWhys;
 	}, [location.state?.list_of_whys]);
 
-	const [elevatorPitch, setElevatorPitch] = useState([]);
+	const [elevatorPitch, setElevatorPitch] = useState(
+		JSON.parse(sessionStorage.getItem("elevatorPitch")) || []
+	);
 
 	const navigate = useNavigate();
 
@@ -92,10 +95,6 @@ const HMW = () => {
 		return setSelectedHMW((prev) => [...prev, ...hmw]);
 	};
 
-	// useEffect(() => {
-	// 	console.log(selectedHMW);
-	// }, [selectedHMW]);
-
 	// SAVING OF SESSION HERE
 	useEffect(() => {
 		sessionStorage.setItem("selected_hmws", JSON.stringify(selectedHMW));
@@ -115,11 +114,6 @@ const HMW = () => {
 		venn,
 	]);
 
-	useEffect(() => {
-		console.log(selectedHMW);
-		console.log(fiveHMW);
-	}, [selectedHMW]);
-
 	const generateElevatorPitch = async () => {
 		if (selectedHMW.length === 0) {
 			alert(
@@ -127,11 +121,7 @@ const HMW = () => {
 			);
 			return;
 		}
-
-		sessionStorage.setItem("root_hmws", JSON.stringify(selectedHMW));
-
 		setIsLoading((prev) => !prev);
-
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
@@ -149,17 +139,24 @@ const HMW = () => {
 			console.error(err);
 		} finally {
 			setIsLoading((prev) => !prev);
-			sessionStorage.setItem("report_hmws", JSON.stringify(selectedHMW));
+			sessionStorage.setItem("elevator_pitches", JSON.stringify(elevatorPitch));
 			sessionStorage.removeItem("selected_hmws");
+			setsaveHMWsForReport(selectedHMW);
+			sessionStorage.setItem("report_hmws", JSON.stringify(saveHMWsForReport));
+
 			setSelectedHMW([]);
 		}
 	};
 
 	const generateReport = () => {
-		sessionStorage.setItem("report_hmws", JSON.stringify(selectedHMW));
 		sessionStorage.setItem("report_whys", JSON.stringify(list_of_whys));
-		sessionStorage.setItem("report_statement_id", JSON.stringify(ps_id));
-
+		sessionStorage.setItem("report_statement_id", ps_id);
+		sessionStorage.setItem("report_hmws", JSON.stringify(saveHMWsForReport));
+		sessionStorage.setItem("report_generated_root", generated_root);
+		sessionStorage.setItem(
+			"report_elevator_pitch",
+			JSON.stringify(elevatorPitch)
+		);
 		navigate("/report", {
 			state: {
 				venn: venn,
@@ -167,7 +164,8 @@ const HMW = () => {
 				statement: selected_statement,
 				list_of_whys: list_of_whys,
 				potential_root: generated_root,
-				list_of_hmws: selectedHMW,
+				list_of_hmws: saveHMWsForReport,
+				elevator_pitch: elevatorPitch,
 			},
 		});
 	};
@@ -186,12 +184,12 @@ const HMW = () => {
 			) : (
 				<Box
 					sx={{
-					px: 12,
-					 py: 2,
-					 width: "90%",
-					margin: "auto",
-					maxWidth: "1000px",
-					 }}>
+						px: 12,
+						py: 2,
+						width: "90%",
+						margin: "auto",
+						maxWidth: "1000px",
+					}}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
 						How Might We
 					</Typography>
@@ -275,7 +273,6 @@ const HMW = () => {
 								Generate 5 HMW's
 							</Button>
 						</Box>
-
 					</Box>
 					<Box sx={{ mt: 5 }}>
 						<Typography variant="h4">Generated 5 HMW's</Typography>
@@ -286,25 +283,7 @@ const HMW = () => {
 									want to achieve), a SUBJECT (to be influenced or affected),
 									and a WHAT (outcome or what you like to achieve).
 								</Typography>
-								<Box sx={{ display: "flex", justifyContent: "flex-end", marginRight:"23px"   }}>
-									<Button
-										variant="contained"
-										sx={{
-											display: "flex",
-											alignItems: "center",
-											borderRadius: 3,
-											color: "#FFFB",
-											backgroundColor: "#888E8E",
-											hieght:"20px",
-											width:"80px",
-											padding: 1,
 
-										}}
-									>
-										<PrintIcon sx={{ mr: 1 }} />
-										Print
-									</Button>
-								</Box>
 								<Box sx={{ mb: 5 }}>
 									<Box component={"form"}>
 										{fiveHMW.map((value, index) => (
@@ -321,7 +300,32 @@ const HMW = () => {
 											sx={{
 												display: "flex",
 												justifyContent: "flex-end",
-												mt: 3,
+												marginRight: "23px",
+											}}>
+											<Button
+												variant="contained"
+												disabled={elevatorPitch.length === 0 ? true : false}
+												onClick={generateReport}
+												sx={{
+													mt: 2,
+													display: "flex",
+													alignItems: "center",
+													borderRadius: 3,
+													color: "#FFFB",
+													backgroundColor: "#888E8E",
+													hieght: "20px",
+													width: "80px",
+													padding: 1,
+												}}>
+												<PrintIcon sx={{ mr: 1 }} />
+												Print
+											</Button>
+										</Box>
+										<Box
+											sx={{
+												display: "flex",
+												justifyContent: "flex-end",
+												mt: 2,
 											}}>
 											<Box sx={{ mr: 2 }}>
 												<Button
@@ -351,17 +355,6 @@ const HMW = () => {
 												}}>
 												Generate Elevator's Pitch
 											</Button>
-											<Button
-												variant="contained"
-												onClick={generateReport}
-												sx={{
-													px: 2.3,
-													py: 1.2,
-													borderRadius: 5.6,
-													color: "#FFFB",
-												}}>
-												Report
-											</Button>
 										</Box>
 									</Box>
 								</Box>
@@ -371,7 +364,11 @@ const HMW = () => {
 				</Box>
 			)}
 			{openElevator && (
-				<ElevatorPitch data={elevatorPitch} setOpenElevator={setOpenElevator} />
+				<ElevatorPitch
+					data={elevatorPitch}
+					setElevatorPitch={setElevatorPitch}
+					setOpenElevator={setOpenElevator}
+				/>
 			)}
 			<RootProblemHistoryPopup
 				open={open}

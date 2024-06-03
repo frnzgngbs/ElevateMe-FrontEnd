@@ -6,6 +6,19 @@ import Venn3Paper from "../components/venndiagramreport/VennDiagramPaper3";
 import Venn2Paper from "../components/venndiagramreport/VennDiagramPaper2";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
+import { Card, CardContent, Grid } from "@mui/material";
+
+const pitch = [
+	"For",
+	"Who",
+	"We Provide",
+	"That",
+	"Unlike",
+	"Who",
+	"Our solution",
+	"That",
+];
 
 const Report = () => {
 	const location = useLocation();
@@ -21,6 +34,7 @@ const Report = () => {
 		potential_root: "",
 		whys: [],
 		hmws: [],
+		elevator_pitch: [],
 	});
 
 	useEffect(() => {
@@ -36,6 +50,7 @@ const Report = () => {
 		const ps_id =
 			location.state?.statement_id ||
 			sessionStorage.getItem("report_statement_id");
+		console.log(`ps_id: ${ps_id}`);
 		const whys =
 			location.state?.list_of_whys ||
 			JSON.parse(sessionStorage.getItem("report_whys")) ||
@@ -45,8 +60,25 @@ const Report = () => {
 			JSON.parse(sessionStorage.getItem("report_hmws")) ||
 			[];
 
-		console.log(ps_id);
+		const potential_root =
+			location.state?.potential_root ||
+			sessionStorage.getItem("report_generated_root") ||
+			"";
+
+		console.log(hmws);
+
+		const elevator_pitch =
+			location.state?.elevatoor_pitch ||
+			JSON.parse(sessionStorage.getItem("report_elevator_pitch")) ||
+			[];
+
+		// console.log(ps_id);
 		const retrieveData = async () => {
+			if (ps_id === null) {
+				console.log(ps_id);
+				alert("ASDAS");
+				return;
+			}
 			let response;
 			let token = localStorage.getItem("token");
 			if (venn.field3 === "") {
@@ -70,10 +102,14 @@ const Report = () => {
 				whys: [...whys],
 				hmws: [...hmws],
 				venn: { ...response.data.venn },
+				potential_root: potential_root,
 				statement: response.data.statement,
 			}));
 		};
-		retrieveData();
+		console.log(typeof ps_id);
+		if (ps_id !== "null") {
+			retrieveData();
+		}
 	}, []);
 
 	return (
@@ -136,7 +172,11 @@ const Report = () => {
 					minWidth: "700px",
 					maxWidth: "900px",
 				}}>
-				<Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+				<Typography
+					variant="h5"
+					color="#8E8E8E"
+					fontSize="18px"
+					sx={{ fontWeight: "bold", marginBottom: 0.5 }}>
 					Why Statements
 				</Typography>
 				<Box>
@@ -166,11 +206,6 @@ const Report = () => {
 					minWidth: "700px",
 					maxWidth: "900px",
 				}}>
-				<Typography
-					variant="h5"
-					sx={{ fontWeight: "bold", marginBottom: 2, marginTop: 5 }}>
-					How Might We
-				</Typography>
 				<Box
 					sx={{
 						marginTop: 10,
@@ -204,7 +239,6 @@ const Report = () => {
 						How might we statements
 					</Typography>
 				</Box>
-
 				<Box>
 					{Array.isArray(details.hmws) &&
 						details.hmws.length > 0 &&
@@ -222,6 +256,32 @@ const Report = () => {
 							</Paper>
 						))}
 				</Box>
+
+				{/* <ElevatorPitch data={details.elevator_pitch} /> */}
+
+				{/* Elevator pitch */}
+				{/* <Grid container spacing={2}>
+					{pitch.map((value, index) => (
+						<Grid item xs={12} sm={6} md={4} key={index}>
+							<Card>
+								<CardContent>
+									<Grid container spacing={2} alignItems="center">
+										<Grid item xs={3}>
+											<Typography variant="h6">{value}</Typography>
+										</Grid>
+										<Grid item xs={9}>
+											{details.elevator_pitch[index] && (
+												<Typography variant="body1">
+													{details.elevator_pitch[index]}
+												</Typography>
+											)}
+										</Grid>
+									</Grid>
+								</CardContent>
+							</Card>
+						</Grid>
+					))} */}
+				{/* </Grid> */}
 			</Box>
 		</Box>
 	);
