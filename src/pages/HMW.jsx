@@ -16,6 +16,7 @@ import LoadingScreen from "../components/LoadingScreen";
 import HMWCard from "../components/HMWCard";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 import { Elevator } from "@mui/icons-material";
+import PrintIcon from '@mui/icons-material/Print';
 
 const HMW = () => {
 	const [open, setOpen] = React.useState(false);
@@ -185,12 +186,12 @@ const HMW = () => {
 			) : (
 				<Box
 					sx={{
-						px: 12,
-						py: 2,
-						width: "90%",
-						margin: "auto",
-						maxWidth: "1000px",
-					}}>
+					px: 12,
+					 py: 2,
+					 width: "90%",
+					margin: "auto",
+					maxWidth: "1000px",
+					 }}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
 						How Might We
 					</Typography>
@@ -274,6 +275,7 @@ const HMW = () => {
 								Generate 5 HMW's
 							</Button>
 						</Box>
+
 					</Box>
 					<Box sx={{ mt: 5 }}>
 						<Typography variant="h4">Generated 5 HMW's</Typography>
@@ -284,7 +286,26 @@ const HMW = () => {
 									want to achieve), a SUBJECT (to be influenced or affected),
 									and a WHAT (outcome or what you like to achieve).
 								</Typography>
-								<Box sx={{ my: 5 }}>
+								<Box sx={{ display: "flex", justifyContent: "flex-end", marginRight:"23px"   }}>
+									<Button
+										variant="contained"
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											borderRadius: 3,
+											color: "#FFFB",
+											backgroundColor: "#888E8E",
+											hieght:"20px",
+											width:"80px",
+											padding: 1,
+
+										}}
+									>
+										<PrintIcon sx={{ mr: 1 }} />
+										Print
+									</Button>
+								</Box>
+								<Box sx={{ mb: 5 }}>
 									<Box component={"form"}>
 										{fiveHMW.map((value, index) => (
 											<Box sx={{ mt: 2 }}>

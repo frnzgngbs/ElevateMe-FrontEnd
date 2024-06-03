@@ -18,6 +18,7 @@ const Report = () => {
 			filter: "",
 		},
 		statement: "",
+		potential_root: "",
 		whys: [],
 		hmws: [],
 	});
@@ -125,6 +126,7 @@ const Report = () => {
 			</Box>
 
 			{/* Why Statements */}
+
 			<Box
 				sx={{
 					marginTop: 10,
@@ -167,26 +169,58 @@ const Report = () => {
 				<Typography
 					variant="h5"
 					sx={{ fontWeight: "bold", marginBottom: 2, marginTop: 5 }}>
-					How Might We Statements
+					How Might We
 				</Typography>
+				<Box
+					sx={{
+						marginTop: 10,
+						marginBottom: 10,
+						margin: "auto",
+						minWidth: "900px",
+						maxWidth: "900px",
+					}}>
+					<Typography
+						variant="h5"
+						color="#8E8E8E"
+						fontSize="18px"
+						sx={{ fontWeight: "bold", marginBottom: 0.5 }}>
+						Potential Root Problem
+					</Typography>
+					<Paper
+						variant="outlined"
+						sx={{
+							padding: 2,
+							borderRadius: 4,
+							borderColor: "#8e8e8e",
+							marginBottom: 2,
+						}}>
+						<Typography variant="body1">{details.potential_root}</Typography>
+					</Paper>
+					<Typography
+						variant="h5"
+						color="#8E8E8E"
+						fontSize="18px"
+						sx={{ fontWeight: "bold", marginBottom: 2 }}>
+						How might we statements
+					</Typography>
+				</Box>
+
 				<Box>
-					<Box>
-						{Array.isArray(details.hmws) &&
-							details.hmws.length > 0 &&
-							details.hmws.map((statement, index) => (
-								<Paper
-									key={index}
-									elevation={4}
-									sx={{
-										padding: 2,
-										marginBottom: 2,
-										borderRadius: 4,
-										minWidth: "600px",
-									}}>
-									<Typography variant="body1">{statement}</Typography>
-								</Paper>
-							))}
-					</Box>
+					{Array.isArray(details.hmws) &&
+						details.hmws.length > 0 &&
+						details.hmws.map((statement, index) => (
+							<Paper
+								key={index}
+								elevation={4}
+								sx={{
+									padding: 2,
+									marginBottom: 2,
+									borderRadius: 4,
+									minWidth: "600px",
+								}}>
+								<Typography variant="body1">{statement}</Typography>
+							</Paper>
+						))}
 				</Box>
 			</Box>
 		</Box>
