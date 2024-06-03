@@ -11,27 +11,44 @@ const Report = () => {
 	const location = useLocation();
 
 	const [details, setDetails] = useState({
-		venn: {},
+		venn: {
+			field1: "",
+			field2: "",
+			field3: "",
+			filter: "",
+		},
 		statement: "",
 		whys: [],
 		hmws: [],
 	});
 
 	useEffect(() => {
-		const venn = location.state?.venn;
-		const ps_id = location.state?.statement_id;
+		// console.log(location.state?.list_of_hmws);
+		const venn = location.state?.venn ||
+			sessionStorage.getItem("hmw_venn") || {
+				field1: "",
+				field2: "",
+				field3: "",
+				filter: "",
+			};
+		console.log(venn);
+		const ps_id =
+			location.state?.statement_id ||
+			sessionStorage.getItem("report_statement_id");
 		const whys =
 			location.state?.list_of_whys ||
-			JSON.parse(sessionStorage.getItem("root_five_whys"));
+			JSON.parse(sessionStorage.getItem("report_whys")) ||
+			[];
 		const hmws =
 			location.state?.list_of_hmws ||
-			JSON.parse(sessionStorage.getItem("root_hmws"));
+			JSON.parse(sessionStorage.getItem("report_hmws")) ||
+			[];
 
 		console.log(ps_id);
 		const retrieveData = async () => {
 			let response;
 			let token = localStorage.getItem("token");
-			if (venn.field3 === undefined) {
+			if (venn.field3 === "") {
 				response = await axios.get(
 					`http://localhost:8000/api/two_venn_ps/${ps_id}/`,
 					{
@@ -39,7 +56,6 @@ const Report = () => {
 					}
 				);
 			} else {
-				let token = localStorage.getItem("token");
 				response = await axios.get(
 					`http://localhost:8000/api/three_venn_ps/${ps_id}/`,
 					{
@@ -47,6 +63,7 @@ const Report = () => {
 					}
 				);
 			}
+			console.log(response.data.venn);
 			setDetails((prev) => ({
 				...prev,
 				whys: [...whys],
@@ -88,7 +105,7 @@ const Report = () => {
 						justifyContent="center"
 						alignItems="center"
 						height="100%">
-						{details.venn && details.venn.field3 !== undefined ? (
+						{details.venn && details.venn?.field3 !== "" ? (
 							<Venn3Paper venn={details.venn} />
 						) : (
 							<Venn2Paper venn={details.venn || { field1: "", field2: "" }} />
@@ -154,9 +171,9 @@ const Report = () => {
 				</Typography>
 				<Box>
 					<Box>
-						{Array.isArray(details.hmw) &&
-							details.hmw.length > 0 &&
-							details.hmw.map((statement, index) => (
+						{Array.isArray(details.hmws) &&
+							details.hmws.length > 0 &&
+							details.hmws.map((statement, index) => (
 								<Paper
 									key={index}
 									elevation={4}

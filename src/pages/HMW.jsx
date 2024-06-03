@@ -58,9 +58,6 @@ const HMW = () => {
 	const handleClose = () => setOpen(false);
 
 	const generateFiveHMW = async () => {
-		if (selectedHMW.lengt === 0) {
-			alert("");
-		}
 		setIsLoading((prev) => !prev);
 		try {
 			let token = localStorage.getItem("token");
@@ -151,12 +148,17 @@ const HMW = () => {
 			console.error(err);
 		} finally {
 			setIsLoading((prev) => !prev);
+			sessionStorage.setItem("report_hmws", JSON.stringify(selectedHMW));
 			sessionStorage.removeItem("selected_hmws");
 			setSelectedHMW([]);
 		}
 	};
 
 	const generateReport = () => {
+		sessionStorage.setItem("report_hmws", JSON.stringify(selectedHMW));
+		sessionStorage.setItem("report_whys", JSON.stringify(list_of_whys));
+		sessionStorage.setItem("report_statement_id", JSON.stringify(ps_id));
+
 		navigate("/report", {
 			state: {
 				venn: venn,
@@ -243,7 +245,9 @@ const HMW = () => {
 											alignItems: "center",
 											justifyContent: "center",
 										}}>
-										<Typography variant="body2">{generated_root}</Typography>
+										<Typography variant="body2">
+											{generated_root === "null" ? "" : generated_root}
+										</Typography>
 									</CardContent>
 									<CardActions>
 										<Button
@@ -259,6 +263,7 @@ const HMW = () => {
 						<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
 							<Button
 								variant="contained"
+								disabled={generated_root === "null" ? true : false}
 								onClick={generateFiveHMW}
 								sx={{
 									px: 2.3,
@@ -324,6 +329,17 @@ const HMW = () => {
 													color: "#FFFB",
 												}}>
 												Generate Elevator's Pitch
+											</Button>
+											<Button
+												variant="contained"
+												onClick={generateReport}
+												sx={{
+													px: 2.3,
+													py: 1.2,
+													borderRadius: 5.6,
+													color: "#FFFB",
+												}}>
+												Report
 											</Button>
 										</Box>
 									</Box>

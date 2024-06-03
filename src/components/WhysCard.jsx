@@ -61,6 +61,8 @@ const WhysCard = ({ value, addWhysToList, setFiveWhys }) => {
 						variant="body1"
 						sx={{
 							mt: 1,
+							minWidth: "100px",
+							minHeight: "20px",
 							color: "#8e8e8e",
 							cursor: "pointer",
 							ml: 2,
