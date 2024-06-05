@@ -152,7 +152,7 @@ const Saved = () => {
 	};
 
 	const handleDelete = async (setting, id) => {
-		if (setting === "two_venn") {
+		if (setting === 2) {
 			try {
 				let token = localStorage.getItem("token");
 				await axios.delete(`http://localhost:8000/api/two_venn_ps/${id}/`, {
@@ -162,7 +162,7 @@ const Saved = () => {
 			} catch (err) {
 				console.log("Error deleting problem statement:", err);
 			}
-		} else if (setting === "three_venn") {
+		} else if (setting === 3) {
 			try {
 				let token = localStorage.getItem("token");
 				await axios.delete(`http://localhost:8000/api/three_venn_ps/${id}/`, {

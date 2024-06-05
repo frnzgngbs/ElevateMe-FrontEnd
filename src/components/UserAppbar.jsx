@@ -19,8 +19,8 @@ const UserAppbar = () => {
 		rank: "Ranking",
 		five_whys: "Five-Whys",
 		hmw: "How Might We",
-		report: "Report",
 		logout: "Log Out",
+		report: "Report",
 	};
 
 	const handleClick = (event) => {
