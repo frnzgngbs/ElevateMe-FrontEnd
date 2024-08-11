@@ -162,11 +162,8 @@ const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
 									</Typography>
 									<InputBase
 										name="field4"
-										value={
-											inputValues.filter
-												? inputValues.filter
-												: "Write your desired filter here..."
-										}
+										disabled
+										value={inputValues.filter ? inputValues.filter : ""}
 										onChange={handleInputChange}
 										multiline
 										minRows={5}

@@ -32,9 +32,9 @@ function problemStatementReducer(state, action) {
 			return { ...state, two_venn: updatedTwoVenn };
 		case "UPDATE_THREE_VENN_STATEMENT":
 			const updatedThreeVen = { ...state.three_venn };
-			updatedThreeVen[action.id] = {
-				...updatedThreeVen[action.id],
-				statement: action.statement,
+			updatedThreeVen[action.payload.id] = {
+				...updatedThreeVen[action.payload.id],
+				statement: action.payload.statement,
 			};
 			return { ...state, three_venn: updatedThreeVen };
 

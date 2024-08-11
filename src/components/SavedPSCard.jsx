@@ -47,7 +47,7 @@ const SavedPSCard = ({ id, statement, venn, onDelete, setting, onEdit }) => {
 							<IconButton onClick={setTextFieldToEditable}>
 								{/* 
 							TODO: Add this later on the icon button functionality
-							onClick={() => setIsEditable((prev) => !prev)}
+							onClick={() => setIsEditable((prev) X=> !prev)}
 							*/}
 								<EditIcon />
 							</IconButton>

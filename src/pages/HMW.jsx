@@ -157,7 +157,7 @@ const HMW = () => {
 			"report_elevator_pitch",
 			JSON.stringify(elevatorPitch)
 		);
-		navigate("/report", {
+		window.open("/report", {
 			state: {
 				venn: venn,
 				statement_id: ps_id,
@@ -231,10 +231,7 @@ const HMW = () => {
 										justifyContent: "space-between",
 										border: "1px solid #8e8e8e",
 										borderRadius: 4,
-										maxWidth: "800px",
-										height: "80px",
 										boxShadow: "none",
-										width: "95%",
 										margin: "auto",
 									}}>
 									<CardContent
