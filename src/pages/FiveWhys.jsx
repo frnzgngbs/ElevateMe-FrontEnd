@@ -203,11 +203,7 @@ const FiveWhys = () => {
 												justifyContent: "space-between",
 												border: "1px solid #8e8e8e",
 												borderRadius: 4,
-												maxWidth: "800px",
-												height: "80px",
 												boxShadow: "none",
-
-												width: "95%",
 												margin: "auto",
 											}}>
 											<CardContent

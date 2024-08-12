@@ -131,8 +131,8 @@ const router = createBrowserRouter(
 					<Route path="five_whys" element={<FiveWhys />} />
 					<Route path="hmw" element={<HMW />} />
 					<Route path="elevator" element={<ElevatorPitch />} />
-					<Route path="report" element={<Report />} />
 				</Route>
+				<Route path="report" element={<Report />} />
 			</Route>
 			<Route path="*" element={<PageNotFound />} />
 		</Route>

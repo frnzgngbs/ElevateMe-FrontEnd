@@ -19,6 +19,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../components/LoadingScreen";
 
 const PS_action = {
 	SET_PROBLEM_STATEMENT: "SET_PROBLEM_STATEMENT",
@@ -120,15 +121,11 @@ const Ranking = () => {
 
 	const [queuedProblemStatement, queuedProblemStatementDispatch] = useReducer(
 		queuedProblemStatementReducer,
-		JSON.parse(sessionStorage.getItem("ranking_queued_list_statements")) || []
+		[]
 	);
 
 	console.log(queuedProblemStatement);
-	const [selectedButton, setSelectedButton] = useState(
-		sessionStorage.getItem("ranking_selected_button") !== null
-			? sessionStorage.getItem("ranking_selected_button")
-			: 3
-	);
+	const [selectedButton, setSelectedButton] = useState(3);
 	const navigate = useNavigate();
 
 	const [selectedValues, setSelectedValues] = useState(
@@ -162,6 +159,7 @@ const Ranking = () => {
 			JSON.stringify(totalsPerRow)
 		);
 	}, [selectedValues, totalsPerRow]);
+
 	const getRanks = (totals) => {
 		const indexedTotals = totals.map((total, index) => ({ total, index }));
 		indexedTotals.sort((a, b) => b.total - a.total || a.index - b.index);
@@ -176,6 +174,7 @@ const Ranking = () => {
 
 	useEffect(() => {
 		const getSavedPS = async () => {
+			setIsLoading(true);
 			try {
 				if (selectedButton === 2) {
 					let token = localStorage.getItem("token");
@@ -205,7 +204,10 @@ const Ranking = () => {
 						queuedProblemStatement: queuedProblemStatement, // Pass the queuedProblemStatement state
 					});
 				}
-			} catch (err) {}
+			} catch (err) {
+			} finally {
+				setIsLoading(false);
+			}
 		};
 
 		getSavedPS();
@@ -304,6 +306,7 @@ const Ranking = () => {
 		});
 	};
 
+	const [isLoading, setIsLoading] = useState(false);
 	return (
 		<Box pb={5}>
 			<Box
@@ -344,15 +347,23 @@ const Ranking = () => {
 						mb: 4,
 						p: 1.3,
 					}}>
-					{listProblemStatement.map((item, id) => (
-						<Box key={id} sx={{ mb: 1 }}>
-							<PSListCard
-								key={id}
-								{...item}
-								addStatement={handleAddStatement}
-							/>
-						</Box>
-					))}
+					{isLoading ? (
+						<>
+							<LoadingScreen />
+						</>
+					) : (
+						<>
+							{listProblemStatement.map((item, id) => (
+								<Box key={id} sx={{ mb: 1 }}>
+									<PSListCard
+										key={id}
+										{...item}
+										addStatement={handleAddStatement}
+									/>
+								</Box>
+							))}
+						</>
+					)}
 				</Box>
 			</Box>
 

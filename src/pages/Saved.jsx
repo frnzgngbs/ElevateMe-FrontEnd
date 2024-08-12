@@ -32,9 +32,9 @@ function problemStatementReducer(state, action) {
 			return { ...state, two_venn: updatedTwoVenn };
 		case "UPDATE_THREE_VENN_STATEMENT":
 			const updatedThreeVen = { ...state.three_venn };
-			updatedThreeVen[action.id] = {
-				...updatedThreeVen[action.id],
-				statement: action.statement,
+			updatedThreeVen[action.payload.id] = {
+				...updatedThreeVen[action.payload.id],
+				statement: action.payload.statement,
 			};
 			return { ...state, three_venn: updatedThreeVen };
 
@@ -106,8 +106,8 @@ const Saved = () => {
 
 	const handleEdit = async (setting, id, statement) => {
 		let token = localStorage.getItem("token");
-
-		if (setting === "two_venn") {
+		alert("CLICKED HERE");
+		if (setting === 2) {
 			try {
 				let response = await axios.put(
 					`http://localhost:8000/api/two_venn_ps/${id}/`,
@@ -126,7 +126,7 @@ const Saved = () => {
 					},
 				});
 			} catch (error) {}
-		} else if (setting === "three_venn") {
+		} else if (setting === 3) {
 			try {
 				let response = await axios.put(
 					`http://localhost:8000/api/three_venn_ps/${id}/`,
