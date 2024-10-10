@@ -62,7 +62,7 @@ const Register = () => {
 
 				if (data.status === 400) {
 					if (data.username) {
-						alert(data.username[0]);
+						// alert(data.username[0]);
 						setUserData((prev) => ({
 							...prev,
 							username: "",
@@ -72,7 +72,7 @@ const Register = () => {
 							...prev,
 							email: "",
 						}));
-						alert(data.email[0]);
+						// alert(data.email[0]);
 					}
 				}
 			}

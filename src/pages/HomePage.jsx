@@ -1,32 +1,29 @@
 import {
 	Box,
 	Button,
-	ButtonBase,
-	Card,
-	CardActionArea,
-	CardContent,
-	CardMedia,
 	Grid,
 	Typography,
 	useTheme,
-} from "@mui/material";
 
+
+
+
+	
+} from "@mui/material";
 import venn from "../res/newHomepageIcons/vennicon.png";
 import save from "../res/newHomepageIcons/saveicon.png";
 import list from "../res/newHomepageIcons/rankingicon.png";
 import five_whys from "../res/newHomepageIcons/whysicon.png";
 import HMW from "../res/newHomepageIcons/hmwicon.png";
 import elevator from "../res/newHomepageIcons/elevator.png";
-import notebook from "../res/techno-book.svg";
-import { useNavigate } from "react-router-dom";
 import Bookpng from "../res/book.png";
 import GridBackground from "../res/gridbackground.png";
 import HomePageCards from "../components/HomePageCards";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
 	const navigate = useNavigate();
-	const [about, setAbout] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 	const [buttonScale, setButtonScale] = useState(1);
 
@@ -76,27 +73,17 @@ const HomePage = () => {
 	var theme = useTheme();
 
 	useEffect(() => {
-		if (about) {
-			setButtonScale(0.8);
-			const timeout = setTimeout(() => {
-				setIsVisible(true);
-				setButtonScale(1);
-			}, 500);
+		setButtonScale(0.8);
+		const timeout = setTimeout(() => {
+			setIsVisible(true);
+			setButtonScale(1);
+		}, 500);
 
-			return () => clearTimeout(timeout);
-		} else {
-			setIsVisible(false);
-			setButtonScale(0.8);
-			setTimeout(() => {
-				setButtonScale(1);
-			}, 500);
-		}
-	}, [about]);
+		return () => clearTimeout(timeout);
+	}, []);
+
 	return (
 		<Box>
-			{/* put background  image here: gridbackgroundpng , make sure it is behind*/}
-
-			{/*  */}
 			<Grid
 				container
 				spacing={6}
@@ -108,7 +95,6 @@ const HomePage = () => {
 					backgroundRepeat: "no-repeat",
 					marginBottom: "50px",
 				}}>
-				{/* Adjusted left div size and font sizes */}
 				<Grid item xs={10} md={5} pr={5}>
 					<div>
 						<Typography variant="h1" fontSize="50px">
@@ -130,18 +116,17 @@ const HomePage = () => {
 										ElevateMe is an app that generates problem statements. It
 										follows the Technopreneurship Workbook. A group of CIT-U
 										students made this app to automate the current and long
-										process of technopreneurship workbook.
+										process of the technopreneurship workbook.
 									</Typography>
 									<br />
 									<Typography
 										variant="body1"
 										textAlign={"justify"}
 										fontSize="14px">
-										Its goal is to shorten the time lorem ipsum setrsa nerates
+										Its goal is to shorten the time it takes to generate
 										problem statements. It follows the Technopreneurship
 										Workbook. A group of CIT-U students made this app to
-										automate the current and long process of technopreneurship
-										workbook.
+										automate the long process of the technopreneurship workbook.
 									</Typography>
 								</>
 							)}
@@ -154,7 +139,7 @@ const HomePage = () => {
 								transition: "transform 0.3s ease-in-out",
 							}}>
 							<Button
-								onClick={() => setAbout((prev) => !prev)}
+								onClick={() => navigate("/roompage", { replace: true })}
 								variant="contained"
 								sx={{ py: 1, px: 5, borderRadius: 4 }}>
 								About
@@ -162,7 +147,7 @@ const HomePage = () => {
 						</div>
 					</div>
 				</Grid>
-				{/* Right div remains unchanged */}
+
 				<Grid item xs={10} md={5}>
 					<Box sx={{ display: "flex", justifyContent: "flex-end" }}>
 						<img
@@ -176,6 +161,7 @@ const HomePage = () => {
 					</Box>
 				</Grid>
 			</Grid>
+
 			<Box
 				sx={{
 					display: "flex",
@@ -194,8 +180,8 @@ const HomePage = () => {
 					fontSize="14px"
 					marginBottom={"50px"}>
 					Choose from the features below. This is a sequential process but you
-					can always navigate to different cards if you want for easire access.
-					Each cards corresponds to a specific page.
+					can always navigate to different cards if you want for easier access.
+					Each card corresponds to a specific page.
 				</Typography>
 				<Grid container spacing={2} sx={{ marginBottom: 8 }}>
 					{Object.entries(cards).map(([key, card]) => (

@@ -106,7 +106,6 @@ const Saved = () => {
 
 	const handleEdit = async (setting, id, statement) => {
 		let token = localStorage.getItem("token");
-		alert("CLICKED HERE");
 		if (setting === 2) {
 			try {
 				let response = await axios.put(
