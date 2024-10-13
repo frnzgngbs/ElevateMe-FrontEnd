@@ -1,21 +1,21 @@
-// components/RoomCard.js
+
 
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
-import SampleImage from "../res/sampleImage.jpg"; // Replace with actual image
+import SampleImage from "../res/sampleImage.jpg"; 
 
 const RoomCards = ({ title }) => {
 	return (
 		<Card
 			sx={{
-				maxWidth: 300, // Fixed card width
-				borderRadius: "16px", // More curve around the corners
-				boxShadow: 3, // Adds a subtle shadow
-				overflow: "hidden", // Ensures image and content are properly clipped
+				maxWidth: 300, 
+				borderRadius: "16px", 
+				boxShadow: 3, 
+				overflow: "hidden", 
 			}}>
 			<CardMedia
 				component="img"
-				height="160" // Adjusted height for a slightly bigger image
-				image={SampleImage} // Replace with the actual image path
+				height="160" 
+				image={SampleImage} 
 				alt={title}
 			/>
 			<CardContent>
