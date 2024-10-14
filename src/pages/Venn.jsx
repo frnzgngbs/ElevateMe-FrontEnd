@@ -208,6 +208,7 @@ function Venn() {
 					alert("Cannot generate when other fields are empty.");
 					return;
 				}
+				// alert("HERE");
 				let two_response = await axios.post(
 					"http://localhost:8000/api/ai/two_venn/",
 					{
@@ -282,7 +283,9 @@ function Venn() {
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
+					alert("PASOK");
 				} else {
+					alert("PASOK");
 					response = await axios.post(
 						"http://localhost:8000/api/three_venn_ps/",
 						{

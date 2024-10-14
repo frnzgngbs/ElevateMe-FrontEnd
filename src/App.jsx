@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Roompage from "./pages/Roompage";
 import Home from "./pages/HomePage";
 import Saved from "./pages/Saved";
 import UserAppbar from "./components/UserAppbar";
@@ -132,7 +131,6 @@ const router = createBrowserRouter(
 					<Route path="five_whys" element={<FiveWhys />} />
 					<Route path="hmw" element={<HMW />} />
 					<Route path="elevator" element={<ElevatorPitch />} />
-					<Route path="roompage" element={<Roompage/>} />
 				</Route>
 				<Route path="report" element={<Report />} />
 			</Route>
