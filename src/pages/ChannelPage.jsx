@@ -1,8 +1,8 @@
-// pages/ChannelPage.js
 import { Box, Button, Grid, Typography } from "@mui/material";
 import PostCard from "../components/PostCard";
 import GridBackground from "../res/gridbackground.png";
 import { useState } from "react";
+import RankingSection from "../components/RankingSection"; // Import the RankingSection
 
 const ChannelPage = () => {
     const [posts, setPosts] = useState([
@@ -24,58 +24,90 @@ const ChannelPage = () => {
     ]);
 
     return (
-        <Box
-            sx={{
-                minHeight: "100vh",
-                backgroundImage: `url(${GridBackground})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-                padding: 4,
-            }}
-        >
-            <Typography variant="h3" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-                Channel - 1
-            </Typography>
-
-            <Grid
-                container
-                spacing={2}
+        <>
+            <Box
                 sx={{
-                    maxWidth: "900px",
-                    margin: "0 auto",
+                    minHeight: "100vh",
+                    backgroundImage: `url(${GridBackground})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textAlign: "center",
+                    padding: 4,
                 }}
             >
-                <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography variant="h5" sx={{ mb: 2 }}>
-                        File Proposals
-                    </Typography>
-                </Grid>
-                <Grid item xs={6} sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button
-                        variant="contained"
-                        sx={{
-                            backgroundColor: "#186F65",
-                            color: "white",
-                            borderRadius: 4,
-                            mb: 2,
-                        }}
-                    >
-                        Share File
-                    </Button>
-                </Grid>
+                <Typography variant="h2" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+                    Channel - 1
+                </Typography>
 
-                {posts.map((post) => (
-                    <Grid item xs={12} key={post.id}>
-                        <PostCard author={post.author} content={post.content} />
+                <Grid
+                    container
+                    spacing={2}
+                    sx={{
+                        maxWidth: "900px",
+                        margin: "0 auto",
+                    }}
+                >
+                    <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
+                        <Typography variant="h5" sx={{ mb: 2 }}>
+                            File Proposals
+                        </Typography>
                     </Grid>
-                ))}
-            </Grid>
-        </Box>
+                    <Grid item xs={6} sx={{ display: "flex", justifyContent: "flex-end" }}>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: "#186F65",
+                                color: "white",
+                                borderRadius: 4,
+                                mb: 2,
+                            }}
+                        >
+                            Share File
+                        </Button>
+                    </Grid>
+
+                    {posts.map((post) => (
+                        <Grid item xs={12} key={post.id}>
+                            <PostCard author={post.author} content={post.content} />
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
+
+            {/* Wrapping the RankingSection with a Box that has maxWidth of 800px */}
+            <Box
+                sx={{
+                    maxWidth: "1000px",
+                    margin: "0 auto",
+                    padding: 4,
+                    textAlign: "center",
+                }}
+            >
+                {/* Insert a title here "Ranking" */}
+                <Typography variant="h3" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+                    Ranking
+                </Typography>
+                
+     
+<RankingSection
+    teamRankings={[
+        { name: "Franz Genegobis", points: 27, content: "Problem Statement: ...", profilePicture: "url-to-image-1" },
+        { name: "John Cadungog", points: 25, content: "Problem Statement: ...", profilePicture: "url-to-image-2" },
+        { name: "Erwin Lambujon", points: 23, content: "Problem Statement: ...", profilePicture: "url-to-image-3" },
+    ]}
+    teacherRankings={[
+        { name: "Erwin Lambujon", points: 30, content: "Problem Statement: ...", profilePicture: "url-to-image-4" },
+        { name: "John Cadungog", points: 25, content: "Problem Statement: ...", profilePicture: "url-to-image-5" },
+        { name: "Franz Genegobis", points: 22, content: "Problem Statement: ...", profilePicture: "url-to-image-6" },
+    ]}
+/>
+
+            </Box>
+        </>
     );
 };
 
