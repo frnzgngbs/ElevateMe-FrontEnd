@@ -20,6 +20,7 @@ import Venn from "./pages/Venn";
 import FiveWhys from "./pages/FiveWhys";
 import HMW from "./pages/HMW";
 import AppRoute from "./components/AppRoute";
+import ChannelPage from "./pages/ChannelPage";
 import LoadingScreen from "./components/LoadingScreen";
 import Ranking from "./pages/Ranking";
 import Report from "./pages/Report";
@@ -133,6 +134,7 @@ const router = createBrowserRouter(
 					<Route path="hmw" element={<HMW />} />
 					<Route path="elevator" element={<ElevatorPitch />} />
 					<Route path="roompage" element={<RoomPage />} />
+					<Route path="channel" element={<ChannelPage />} />
 				</Route>
 				<Route path="report" element={<Report />} />
 			</Route>

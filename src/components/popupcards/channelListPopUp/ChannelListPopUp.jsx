@@ -1,8 +1,17 @@
+// components/popupcards/channelListPopUp/ChannelListPopUp.js
 import { Box, Button, Grid, Modal, Typography } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import ChannelCard from "./ChannelCard";
+import ChannelCard from "../channelListPopUp/ChannelCard";
+import { useNavigate } from "react-router-dom";
 
 const ChannelListPopup = ({ open, onClose, channels, onAddChannel }) => {
+    const navigate = useNavigate();
+
+    const handleChannelClick = (channelId) => {
+        navigate(`/channel/${channelId}`);
+        onClose(); // Close the popup after navigation
+    };
+
     return (
         <Modal
             open={open}
@@ -29,7 +38,10 @@ const ChannelListPopup = ({ open, onClose, channels, onAddChannel }) => {
                 <Grid container spacing={2} justifyContent="flex-start">
                     {channels.map((channel, index) => (
                         <Grid item xs={12} key={index}>
-                            <ChannelCard title={channel.title} />
+                            <ChannelCard
+                                title={channel.title}
+                                onClick={() => handleChannelClick(channel.title)}
+                            />
                         </Grid>
                     ))}
                 </Grid>

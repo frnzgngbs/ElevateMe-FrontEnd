@@ -7,6 +7,7 @@ import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelL
 import { useState } from "react";
 
 const RoomPage = () => {
+	//samples
     const [rooms, setRooms] = useState([
         { id: 1, title: "Room 1" },
         { id: 2, title: "Room 2" },
@@ -17,10 +18,12 @@ const RoomPage = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isChannelListOpen, setIsChannelListOpen] = useState(false);
     const [selectedRoom, setSelectedRoom] = useState(null);
-    const [channels, setChannels] = useState([
-        { title: "Channel 1" },
-        { title: "Channel 2" },
-    ]);
+    const [roomChannels, setRoomChannels] = useState({
+        1: [{ title: "Channel 1" }, { title: "Channel 2" }],
+        2: [{ title: "Channel 1" }],
+        3: [{ title: "Channel 1" }, { title: "Channel 2" }, { title: "Channel 3" }],
+        4: [],
+    });
 
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
@@ -42,10 +45,13 @@ const RoomPage = () => {
     const handleCloseChannelList = () => {
         setIsChannelListOpen(false);
     };
-//fill sample...
-    const handleAddChannel = () => {
-        const newChannel = { title: `Channel ${channels.length + 1}` };
-        setChannels((prevChannels) => [...prevChannels, newChannel]);
+
+    const handleAddChannel = (roomId) => {
+        const newChannel = { title: `Channel ${roomChannels[roomId]?.length + 1 || 1}` };
+        setRoomChannels((prevChannels) => ({
+            ...prevChannels,
+            [roomId]: [...(prevChannels[roomId] || []), newChannel],
+        }));
     };
 
     return (
@@ -127,8 +133,8 @@ const RoomPage = () => {
             <ChannelListPopup
                 open={isChannelListOpen}
                 onClose={handleCloseChannelList}
-                channels={channels}
-                onAddChannel={handleAddChannel}
+                channels={roomChannels[selectedRoom?.id] || []}
+                onAddChannel={() => handleAddChannel(selectedRoom?.id)}
             />
         </Box>
     );
