@@ -1,19 +1,17 @@
-// components/PostCard.js
 import { Box, Card, CardContent, Typography, Button, Avatar, Grid } from "@mui/material";
 import { useState } from "react";
-import CommentDialog from "../components/popupcards/commentpopup/CommentDialog";
+import VotingDialog from "../components/popupcards/votingpopup/VotingDialog"; // Import the VotingDialog component
 
 const PostCard = ({ author, content }) => {
-    const [open, setOpen] = useState(false);
+    const [openVoteDialog, setOpenVoteDialog] = useState(false); // State to manage the voting dialog
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleVoteDialogOpen = () => {
+        setOpenVoteDialog(true);
+    };
 
-    // Example comments data, you can replace this with your actual data
-    const comments = [
-        { author: "Franz Genegobis", content: "Change the Fields, overall this is good, Also the problem statement you can improve." },
-        { author: "John Cadungog", content: "Change the Fields, overall this is good, Also the problem statement you can improve." },
-    ];
+    const handleVoteDialogClose = () => {
+        setOpenVoteDialog(false);
+    };
 
     return (
         <>
@@ -32,7 +30,7 @@ const PostCard = ({ author, content }) => {
 
                         {/* Second Row: Problem Statement */}
                         <Grid item xs={12}>
-                            <Typography variant="body2" color="text.secondary" textAlign={"left"}>
+                            <Typography variant="body2" color="text.secondary">
                                 {content}
                             </Typography>
                         </Grid>
@@ -40,8 +38,8 @@ const PostCard = ({ author, content }) => {
                         {/* Third Row: Comment, Vote, and View File Button */}
                         <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <Box sx={{ display: "flex", gap: 2 }}>
-                                <Button variant="text" onClick={handleOpen}>Comment</Button>
-                                <Button variant="text">Vote</Button>
+                                <Button variant="text">Comment</Button>
+                                <Button variant="text" onClick={handleVoteDialogOpen}>Vote</Button>
                             </Box>
                             <Button
                                 variant="contained"
@@ -54,8 +52,8 @@ const PostCard = ({ author, content }) => {
                 </CardContent>
             </Card>
 
-            {/* Comment Dialog */}
-            <CommentDialog open={open} onClose={handleClose} comments={comments} />
+            {/* Voting Dialog */}
+            <VotingDialog open={openVoteDialog} onClose={handleVoteDialogClose} />
         </>
     );
 };
