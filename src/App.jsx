@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/HomePage";
 import Saved from "./pages/Saved";
+import RoomPage from "./pages/Roompage";
 import UserAppbar from "./components/UserAppbar";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import createTheme from "@mui/material/styles/createTheme";
@@ -131,6 +132,7 @@ const router = createBrowserRouter(
 					<Route path="five_whys" element={<FiveWhys />} />
 					<Route path="hmw" element={<HMW />} />
 					<Route path="elevator" element={<ElevatorPitch />} />
+					<Route path="roompage" element={<RoomPage />} />
 				</Route>
 				<Route path="report" element={<Report />} />
 			</Route>
