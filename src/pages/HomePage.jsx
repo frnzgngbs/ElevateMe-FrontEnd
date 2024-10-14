@@ -142,7 +142,7 @@ const HomePage = () => {
 								onClick={() => navigate("/roompage", { replace: true })}
 								variant="contained"
 								sx={{ py: 1, px: 5, borderRadius: 4 }}>
-								About
+								Rooms
 							</Button>
 						</div>
 					</div>

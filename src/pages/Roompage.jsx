@@ -2,11 +2,11 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import GridBackground from "../res/gridbackground.png";
 import RoomCard from "../components/RoomCards";
-import JoinRoomPopup from "../components/popupcards/JoinRoomPopUp/JoinRoomPopUp"; 
+import JoinRoomPopup from "../components/popupcards/JoinRoomPopUp/JoinRoomPopUp";
+import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopUp";
 import { useState } from "react";
 
 const RoomPage = () => {
-
     const [rooms, setRooms] = useState([
         { id: 1, title: "Room 1" },
         { id: 2, title: "Room 2" },
@@ -14,10 +14,14 @@ const RoomPage = () => {
         { id: 4, title: "Room 4" },
     ]);
 
-    // popup Join Roommm
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [isChannelListOpen, setIsChannelListOpen] = useState(false);
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [channels, setChannels] = useState([
+        { title: "Channel 1" },
+        { title: "Channel 2" },
+    ]);
 
-    
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
     };
@@ -28,6 +32,20 @@ const RoomPage = () => {
 
     const handleJoinRoom = () => {
         handleClosePopup();
+    };
+
+    const handleOpenChannelList = (room) => {
+        setSelectedRoom(room);
+        setIsChannelListOpen(true);
+    };
+
+    const handleCloseChannelList = () => {
+        setIsChannelListOpen(false);
+    };
+//fill sample...
+    const handleAddChannel = () => {
+        const newChannel = { title: `Channel ${channels.length + 1}` };
+        setChannels((prevChannels) => [...prevChannels, newChannel]);
     };
 
     return (
@@ -45,22 +63,20 @@ const RoomPage = () => {
                 padding: 1,
             }}
         >
-         
             <Typography variant="h1" fontSize="50px" gutterBottom sx={{ marginTop: "5px" }}>
                 Room Page
             </Typography>
 
-      
             <Grid
                 container
-                spacing={4} 
-                justifyContent="flex-start" 
+                spacing={4}
+                justifyContent="flex-start"
                 alignItems="center"
-                sx={{ 
-                    maxWidth: "1200px", 
-                    margin: "20px auto", 
+                sx={{
+                    maxWidth: "1200px",
+                    margin: "20px auto",
                     padding: "0 16px",
-                    px: { xs: "16px", sm: "50px", md: "100px" } 
+                    px: { xs: "16px", sm: "50px", md: "100px" }
                 }}
             >
                 <Grid
@@ -87,18 +103,32 @@ const RoomPage = () => {
                     </Button>
                 </Grid>
 
-                {/* Room Cards */}
                 {rooms.map((room) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={room.id}>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        key={room.id}
+                        onClick={() => handleOpenChannelList(room)}
+                    >
                         <RoomCard title={room.title} />
                     </Grid>
                 ))}
             </Grid>
 
-            <JoinRoomPopup 
-                open={isPopupOpen} 
-                onClose={handleClosePopup} 
-                onJoin={handleJoinRoom} 
+            <JoinRoomPopup
+                open={isPopupOpen}
+                onClose={handleClosePopup}
+                onJoin={handleJoinRoom}
+            />
+
+            <ChannelListPopup
+                open={isChannelListOpen}
+                onClose={handleCloseChannelList}
+                channels={channels}
+                onAddChannel={handleAddChannel}
             />
         </Box>
     );
