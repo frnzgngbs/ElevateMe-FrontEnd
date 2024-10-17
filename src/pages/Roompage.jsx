@@ -135,7 +135,7 @@ const RoomPage = () => {
                 justifyContent="flex-start"
                 alignItems="center"
                 sx={{
-                    maxWidth: "1200px",
+                    maxWidth: "1450px",
                     margin: "20px auto",
                     padding: "0 16px",
                     px: { xs: "16px", sm: "50px", md: "100px" }

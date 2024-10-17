@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import DeleteDialog from "./popupcards/deletedialogpopup/DeleteDialog";
 import ChannelListPopup from "./popupcards/channelListPopUp/ChannelListPopUp";
+import AddMemberPopup from "./popupcards/addmemberpopup/AddMemberPopUP";
 
 const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
     const [isDeleting, setIsDeleting] = useState(false);
@@ -13,6 +14,7 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
     const [openChannelList, setOpenChannelList] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
     const [channelList, setChannelList] = useState([]); // Example state for channel list
+	const [openAddMemberPopup, setOpenAddMemberPopup] = useState(false);
 
     // Function to handle deleting the room
     const handleDelete = async () => {
@@ -130,12 +132,13 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Add Members">
-                            <IconButton
-                                sx={{ color: "white" }}
-                            >
-                                <GroupAdd />
-                            </IconButton>
-                        </Tooltip>
+    <IconButton
+        onClick={() => setOpenAddMemberPopup(true)}
+        sx={{ color: "white" }}
+    >
+        <GroupAdd />
+    </IconButton>
+</Tooltip>
                         <Tooltip title="Delete Room">
                             <IconButton
                                 onClick={() => setOpenDeleteDialog(true)}
@@ -180,6 +183,11 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
                 channels={channelList} // Pass channelList as channels
                 onAddChannel={handleAddChannel} // Pass handleAddChannel
             />
+
+<AddMemberPopup 
+    open={openAddMemberPopup} 
+    onClose={() => setOpenAddMemberPopup(false)} 
+/>
         </Card>
     );
 };

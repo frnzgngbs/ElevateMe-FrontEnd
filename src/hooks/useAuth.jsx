@@ -7,8 +7,11 @@ const useAuth = () => {
 
 	const Login = async (user) => {
 		try {
+
+
+
 			let response = await axios.post("http://localhost:8000/api/user/login/", {
-				username: user.username,
+				email: user.email,
 				password: user.password,
 			});
 
