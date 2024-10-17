@@ -1,9 +1,9 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, Snackbar, Alert } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import GridBackground from "../res/gridbackground.png";
 import RoomCard from "../components/RoomCards";
 import JoinRoomPopup from "../components/popupcards/JoinRoomPopUp/JoinRoomPopUp";
-import CreateRoomPopup from "../components/popupcards/createroompopup/CreateRoomPopUp"; // New Component
+import CreateRoomPopup from "../components/popupcards/createroompopup/CreateRoomPopUp";
 import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopUp";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -11,27 +11,28 @@ import axios from "axios";
 const RoomPage = () => {
     const [rooms, setRooms] = useState([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [isCreateRoomPopupOpen, setIsCreateRoomPopupOpen] = useState(false); // New state for Create Room popup
+    const [isCreateRoomPopupOpen, setIsCreateRoomPopupOpen] = useState(false);
     const [isChannelListOpen, setIsChannelListOpen] = useState(false);
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [roomChannels, setRoomChannels] = useState({});
+    const [showSuccess, setShowSuccess] = useState(false);
 
     useEffect(() => {
         const fetchRooms = async () => {
             try {
                 let token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
                 console.log("Fetched token:", token);
-        
+
                 if (!token) {
                     throw new Error("No token found. Please log in.");
                 }
-        
+
                 const response = await axios.get('http://localhost:8000/api/rooms/', {
                     headers: { Authorization: `Token ${token}` },
                 });
-        
+
                 console.log("Response data:", response.data);
-        
+
                 const roomData = response.data.map((room) => ({
                     id: room.id,
                     title: room.room_name,
@@ -39,7 +40,7 @@ const RoomPage = () => {
                     ownerEmail: room.room_owner_id.email,
                     channels: [],
                 }));
-        
+
                 setRooms(roomData);
             } catch (error) {
                 console.error("Error fetching rooms:", error);
@@ -68,12 +69,28 @@ const RoomPage = () => {
         setIsCreateRoomPopupOpen(false);
     };
 
-    const handleJoinRoom = () => {
-        handleClosePopup();
+    const handleDeleteRoom = (deletedRoomId) => {
+        setRooms((prevRooms) => prevRooms.filter((room) => room.id !== deletedRoomId));
     };
-    const handleCreateRoom = (roomName, members) => {
-        // Add the logic for creating a new room here
+
+    const handleRoomCreated = (newRoom) => {
+        // Update the room list with the newly created room
+        setRooms((prevRooms) => [
+            ...prevRooms,
+            {
+                id: newRoom.id,
+                title: newRoom.room_name,
+                roomCode: newRoom.room_code,
+                ownerEmail: newRoom.room_owner_id.email,
+                channels: [],
+            },
+        ]);
+        setShowSuccess(true); // Show success message
         handleCloseCreateRoomPopup();
+    };
+
+    const handleCloseSuccess = () => {
+        setShowSuccess(false);
     };
 
     const handleOpenChannelList = (room) => {
@@ -177,6 +194,8 @@ const RoomPage = () => {
                             title={room.title} 
                             roomCode={room.roomCode} 
                             ownerEmail={room.ownerEmail} 
+                            roomId={room.id}
+                            onDelete={handleDeleteRoom}
                         />
                     </Grid>
                 ))}
@@ -185,21 +204,32 @@ const RoomPage = () => {
             <JoinRoomPopup
                 open={isPopupOpen}
                 onClose={handleClosePopup}
-                onJoin={handleJoinRoom}
+                onJoin={() => handleClosePopup()}
             />
 
             <CreateRoomPopup
                 open={isCreateRoomPopupOpen}
                 onClose={handleCloseCreateRoomPopup}
-                onCreate={handleCreateRoom}
+                onRoomCreated={handleRoomCreated}
             />
 
-            <ChannelListPopup
+            {/* <ChannelListPopup
                 open={isChannelListOpen}
                 onClose={handleCloseChannelList}
                 channels={roomChannels[selectedRoom?.id] || []}
                 onAddChannel={() => handleAddChannel(selectedRoom?.id)}
-            />
+            /> */}
+
+            <Snackbar
+                open={showSuccess}
+                autoHideDuration={3000}
+                onClose={handleCloseSuccess}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert onClose={handleCloseSuccess} severity="success">
+                    Room created successfully!
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

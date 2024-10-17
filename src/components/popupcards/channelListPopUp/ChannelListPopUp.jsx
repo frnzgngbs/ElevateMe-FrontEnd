@@ -9,7 +9,7 @@ const ChannelListPopup = ({ open, onClose, channels, onAddChannel }) => {
 
     const handleChannelClick = (channelId) => {
         navigate(`/channel/${channelId}`);
-        onClose(); // Close the popup after navigation
+        onClose(); 
     };
 
     return (
