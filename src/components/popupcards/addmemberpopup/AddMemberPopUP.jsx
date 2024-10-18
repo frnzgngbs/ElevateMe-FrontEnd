@@ -44,7 +44,7 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
                 { headers: { Authorization: `Token ${token}` } }
             );
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setSnackbar({
                     open: true,
                     message: "Successfully added to the room",
@@ -105,6 +105,7 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
                         members={members}
                         onAddMembers={handleAddMembersPage}
                         roomId={roomId}
+                        onClose={onClose}
                     />
                 ) : (
                     <AddMember

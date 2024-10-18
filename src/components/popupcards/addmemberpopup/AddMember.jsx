@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
     Box,
@@ -11,13 +10,13 @@ import {
     ListItem,
     ListItemText,
 } from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check'; // Import the Check icon
 
 const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
     const [emailInput, setEmailInput] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [addedEmails, setAddedEmails] = useState([]);
 
-    // Update suggestions based on the input
     const handleInputChange = (e) => {
         const input = e.target.value;
         setEmailInput(input);
@@ -64,143 +63,151 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
     };
 
     return (
-        <Box sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-                Add Members
-            </Typography>
-            <TextField
-                label="Enter Email(s)"
-                variant="outlined"
-                fullWidth
-                value={emailInput}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
-                sx={{ mb: 2 }}
-            />
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                Selected Email Tags
-            </Typography>
-            <Stack
-                direction="row"
-                spacing={1}
-                flexWrap="wrap"
-                sx={{
-                    mb: 2,
-                    height: 60,
-                    overflowY: "auto",
-                    "&::-webkit-scrollbar": { display: "none" },
-                }}
-            >
-                {addedEmails.length > 0 ? (
-                    addedEmails.map((email, index) => (
-                        <Chip
-                            key={index}
-                            label={email}
-                            onDelete={() => handleDeleteEmail(email)}
-                            sx={{
-                                backgroundColor: "rgba(24, 111, 101, 0.1)", // Match this color with the suggested emails
-                                color: "rgba(24, 111, 101, 0.8)",
-                                border: "1px solid rgba(24, 111, 101, 0.3)",
-                            }}
-                        />
-                    ))
-                ) : (
-                    // Placeholder emails
-                    ["sample@email.com", "anothersample@gmail.com"].map((sampleEmail, index) => (
-                        <Chip
-                            key={index}
-                            label={sampleEmail}
-                            sx={{
-                                backgroundColor: "rgba(24, 111, 101, 0.05)",
-                                color: "rgba(24, 111, 101, 0.5)",
-                                border: "1px solid rgba(24, 111, 101, 0.1)",
-                                fontStyle: "italic",
-                            }}
-                        />
-                    ))
-                )}
-            </Stack>
-
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                Suggested Emails
-            </Typography>
-
-            <List
-                sx={{
-                    height: 120,
-                    overflowY: "auto",
-                    "&::-webkit-scrollbar": { display: "none" },
-                }}
-            >
-                {suggestions.length > 0 ? (
-                    suggestions.map((email, index) => (
-                        <ListItem
-                            button
-                            key={index}
-                            onClick={() => handleAddEmail(email)}
-                            sx={{
-                                backgroundColor: "rgba(24, 111, 101, 0.1)", // Match this color with email tags
-                                borderRadius: "8px", // Rounded corners
-                                marginBottom: "8px", // Space between suggested email cards
-                                "&:hover": {
-                                    backgroundColor: "rgba(24, 111, 101, 0.2)", // Darker on hover
-                                },
-                            }}
-                        >
-                            <ListItemText primary={email} />
-                        </ListItem>
-                    ))
-                ) : (
-                    // Placeholder for no suggestions
-                    <ListItem>
-                        <ListItemText
-                            primary={
-                                <Typography
-                                    sx={{
+        <Box sx={{ p: 2, display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
+            <div>
+                <Typography variant="h6" gutterBottom sx={{ textAlign: "center", marginTop: -3 }}>
+                    Add Members
+                </Typography>
+                <TextField
+                    label="Enter Email(s)"
+                    variant="outlined"
+                    fullWidth
+                    value={emailInput}
+                    onChange={handleInputChange}
+                    onKeyPress={handleKeyPress}
+                    sx={{
+                        mb: 2,
+                        borderRadius: 4,
+                        '& .MuiOutlinedInput-root': {
+                            borderRadius: '20px',
+                        },
+                    }}
+                />
+                <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Selected Email Tags
+                </Typography>
+                <Stack
+                    direction="row"
+                    spacing={1}
+                    flexWrap="wrap"
+                    sx={{
+                        mb: 2,
+                        height: 60,
+                        overflowY: "auto",
+                        "&::-webkit-scrollbar": { display: "none" },
+                    }}
+                >
+                    {addedEmails.length > 0 ? (
+                        addedEmails.map((email, index) => (
+                            <Chip
+                                key={index}
+                                label={email}
+                                onDelete={() => handleDeleteEmail(email)}
+                                sx={{
+                                    backgroundColor: "rgba(24, 111, 101, 0.1)",
+                                    color: "rgba(24, 111, 101, 0.8)",
+                                    border: "1px solid rgba(24, 111, 101, 0.3)",
+                                }}
+                            />
+                        ))
+                    ) : (
+                        ["sample@email.com", "anothersample@gmail.com"].map((sampleEmail, index) => (
+                            <Chip
+                                key={index}
+                                label={sampleEmail}
+                                sx={{
+                                    backgroundColor: "rgba(24, 111, 101, 0.05)",
+                                    color: "rgba(24, 111, 101, 0.5)",
+                                    border: "1px solid rgba(24, 111, 101, 0.1)",
+                                    fontStyle: "italic",
+                                }}
+                            />
+                        ))
+                    )}
+                </Stack>
+                <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Suggested Emails
+                </Typography>
+                <List
+                    sx={{
+                        height: 120,
+                        overflowY: "auto",
+                        "&::-webkit-scrollbar": { display: "none" },
+                    }}
+                >
+                    {suggestions.length > 0 ? (
+                        suggestions.map((email, index) => (
+                            <ListItem
+                                button
+                                key={index}
+                                onClick={() => handleAddEmail(email)}
+                                sx={{
+                                    backgroundColor: "rgba(24, 111, 101, 0.1)",
+                                    borderRadius: "4px",
+                                    marginBottom: "4px",
+                                }}
+                            >
+                                <ListItemText primary={email} />
+                            </ListItem>
+                        ))
+                    ) : (
+                        <ListItem>
+                            <ListItemText  primary="No suggestions available" sx={{
                                         color: "rgba(24, 111, 101, 0.4)",
                                         fontStyle: "italic",
-                                    }}
-                                >
-                                    No suggestions available
-                                </Typography>
-                            }
-                        />
-                    </ListItem>
-                )}
-            </List>
+                                    }} />
+                        </ListItem>
+                        
+                    )}
+                </List>
+            </div>
 
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: 2,
-                    mt: 2,
-                }}
-            >
-                <Button
-                    variant="contained"
-                    onClick={onBack}
+            <Box >
+                {/* Pagination Dots */}
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
+                    <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
+                    <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
+                </Box>
+                <Box
                     sx={{
-                        backgroundColor: "#186F65",
-                        color: "white",
-                        borderRadius: 5,
-                        width: "100px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignContent:"center",
+                        position: 'relative',
+                        bottom: '20px',
+                        gap: 2, // Added space from bottom
                     }}
                 >
-                    Back
-                </Button>
-                <Button
-                    variant="contained"
-                    onClick={handleSubmit}
-                    sx={{
-                        backgroundColor: "#186F65",
-                        color: "white",
-                        borderRadius: 5,
-                        width: "100px",
-                    }}
-                >
-                    Add
-                </Button>
+                    <Button
+                        variant="contained"
+                        onClick={onBack}
+                        sx={{
+                            borderRadius: "20px",
+                            padding: "8px 24px",
+                            backgroundColor: "#187569",
+                            "&:hover": {
+                                backgroundColor: "#145c56",
+                            },
+                        }}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={handleSubmit}
+                        sx={{
+                            borderRadius: "20px",
+                            padding: "8px 24px",
+                            backgroundColor: "#187569",
+                            "&:hover": {
+                                backgroundColor: "#145c56",
+                            },
+                        }}
+                    >
+                        <CheckIcon sx={{ marginRight: 1 }} />
+                        Add
+                    </Button>
+                </Box>
             </Box>
         </Box>
     );

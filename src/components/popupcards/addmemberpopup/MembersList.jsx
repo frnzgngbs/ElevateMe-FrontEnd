@@ -1,4 +1,3 @@
-// MembersList.js
 import React, { useEffect, useState } from "react";
 import {
     Box,
@@ -9,32 +8,50 @@ import {
     ListItemText,
     CircularProgress,
 } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add'; // Import the Add icon
 import axios from "axios";
 
-const MembersList = ({ roomId, onAddMembers }) => {
-    const [members, setMembers] = useState([]);
+const MembersList = ({ roomId, onAddMembers, onClose }) => {
+    const [membersEmails, setMembersEmails] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchMembers = async () => {
+        const fetchMembersEmails = async () => {
             try {
-                //TODO: Temporary token
                 const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
-                console.log("Fetched token:", token);
 
                 if (!token) {
                     throw new Error("No token found. Please log in.");
                 }
 
-                const response = await axios.get(`http://localhost:8000/api/rooms/${roomId}/members/`, {
-                    headers: {
-                        Authorization: `Token ${token}`, // Use the temporary token
-                    },
+                const membersResponse = await axios.get(
+                    `http://localhost:8000/api/rooms/${roomId}/members/`,
+                    {
+                        headers: {
+                            Authorization: `Token ${token}`,
+                        },
+                    }
+                );
+
+                const memberIds = membersResponse.data.map(
+                    (member) => member.member_id
+                );
+
+                const emailsPromises = memberIds.map(async (memberId) => {
+                    const userResponse = await axios.get(
+                        `http://localhost:8000/api/user/${memberId}/`,
+                        {
+                            headers: {
+                                Authorization: `Token ${token}`,
+                            },
+                        }
+                    );
+                    return userResponse.data.email;
                 });
 
-                console.log("Response data:", response.data);
-                setMembers(response.data); // Adjust based on the actual response structure
+                const emails = await Promise.all(emailsPromises);
+                setMembersEmails(emails);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -42,44 +59,90 @@ const MembersList = ({ roomId, onAddMembers }) => {
             }
         };
 
-        fetchMembers();
-    }, [roomId]); // Removed token from dependencies since it's hardcoded
+        fetchMembersEmails();
+    }, [roomId]);
 
     return (
-        <Box sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-                Current Members
+        <Box sx={{ p: 2, display: "flex", flexDirection: "column", height: "100%", position: "relative" }}>
+        <Typography variant="h6" align="center" gutterBottom sx={{ textAlign: "center", marginTop: -3 }}>
+            Current Members
+        </Typography>
+        {loading ? (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100px">
+                <CircularProgress />
+            </Box>
+        ) : error ? (
+            <Typography color="error" align="center">
+                {error}
             </Typography>
-            {loading ? (
-                <Box display="flex" justifyContent="center" alignItems="center" height="100px">
-                    <CircularProgress />
-                </Box>
-            ) : error ? (
-                <Typography color="error">{error}</Typography>
-            ) : (
+        ) : (
+            <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
                 <List>
-                    {members.map((member, index) => (
+                    {membersEmails.map((email, index) => (
                         <ListItem
                             key={index}
                             sx={{
-                                backgroundColor: "rgba(24, 111, 101, 0.1)", // Same styling as suggested emails
-                                borderRadius: "8px", // Rounded corners
-                                marginBottom: "8px", // Space between member cards
+                                backgroundColor: "rgba(24, 111, 101, 0.1)",
+                                borderRadius: "8px",
+                                marginBottom: "8px",
                             }}
                         >
-                            <ListItemText primary={member.member_email || member.member_name} /> {/* Change this to the correct property */}
+                            <ListItemText primary={email} />
                         </ListItem>
                     ))}
                 </List>
-            )}
+            </Box>
+        )}
+        {/* Pagination Dots */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+            <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
+            <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
+        </Box>
+    
+        {/* Buttons anchored at the bottom */}
+        <Box
+            sx={{
+                position: 'absolute',
+                bottom: 2, // 20px from the bottom
+                left: 0,
+                right: 0,
+                display: "flex",
+                justifyContent: "center",
+                gap: 2,
+            }}
+        >
+            <Button
+                variant="contained"
+                onClick={onClose}
+                sx={{
+                    borderRadius: "20px",
+                    padding: "8px 24px",
+                    backgroundColor: "#187569",
+                    "&:hover": {
+                        backgroundColor: "#145c56",
+                    },
+                }}
+            >
+                Close
+            </Button>
             <Button
                 variant="contained"
                 onClick={onAddMembers}
-                sx={{ mt: 2 }}
+                sx={{
+                    borderRadius: "20px",
+                    padding: "8px 24px",
+                    backgroundColor: "#187569",
+                    "&:hover": {
+                        backgroundColor: "#145c56",
+                    },
+                }}
             >
-                Add Members
+                <AddIcon sx={{ marginRight: 1 }} />
+                Add
             </Button>
         </Box>
+    </Box>
+    
     );
 };
 
