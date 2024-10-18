@@ -20,6 +20,8 @@ const RoomPage = () => {
     useEffect(() => {
         const fetchRooms = async () => {
             try {
+
+                //TODO: update this token
                 let token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
                 console.log("Fetched token:", token);
 
