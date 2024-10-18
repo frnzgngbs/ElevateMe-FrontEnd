@@ -15,11 +15,13 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
     const [showOptions, setShowOptions] = useState(false);
     const [channelList, setChannelList] = useState([]); // Example state for channel list
 	const [openAddMemberPopup, setOpenAddMemberPopup] = useState(false);
+    
 
     // Function to handle deleting the room
     const handleDelete = async () => {
         try {
             setIsDeleting(true);
+            //TODO: Token
             const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
 
             await axios.delete(`http://localhost:8000/api/rooms/${roomId}/`, {
@@ -37,7 +39,7 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
         }
     };
 
-	
+
 
     // Function to handle copying the room code to the clipboard
     const handleCopyRoomCode = async (e) => {
@@ -182,8 +184,8 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
             <ChannelListPopup 
                 open={openChannelList} 
                 onClose={() => setOpenChannelList(false)} 
-                channels={channelList} // Pass channelList as channels
-                onAddChannel={handleAddChannel} // Pass handleAddChannel
+                roomId={roomId} // Pass the roomId here
+                onAddChannel={() => console.log("Add new channel logic goes here.")}
             />
 
  <AddMemberPopup 
