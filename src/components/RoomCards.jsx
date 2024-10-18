@@ -37,6 +37,8 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
         }
     };
 
+	
+
     // Function to handle copying the room code to the clipboard
     const handleCopyRoomCode = async (e) => {
         e.stopPropagation();
@@ -184,10 +186,11 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
                 onAddChannel={handleAddChannel} // Pass handleAddChannel
             />
 
-<AddMemberPopup 
-    open={openAddMemberPopup} 
-    onClose={() => setOpenAddMemberPopup(false)} 
-/>
+ <AddMemberPopup 
+                open={openAddMemberPopup} 
+                onClose={() => setOpenAddMemberPopup(false)} 
+                roomId={roomId} // Pass the roomId prop to the AddMemberPopup
+            />
         </Card>
     );
 };

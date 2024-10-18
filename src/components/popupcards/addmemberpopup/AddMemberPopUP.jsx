@@ -10,21 +10,28 @@ import {
     ListItemText,
     Chip,
     Stack,
+    Snackbar,
+    Alert,
 } from "@mui/material";
 import axios from "axios";
 
-const AddMemberPopup = ({ open, onClose }) => {
+const AddMemberPopup = ({ open, onClose, roomId }) => {
     const [emailInput, setEmailInput] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [addedEmails, setAddedEmails] = useState([]);
     const [emailDatabase, setEmailDatabase] = useState([]);
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success", // or "error"
+    });
 
     // Fetch emails from the database on component mount
     useEffect(() => {
         const fetchEmails = async () => {
             try {
                 const response = await axios.get("http://localhost:8000/api/user/");
-                const emails = response.data.map(user => user.email);
+                const emails = response.data.map((user) => user.email);
                 setEmailDatabase(emails);
             } catch (error) {
                 console.error("Failed to fetch emails:", error);
@@ -39,7 +46,6 @@ const AddMemberPopup = ({ open, onClose }) => {
         const input = e.target.value;
         setEmailInput(input);
 
-        // Get the last entered email part for suggestions
         const lastTypedEmail = input.split(",").pop().trim();
         if (lastTypedEmail) {
             updateSuggestions(lastTypedEmail);
@@ -51,10 +57,8 @@ const AddMemberPopup = ({ open, onClose }) => {
     // Update suggestions based on the input and added emails
     const updateSuggestions = (query) => {
         const filteredSuggestions = emailDatabase
-            .filter(email => 
-                email.toLowerCase().includes(query.toLowerCase())
-            )
-            .filter(email => !addedEmails.includes(email)); // Exclude already added emails
+            .filter((email) => email.toLowerCase().includes(query.toLowerCase()))
+            .filter((email) => !addedEmails.includes(email));
 
         setSuggestions(filteredSuggestions);
     };
@@ -69,13 +73,13 @@ const AddMemberPopup = ({ open, onClose }) => {
     // Handle adding emails to tags
     const addEmailToTags = (email) => {
         if (email && !addedEmails.includes(email)) {
-            setAddedEmails(prev => [...prev, email]);
+            setAddedEmails((prev) => [...prev, email]);
         }
     };
 
     // Handle deleting an email tag
     const handleDeleteEmail = (emailToDelete) => {
-        setAddedEmails(addedEmails.filter(email => email !== emailToDelete));
+        setAddedEmails(addedEmails.filter((email) => email !== emailToDelete));
     };
 
     // Handle key press (e.g., Enter) in the input field
@@ -87,9 +91,51 @@ const AddMemberPopup = ({ open, onClose }) => {
     };
 
     // Handle the submission of emails
-    const handleSubmit = () => {
-        console.log("Added Emails:", addedEmails);
-        onClose();
+    const handleSubmit = async () => {
+        const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
+
+        try {
+            const payload = {
+                new_room_members: addedEmails,
+            };
+
+            const response = await axios.patch(
+                `http://localhost:8000/api/rooms/${roomId}/`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                }
+            );
+
+            if (response.status === 201) {
+                setSnackbar({
+                    open: true,
+                    message: "Successfully added to the room",
+                    severity: "success",
+                });
+                onClose(); 
+                setAddedEmails([]);
+            }
+        } catch (error) {
+            let errorMessage = "This member might be already in the room";
+            if (error.response && error.response.status === 400) {
+                errorMessage = "The useremail might be already a member in this room";
+            }
+            setSnackbar({
+                open: true,
+                message: errorMessage,
+                severity: "error",
+            });
+        } finally {
+            setEmailInput("");
+        }
+    };
+
+    // Handle Snackbar close
+    const handleSnackbarClose = () => {
+        setSnackbar((prev) => ({ ...prev, open: false }));
     };
 
     return (
@@ -106,7 +152,7 @@ const AddMemberPopup = ({ open, onClose }) => {
             <Box
                 sx={{
                     width: 500,
-                    height: 500, // Adjusted height for a taller modal
+                    height: 500,
                     bgcolor: "background.paper",
                     boxShadow: 24,
                     p: 4,
@@ -116,7 +162,7 @@ const AddMemberPopup = ({ open, onClose }) => {
                 <Typography id="add-member-title" variant="h6" gutterBottom>
                     Add Members
                 </Typography>
-                
+
                 <TextField
                     label="Enter Email(s)"
                     variant="outlined"
@@ -127,7 +173,6 @@ const AddMemberPopup = ({ open, onClose }) => {
                     sx={{ mb: 2 }}
                 />
 
-                {/* Display label and email tags */}
                 <Typography variant="subtitle1" sx={{ mb: 1 }}>
                     Selected Email Tags
                 </Typography>
@@ -137,9 +182,9 @@ const AddMemberPopup = ({ open, onClose }) => {
                     flexWrap="wrap"
                     sx={{
                         mb: 2,
-                        height: 80, // Fixed height for the tags section
-                        overflowY: "auto", // Make it scrollable
-                        "&::-webkit-scrollbar": { display: "none" }, // Hide the scrollbar for webkit browsers
+                        height: 80,
+                        overflowY: "auto",
+                        "&::-webkit-scrollbar": { display: "none" },
                     }}
                 >
                     {addedEmails.length > 0 ? (
@@ -156,7 +201,6 @@ const AddMemberPopup = ({ open, onClose }) => {
                             />
                         ))
                     ) : (
-                        // Display sample email tags in a lighter style
                         ["sample@email.com", "anothersample@gmail.com"].map((sampleEmail, index) => (
                             <Chip
                                 key={index}
@@ -172,26 +216,20 @@ const AddMemberPopup = ({ open, onClose }) => {
                     )}
                 </Stack>
 
-                {/* Display suggestions label */}
                 <Typography variant="subtitle1" sx={{ mb: 1 }}>
                     Suggested Emails
                 </Typography>
-                
-                {/* Display suggestions */}
+
                 <List
                     sx={{
-                        height: 100, // Fixed height for the suggestions section
-                        overflowY: "auto", // Make it scrollable
-                        "&::-webkit-scrollbar": { display: "none" }, // Hide the scrollbar for webkit browsers
+                        height: 100,
+                        overflowY: "auto",
+                        "&::-webkit-scrollbar": { display: "none" },
                     }}
                 >
                     {suggestions.length > 0 ? (
                         suggestions.map((email, index) => (
-                            <ListItem
-                                button
-                                key={index}
-                                onClick={() => handleAddEmail(email)}
-                            >
+                            <ListItem button key={index} onClick={() => handleAddEmail(email)}>
                                 <ListItemText primary={email} />
                             </ListItem>
                         ))
@@ -212,7 +250,7 @@ const AddMemberPopup = ({ open, onClose }) => {
                     sx={{
                         display: "flex",
                         justifyContent: "center",
-                        gap: 2, // Space between the buttons
+                        gap: 2,
                         mt: 2,
                     }}
                 >
@@ -224,7 +262,6 @@ const AddMemberPopup = ({ open, onClose }) => {
                             color: "white",
                             borderRadius: 5,
                             width: "100px",
-                          
                         }}
                     >
                         Close
@@ -235,13 +272,25 @@ const AddMemberPopup = ({ open, onClose }) => {
                         sx={{
                             backgroundColor: "#186F65",
                             color: "white",
-                            borderRadius:5,
+                            borderRadius: 5,
                             width: "100px",
                         }}
                     >
                         Add
                     </Button>
                 </Box>
+
+                {/* Snackbar for displaying messages */}
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={4000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                >
+                    <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: '100%' }}>
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
             </Box>
         </Modal>
     );
