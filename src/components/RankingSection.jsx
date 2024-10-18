@@ -10,7 +10,6 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                         Team’s Ranking
                     </Typography>
                     {teamRankings.map((member) => (
-                        // Wrap the ranking inside a Card
                         <Card key={member.name} sx={{ mb: 2, boxShadow: 2, borderRadius: 4 }}>
                             <CardContent sx={{ display: "flex", alignItems: "center" }}>
                                 <Avatar
@@ -58,7 +57,7 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                         Teacher’s Ranking
                     </Typography>
                     {teacherRankings.map((member) => (
-                        // Wrap the ranking inside a Card
+                        // TODO: Wrap the ranking inside a Card
                         <Card key={member.name} sx={{ mb: 2, boxShadow: 2, borderRadius: 4 }}>
                             <CardContent sx={{ display: "flex", alignItems: "center" }}>
                                 <Avatar

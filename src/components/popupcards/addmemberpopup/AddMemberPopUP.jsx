@@ -1,32 +1,25 @@
 import React, { useState, useEffect } from "react";
 import {
     Box,
-    Button,
-    TextField,
-    Typography,
     Modal,
-    List,
-    ListItem,
-    ListItemText,
-    Chip,
-    Stack,
+    Button,
     Snackbar,
     Alert,
 } from "@mui/material";
 import axios from "axios";
+import MembersList from "./MembersList";
+import AddMember from "./AddMember";
 
 const AddMemberPopup = ({ open, onClose, roomId }) => {
-    const [emailInput, setEmailInput] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
-    const [addedEmails, setAddedEmails] = useState([]);
+    const [currentPage, setCurrentPage] = useState("members"); // "members" or "addMember"
     const [emailDatabase, setEmailDatabase] = useState([]);
+    const [members, setMembers] = useState([]);
     const [snackbar, setSnackbar] = useState({
         open: false,
         message: "",
-        severity: "success", // or "error"
+        severity: "success",
     });
 
-    // Fetch emails from the database on component mount
     useEffect(() => {
         const fetchEmails = async () => {
             try {
@@ -41,96 +34,44 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
         fetchEmails();
     }, []);
 
-    // Handle input changes for email input
-    const handleInputChange = (e) => {
-        const input = e.target.value;
-        setEmailInput(input);
-
-        const lastTypedEmail = input.split(",").pop().trim();
-        if (lastTypedEmail) {
-            updateSuggestions(lastTypedEmail);
-        } else {
-            setSuggestions([]);
-        }
-    };
-
-    // Update suggestions based on the input and added emails
-    const updateSuggestions = (query) => {
-        const filteredSuggestions = emailDatabase
-            .filter((email) => email.toLowerCase().includes(query.toLowerCase()))
-            .filter((email) => !addedEmails.includes(email));
-
-        setSuggestions(filteredSuggestions);
-    };
-
-    // Add a selected email from suggestions
-    const handleAddEmail = (selectedEmail) => {
-        addEmailToTags(selectedEmail);
-        setEmailInput("");
-        setSuggestions([]);
-    };
-
-    // Handle adding emails to tags
-    const addEmailToTags = (email) => {
-        if (email && !addedEmails.includes(email)) {
-            setAddedEmails((prev) => [...prev, email]);
-        }
-    };
-
-    // Handle deleting an email tag
-    const handleDeleteEmail = (emailToDelete) => {
-        setAddedEmails(addedEmails.filter((email) => email !== emailToDelete));
-    };
-
-    // Handle key press (e.g., Enter) in the input field
-    const handleKeyPress = (e) => {
-        if (e.key === "Enter" && emailInput.trim()) {
-            addEmailToTags(emailInput.trim());
-            setEmailInput("");
-        }
-    };
-
-    // Handle the submission of emails
-    const handleSubmit = async () => {
+    const handleAddMembers = async (addedEmails) => {
         const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
-
         try {
-            const payload = {
-                new_room_members: addedEmails,
-            };
-
+            const payload = { new_room_members: addedEmails };
             const response = await axios.patch(
                 `http://localhost:8000/api/rooms/${roomId}/`,
                 payload,
-                {
-                    headers: {
-                        Authorization: `Token ${token}`,
-                    },
-                }
+                { headers: { Authorization: `Token ${token}` } }
             );
 
-            if (response.status === 201) {
+            if (response.status === 200) {
                 setSnackbar({
                     open: true,
                     message: "Successfully added to the room",
                     severity: "success",
                 });
-                onClose(); 
-                setAddedEmails([]);
+                // Optionally, update the members list here
+                setCurrentPage("members"); // Go back to members list
             }
         } catch (error) {
-            let errorMessage = "This member might be already in the room";
+            let errorMessage = "An error occurred";
             if (error.response && error.response.status === 400) {
-                errorMessage = "The useremail might be already a member in this room";
+                errorMessage = "The member might already be in the room";
             }
             setSnackbar({
                 open: true,
                 message: errorMessage,
                 severity: "error",
             });
-        } finally {
-            setEmailInput("");
         }
+    };
+
+    const handleBackToMembers = () => {
+        setCurrentPage("members");
+    };
+
+    const handleAddMembersPage = () => {
+        setCurrentPage("addMember");
     };
 
     // Handle Snackbar close
@@ -159,128 +100,20 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
                     borderRadius: 4,
                 }}
             >
-                <Typography id="add-member-title" variant="h6" gutterBottom>
-                    Add Members
-                </Typography>
+                {currentPage === "members" ? (
+                    <MembersList
+                        members={members}
+                        onAddMembers={handleAddMembersPage}
+                        roomId={roomId}
+                    />
+                ) : (
+                    <AddMember
+                        emailDatabase={emailDatabase}
+                        onSubmit={handleAddMembers}
+                        onBack={handleBackToMembers}
+                    />
+                )}
 
-                <TextField
-                    label="Enter Email(s)"
-                    variant="outlined"
-                    fullWidth
-                    value={emailInput}
-                    onChange={handleInputChange}
-                    onKeyPress={handleKeyPress}
-                    sx={{ mb: 2 }}
-                />
-
-                <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                    Selected Email Tags
-                </Typography>
-                <Stack
-                    direction="row"
-                    spacing={1}
-                    flexWrap="wrap"
-                    sx={{
-                        mb: 2,
-                        height: 80,
-                        overflowY: "auto",
-                        "&::-webkit-scrollbar": { display: "none" },
-                    }}
-                >
-                    {addedEmails.length > 0 ? (
-                        addedEmails.map((email, index) => (
-                            <Chip
-                                key={index}
-                                label={email}
-                                onDelete={() => handleDeleteEmail(email)}
-                                sx={{
-                                    backgroundColor: "rgba(24, 111, 101, 0.1)",
-                                    color: "rgba(24, 111, 101, 0.8)",
-                                    border: "1px solid rgba(24, 111, 101, 0.3)",
-                                }}
-                            />
-                        ))
-                    ) : (
-                        ["sample@email.com", "anothersample@gmail.com"].map((sampleEmail, index) => (
-                            <Chip
-                                key={index}
-                                label={sampleEmail}
-                                sx={{
-                                    backgroundColor: "rgba(24, 111, 101, 0.05)",
-                                    color: "rgba(24, 111, 101, 0.5)",
-                                    border: "1px solid rgba(24, 111, 101, 0.1)",
-                                    fontStyle: "italic",
-                                }}
-                            />
-                        ))
-                    )}
-                </Stack>
-
-                <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                    Suggested Emails
-                </Typography>
-
-                <List
-                    sx={{
-                        height: 100,
-                        overflowY: "auto",
-                        "&::-webkit-scrollbar": { display: "none" },
-                    }}
-                >
-                    {suggestions.length > 0 ? (
-                        suggestions.map((email, index) => (
-                            <ListItem button key={index} onClick={() => handleAddEmail(email)}>
-                                <ListItemText primary={email} />
-                            </ListItem>
-                        ))
-                    ) : (
-                        <Typography
-                            sx={{
-                                color: "rgba(24, 111, 101, 0.4)",
-                                fontStyle: "italic",
-                                ml: 2,
-                            }}
-                        >
-                            suggestion@example.com
-                        </Typography>
-                    )}
-                </List>
-
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        gap: 2,
-                        mt: 2,
-                    }}
-                >
-                    <Button
-                        variant="contained"
-                        onClick={onClose}
-                        sx={{
-                            backgroundColor: "#186F65",
-                            color: "white",
-                            borderRadius: 5,
-                            width: "100px",
-                        }}
-                    >
-                        Close
-                    </Button>
-                    <Button
-                        variant="contained"
-                        onClick={handleSubmit}
-                        sx={{
-                            backgroundColor: "#186F65",
-                            color: "white",
-                            borderRadius: 5,
-                            width: "100px",
-                        }}
-                    >
-                        Add
-                    </Button>
-                </Box>
-
-                {/* Snackbar for displaying messages */}
                 <Snackbar
                     open={snackbar.open}
                     autoHideDuration={4000}

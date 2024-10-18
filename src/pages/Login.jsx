@@ -39,7 +39,8 @@ const Login = () => {
 	};
 
 	const [user, setUser] = useState({
-		username: "",
+		
+		email: "",
 		password: "",
 	});
 
