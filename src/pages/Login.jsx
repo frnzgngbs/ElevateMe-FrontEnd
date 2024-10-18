@@ -39,7 +39,6 @@ const Login = () => {
 	};
 
 	const [user, setUser] = useState({
-		
 		email: "",
 		password: "",
 	});
@@ -92,14 +91,14 @@ const Login = () => {
 						<FormControl sx={{ width: "100%" }}>
 							<Box sx={inputFieldContainer}>
 								<Box align="left">
-									<FormLabel sx={formLabel}>Username</FormLabel>
+									<FormLabel sx={formLabel}>Email</FormLabel>
 								</Box>
 								<TextField
 									InputProps={inputProps}
 									sx={inputSx}
-									name="username"
-									id="username"
-									value={user.username}
+									name="email"
+									id="email"
+									value={user.email}
 									onChange={handleChange}
 								/>
 							</Box>
