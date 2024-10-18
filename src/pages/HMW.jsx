@@ -1,15 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Grid, Typography } from "@mui/material";
+import {
+	Grid,
+	Typography,
+	Card,
+	CardActions,
+	CardContent,
+} from "@mui/material";
 import RootProblemHistoryPopup from "../components/popupcards/potentialRootHistoryPopup/potentialRootHistoryPopup";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import WhysCard from "../components/WhysCard";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
 import HMWCard from "../components/HMWCard";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 import { Elevator } from "@mui/icons-material";
+import PrintIcon from "@mui/icons-material/Print";
 
 const HMW = () => {
 	const [open, setOpen] = React.useState(false);
@@ -23,6 +30,7 @@ const HMW = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [openElevator, setOpenElevator] = useState(false);
+	const [saveHMWsForReport, setsaveHMWsForReport] = useState([]);
 
 	const generated_root =
 		location.state?.potential_root?.root ||
@@ -35,18 +43,25 @@ const HMW = () => {
 		return location.state?.list_of_whys || parsedWhys;
 	}, [location.state?.list_of_whys]);
 
-	const [elevatorPitch, setElevatorPitch] = useState([]);
+	const [elevatorPitch, setElevatorPitch] = useState(
+		JSON.parse(sessionStorage.getItem("elevatorPitch")) || []
+	);
+
+	const navigate = useNavigate();
 
 	const selected_statement =
 		location.state?.statement || sessionStorage.getItem("selected_statement");
+
+	const venn =
+		location.state?.venn || JSON.parse(sessionStorage.getItem("whys_venn"));
+
+	const ps_id =
+		location.state?.statement_id || sessionStorage.getItem("statement_id");
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
 	const generateFiveHMW = async () => {
-		if (selectedHMW.lengt === 0) {
-			alert("");
-		}
 		setIsLoading((prev) => !prev);
 		try {
 			let token = localStorage.getItem("token");
@@ -80,10 +95,6 @@ const HMW = () => {
 		return setSelectedHMW((prev) => [...prev, ...hmw]);
 	};
 
-	// useEffect(() => {
-	// 	console.log(selectedHMW);
-	// }, [selectedHMW]);
-
 	// SAVING OF SESSION HERE
 	useEffect(() => {
 		sessionStorage.setItem("selected_hmws", JSON.stringify(selectedHMW));
@@ -92,6 +103,7 @@ const HMW = () => {
 		sessionStorage.setItem("root_five_whys", JSON.stringify(list_of_whys));
 		sessionStorage.setItem("selected_statement", selected_statement);
 		sessionStorage.setItem("elevatorPitch", JSON.stringify(elevatorPitch));
+		sessionStorage.setItem("hmw_venn", JSON.stringify(venn));
 	}, [
 		selectedHMW,
 		fiveHMW,
@@ -99,6 +111,7 @@ const HMW = () => {
 		list_of_whys,
 		selected_statement,
 		elevatorPitch,
+		venn,
 	]);
 
 	const generateElevatorPitch = async () => {
@@ -108,9 +121,7 @@ const HMW = () => {
 			);
 			return;
 		}
-
 		setIsLoading((prev) => !prev);
-
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
@@ -123,15 +134,40 @@ const HMW = () => {
 				},
 				{ headers: { Authorization: `Token ${token}` } }
 			);
-			sessionStorage.removeItem("selected_hmws");
 			setElevatorPitch(response.data.elevator_pitch);
 		} catch (err) {
 			console.error(err);
 		} finally {
 			setIsLoading((prev) => !prev);
+			sessionStorage.setItem("elevator_pitches", JSON.stringify(elevatorPitch));
 			sessionStorage.removeItem("selected_hmws");
+			setsaveHMWsForReport(selectedHMW);
+			sessionStorage.setItem("report_hmws", JSON.stringify(saveHMWsForReport));
+
 			setSelectedHMW([]);
 		}
+	};
+
+	const generateReport = () => {
+		sessionStorage.setItem("report_whys", JSON.stringify(list_of_whys));
+		sessionStorage.setItem("report_statement_id", ps_id);
+		sessionStorage.setItem("report_hmws", JSON.stringify(saveHMWsForReport));
+		sessionStorage.setItem("report_generated_root", generated_root);
+		sessionStorage.setItem(
+			"report_elevator_pitch",
+			JSON.stringify(elevatorPitch)
+		);
+		window.open("/report", {
+			state: {
+				venn: venn,
+				statement_id: ps_id,
+				statement: selected_statement,
+				list_of_whys: list_of_whys,
+				potential_root: generated_root,
+				list_of_hmws: saveHMWsForReport,
+				elevator_pitch: elevatorPitch,
+			},
+		});
 	};
 	return (
 		<Box>
@@ -146,47 +182,84 @@ const HMW = () => {
 					<LoadingScreen />
 				</Box>
 			) : (
-				<Box sx={{ px: 12, py: 2 }}>
+				<Box
+					sx={{
+						px: 12,
+						py: 2,
+						width: "90%",
+						margin: "auto",
+						maxWidth: "1000px",
+					}}>
 					<Typography variant="h1" textAlign={"center"} fontSize="50px">
-							HMW
-			
+						How Might We
 					</Typography>
+
 					<Typography
-										variant="body1"
-										textAlign={"center"}
-										fontSize="14px"
-										marginBottom={"50px"}>
-										Choose from the features below. This is a sequential process
-										but you can always navigate to different cards if you want for easire
-										access. Each cards corresponds to a specific page.
-									</Typography>
+						variant="body1"
+						textAlign={"center"}
+						fontSize="14px"
+						width="800px"
+						margin="auto"
+						marginBottom={"50px"}
+						marginTop="10px">
+						Now subject the selected problem statement to a 5-Why analysis. In
+						5-Whys, you ask "why" five times to uncover the underlying issue
+						behind a problem. Click the generate button to generate a 5 whys
+						statement
+					</Typography>
+
 					<Typography variant="h4">Potential Root Problem</Typography>
 					<Box sx={{ mt: 3, ml: 7 }}>
 						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
 							Below, is your generated potential root problem.
 						</Typography>
-						<Grid container sx={{ ml: 2 }}>
-							{/* I want to center the typography horizontally."*/}
-							<Grid item xs sx={{ display: "flex", alignItems: "center" }}>
-								<Typography variant="body2" sx={{}}>
-									{generated_root}
-								</Typography>
-							</Grid>
-							<Grid item sx={{ mr: 2.2 }}>
-								<Button
-									variant="contained"
-									onClick={handleOpen}
+						<Grid container sx={{ display: "flex", justifyContent: "center" }}>
+							<Box
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									mb: 2,
+									mt: 2,
+									width: "100%",
+								}}>
+								<Card
+									variant="outlined"
 									sx={{
-										borderRadius: 5.6,
-										color: "#FFFB",
+										display: "flex",
+										flexDirection: "row",
+										justifyContent: "space-between",
+										border: "1px solid #8e8e8e",
+										borderRadius: 4,
+										boxShadow: "none",
+										margin: "auto",
 									}}>
-									Show
-								</Button>
-							</Grid>
+									<CardContent
+										sx={{
+											display: "flex",
+											flexDirection: "column",
+											alignItems: "center",
+											justifyContent: "center",
+										}}>
+										<Typography variant="body2">
+											{generated_root === "null" ? "" : generated_root}
+										</Typography>
+									</CardContent>
+									<CardActions>
+										<Button
+											variant="contained"
+											sx={{ borderRadius: 5, color: "#FFFB" }}
+											onClick={handleOpen}>
+											Show
+										</Button>
+									</CardActions>
+								</Card>
+							</Box>
 						</Grid>
-						<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 5 }}>
+						<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
 							<Button
 								variant="contained"
+								disabled={generated_root === "null" ? true : false}
 								onClick={generateFiveHMW}
 								sx={{
 									px: 2.3,
@@ -207,13 +280,15 @@ const HMW = () => {
 									want to achieve), a SUBJECT (to be influenced or affected),
 									and a WHAT (outcome or what you like to achieve).
 								</Typography>
-								<Box sx={{ my: 5 }}>
+
+								<Box sx={{ mb: 5 }}>
 									<Box component={"form"}>
 										{fiveHMW.map((value, index) => (
 											<Box sx={{ mt: 2 }}>
 												<HMWCard
 													key={index}
 													value={value}
+													setFiveHMW={setFiveHMW}
 													addHMWToList={addHMWToList}
 												/>
 											</Box>
@@ -222,11 +297,37 @@ const HMW = () => {
 											sx={{
 												display: "flex",
 												justifyContent: "flex-end",
-												mt: 3,
+												marginRight: "23px",
+											}}>
+											<Button
+												variant="contained"
+												disabled={elevatorPitch.length === 0 ? true : false}
+												onClick={generateReport}
+												sx={{
+													mt: 2,
+													display: "flex",
+													alignItems: "center",
+													borderRadius: 3,
+													color: "#FFFB",
+													backgroundColor: "#888E8E",
+													hieght: "20px",
+													width: "80px",
+													padding: 1,
+												}}>
+												<PrintIcon sx={{ mr: 1 }} />
+												Print
+											</Button>
+										</Box>
+										<Box
+											sx={{
+												display: "flex",
+												justifyContent: "flex-end",
+												mt: 2,
 											}}>
 											<Box sx={{ mr: 2 }}>
 												<Button
 													variant="contained"
+													disabled={elevatorPitch.length === 0 ? true : false}
 													onClick={() => {
 														setOpenElevator((prev) => !prev);
 													}}
@@ -241,6 +342,7 @@ const HMW = () => {
 											</Box>
 											<Button
 												variant="contained"
+												disabled={selectedHMW.length === 0 ? true : false}
 												onClick={generateElevatorPitch}
 												sx={{
 													px: 2.3,
@@ -259,7 +361,11 @@ const HMW = () => {
 				</Box>
 			)}
 			{openElevator && (
-				<ElevatorPitch data={elevatorPitch} setOpenElevator={setOpenElevator} />
+				<ElevatorPitch
+					data={elevatorPitch}
+					setElevatorPitch={setElevatorPitch}
+					setOpenElevator={setOpenElevator}
+				/>
 			)}
 			<RootProblemHistoryPopup
 				open={open}

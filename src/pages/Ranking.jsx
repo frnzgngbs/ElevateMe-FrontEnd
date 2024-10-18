@@ -19,6 +19,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "../components/LoadingScreen";
 
 const PS_action = {
 	SET_PROBLEM_STATEMENT: "SET_PROBLEM_STATEMENT",
@@ -117,15 +118,14 @@ const Ranking = () => {
 		listProblemStatementReducer,
 		JSON.parse(sessionStorage.getItem("ranking_list_statements")) || []
 	);
+
 	const [queuedProblemStatement, queuedProblemStatementDispatch] = useReducer(
 		queuedProblemStatementReducer,
-		JSON.parse(sessionStorage.getItem("ranking_queued_list_statements")) || []
+		[]
 	);
-	const [selectedButton, setSelectedButton] = useState(
-		sessionStorage.getItem("ranking_selected_button") !== null
-			? sessionStorage.getItem("ranking_selected_button")
-			: 3
-	);
+
+	console.log(queuedProblemStatement);
+	const [selectedButton, setSelectedButton] = useState(3);
 	const navigate = useNavigate();
 
 	const [selectedValues, setSelectedValues] = useState(
@@ -159,6 +159,7 @@ const Ranking = () => {
 			JSON.stringify(totalsPerRow)
 		);
 	}, [selectedValues, totalsPerRow]);
+
 	const getRanks = (totals) => {
 		const indexedTotals = totals.map((total, index) => ({ total, index }));
 		indexedTotals.sort((a, b) => b.total - a.total || a.index - b.index);
@@ -173,6 +174,7 @@ const Ranking = () => {
 
 	useEffect(() => {
 		const getSavedPS = async () => {
+			setIsLoading(true);
 			try {
 				if (selectedButton === 2) {
 					let token = localStorage.getItem("token");
@@ -182,7 +184,6 @@ const Ranking = () => {
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
-					console.log(response.data);
 					listProblemStatementDispatch({
 						type: PS_action.SET_PROBLEM_STATEMENT,
 						statements: response.data,
@@ -203,7 +204,10 @@ const Ranking = () => {
 						queuedProblemStatement: queuedProblemStatement, // Pass the queuedProblemStatement state
 					});
 				}
-			} catch (err) {}
+			} catch (err) {
+			} finally {
+				setIsLoading(false);
+			}
 		};
 
 		getSavedPS();
@@ -252,7 +256,6 @@ const Ranking = () => {
 			},
 		});
 	};
-	console.log(initialSelectedValues);
 	const removeSelectedStatement = (index, id, venn, statement) => {
 		queuedProblemStatementDispatch({
 			type: PS_action.REMOVE_PROBLEM_STATEMENT,
@@ -303,27 +306,20 @@ const Ranking = () => {
 		});
 	};
 
+	const [isLoading, setIsLoading] = useState(false);
 	return (
 		<Box pb={5}>
-			<Typography variant="h1" textAlign={"center"} fontSize="50px">
-							HMW
-			
-					</Typography>
 			<Box
 				sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
 				<Typography variant="h1" sx={{ textAlign: "center", width: "400px" }}>
 					Ranking List
 				</Typography>
-				
 			</Box>
-			<Box sx={{ mx: 13.3, mb: .5, mt: 3}}>
+			<Box sx={{ mx: 13.3, mb: 0.5, mt: 3 }}>
 				<Typography variant="h3">Problem Statement List</Typography>
 			</Box>
-			
+
 			<Box sx={{ mx: 17 }}>
-				
-			
-				
 				<Box sx={{ display: "flex", justifyContent: "end" }}>
 					<RadioGroup
 						value={selectedButton}
@@ -343,16 +339,31 @@ const Ranking = () => {
 					</RadioGroup>
 				</Box>
 				<Box
-					sx={{ minHeight:"300px", maxHeight: "500px", overflowY: "auto", mt: 2, mb: 4, p: 1.3 }}>
-					{listProblemStatement.map((item, id) => (
-						<Box key={id} sx={{ mb: 1 }}>
-							<PSListCard
-								key={id}
-								{...item}
-								addStatement={handleAddStatement}
-							/>
-						</Box>
-					))}
+					sx={{
+						minHeight: "300px",
+						maxHeight: "500px",
+						overflowY: "auto",
+						mt: 2,
+						mb: 4,
+						p: 1.3,
+					}}>
+					{isLoading ? (
+						<>
+							<LoadingScreen />
+						</>
+					) : (
+						<>
+							{listProblemStatement.map((item, id) => (
+								<Box key={id} sx={{ mb: 1 }}>
+									<PSListCard
+										key={id}
+										{...item}
+										addStatement={handleAddStatement}
+									/>
+								</Box>
+							))}
+						</>
+					)}
 				</Box>
 			</Box>
 
@@ -360,37 +371,47 @@ const Ranking = () => {
 				<Typography variant="h3">Problem Statement Ranking</Typography>
 			</Box>
 
-			<Box sx={{ display: "flex", flexDirection: "column", gap: 2, mx: 17, mb: 7 }}>
-  {criteria.map(({ criteria_title, description }, index) => (
-    <Box
-      key={index}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 2,
-		minHeight: "50px",
-        backgroundColor: "rgba(255, 255, 255, 0.1)", // Semi-transparent background
-        borderRadius: 2.5, // Rounded corners
-        padding: .5, // Add some padding
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add a subtle box shadow
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: "primary.main", // Use the primary color for the bullet
-          width: 10,
-          height: 10,
-		  marginLeft: 1,
-          borderRadius: "50%", // Make the bullet a circle
-        }}
-      />
-      <Typography variant="body1" sx={{ fontWeight: "bold", minWidth:"180px", maxWidth:"180px"}}>
-        {criteria_title}:
-      </Typography>
-      <Typography variant="body1"sx={{alignItems:"center"}}>{description}</Typography>
-    </Box>
-  ))}
-</Box>
+			<Box
+				sx={{
+					display: "flex",
+					flexDirection: "column",
+					gap: 2,
+					mx: 17,
+					mb: 7,
+				}}>
+				{criteria.map(({ criteria_title, description }, index) => (
+					<Box
+						key={index}
+						sx={{
+							display: "flex",
+							alignItems: "center",
+							gap: 2,
+							minHeight: "50px",
+							backgroundColor: "rgba(255, 255, 255, 0.1)", // Semi-transparent background
+							borderRadius: 2.5, // Rounded corners
+							padding: 0.5, // Add some padding
+							boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Add a subtle box shadow
+						}}>
+						<Box
+							sx={{
+								backgroundColor: "primary.main", // Use the primary color for the bullet
+								width: 10,
+								height: 10,
+								marginLeft: 1,
+								borderRadius: "50%", // Make the bullet a circle
+							}}
+						/>
+						<Typography
+							variant="body1"
+							sx={{ fontWeight: "bold", minWidth: "180px", maxWidth: "180px" }}>
+							{criteria_title}:
+						</Typography>
+						<Typography variant="body1" sx={{ alignItems: "center" }}>
+							{description}
+						</Typography>
+					</Box>
+				))}
+			</Box>
 
 			<Box sx={{ mr: 14, ml: 17, mb: 2 }}>
 				<Card
@@ -413,7 +434,7 @@ const Ranking = () => {
 							sx={{ justifyContent: "space-between" }}
 							spacing={2}>
 							<Grid item xs={4}>
-								<Typography sx={{ textAlign: "center", alignItem:"center" }}>
+								<Typography sx={{ textAlign: "center", alignItem: "center" }}>
 									Problem Statement
 								</Typography>
 							</Grid>
