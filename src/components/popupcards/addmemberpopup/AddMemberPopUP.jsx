@@ -35,8 +35,9 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
     }, []);
 
     const handleAddMembers = async (addedEmails) => {
-        const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
-        try {
+             try {
+        let token = localStorage.getItem("token");
+
             const payload = { new_room_members: addedEmails };
             const response = await axios.patch(
                 `http://localhost:8000/api/rooms/${roomId}/`,
@@ -50,8 +51,8 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
                     message: "Successfully added to the room",
                     severity: "success",
                 });
-                // Optionally, update the members list here
-                setCurrentPage("members"); // Go back to members list
+
+                setCurrentPage("members"); 
             }
         } catch (error) {
             let errorMessage = "An error occurred";
