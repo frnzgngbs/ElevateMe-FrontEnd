@@ -108,7 +108,7 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                                 color: "#888",
                                 backgroundColor: "rgba(24, 111, 101, 0.05)",
                                 borderRadius: "8px",
-                                height: "50%",
+                                height: "70%",
                                 padding: 4,
                             }}
                         >

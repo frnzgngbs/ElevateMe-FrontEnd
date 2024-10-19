@@ -33,7 +33,6 @@ const RoomPage = () => {
 					throw new Error("No token found. Please log in.");
 				}
 
-				// Fetch the currently logged-in user's ID
 				const userResponse = await axios.get(
 					"http://localhost:8000/api/user/get_currently_login/",
 					{
@@ -87,14 +86,14 @@ const RoomPage = () => {
 		);
 	};
 
-	const handleRoomCreated = (newRoom) => {
+	const handleRoomCreated = (room) => {
 		setRooms((prevRooms) => [
 			...prevRooms,
 			{
-				id: newRoom.id,
-				title: newRoom.room_name,
-				roomCode: newRoom.room_code,
-				ownerEmail: newRoom.room_owner_id.email,
+				id:room.id,
+				room_name: room.room_name,
+				room_code: room.room_code,
+				room_owner_Id: room.room_owner_id,
 				channels: [],
 			},
 		]);
@@ -207,9 +206,9 @@ const RoomPage = () => {
 						onClick={() => handleOpenChannelList(room)}>
 						<RoomCard
 							title={room.room_name}
-							roomCode={room.roomCode}
-							ownerEmail={room.ownerEmail}
-							roomId={room.room_id}
+							roomCode={room.room_code}
+							ownerId={room.room_owner_id}
+							roomId={room.id}
 							onDelete={handleDeleteRoom}
 						/>
 					</Grid>
@@ -220,6 +219,7 @@ const RoomPage = () => {
 				open={isPopupOpen}
 				onClose={handleClosePopup}
 				onJoin={() => handleClosePopup()}
+                user={user}
 			/>
 
 			<CreateRoomPopup
