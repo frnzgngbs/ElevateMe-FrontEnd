@@ -1,29 +1,73 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, Snackbar, Alert } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import GridBackground from "../res/gridbackground.png";
 import RoomCard from "../components/RoomCards";
 import JoinRoomPopup from "../components/popupcards/JoinRoomPopUp/JoinRoomPopUp";
+import CreateRoomPopup from "../components/popupcards/createroompopup/CreateRoomPopUp";
 import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopUp";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const RoomPage = () => {
-	//samples
-    const [rooms, setRooms] = useState([
-        { id: 1, title: "Room 1" },
-        { id: 2, title: "Room 2" },
-        { id: 3, title: "Room 3" },
-        { id: 4, title: "Room 4" },
-    ]);
-
+    const [rooms, setRooms] = useState([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [isCreateRoomPopupOpen, setIsCreateRoomPopupOpen] = useState(false);
     const [isChannelListOpen, setIsChannelListOpen] = useState(false);
     const [selectedRoom, setSelectedRoom] = useState(null);
-    const [roomChannels, setRoomChannels] = useState({
-        1: [{ title: "Channel 1" }, { title: "Channel 2" }],
-        2: [{ title: "Channel 1" }],
-        3: [{ title: "Channel 1" }, { title: "Channel 2" }, { title: "Channel 3" }],
-        4: [],
-    });
+    const [roomChannels, setRoomChannels] = useState({});
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [currentlyLoginId, setCurrentlyLoginId] = useState(null);
+
+    useEffect(() => {
+        const fetchCurrentlyLoggedInUser = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                console.log("Fetched token:", token);
+
+                if (!token) {
+                    throw new Error("No token found. Please log in.");
+                }
+
+                // Fetch the currently logged-in user's ID
+                const userResponse = await axios.get('http://localhost:8000/api/user/get_currently_login/', {
+                    headers: { Authorization: `Token ${token}` },
+                });
+
+                const userId = userResponse.data.id;
+                setCurrentlyLoginId(userId);
+                console.log("Currently logged in user ID:", userId);
+
+                // Fetch rooms for this user
+                const roomsResponse = await axios.get('http://localhost:8000/api/rooms/', {
+                    headers: { Authorization: `Token ${token}` },
+                });
+
+                console.log("Response data:", roomsResponse.data);
+
+                // Filter rooms to only include those where the logged-in user is the owner
+                const roomData = roomsResponse.data
+                    .filter((room) => room.room_owner_id === userId)
+                    .map((room) => ({
+                        id: room.id,
+                        title: room.room_name,
+                        roomCode: room.room_code,
+                        ownerEmail: room.room_owner_id.email,
+                        channels: [],
+                    }));
+
+                    console.log(roomData)
+
+                setRooms(roomData);
+            } catch (error) {
+                console.error("Error fetching rooms or user:", error);
+                if (error.response && error.response.status === 401) {
+                    console.error("Unauthorized: Check if the token is valid and correctly formatted.");
+                }
+            }
+        };
+
+        fetchCurrentlyLoggedInUser();
+    }, []);
 
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
@@ -33,8 +77,35 @@ const RoomPage = () => {
         setIsPopupOpen(false);
     };
 
-    const handleJoinRoom = () => {
-        handleClosePopup();
+    const handleOpenCreateRoomPopup = () => {
+        setIsCreateRoomPopupOpen(true);
+    };
+
+    const handleCloseCreateRoomPopup = () => {
+        setIsCreateRoomPopupOpen(false);
+    };
+
+    const handleDeleteRoom = (deletedRoomId) => {
+        setRooms((prevRooms) => prevRooms.filter((room) => room.id !== deletedRoomId));
+    };
+
+    const handleRoomCreated = (newRoom) => {
+        setRooms((prevRooms) => [
+            ...prevRooms,
+            {
+                id: newRoom.id,
+                title: newRoom.room_name,
+                roomCode: newRoom.room_code,
+                ownerEmail: newRoom.room_owner_id.email,
+                channels: [],
+            },
+        ]);
+        setShowSuccess(true); // Show success message
+        handleCloseCreateRoomPopup();
+    };
+
+    const handleCloseSuccess = () => {
+        setShowSuccess(false);
     };
 
     const handleOpenChannelList = (room) => {
@@ -79,7 +150,7 @@ const RoomPage = () => {
                 justifyContent="flex-start"
                 alignItems="center"
                 sx={{
-                    maxWidth: "1200px",
+                    maxWidth: "1450px",
                     margin: "20px auto",
                     padding: "0 16px",
                     px: { xs: "16px", sm: "50px", md: "100px" }
@@ -105,7 +176,22 @@ const RoomPage = () => {
                             minWidth: "150px",
                         }}
                     >
-                        Add Room
+                        Join Room
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        startIcon={<Add />}
+                        onClick={handleOpenCreateRoomPopup}
+                        sx={{
+                            marginLeft: 2,
+                            borderRadius: 4,
+                            backgroundColor: "#186F65",
+                            color: "white",
+                            minWidth: "150px",
+                        }}
+                    >
+                        Create Room
                     </Button>
                 </Grid>
 
@@ -119,7 +205,13 @@ const RoomPage = () => {
                         key={room.id}
                         onClick={() => handleOpenChannelList(room)}
                     >
-                        <RoomCard title={room.title} />
+                        <RoomCard 
+                            title={room.title} 
+                            roomCode={room.roomCode} 
+                            ownerEmail={room.ownerEmail} 
+                            roomId={room.id}
+                            onDelete={handleDeleteRoom}
+                        />
                     </Grid>
                 ))}
             </Grid>
@@ -127,15 +219,25 @@ const RoomPage = () => {
             <JoinRoomPopup
                 open={isPopupOpen}
                 onClose={handleClosePopup}
-                onJoin={handleJoinRoom}
+                onJoin={() => handleClosePopup()}
             />
 
-            <ChannelListPopup
-                open={isChannelListOpen}
-                onClose={handleCloseChannelList}
-                channels={roomChannels[selectedRoom?.id] || []}
-                onAddChannel={() => handleAddChannel(selectedRoom?.id)}
+            <CreateRoomPopup
+                open={isCreateRoomPopupOpen}
+                onClose={handleCloseCreateRoomPopup}
+                onRoomCreated={handleRoomCreated}
             />
+
+            <Snackbar
+                open={showSuccess}
+                autoHideDuration={3000}
+                onClose={handleCloseSuccess}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert onClose={handleCloseSuccess} severity="success">
+                    Room created successfully!
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

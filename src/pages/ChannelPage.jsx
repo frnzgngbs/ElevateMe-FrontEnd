@@ -2,7 +2,7 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import PostCard from "../components/PostCard";
 import GridBackground from "../res/gridbackground.png";
 import { useState } from "react";
-import RankingSection from "../components/RankingSection"; // Import the RankingSection
+import RankingSection from "../components/RankingSection"; 
 
 const ChannelPage = () => {
     const [posts, setPosts] = useState([
@@ -78,7 +78,6 @@ const ChannelPage = () => {
                 </Grid>
             </Box>
 
-            {/* Wrapping the RankingSection with a Box that has maxWidth of 800px */}
             <Box
                 sx={{
                     maxWidth: "1000px",
@@ -87,7 +86,6 @@ const ChannelPage = () => {
                     textAlign: "center",
                 }}
             >
-                {/* Insert a title here "Ranking" */}
                 <Typography variant="h3" sx={{ fontWeight: "bold", marginBottom: 2 }}>
                     Ranking
                 </Typography>
