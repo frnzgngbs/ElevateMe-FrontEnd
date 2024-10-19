@@ -16,43 +16,57 @@ const RoomPage = () => {
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [roomChannels, setRoomChannels] = useState({});
     const [showSuccess, setShowSuccess] = useState(false);
+    const [currentlyLoginId, setCurrentlyLoginId] = useState(null);
 
     useEffect(() => {
-        const fetchRooms = async () => {
+        const fetchCurrentlyLoggedInUser = async () => {
             try {
-
-                //TODO: update this token
-                let token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
+                const token = localStorage.getItem("token");
                 console.log("Fetched token:", token);
 
                 if (!token) {
                     throw new Error("No token found. Please log in.");
                 }
 
-                const response = await axios.get('http://localhost:8000/api/rooms/', {
+                // Fetch the currently logged-in user's ID
+                const userResponse = await axios.get('http://localhost:8000/api/user/get_currently_login/', {
                     headers: { Authorization: `Token ${token}` },
                 });
 
-                console.log("Response data:", response.data);
+                const userId = userResponse.data.id;
+                setCurrentlyLoginId(userId);
+                console.log("Currently logged in user ID:", userId);
 
-                const roomData = response.data.map((room) => ({
-                    id: room.id,
-                    title: room.room_name,
-                    roomCode: room.room_code,
-                    ownerEmail: room.room_owner_id.email,
-                    channels: [],
-                }));
+                // Fetch rooms for this user
+                const roomsResponse = await axios.get('http://localhost:8000/api/rooms/', {
+                    headers: { Authorization: `Token ${token}` },
+                });
+
+                console.log("Response data:", roomsResponse.data);
+
+                // Filter rooms to only include those where the logged-in user is the owner
+                const roomData = roomsResponse.data
+                    .filter((room) => room.room_owner_id === userId)
+                    .map((room) => ({
+                        id: room.id,
+                        title: room.room_name,
+                        roomCode: room.room_code,
+                        ownerEmail: room.room_owner_id.email,
+                        channels: [],
+                    }));
+
+                    console.log(roomData)
 
                 setRooms(roomData);
             } catch (error) {
-                console.error("Error fetching rooms:", error);
+                console.error("Error fetching rooms or user:", error);
                 if (error.response && error.response.status === 401) {
                     console.error("Unauthorized: Check if the token is valid and correctly formatted.");
                 }
             }
         };
 
-        fetchRooms();
+        fetchCurrentlyLoggedInUser();
     }, []);
 
     const handleOpenPopup = () => {
@@ -76,7 +90,6 @@ const RoomPage = () => {
     };
 
     const handleRoomCreated = (newRoom) => {
-        // Update the room list with the newly created room
         setRooms((prevRooms) => [
             ...prevRooms,
             {
@@ -214,13 +227,6 @@ const RoomPage = () => {
                 onClose={handleCloseCreateRoomPopup}
                 onRoomCreated={handleRoomCreated}
             />
-
-            {/* <ChannelListPopup
-                open={isChannelListOpen}
-                onClose={handleCloseChannelList}
-                channels={roomChannels[selectedRoom?.id] || []}
-                onAddChannel={() => handleAddChannel(selectedRoom?.id)}
-            /> */}
 
             <Snackbar
                 open={showSuccess}

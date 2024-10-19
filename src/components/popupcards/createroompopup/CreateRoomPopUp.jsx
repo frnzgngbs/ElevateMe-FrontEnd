@@ -16,7 +16,7 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
 
         try {
             setLoading(true);
-            const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1"; // Replace this with your dynamic token logic if necessary
+            let token = localStorage.getItem("token");
 
             const response = await axios.post('http://localhost:8000/api/rooms/', payload, {
                 headers: {

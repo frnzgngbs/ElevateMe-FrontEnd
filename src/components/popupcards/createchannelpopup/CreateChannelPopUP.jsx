@@ -19,7 +19,7 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
         try {
             setLoading(true);
             //TODO:Token
-            const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1"; // Replace this with your dynamic token logic if necessary
+            let token = localStorage.getItem("token");
 
             const response = await axios.post(`http://localhost:8000/api/channels/`, payload, {
                 headers: {

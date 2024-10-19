@@ -22,7 +22,7 @@ const RoomCards = ({ title, roomCode, ownerEmail, roomId, onDelete }) => {
         try {
             setIsDeleting(true);
             //TODO: Token
-            const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
+			let token = localStorage.getItem("token");
 
             await axios.delete(`http://localhost:8000/api/rooms/${roomId}/`, {
                 headers: {

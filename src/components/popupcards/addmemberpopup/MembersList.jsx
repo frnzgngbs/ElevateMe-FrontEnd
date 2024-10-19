@@ -19,7 +19,7 @@ const MembersList = ({ roomId, onAddMembers, onClose }) => {
     useEffect(() => {
         const fetchMembersEmails = async () => {
             try {
-                const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1";
+                let token = localStorage.getItem("token");
 
                 if (!token) {
                     throw new Error("No token found. Please log in.");
@@ -94,7 +94,8 @@ const MembersList = ({ roomId, onAddMembers, onClose }) => {
             </Box>
         )}
         {/* Pagination Dots */}
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+        <Box>
+        <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', bottom: 55, left: 0, right:0, }}>
             <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
             <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
         </Box>
@@ -140,6 +141,7 @@ const MembersList = ({ roomId, onAddMembers, onClose }) => {
                 <AddIcon sx={{ marginRight: 1 }} />
                 Add
             </Button>
+        </Box>
         </Box>
     </Box>
     

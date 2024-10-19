@@ -12,10 +12,11 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
     const [createChannelOpen, setCreateChannelOpen] = useState(false); // State for controlling the CreateChannelPopup
-    const token = "c9da795286ada1a817f0d070e5a0feb7ddaf6be1"; // Temporary token
 
     useEffect(() => {
         const fetchChannels = async () => {
+			let token = localStorage.getItem("token");
+
             try {
                 const response = await axios.get(`http://localhost:8000/api/rooms/${roomId}/channels`, {
                     headers: {
