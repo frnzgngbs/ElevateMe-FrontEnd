@@ -7,14 +7,22 @@ import {
     ListItem,
     ListItemText,
     CircularProgress,
+    Snackbar,
+    Alert,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add'; // Import the Add icon
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
+import DeleteDialog from ".././deletedialogpopup/DeleteDialog"; // Adjust the import path if necessary
 
 const MembersList = ({ roomId, onAddMembers, onClose }) => {
-    const [membersEmails, setMembersEmails] = useState([]);
+    const [members, setMembers] = useState([]); // Store members as objects with email and id
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [memberToDelete, setMemberToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
     useEffect(() => {
         const fetchMembersEmails = async () => {
@@ -34,26 +42,27 @@ const MembersList = ({ roomId, onAddMembers, onClose }) => {
                     }
                 );
 
-                const memberIds = membersResponse.data.map(
-                    (member) => member.member_id
+                const membersData = await Promise.all(
+                    membersResponse.data.map(async (member) => {
+                        const userResponse = await axios.get(
+                            `http://localhost:8000/api/user/${member.member_id}/`,
+                            {
+                                headers: {
+                                    Authorization: `Token ${token}`,
+                                },
+                            }
+                        );
+                        return {
+                            id: member.member_id,
+                            email: userResponse.data.email,
+                        };
+                    })
                 );
 
-                const emailsPromises = memberIds.map(async (memberId) => {
-                    const userResponse = await axios.get(
-                        `http://localhost:8000/api/user/${memberId}/`,
-                        {
-                            headers: {
-                                Authorization: `Token ${token}`,
-                            },
-                        }
-                    );
-                    return userResponse.data.email;
-                });
-
-                const emails = await Promise.all(emailsPromises);
-                setMembersEmails(emails);
+                setMembers(membersData);
             } catch (err) {
                 setError(err.message);
+                setSnackbar({ open: true, message: `Error: ${err.message}`, severity: 'error' });
             } finally {
                 setLoading(false);
             }
@@ -62,89 +71,175 @@ const MembersList = ({ roomId, onAddMembers, onClose }) => {
         fetchMembersEmails();
     }, [roomId]);
 
+    const handleDeleteClick = (member) => {
+        setMemberToDelete(member);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDelete = async () => {
+        setIsDeleting(true);
+        let token = localStorage.getItem("token");
+
+        try {
+            await axios.delete(
+                `http://localhost:8000/api/rooms/${roomId}/members/${memberToDelete.id}/`,
+                {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                }
+            );
+
+            setMembers((prevMembers) =>
+                prevMembers.filter((member) => member.id !== memberToDelete.id)
+            );
+            setSnackbar({ open: true, message: 'Member deleted successfully!', severity: 'success' });
+        } catch (error) {
+            console.error("Error deleting member:", error);
+            setSnackbar({ open: true, message: 'Error deleting member', severity: 'error' });
+        } finally {
+            setIsDeleting(false);
+            setDeleteDialogOpen(false);
+            setMemberToDelete(null);
+        }
+    };
+
+    const handleCloseSnackbar = () => {
+        setSnackbar({ ...snackbar, open: false });
+    };
+
     return (
         <Box sx={{ p: 2, display: "flex", flexDirection: "column", height: "100%", position: "relative" }}>
-        <Typography variant="h6" align="center" gutterBottom sx={{ textAlign: "center", marginTop: -3 }}>
-            Current Members
-        </Typography>
-        {loading ? (
-            <Box display="flex" justifyContent="center" alignItems="center" height="100px">
-                <CircularProgress />
-            </Box>
-        ) : error ? (
-            <Typography color="error" align="center">
-                {error}
+            <Typography variant="h6" align="center" gutterBottom sx={{ textAlign: "center", marginTop: -3 }}>
+                Current Members
             </Typography>
-        ) : (
-            <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
-                <List>
-                    {membersEmails.map((email, index) => (
-                        <ListItem
-                            key={index}
-                            sx={{
-                                backgroundColor: "rgba(24, 111, 101, 0.1)",
-                                borderRadius: "8px",
-                                marginBottom: "8px",
-                            }}
-                        >
-                            <ListItemText primary={email} />
-                        </ListItem>
-                    ))}
-                </List>
+            {loading ? (
+                <Box display="flex" justifyContent="center" alignItems="center" height="100px">
+                    <CircularProgress />
+                </Box>
+            ) : error ? (
+                <Typography color="error" align="center">
+                    {error}
+                </Typography>
+            ) : members.length === 0 ? (
+                <Box
+                sx={{
+                    flexGrow: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    color: "#888",
+                    backgroundColor: "rgba(24, 111, 101, 0.05)",
+                    borderRadius: "8px",
+                    height: "250px",
+                    padding: 4,
+                    marginBottom: 8,
+                }}
+            >
+                <Typography variant="body2">
+                    No Members available. Click 'Add member' to create one.
+                </Typography>
             </Box>
-        )}
-        {/* Pagination Dots */}
-        <Box>
-        <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', bottom: 55, left: 0, right:0, }}>
-            <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
-            <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
-        </Box>
-    
-        {/* Buttons anchored at the bottom */}
-        <Box
-            sx={{
-                position: 'absolute',
-                bottom: 2, // 20px from the bottom
-                left: 0,
-                right: 0,
-                display: "flex",
-                justifyContent: "center",
-                gap: 2,
-            }}
-        >
-            <Button
-                variant="contained"
-                onClick={onClose}
-                sx={{
-                    borderRadius: "20px",
-                    padding: "8px 24px",
-                    backgroundColor: "#187569",
-                    "&:hover": {
-                        backgroundColor: "#145c56",
-                    },
-                }}
+            ) : (
+                <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
+                    <List>
+                        {members.map((member) => (
+                            <ListItem
+                                key={member.id}
+                                sx={{
+                                    backgroundColor: "rgba(24, 111, 101, 0.1)",
+                                    borderRadius: "8px",
+                                    marginBottom: "8px",
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <ListItemText primary={member.email} sx={{ color: "#000" }} />
+                                <Button
+                                    onClick={() => handleDeleteClick(member)}
+                                    sx={{ color: "#000" }} // Set the same color as the text
+                                >
+                                    <DeleteIcon />
+                                </Button>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
+            )}
+            {/* Pagination Dots */}
+            <Box>
+                <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', bottom: 55, left: 0, right: 0 }}>
+                    <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
+                    <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
+                </Box>
+
+                {/* Buttons anchored at the bottom */}
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        bottom: 2,
+                        left: 0,
+                        right: 0,
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: 2,
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        onClick={onClose}
+                        sx={{
+                            borderRadius: "20px",
+                            padding: "8px 24px",
+                            backgroundColor: "#187569",
+                            "&:hover": {
+                                backgroundColor: "#145c56",
+                            },
+                        }}
+                    >
+                        Close
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={onAddMembers}
+                        sx={{
+                            borderRadius: "20px",
+                            padding: "8px 24px",
+                            backgroundColor: "#187569",
+                            "&:hover": {
+                                backgroundColor: "#145c56",
+                            },
+                        }}
+                    >
+                        <AddIcon sx={{ marginRight: 1 }} />
+                        Add
+                    </Button>
+                </Box>
+            </Box>
+
+            {/* Render DeleteDialog */}
+            <DeleteDialog
+                open={deleteDialogOpen}
+                onClose={() => setDeleteDialogOpen(false)}
+                onDelete={handleDelete}
+                title={memberToDelete?.email}
+                isDeleting={isDeleting}
+            />
+
+            {/* Snackbar for displaying messages */}
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >
-                Close
-            </Button>
-            <Button
-                variant="contained"
-                onClick={onAddMembers}
-                sx={{
-                    borderRadius: "20px",
-                    padding: "8px 24px",
-                    backgroundColor: "#187569",
-                    "&:hover": {
-                        backgroundColor: "#145c56",
-                    },
-                }}
-            >
-                <AddIcon sx={{ marginRight: 1 }} />
-                Add
-            </Button>
+                <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box>
-        </Box>
-    </Box>
-    
     );
 };
 
