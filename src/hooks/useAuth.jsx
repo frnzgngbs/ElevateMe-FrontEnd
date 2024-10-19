@@ -6,8 +6,11 @@ const useAuth = () => {
   const navigate = useNavigate();
 
   const Login = async (user) => {
+    if (!user.email || !user.password) {
+      alert("Please enter both email and password");
+      return;
+    }
     try {
-
       /*console.log("Login attempt with payload:", {
         email: user.email,
         password: user.password,
@@ -20,9 +23,9 @@ const useAuth = () => {
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
+        alert("Login successfully!");
         navigate("/home", { replace: true });
       }
-      alert("Login successfully!");
     } catch (err) {
       if (err.code === "ERR_BAD_REQUEST") {
         alert(err.response.data.error);
