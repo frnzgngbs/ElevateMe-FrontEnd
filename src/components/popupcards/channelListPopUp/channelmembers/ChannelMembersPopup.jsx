@@ -131,4 +131,4 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user}) => {
     );
 };
 
-export default ChannelMembersPopup.jsx;
+export default ChannelMembersPopup;

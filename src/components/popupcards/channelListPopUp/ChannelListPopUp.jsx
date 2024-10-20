@@ -167,7 +167,7 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                                     
                                             
                                             width: "90%",
-                                            marginBottom: "8px",
+                                            
                                             padding: 0, 
                                         }}
                                     >
@@ -234,6 +234,9 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                 roomId={roomId}
                 onChannelCreated={handleChannelCreated}
             />
+
+
+            
 
             {/* Render ChannelMembersPopup */}
             {selectedChannelId && (
