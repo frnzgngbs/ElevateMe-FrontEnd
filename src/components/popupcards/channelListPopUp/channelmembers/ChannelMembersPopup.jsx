@@ -10,8 +10,8 @@ import axios from "axios";
 import MembersList from "./MemberListChannel";
 import AddMember from "./AddMemberChannel";
 
-const ChannelMembersPopup = ({ open, onClose, roomId, user}) => {
-    const [currentPage, setCurrentPage] = useState("members"); // "members" or "addMember"
+const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
+    const [currentPage, setCurrentPage] = useState("members"); 
     const [emailDatabase, setEmailDatabase] = useState([]);
     const [members, setMembers] = useState([]);
     const [snackbar, setSnackbar] = useState({
@@ -38,9 +38,10 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user}) => {
              try {
         let token = localStorage.getItem("token");
 
-            const payload = { new_room_members: addedEmails };
+            const payload = { new_channel_members_emails: addedEmails, room_id: roomId };
+            console.log(payload);
             const response = await axios.patch(
-                `http://localhost:8000/api/rooms/${roomId}/`,
+                `http://localhost:8000/api/channels/${channelId}/`,
                 payload,
                 { headers: { Authorization: `Token ${token}` } }
             );
@@ -107,6 +108,7 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user}) => {
                         roomId={roomId}
                         onClose={onClose}
                         user={user}
+                        channelId= {channelId}
                     />
                 ) : (
                     <AddMember

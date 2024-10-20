@@ -15,7 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 import DeleteDialog from "../../deletedialogpopup/DeleteDialog"; 
 
-const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
+const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) => {
     const [members, setMembers] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -34,7 +34,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
                 }
 
                 const membersResponse = await axios.get(
-                    `http://localhost:8000/api/rooms/${roomId}/members/`,
+                    `http://localhost:8000/api/channels/${channelId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -82,7 +82,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
 
         try {
             await axios.delete(
-                `http://localhost:8000/api/rooms/${roomId}/members/${memberToDelete.id}/`,
+                `http://localhost:8000/api/channels/${channelId}/members/${memberToDelete.id}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`,
@@ -111,7 +111,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
     return (
         <Box sx={{ p: 2, display: "flex", flexDirection: "column", height: "100%", position: "relative" }}>
             <Typography variant="h6" align="center" gutterBottom sx={{ textAlign: "center", marginTop: -3 }}>
-                Current Members
+                Channel Members
             </Typography>
             {loading ? (
                 <Box display="flex" justifyContent="center" alignItems="center" height="100px">
@@ -171,7 +171,6 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
                     </List>
                 </Box>
             )}
-            {/* Pagination Dots and Add button, visible only if user is not a student */}
             {user?.user_type !== "STUDENT" && (
                 <Box>
                     <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', bottom: 55, left: 0, right: 0 }}>
@@ -221,7 +220,6 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
                     </Box>
                 </Box>
             )}
-            {/* Only the Close button if user is a student */}
             {user?.user_type === "STUDENT" && (
                 <Box
                     sx={{
@@ -250,7 +248,6 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
                 </Box>
             )}
 
-            {/* Render DeleteDialog */}
             <DeleteDialog
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
@@ -259,7 +256,6 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
                 isDeleting={isDeleting}
             />
 
-            {/* Snackbar for displaying messages */}
             <Snackbar
                 open={snackbar.open}
                 autoHideDuration={6000}

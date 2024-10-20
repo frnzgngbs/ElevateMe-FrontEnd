@@ -10,13 +10,13 @@ import {
     Typography,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import ChannelCard from "./ChannelCard"; // Adjust the import path if necessary
-import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP"; // Import the new component
+import ChannelCard from "./ChannelCard"; 
+import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP"; 
 import ChannelMembersPopup from "./channelmembers/ChannelMembersPopup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const ChannelListPopup = ({ open, onClose, roomId }) => {
+const ChannelListPopup = ({ open, onClose, roomId, user }) => {
     const navigate = useNavigate();
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -227,7 +227,6 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                 </Box>
             </Modal>
 
-            {/* Render CreateChannelPopup */}
             <CreateChannelPopup
                 open={createChannelOpen}
                 onClose={handleCreateChannelClose}
@@ -238,12 +237,14 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
 
             
 
-            {/* Render ChannelMembersPopup */}
             {selectedChannelId && (
                 <ChannelMembersPopup
                     open={channelMembersOpen}
                     onClose={handleChannelMembersClose}
                     channelId={selectedChannelId}
+                    user={user}
+                    roomId={roomId}
+                    
                 />
             )}
         </>

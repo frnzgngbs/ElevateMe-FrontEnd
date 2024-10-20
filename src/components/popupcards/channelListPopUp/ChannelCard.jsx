@@ -11,23 +11,22 @@ const ChannelCard = ({ title, onClick, onDelete, onAddMember }) => {
                 cursor: "pointer",
                 width:"100%",
                 position: "relative",
-                display: "flex", // Arrange content in a row
-                alignItems: "center", // Center vertically
-                padding: "8px 16px", // Add padding inside the card
-                justifyContent: "space-between", // Space between title and icons
+                display: "flex",
+                alignItems: "center", 
+                padding: "8px 16px", 
+                justifyContent: "space-between", 
                 backgroundColor: "rgba(24, 111, 101, 0.1)",
                 boxShadow: 0,
             }}
-            onClick={onClick} // Handle click to navigate to the channel page
+            onClick={onClick}
         >
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 {title}
             </Typography>
             <Box>
-                {/* Add Member Icon */}
                 <IconButton
                     onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering the card click
+                        e.stopPropagation(); 
                         onAddMember();
                     }}
                     sx={{
@@ -40,10 +39,9 @@ const ChannelCard = ({ title, onClick, onDelete, onAddMember }) => {
                     <GroupAdd />
                 </IconButton>
 
-                {/* Delete Icon */}
                 <IconButton
                     onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering the card click
+                        e.stopPropagation(); 
                         onDelete();
                     }}
                     sx={{

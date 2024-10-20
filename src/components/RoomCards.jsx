@@ -39,7 +39,6 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
 
 
 
-    // Function to handle copying the room code to the clipboard
     const handleCopyRoomCode = async (e) => {
         e.stopPropagation();
         try {
@@ -54,7 +53,6 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
         }
     };
 
-    //Function to handle showing the channel list popup
     const handleShowChannelList = () => {
         setChannelList([{ id: 1, title: "Channel 1" }, { id: 2, title: "Channel 2" }]); // Example channel list with IDs
         setOpenChannelList(true);
@@ -185,6 +183,7 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
                 onClose={() => setOpenChannelList(false)}
                 roomId={roomId} 
                 onAddChannel={() => console.log("Add new channel logic goes here.")}
+                user={user}
             />
 
             <AddMemberPopup

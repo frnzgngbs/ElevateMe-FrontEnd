@@ -11,7 +11,7 @@ import MembersList from "./MembersList";
 import AddMember from "./AddMember";
 
 const AddMemberPopup = ({ open, onClose, roomId, user}) => {
-    const [currentPage, setCurrentPage] = useState("members"); // "members" or "addMember"
+    const [currentPage, setCurrentPage] = useState("members"); 
     const [emailDatabase, setEmailDatabase] = useState([]);
     const [members, setMembers] = useState([]);
     const [snackbar, setSnackbar] = useState({
