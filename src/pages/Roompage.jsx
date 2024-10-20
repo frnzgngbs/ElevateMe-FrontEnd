@@ -64,6 +64,20 @@ const RoomPage = () => {
 		fetchCurrentlyLoggedInUser();
 	}, []);
 
+	const handleRoomJoined = (joinedRoom) => {
+		setRooms((prevRooms) => [
+			...prevRooms,
+			{
+				id: joinedRoom.id,
+				room_name: joinedRoom.room_name,
+				room_code: joinedRoom.room_code,
+				room_owner_id: joinedRoom.room_owner_id,
+				channels: joinedRoom.channels || [],
+			},
+		]);
+		setShowSuccess(true);
+	};
+
 	const handleOpenPopup = () => {
 		setIsPopupOpen(true);
 	};
@@ -90,7 +104,7 @@ const RoomPage = () => {
 		setRooms((prevRooms) => [
 			...prevRooms,
 			{
-				id:room.id,
+				id: room.id,
 				room_name: room.room_name,
 				room_code: room.room_code,
 				room_owner_Id: room.room_owner_id,
@@ -165,18 +179,20 @@ const RoomPage = () => {
 						justifyContent: "flex-end",
 						marginBottom: "20px",
 					}}>
-					<Button
-						variant="contained"
-						startIcon={<Add />}
-						onClick={handleOpenPopup}
-						sx={{
-							borderRadius: 4,
-							backgroundColor: "#186F65",
-							color: "white",
-							minWidth: "150px",
-						}}>
-						Join Room
-					</Button>
+					{user.user_type === "STUDENT" && (
+						<Button
+							variant="contained"
+							startIcon={<Add />}
+							onClick={handleOpenPopup}
+							sx={{
+								borderRadius: 4,
+								backgroundColor: "#186F65",
+								color: "white",
+								minWidth: "150px",
+							}}>
+							Join Room
+						</Button>
+					)}
 
 					{user.user_type === "TEACHER" && (
 						<Button
@@ -210,6 +226,7 @@ const RoomPage = () => {
 							ownerId={room.room_owner_id}
 							roomId={room.id}
 							onDelete={handleDeleteRoom}
+							user={user}
 						/>
 					</Grid>
 				))}
@@ -218,8 +235,8 @@ const RoomPage = () => {
 			<JoinRoomPopup
 				open={isPopupOpen}
 				onClose={handleClosePopup}
-				onJoin={() => handleClosePopup()}
-                user={user}
+				onJoin={handleRoomJoined}
+				user={user}
 			/>
 
 			<CreateRoomPopup

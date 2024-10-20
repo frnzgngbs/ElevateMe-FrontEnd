@@ -13,13 +13,12 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
             setShowError(true);
             return;
         }
-        console.log(user.id);
         try {
             const token = localStorage.getItem("token");
             if (!token) {
                 throw new Error("Token is missing. Please log in.");
             }
-
+    
             const response = await axios.post(
                 "http://localhost:8000/api/rooms/join/",
                 {
@@ -30,9 +29,9 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
                     headers: { Authorization: `Token ${token}` },
                 }
             );
-
-            onJoin(response.data);
-            onClose();
+    
+            onJoin(response.data); // Pass the joined room data back to the RoomPage
+            onClose(); // Close the popup
         } catch (error) {
             console.error("Error joining room:", error);
             setErrorMessage(
@@ -41,7 +40,7 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
             setShowError(true);
         }
     };
-
+    
     return (
         <>
             <Modal

@@ -47,6 +47,33 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
         }
     }, [open, roomId]);
 
+    const handleDeleteChannel = async (channelId) => {
+        let token = localStorage.getItem("token");
+    
+        try {
+            await axios.delete(
+                `http://localhost:8000/api/channels/${channelId}`,
+                {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                }
+            );
+            
+            setChannels((prevChannels) =>
+                prevChannels.filter((channel) => channel.id !== channelId)
+            );
+        } catch (error) {
+            console.error("Error deleting channel:", error);
+        }
+    };
+    
+    const handleAddMemberToChannel = (channelId) => {
+        // Open the add member dialog or perform actions to add a member
+        console.log("Add member to channel:", channelId);
+        // Implement your logic for adding a member, e.g., open a popup
+    };
+    
     const handleChannelClick = (channelId) => {
         navigate(`/channel/${channelId}`);
         onClose();
@@ -127,19 +154,23 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                                 }}
                             >
                                 {channels.map((channel) => (
-                                    <ListItem
-                                        key={channel.id}
-                                        sx={{
-                                            backgroundColor: "rgba(24, 111, 101, 0.1)",
-                                            borderRadius: "8px",
-                                            width: "90%", // Centering cards with margin
-                                            marginBottom: "8px",
-                                            cursor: "pointer",
-                                        }}
-                                        onClick={() => handleChannelClick(channel.id)}
-                                    >
-                                        <ListItemText primary={channel.channel_name} />
-                                    </ListItem>
+                                   <ListItem
+                                   key={channel.id}
+                                   sx={{
+                                       backgroundColor: "rgba(24, 111, 101, 0.1)",
+                                       borderRadius: "8px",
+                                       width: "90%",
+                                       marginBottom: "8px",
+                                       padding: 0, // Remove extra padding for better card styling
+                                   }}
+                               >
+                                   <ChannelCard
+                                       title={channel.channel_name}
+                                       onClick={() => handleChannelClick(channel.id)}
+                                       onDelete={() => handleDeleteChannel(channel.id)}
+                                       onAddMember={() => handleAddMemberToChannel(channel.id)}
+                                   />
+                               </ListItem>
                                 ))}
                             </List>
                         </Box>

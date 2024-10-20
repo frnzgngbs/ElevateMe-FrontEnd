@@ -10,8 +10,7 @@ import {
     ListItem,
     ListItemText,
 } from "@mui/material";
-import CheckIcon from '@mui/icons-material/Check'; // Import the Check icon
-
+import CheckIcon from '@mui/icons-material/Check'; 
 const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
     const [emailInput, setEmailInput] = useState("");
     const [suggestions, setSuggestions] = useState([]);

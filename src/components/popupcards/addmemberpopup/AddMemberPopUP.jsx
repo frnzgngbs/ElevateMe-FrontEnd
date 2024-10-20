@@ -10,7 +10,7 @@ import axios from "axios";
 import MembersList from "./MembersList";
 import AddMember from "./AddMember";
 
-const AddMemberPopup = ({ open, onClose, roomId }) => {
+const AddMemberPopup = ({ open, onClose, roomId, user}) => {
     const [currentPage, setCurrentPage] = useState("members"); // "members" or "addMember"
     const [emailDatabase, setEmailDatabase] = useState([]);
     const [members, setMembers] = useState([]);
@@ -75,7 +75,6 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
         setCurrentPage("addMember");
     };
 
-    // Handle Snackbar close
     const handleSnackbarClose = () => {
         setSnackbar((prev) => ({ ...prev, open: false }));
     };
@@ -107,6 +106,7 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
                         onAddMembers={handleAddMembersPage}
                         roomId={roomId}
                         onClose={onClose}
+                        user={user}
                     />
                 ) : (
                     <AddMember

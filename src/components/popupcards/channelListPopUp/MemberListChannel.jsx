@@ -15,7 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 import DeleteDialog from ".././deletedialogpopup/DeleteDialog"; 
 
-const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
+const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
     const [members, setMembers] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -274,4 +274,4 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
     );
 };
 
-export default MembersList;
+export default MembersListChannel;
