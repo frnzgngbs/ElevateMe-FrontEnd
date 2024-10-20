@@ -4,8 +4,8 @@ import SampleImage from "../res/sampleImage.jpg";
 import axios from "axios";
 import { useState } from "react";
 import DeleteDialog from "./popupcards/deletedialogpopup/DeleteDialog";
-import ChannelListPopup from "./popupcards/channelListPopUp/ChannelListPopUp";
-import AddMemberPopup from "./popupcards/addmemberpopup/AddMemberPopUP";
+import ChannelListPopup from "./popupcards/channelListPopUp/ChannelListPopup.jsx";
+import AddMemberPopup from "./popupcards/addmemberpopup/RoomMembersPopup";
 
 const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
     const [isDeleting, setIsDeleting] = useState(false);

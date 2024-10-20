@@ -6,14 +6,17 @@ const ChannelCard = ({ title, onClick, onDelete, onAddMember }) => {
     return (
         <Card
             sx={{
-                borderRadius: 4,
-                boxShadow: 2,
+                borderRadius: 3,
+                
                 cursor: "pointer",
+                width:"100%",
                 position: "relative",
                 display: "flex", // Arrange content in a row
                 alignItems: "center", // Center vertically
                 padding: "8px 16px", // Add padding inside the card
                 justifyContent: "space-between", // Space between title and icons
+                backgroundColor: "rgba(24, 111, 101, 0.1)",
+                boxShadow: 0,
             }}
             onClick={onClick} // Handle click to navigate to the channel page
         >

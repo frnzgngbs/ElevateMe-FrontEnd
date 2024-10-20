@@ -4,7 +4,7 @@ import GridBackground from "../res/gridbackground.png";
 import RoomCard from "../components/RoomCards";
 import JoinRoomPopup from "../components/popupcards/JoinRoomPopUp/JoinRoomPopUp";
 import CreateRoomPopup from "../components/popupcards/createroompopup/CreateRoomPopUp";
-import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopUp";
+import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopup.jsx";
 import { useState, useEffect } from "react";
 import axios from "axios";
 

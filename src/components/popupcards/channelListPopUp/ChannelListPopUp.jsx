@@ -12,6 +12,7 @@ import {
 import { Add } from "@mui/icons-material";
 import ChannelCard from "./ChannelCard"; // Adjust the import path if necessary
 import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP"; // Import the new component
+import ChannelMembersPopup from "./channelmembers/ChannelMembersPopup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -20,6 +21,8 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
     const [createChannelOpen, setCreateChannelOpen] = useState(false);
+    const [channelMembersOpen, setChannelMembersOpen] = useState(false);
+    const [selectedChannelId, setSelectedChannelId] = useState(null);
 
     useEffect(() => {
         const fetchChannels = async () => {
@@ -69,9 +72,8 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
     };
     
     const handleAddMemberToChannel = (channelId) => {
-        // Open the add member dialog or perform actions to add a member
-        console.log("Add member to channel:", channelId);
-        // Implement your logic for adding a member, e.g., open a popup
+        setSelectedChannelId(channelId);
+        setChannelMembersOpen(true);
     };
     
     const handleChannelClick = (channelId) => {
@@ -90,6 +92,11 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
     const handleChannelCreated = (newChannel) => {
         setChannels((prevChannels) => [...prevChannels, newChannel]);
         handleCreateChannelClose();
+    };
+
+    const handleChannelMembersClose = () => {
+        setChannelMembersOpen(false);
+        setSelectedChannelId(null);
     };
 
     return (
@@ -154,28 +161,28 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                                 }}
                             >
                                 {channels.map((channel) => (
-                                   <ListItem
-                                   key={channel.id}
-                                   sx={{
-                                       backgroundColor: "rgba(24, 111, 101, 0.1)",
-                                       borderRadius: "8px",
-                                       width: "90%",
-                                       marginBottom: "8px",
-                                       padding: 0, // Remove extra padding for better card styling
-                                   }}
-                               >
-                                   <ChannelCard
-                                       title={channel.channel_name}
-                                       onClick={() => handleChannelClick(channel.id)}
-                                       onDelete={() => handleDeleteChannel(channel.id)}
-                                       onAddMember={() => handleAddMemberToChannel(channel.id)}
-                                   />
-                               </ListItem>
+                                    <ListItem
+                                        key={channel.id}
+                                        sx={{
+                                    
+                                            
+                                            width: "90%",
+                                            marginBottom: "8px",
+                                            padding: 0, 
+                                        }}
+                                    >
+                                        <ChannelCard
+                                            title={channel.channel_name}
+                                            onClick={() => handleChannelClick(channel.id)}
+                                            onDelete={() => handleDeleteChannel(channel.id)}
+                                            onAddMember={() => handleAddMemberToChannel(channel.id)}
+                                        />
+                                    </ListItem>
                                 ))}
                             </List>
                         </Box>
                     )}
-                   
+                    
                     <Box
                         sx={{
                             marginBottom: 3,
@@ -227,6 +234,15 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                 roomId={roomId}
                 onChannelCreated={handleChannelCreated}
             />
+
+            {/* Render ChannelMembersPopup */}
+            {selectedChannelId && (
+                <ChannelMembersPopup
+                    open={channelMembersOpen}
+                    onClose={handleChannelMembersClose}
+                    channelId={selectedChannelId}
+                />
+            )}
         </>
     );
 };

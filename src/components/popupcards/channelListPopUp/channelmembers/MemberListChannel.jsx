@@ -13,7 +13,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
-import DeleteDialog from ".././deletedialogpopup/DeleteDialog"; 
+import DeleteDialog from "../../deletedialogpopup/DeleteDialog"; 
 
 const MembersListChannel = ({ roomId, onAddMembers, onClose, user }) => {
     const [members, setMembers] = useState([]); 
