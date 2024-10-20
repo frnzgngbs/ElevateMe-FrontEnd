@@ -11,7 +11,7 @@ import {
     ListItemText,
 } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check'; 
-const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
+const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
     const [emailInput, setEmailInput] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [addedEmails, setAddedEmails] = useState([]);
@@ -162,7 +162,6 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
             </div>
 
             <Box >
-                {/* Pagination Dots */}
                 <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
                     <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
                     <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
@@ -174,7 +173,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
                         alignContent:"center",
                         position: 'relative',
                         bottom: '20px',
-                        gap: 2, // Added space from bottom
+                        gap: 2, 
                     }}
                 >
                     <Button
@@ -212,4 +211,4 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
     );
 };
 
-export default AddMember;
+export default AddMemberChannel;

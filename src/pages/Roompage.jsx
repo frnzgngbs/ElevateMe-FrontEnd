@@ -4,7 +4,7 @@ import GridBackground from "../res/gridbackground.png";
 import RoomCard from "../components/RoomCards";
 import JoinRoomPopup from "../components/popupcards/JoinRoomPopUp/JoinRoomPopUp";
 import CreateRoomPopup from "../components/popupcards/createroompopup/CreateRoomPopUp";
-import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopUp";
+import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopup.jsx";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -33,7 +33,6 @@ const RoomPage = () => {
 					throw new Error("No token found. Please log in.");
 				}
 
-				// Fetch the currently logged-in user's ID
 				const userResponse = await axios.get(
 					"http://localhost:8000/api/user/get_currently_login/",
 					{
@@ -65,6 +64,20 @@ const RoomPage = () => {
 		fetchCurrentlyLoggedInUser();
 	}, []);
 
+	const handleRoomJoined = (joinedRoom) => {
+		setRooms((prevRooms) => [
+			...prevRooms,
+			{
+				id: joinedRoom.id,
+				room_name: joinedRoom.room_name,
+				room_code: joinedRoom.room_code,
+				room_owner_id: joinedRoom.room_owner_id,
+				channels: joinedRoom.channels || [],
+			},
+		]);
+		setShowSuccess(true);
+	};
+
 	const handleOpenPopup = () => {
 		setIsPopupOpen(true);
 	};
@@ -87,14 +100,14 @@ const RoomPage = () => {
 		);
 	};
 
-	const handleRoomCreated = (newRoom) => {
+	const handleRoomCreated = (room) => {
 		setRooms((prevRooms) => [
 			...prevRooms,
 			{
-				id: newRoom.id,
-				title: newRoom.room_name,
-				roomCode: newRoom.room_code,
-				ownerEmail: newRoom.room_owner_id.email,
+				id: room.id,
+				room_name: room.room_name,
+				room_code: room.room_code,
+				room_owner_Id: room.room_owner_id,
 				channels: [],
 			},
 		]);
@@ -166,18 +179,20 @@ const RoomPage = () => {
 						justifyContent: "flex-end",
 						marginBottom: "20px",
 					}}>
-					<Button
-						variant="contained"
-						startIcon={<Add />}
-						onClick={handleOpenPopup}
-						sx={{
-							borderRadius: 4,
-							backgroundColor: "#186F65",
-							color: "white",
-							minWidth: "150px",
-						}}>
-						Join Room
-					</Button>
+					{user.user_type === "STUDENT" && (
+						<Button
+							variant="contained"
+							startIcon={<Add />}
+							onClick={handleOpenPopup}
+							sx={{
+								borderRadius: 4,
+								backgroundColor: "#186F65",
+								color: "white",
+								minWidth: "150px",
+							}}>
+							Join Room
+						</Button>
+					)}
 
 					{user.user_type === "TEACHER" && (
 						<Button
@@ -207,10 +222,11 @@ const RoomPage = () => {
 						onClick={() => handleOpenChannelList(room)}>
 						<RoomCard
 							title={room.room_name}
-							roomCode={room.roomCode}
-							ownerEmail={room.ownerEmail}
-							roomId={room.room_id}
+							roomCode={room.room_code}
+							ownerId={room.room_owner_id}
+							roomId={room.id}
 							onDelete={handleDeleteRoom}
+							user={user}
 						/>
 					</Grid>
 				))}
@@ -219,7 +235,8 @@ const RoomPage = () => {
 			<JoinRoomPopup
 				open={isPopupOpen}
 				onClose={handleClosePopup}
-				onJoin={() => handleClosePopup()}
+				onJoin={handleRoomJoined}
+				user={user}
 			/>
 
 			<CreateRoomPopup

@@ -7,11 +7,11 @@ import {
     Alert,
 } from "@mui/material";
 import axios from "axios";
-import MembersList from "./MembersList";
-import AddMember from "./AddMember";
+import MembersList from "./MemberListChannel";
+import AddMember from "./AddMemberChannel";
 
-const AddMemberPopup = ({ open, onClose, roomId }) => {
-    const [currentPage, setCurrentPage] = useState("members"); // "members" or "addMember"
+const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
+    const [currentPage, setCurrentPage] = useState("members"); 
     const [emailDatabase, setEmailDatabase] = useState([]);
     const [members, setMembers] = useState([]);
     const [snackbar, setSnackbar] = useState({
@@ -38,9 +38,10 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
              try {
         let token = localStorage.getItem("token");
 
-            const payload = { new_room_members: addedEmails };
+            const payload = { new_channel_members_emails: addedEmails, room_id: roomId };
+            console.log(payload);
             const response = await axios.patch(
-                `http://localhost:8000/api/rooms/${roomId}/`,
+                `http://localhost:8000/api/channels/${channelId}/`,
                 payload,
                 { headers: { Authorization: `Token ${token}` } }
             );
@@ -75,7 +76,6 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
         setCurrentPage("addMember");
     };
 
-    // Handle Snackbar close
     const handleSnackbarClose = () => {
         setSnackbar((prev) => ({ ...prev, open: false }));
     };
@@ -107,6 +107,8 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
                         onAddMembers={handleAddMembersPage}
                         roomId={roomId}
                         onClose={onClose}
+                        user={user}
+                        channelId= {channelId}
                     />
                 ) : (
                     <AddMember
@@ -131,4 +133,4 @@ const AddMemberPopup = ({ open, onClose, roomId }) => {
     );
 };
 
-export default AddMemberPopup;
+export default ChannelMembersPopup;

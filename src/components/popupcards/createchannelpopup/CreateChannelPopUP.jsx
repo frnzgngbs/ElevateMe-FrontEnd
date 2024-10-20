@@ -31,7 +31,7 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
             console.log("Channel created successfully:", response.data);
 
             // Call the onChannelCreated callback with the new channel data (if needed to update UI)
-            onChannelCreated(response.data);
+            onChannelCreated(response.data);    
 
             // Show success snackbar
             setSnackbar({
@@ -40,7 +40,6 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
                 severity: "success",
             });
 
-            // Reset fields and close the popup after successful creation
             setChannelName("");
             setMembers("");
             onClose();

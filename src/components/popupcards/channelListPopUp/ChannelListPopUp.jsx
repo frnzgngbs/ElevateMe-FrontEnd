@@ -10,16 +10,19 @@ import {
     Typography,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import ChannelCard from "./ChannelCard"; // Adjust the import path if necessary
-import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP"; // Import the new component
+import ChannelCard from "./ChannelCard"; 
+import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP"; 
+import ChannelMembersPopup from "./channelmembers/ChannelMembersPopup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const ChannelListPopup = ({ open, onClose, roomId }) => {
+const ChannelListPopup = ({ open, onClose, roomId, user }) => {
     const navigate = useNavigate();
     const [channels, setChannels] = useState([]);
     const [loading, setLoading] = useState(true);
     const [createChannelOpen, setCreateChannelOpen] = useState(false);
+    const [channelMembersOpen, setChannelMembersOpen] = useState(false);
+    const [selectedChannelId, setSelectedChannelId] = useState(null);
 
     useEffect(() => {
         const fetchChannels = async () => {
@@ -47,6 +50,32 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
         }
     }, [open, roomId]);
 
+    const handleDeleteChannel = async (channelId) => {
+        let token = localStorage.getItem("token");
+    
+        try {
+            await axios.delete(
+                `http://localhost:8000/api/channels/${channelId}`,
+                {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                }
+            );
+            
+            setChannels((prevChannels) =>
+                prevChannels.filter((channel) => channel.id !== channelId)
+            );
+        } catch (error) {
+            console.error("Error deleting channel:", error);
+        }
+    };
+    
+    const handleAddMemberToChannel = (channelId) => {
+        setSelectedChannelId(channelId);
+        setChannelMembersOpen(true);
+    };
+    
     const handleChannelClick = (channelId) => {
         navigate(`/channel/${channelId}`);
         onClose();
@@ -63,6 +92,11 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
     const handleChannelCreated = (newChannel) => {
         setChannels((prevChannels) => [...prevChannels, newChannel]);
         handleCreateChannelClose();
+    };
+
+    const handleChannelMembersClose = () => {
+        setChannelMembersOpen(false);
+        setSelectedChannelId(null);
     };
 
     return (
@@ -108,7 +142,7 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                                 color: "#888",
                                 backgroundColor: "rgba(24, 111, 101, 0.05)",
                                 borderRadius: "8px",
-                                height: "50%",
+                                height: "70%",
                                 padding: 4,
                             }}
                         >
@@ -130,21 +164,25 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                                     <ListItem
                                         key={channel.id}
                                         sx={{
-                                            backgroundColor: "rgba(24, 111, 101, 0.1)",
-                                            borderRadius: "8px",
-                                            width: "90%", // Centering cards with margin
-                                            marginBottom: "8px",
-                                            cursor: "pointer",
+                                    
+                                            
+                                            width: "90%",
+                                            
+                                            padding: 0, 
                                         }}
-                                        onClick={() => handleChannelClick(channel.id)}
                                     >
-                                        <ListItemText primary={channel.channel_name} />
+                                        <ChannelCard
+                                            title={channel.channel_name}
+                                            onClick={() => handleChannelClick(channel.id)}
+                                            onDelete={() => handleDeleteChannel(channel.id)}
+                                            onAddMember={() => handleAddMemberToChannel(channel.id)}
+                                        />
                                     </ListItem>
                                 ))}
                             </List>
                         </Box>
                     )}
-                   
+                    
                     <Box
                         sx={{
                             marginBottom: 3,
@@ -189,13 +227,26 @@ const ChannelListPopup = ({ open, onClose, roomId }) => {
                 </Box>
             </Modal>
 
-            {/* Render CreateChannelPopup */}
             <CreateChannelPopup
                 open={createChannelOpen}
                 onClose={handleCreateChannelClose}
                 roomId={roomId}
                 onChannelCreated={handleChannelCreated}
             />
+
+
+            
+
+            {selectedChannelId && (
+                <ChannelMembersPopup
+                    open={channelMembersOpen}
+                    onClose={handleChannelMembersClose}
+                    channelId={selectedChannelId}
+                    user={user}
+                    roomId={roomId}
+                    
+                />
+            )}
         </>
     );
 };
