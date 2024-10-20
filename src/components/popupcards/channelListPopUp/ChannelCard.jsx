@@ -2,19 +2,18 @@ import React from "react";
 import { Card, CardContent, IconButton, Typography, Box } from "@mui/material";
 import { Delete, GroupAdd } from "@mui/icons-material";
 
-const ChannelCard = ({ title, onClick, onDelete, onAddMember }) => {
+const ChannelCard = ({ title, onClick, onDelete, onAddMember, user }) => {
     return (
         <Card
             sx={{
                 borderRadius: 3,
-                
                 cursor: "pointer",
-                width:"100%",
+                width: "100%",
                 position: "relative",
                 display: "flex",
-                alignItems: "center", 
-                padding: "8px 16px", 
-                justifyContent: "space-between", 
+                alignItems: "center",
+                padding: "8px 16px",
+                justifyContent: "space-between",
                 backgroundColor: "rgba(24, 111, 101, 0.1)",
                 boxShadow: 0,
             }}
@@ -24,35 +23,39 @@ const ChannelCard = ({ title, onClick, onDelete, onAddMember }) => {
                 {title}
             </Typography>
             <Box>
-                <IconButton
-                    onClick={(e) => {
-                        e.stopPropagation(); 
-                        onAddMember();
-                    }}
-                    sx={{
-                        color: "rgba(0, 0, 0, 0.54)",
-                        "&:hover": {
-                            color: "#187569",
-                        },
-                    }}
-                >
-                    <GroupAdd />
-                </IconButton>
+                {user.user_type !== "STUDENT" && (
+                    <IconButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onAddMember();
+                        }}
+                        sx={{
+                            color: "rgba(0, 0, 0, 0.54)",
+                            "&:hover": {
+                                color: "#187569",
+                            },
+                        }}
+                    >
+                        <GroupAdd />
+                    </IconButton>
+                )}
 
-                <IconButton
-                    onClick={(e) => {
-                        e.stopPropagation(); 
-                        onDelete();
-                    }}
-                    sx={{
-                        color: "rgba(0, 0, 0, 0.54)",
-                        "&:hover": {
-                            color: "#d32f2f",
-                        },
-                    }}
-                >
-                    <Delete />
-                </IconButton>
+                {user.user_type !== "STUDENT" && (
+                    <IconButton
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete();
+                        }}
+                        sx={{
+                            color: "rgba(0, 0, 0, 0.54)",
+                            "&:hover": {
+                                color: "#d32f2f",
+                            },
+                        }}
+                    >
+                        <Delete />
+                    </IconButton>
+                )}
             </Box>
         </Card>
     );

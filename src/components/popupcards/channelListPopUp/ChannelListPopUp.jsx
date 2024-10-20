@@ -10,8 +10,8 @@ import {
     Typography,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import ChannelCard from "./ChannelCard"; 
-import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP"; 
+import ChannelCard from "./ChannelCard";
+import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP";
 import ChannelMembersPopup from "./channelmembers/ChannelMembersPopup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -52,7 +52,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
 
     const handleDeleteChannel = async (channelId) => {
         let token = localStorage.getItem("token");
-    
+
         try {
             await axios.delete(
                 `http://localhost:8000/api/channels/${channelId}`,
@@ -62,7 +62,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
                     },
                 }
             );
-            
+
             setChannels((prevChannels) =>
                 prevChannels.filter((channel) => channel.id !== channelId)
             );
@@ -70,12 +70,12 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
             console.error("Error deleting channel:", error);
         }
     };
-    
+
     const handleAddMemberToChannel = (channelId) => {
         setSelectedChannelId(channelId);
         setChannelMembersOpen(true);
     };
-    
+
     const handleChannelClick = (channelId) => {
         navigate(`/channel/${channelId}`);
         onClose();
@@ -164,11 +164,11 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
                                     <ListItem
                                         key={channel.id}
                                         sx={{
-                                    
-                                            
+
+
                                             width: "90%",
-                                            
-                                            padding: 0, 
+
+                                            padding: 0,
                                         }}
                                     >
                                         <ChannelCard
@@ -176,13 +176,14 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
                                             onClick={() => handleChannelClick(channel.id)}
                                             onDelete={() => handleDeleteChannel(channel.id)}
                                             onAddMember={() => handleAddMemberToChannel(channel.id)}
+                                            user={user}
                                         />
                                     </ListItem>
                                 ))}
                             </List>
                         </Box>
                     )}
-                    
+
                     <Box
                         sx={{
                             marginBottom: 3,
@@ -208,21 +209,24 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
                         >
                             Close
                         </Button>
-                        <Button
-                            variant="contained"
-                            startIcon={<Add />}
-                            onClick={handleAddChannel}
-                            sx={{
-                                borderRadius: "20px",
-                                padding: "8px 24px",
-                                backgroundColor: "#187569",
-                                "&:hover": {
-                                    backgroundColor: "#145c56",
-                                },
-                            }}
-                        >
-                            Channel
-                        </Button>
+                        {user.user_type !== "STUDENT" && (
+                            <Button
+                                variant="contained"
+                                startIcon={<Add />}
+                                onClick={handleAddChannel}
+                                sx={{
+                                    borderRadius: "20px",
+                                    padding: "8px 24px",
+                                    backgroundColor: "#187569",
+                                    "&:hover": {
+                                        backgroundColor: "#145c56",
+                                    },
+                                }}
+                            >
+                                Channel
+                            </Button>
+                        )}
+
                     </Box>
                 </Box>
             </Modal>
@@ -235,7 +239,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
             />
 
 
-            
+
 
             {selectedChannelId && (
                 <ChannelMembersPopup
@@ -244,7 +248,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
                     channelId={selectedChannelId}
                     user={user}
                     roomId={roomId}
-                    
+
                 />
             )}
         </>
