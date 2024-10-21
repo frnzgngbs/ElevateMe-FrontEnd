@@ -1,4 +1,4 @@
-import { Card, CardMedia, CardContent, Typography, IconButton, Box, Tooltip } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, IconButton, Box, Tooltip, Snackbar, Alert } from "@mui/material";
 import { Delete, ContentCopy, GroupAdd, MoreHoriz, People } from "@mui/icons-material";
 import SampleImage from "../res/sampleImage.jpg";
 import axios from "axios";
@@ -15,7 +15,11 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
     const [showOptions, setShowOptions] = useState(false);
     const [channelList, setChannelList] = useState([]);
     const [openAddMemberPopup, setOpenAddMemberPopup] = useState(false);
-
+    
+    // Snackbar states
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
     const handleDelete = async () => {
         try {
@@ -30,14 +34,20 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
 
             onDelete(roomId);
             setOpenDeleteDialog(false);
+            // Show success snackbar
+            setSnackbarMessage("Room deleted successfully!");
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true);
         } catch (error) {
             console.error("Error deleting room:", error);
+            // Show error snackbar
+            setSnackbarMessage("Error deleting room.");
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
         } finally {
             setIsDeleting(false);
         }
     };
-
-
 
     const handleCopyRoomCode = async (e) => {
         e.stopPropagation();
@@ -45,11 +55,16 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
             await navigator.clipboard.writeText(roomCode);
             setIsCopied(true);
             setTimeout(() => setIsCopied(false), 2000);
-            
-          
-
+            // Show success snackbar for copying room code
+            setSnackbarMessage("Room code copied to clipboard!");
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true);
         } catch (error) {
             console.error("Failed to copy room code:", error);
+            // Show error snackbar
+            setSnackbarMessage("Failed to copy room code.");
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
         }
     };
 
@@ -58,8 +73,9 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
         setOpenChannelList(true);
     };
 
-    const handleAddChannel = () => {
-        console.log("Add new channel logic goes here.");
+    // Close the Snackbar
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
     };
 
     return (
@@ -112,6 +128,9 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
                     display: "flex",
                     gap: 1,
                     transition: "right 0.3s ease",
+                    justifyContent: "center",
+                    left: 0,
+                    right: 0,
                 }}
             >
                 {showOptions && (
@@ -190,9 +209,20 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
                 open={openAddMemberPopup}
                 onClose={() => setOpenAddMemberPopup(false)}
                 roomId={roomId} 
-                user = {user}
-                
+                user={user}
             />
+
+            {/* Snackbar component */}
+            <Snackbar 
+                open={snackbarOpen} 
+                autoHideDuration={4000} 
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Card>
     );
 };

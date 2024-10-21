@@ -157,7 +157,6 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                                 }}
                             >
                                 <ListItemText primary={member.email} sx={{ color: "#000" }} />
-                                {/* Hide delete button for students */}
                                 {user.user_type !== "STUDENT" && (
                                     <Button
                                         onClick={() => handleDeleteClick(member)}
@@ -171,7 +170,6 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                     </List>
                 </Box>
             )}
-            {/* Pagination Dots and Add button, visible only if user is not a student */}
             {user?.user_type !== "STUDENT" && (
                 <Box>
                     <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', bottom: 55, left: 0, right: 0 }}>
@@ -250,7 +248,6 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 </Box>
             )}
 
-            {/* Render DeleteDialog */}
             <DeleteDialog
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
@@ -259,7 +256,6 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 isDeleting={isDeleting}
             />
 
-            {/* Snackbar for displaying messages */}
             <Snackbar
                 open={snackbar.open}
                 autoHideDuration={6000}
