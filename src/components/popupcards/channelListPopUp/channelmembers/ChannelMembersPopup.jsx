@@ -38,8 +38,9 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
              try {
         let token = localStorage.getItem("token");
 
-            const payload = { new_channel_members_emails: addedEmails, room_id: roomId };
+            const payload = { new_channel_member_emails: addedEmails, room_id: roomId };
             console.log(payload);
+            console.log("CHannel:" + channelId)
             const response = await axios.patch(
                 `http://localhost:8000/api/channels/${channelId}/`,
                 payload,
@@ -49,7 +50,7 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
             if (response.status === 201) {
                 setSnackbar({
                     open: true,
-                    message: "Successfully added to the room",
+                    message: "Successfully added to the roomsssss",
                     severity: "success",
                 });
 
@@ -58,7 +59,7 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
         } catch (error) {
             let errorMessage = "An error occurred";
             if (error.response && error.response.status === 400) {
-                errorMessage = "The member might already be in the room";
+                errorMessage = "The member might already be in the channel";
             }
             setSnackbar({
                 open: true,

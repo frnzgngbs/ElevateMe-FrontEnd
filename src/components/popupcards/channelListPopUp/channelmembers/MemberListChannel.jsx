@@ -81,8 +81,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
         let token = localStorage.getItem("token");
 
         try {
-            await axios.delete(
-                `http://localhost:8000/api/channels/${channelId}/members/${memberToDelete.id}/`,
+            await axios.delete(`http://localhost:8000/api/channels/${channelId}/members/${memberToDelete.id}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`,
@@ -95,7 +94,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
             );
             setSnackbar({ open: true, message: 'Member deleted successfully!', severity: 'success' });
         } catch (error) {
-            console.error("Error deleting member:", error);
+            console.error("Error deleting memberss:", error);
             setSnackbar({ open: true, message: 'Error deleting member', severity: 'error' });
         } finally {
             setIsDeleting(false);
