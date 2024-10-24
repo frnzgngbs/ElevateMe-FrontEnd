@@ -11,34 +11,75 @@ import {
 import { useState, useRef } from "react";
 import axios from "axios";
 
-const UploadPSPopup = () => {
+const UploadPSPopup = ({ channelId, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [pStatement, setpStatement] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [openDone, setopenDone] = useState(false);
   const fileInputRef = useRef(null);
 
-  const openButton = () => {
-    alert("This is a test!");
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      alert("Please select a file to upload");
+      return;
+    }
+
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("submitted_work", selectedFile);
+    formData.append("problem_statement", pStatement);
+
+    try {
+      let token = localStorage.getItem("token");
+      const response = await axios.post(
+        `http://localhost:8000/api/channels/${channelId}/submissions/submit/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Token ${token}`, // Ensure the token is correct
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        alert("File uploaded successfully!");
+      } else {
+        alert("Unexpected response from the server.");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+        alert(`Error: ${error.response.data.detail || "File upload failed"}`);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        alert("No response received from the server.");
+      } else {
+        console.error("Error:", error.message);
+        alert(`Error: ${error.message}`);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // Add logging to file selection
   const handleSelectedFile = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const file = e.target.files[0];
+    console.log("Selected file:", {
+      name: file?.name,
+      type: file?.type,
+      size: file?.size,
+    });
+    setSelectedFile(file);
   };
 
-  const triggerFileExplorer = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleInput = (e) => {
-    const target = e.target;
-    target.style.height = "auto";
-    target.style.height = `${target.scrollHeight}px`;
-    setpStatement(e.target.value);
-  };
   return (
     <Dialog
       open={true}
-      onClose={() => {}}
+      onClose={onClose}
       PaperProps={{
         sx: {
           borderRadius: "20px",
@@ -59,7 +100,13 @@ const UploadPSPopup = () => {
           multiline
           minRows={5}
           value={pStatement}
-          onInput={handleInput}
+          onInput={(e) => {
+            const target = e.target;
+            target.style.height = "auto";
+            target.style.height = `${target.scrollHeight}px`;
+            setpStatement(e.target.value);
+            console.log("Problem statement updated:", e.target.value);
+          }}
           sx={{
             "& .MuiOutlinedInput-root": {
               borderRadius: "20px",
@@ -74,59 +121,45 @@ const UploadPSPopup = () => {
       <DialogActions>
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "center",
             width: "100%",
+            display: "flex",
+            flexDirection: "column",
             gap: 2,
-            mb: 2,
           }}
         >
           <input
             type="file"
-            ref={fileInputRef} // Reference to file input
-            style={{ display: "none" }} // Hide the input
-            onChange={handleSelectedFile} // Handle file selection
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleSelectedFile}
           />
           <Button
             variant="contained"
             color="secondary"
-            onClick={triggerFileExplorer}
+            onClick={() => fileInputRef.current.click()}
             sx={{
               borderRadius: 20,
               padding: "8px 24px",
               backgroundColor: "#186F65",
               color: "white",
-              borderRadius: "20px",
+              alignSelf: "center",
               width: "500px",
-              padding: "16px",
             }}
           >
             {selectedFile ? selectedFile.name : "Upload File"}
           </Button>
-        </Box>
-      </DialogActions>
-      <DialogActions>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            width: "100%",
-            gap: 2,
-            mb: 2,
-          }}
-        >
+
           <Button
-            onClick={openButton}
+            onClick={handleUpload}
             variant="contained"
-            disabled={loading || pStatement.trim() === ""}
+            disabled={loading || !pStatement.trim() || !selectedFile}
             sx={{
               borderRadius: 20,
               padding: "8px 24px",
               backgroundColor: "#186F65",
               color: "white",
-              borderRadius: "20px",
+              alignSelf: "center",
               width: "500px",
-              padding: "16px",
             }}
           >
             {loading ? <CircularProgress size={24} /> : "Done"}
