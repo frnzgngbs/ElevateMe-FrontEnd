@@ -16,7 +16,13 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const PostCard = ({ author, content, submittedWork, channelId }) => {
+const PostCard = ({
+  author,
+  content,
+  submittedWork,
+  channelId,
+  onVoteSuccess,
+}) => {
   const [openVoteDialog, setOpenVoteDialog] = useState(false);
   const [openCommentDialog, setOpenCommentDialog] = useState(false);
   const [openFileDialog, setOpenFileDialog] = useState(false);
@@ -101,7 +107,6 @@ const PostCard = ({ author, content, submittedWork, channelId }) => {
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`
       );
 
-      // Debug log
       console.log("Comments response:", response.data);
 
       let commentsData = [];
@@ -242,7 +247,13 @@ const PostCard = ({ author, content, submittedWork, channelId }) => {
         loading={loadingComments}
         error={error}
       />
-      <VotingDialog open={openVoteDialog} onClose={handleVoteDialogClose} />
+      <VotingDialog
+        open={openVoteDialog}
+        onClose={handleVoteDialogClose}
+        channelId={channelId} // Make sure these are defined
+        submissionId={submittedWork.id}
+        onVoteSuccess={onVoteSuccess}
+      />
 
       <Dialog
         open={openFileDialog}

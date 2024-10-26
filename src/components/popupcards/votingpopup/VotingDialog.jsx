@@ -1,25 +1,59 @@
-// components/VotingDialog.js
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   Box,
+  Typography,
   Slider,
   Button,
-  Typography,
 } from "@mui/material";
+import axios from "axios";
 import { useState } from "react";
-
-const VotingDialog = ({ open, onClose }) => {
+const VotingDialog = ({
+  open,
+  onClose,
+  channelId,
+  submissionId,
+  onVoteSuccess,
+}) => {
   const [rating, setRating] = useState(5);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleRatingChange = (event, newValue) => {
     setRating(newValue);
+    setError(null);
   };
 
-  const handleSubmit = () => {
-    console.log("Rating submitted:", rating);
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      setIsSubmitting(true);
+      setError(null);
+
+      await axios.post(
+        `http://localhost:8000/api/channels/${channelId}/submissions/${submissionId}/voting_marks/`,
+        {
+          marks: rating,
+          submission_id: submissionId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+      onClose();
+      onVoteSuccess(); // Call to refresh the rankings
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "An error occurred while submitting your rating."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -35,7 +69,7 @@ const VotingDialog = ({ open, onClose }) => {
       }}
     >
       <DialogTitle sx={{ fontWeight: "bold", textAlign: "center" }}>
-        Rate This file post
+        Rate This File Post
       </DialogTitle>
       <DialogContent>
         <Box
@@ -72,24 +106,35 @@ const VotingDialog = ({ open, onClose }) => {
             step={1}
             valueLabelDisplay="off"
             sx={{ width: "80%" }}
+            disabled={isSubmitting}
           />
           <Typography variant="h6" sx={{ mt: 2 }}>
             Rating: {rating}
-          </Typography>{" "}
-          {/* Display the selected rating */}
+          </Typography>
+
+          {error && (
+            <Typography color="error" sx={{ mt: 1 }}>
+              {error}
+            </Typography>
+          )}
         </Box>
       </DialogContent>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
         <Button
           onClick={handleSubmit}
           variant="contained"
+          disabled={isSubmitting}
           sx={{
             backgroundColor: "#186F65",
             color: "white",
             borderRadius: 4,
+            "&:disabled": {
+              backgroundColor: "#186F65",
+              opacity: 0.7,
+            },
           }}
         >
-          Submit Rating
+          {isSubmitting ? "Submitting..." : "Submit Rating"}
         </Button>
       </Box>
     </Dialog>

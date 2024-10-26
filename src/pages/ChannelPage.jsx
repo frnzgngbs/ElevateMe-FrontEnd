@@ -12,8 +12,12 @@ const ChannelPage = () => {
   const [channelName, setChannelName] = useState("");
   const [posts, setPosts] = useState([]);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [rankings, setRankings] = useState({
+    teamRankings: [],
+    teacherRankings: [],
+  });
 
-  console.log("Channel ID:", channelId);
+  const [loading, setLoading] = useState(true);
 
   const openShareFile = () => {
     setShowUploadPopup(true);
@@ -21,6 +25,143 @@ const ChannelPage = () => {
 
   const closeShareFile = () => {
     setShowUploadPopup(false);
+  };
+
+  const fetchRankings = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No authentication token found");
+        throw new Error("Authentication required");
+      }
+
+      const headers = { Authorization: `Token ${token}` };
+
+      // Get all submissions
+      const submissionsResponse = await axios.get(
+        `http://localhost:8000/api/channels/${channelId}/submissions/`,
+        { headers }
+      );
+
+      console.log("Fetched submissions:", submissionsResponse.data);
+
+      // Process each submission
+      const postsWithMarks = await Promise.all(
+        submissionsResponse.data.map(async (submission) => {
+          try {
+            // Fetch votes for this submission
+            const votesResponse = await axios.get(
+              `http://localhost:8000/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
+              { headers }
+            );
+
+            const votes = votesResponse.data;
+            console.log(`Votes for submission ${submission.id}:`, votes);
+
+            // Calculate averages for student votes
+            const studentVotes = votes.filter(
+              (vote) => vote.voter_type === "STUDENT"
+            );
+            const studentPoints =
+              studentVotes.length > 0
+                ? studentVotes.reduce(
+                    (sum, vote) => sum + parseFloat(vote.marks),
+                    0
+                  )
+                : 0;
+
+            // Calculate averages for teacher votes
+            const teacherVotes = votes.filter(
+              (vote) => vote.voter_type === "TEACHER"
+            );
+            const teacherPoints =
+              teacherVotes.length > 0
+                ? teacherVotes.reduce(
+                    (sum, vote) => sum + parseFloat(vote.marks),
+                    0
+                  )
+                : 0;
+
+            console.log(`Submission ${submission.id} scores:`, {
+              studentPoints: Math.round(studentPoints * 10) / 10,
+              teacherPoints: Math.round(teacherPoints * 10) / 10,
+              totalVotes: votes.length,
+              studentVotes: studentVotes.length,
+              teacherVotes: teacherVotes.length,
+            });
+
+            return {
+              id: submission.id,
+              name: submission.member_name || `User ${submission.member_id}`,
+              content: submission.problem_statement,
+              studentPoints: Math.round(studentPoints * 10) / 10,
+              teacherPoints: Math.round(teacherPoints * 10) / 10,
+              profilePicture: submission.profile_picture || "",
+            };
+          } catch (error) {
+            console.error(
+              `Error processing submission ${submission.id}:`,
+              error.response?.data || error.message
+            );
+            return null;
+          }
+        })
+      );
+
+      // Filter out any failed submissions
+      const validPosts = postsWithMarks.filter((post) => post !== null);
+
+      console.log("Processed submissions:", validPosts);
+
+      // Sort rankings
+      const teamRankings = validPosts
+        .sort((a, b) => b.studentPoints - a.studentPoints)
+        .map(({ name, content, studentPoints, profilePicture }) => ({
+          name,
+          content,
+          points: studentPoints,
+          profilePicture,
+        }));
+
+      const teacherRankings = validPosts
+        .sort((a, b) => b.teacherPoints - a.teacherPoints)
+        .map(({ name, content, teacherPoints, profilePicture }) => ({
+          name,
+          content,
+          points: teacherPoints,
+          profilePicture,
+        }));
+
+      console.log("Final rankings:", { teamRankings, teacherRankings });
+
+      setRankings({ teamRankings, teacherRankings });
+    } catch (error) {
+      console.error(
+        "Failed to fetch rankings:",
+        error.response?.data || error.message
+      );
+      setRankings({ teamRankings: [], teacherRankings: [] });
+    }
+  };
+  // Ensure fetchRankings is called when channelId changes
+  useEffect(() => {
+    if (channelId) {
+      fetchRankings();
+    }
+  }, [channelId]);
+  // Call fetchRankings when component mounts
+  useEffect(() => {
+    if (channelId) {
+      fetchRankings();
+    }
+  }, [channelId]);
+
+  useEffect(() => {
+    fetchRankings(); // Initial load
+  }, [channelId]);
+
+  const handleVoteSuccess = () => {
+    fetchRankings(); // Refresh rankings after a vote
   };
 
   useEffect(() => {
@@ -136,6 +277,7 @@ const ChannelPage = () => {
                   file_url: post.submitted_work,
                 }}
                 channelId={channelId}
+                onVoteSuccess={fetchRankings}
               />
             </Grid>
           ))}
@@ -143,57 +285,26 @@ const ChannelPage = () => {
       </Box>
       <Box
         sx={{
-          maxWidth: "1000px",
           margin: "0 auto",
           padding: 4,
           textAlign: "center",
+          // Remove these properties from the parent Box since they're affecting children
+          // whiteSpace: "nowrap",
+          // overflow: "hidden",
+          // textOverflow: "ellipsis",
+          maxWidth: "80%",
         }}
       >
-        <Typography variant="h3" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+        <Typography
+          variant="h3"
+          sx={{ fontWeight: "bold", marginBottom: 2, marginRight: "80px" }}
+        >
           Ranking
         </Typography>
 
         <RankingSection
-          teamRankings={[
-            {
-              name: "Franz Genegobis",
-              points: 27,
-              content: "Problem Statement: ...",
-              profilePicture: "url-to-image-1",
-            },
-            {
-              name: "John Cadungog",
-              points: 25,
-              content: "Problem Statement: ...",
-              profilePicture: "url-to-image-2",
-            },
-            {
-              name: "Erwin Lambujon",
-              points: 23,
-              content: "Problem Statement: ...",
-              profilePicture: "url-to-image-3",
-            },
-          ]}
-          teacherRankings={[
-            {
-              name: "Erwin Lambujon",
-              points: 30,
-              content: "Problem Statement: ...",
-              profilePicture: "url-to-image-4",
-            },
-            {
-              name: "John Cadungog",
-              points: 25,
-              content: "Problem Statement: ...",
-              profilePicture: "url-to-image-5",
-            },
-            {
-              name: "Franz Genegobis",
-              points: 22,
-              content: "Problem Statement: ...",
-              profilePicture: "url-to-image-6",
-            },
-          ]}
+          teamRankings={rankings.teamRankings}
+          teacherRankings={rankings.teacherRankings}
         />
       </Box>
 
