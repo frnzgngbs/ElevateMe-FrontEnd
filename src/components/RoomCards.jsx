@@ -18,7 +18,7 @@ import {
 } from "@mui/icons-material";
 import SampleImage from "../res/sampleImage.jpg";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import DeleteDialog from "./popupcards/deletedialogpopup/DeleteDialog";
 import ChannelListPopup from "./popupcards/channelListPopUp/ChannelListPopUp.jsx";
 import AddMemberPopup from "./popupcards/addmemberpopup/RoomMembersPopup";
@@ -31,11 +31,38 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [channelList, setChannelList] = useState([]);
   const [openAddMemberPopup, setOpenAddMemberPopup] = useState(false);
+  const [ownerName, setOwnerName] = useState("unknown");
 
   // Snackbar states
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+
+
+  useEffect(() => {
+    const fetchOwnerName = async () => {
+      try {
+        let token = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:8000/api/user/${ownerId}/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        const { first_name, last_name } = response.data;
+        setOwnerName(`${first_name} ${last_name}`);
+      } catch (error) {
+        console.error("Error fetching owner's name:", error);
+      }
+    };
+
+    if (ownerId) {
+      fetchOwnerName();
+    }
+  }, [ownerId]);
 
   const handleDelete = async () => {
     try {
@@ -112,10 +139,15 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Owner: {ownerId}
-        </Typography>
+        
+        {user.user_type === "STUDENT" && ownerName && (
+    <Typography variant="body2" color="textSecondary">
+      <span style={{ fontSize: "0.8rem" }}>Creator: </span>{" "}
+      <span style={{ fontWeight: "bold" }}>{ownerName}</span>
+    </Typography>
+  )}
       </CardContent>
+      
       <Box
         sx={{
           position: "absolute",
@@ -162,7 +194,7 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
                 <ContentCopy />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Add Members">
+            <Tooltip title="Members">
               <IconButton
                 onClick={() => setOpenAddMemberPopup(true)}
                 sx={{ color: "white" }}
