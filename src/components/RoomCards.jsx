@@ -223,7 +223,6 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
         user={user}
       />
 
-      {/* Snackbar component */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}

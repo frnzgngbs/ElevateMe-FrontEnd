@@ -10,7 +10,7 @@ import axios from "axios";
 import MembersList from "./MemberListChannel";
 import AddMember from "./AddMemberChannel";
 
-const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
+const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId }) => {
     const [currentPage, setCurrentPage] = useState("members"); 
     const [emailDatabase, setEmailDatabase] = useState([]);
     const [members, setMembers] = useState([]);
@@ -19,41 +19,62 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
         message: "",
         severity: "success",
     });
+    const [roomMembers, setRoomMembers] = useState([]);
 
     useEffect(() => {
-        const fetchEmails = async () => {
+        const fetchRoomMembers = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/user/");
-                const emails = response.data.map((user) => user.email);
-                setEmailDatabase(emails);
+                let token = localStorage.getItem("token");
+                const response = await axios.get(`http://localhost:8000/api/rooms/${roomId}/members/`,  { headers: { Authorization: `Token ${token}` } });
+                const roomMemberIds = response.data.map((member) => member.member_id);
+
+                // Use Promise.all to get member details
+                const memberDetails = await Promise.all(
+                    roomMemberIds.map((memberId) => axios.get(`http://localhost:8000/api/user/${memberId}/`,  { headers: { Authorization: `Token ${token}` } }))
+                );
+
+                // Extract the emails of the room members
+                const emails = memberDetails.map((res) => res.data.email);
+                setRoomMembers(emails);
+                setEmailDatabase(emails); // Use this as the source for suggestions
             } catch (error) {
-                console.error("Failed to fetch emails:", error);
+                console.error("Failed to fetch room members:", error);
             }
         };
 
-        fetchEmails();
-    }, []);
+        fetchRoomMembers();
+    }, [roomId]);
 
     const handleAddMembers = async (addedEmails) => {
-             try {
-        let token = localStorage.getItem("token");
-
+        try {
+            let token = localStorage.getItem("token");
+            
+            // Validate emails before making the request
+            const invalidEmails = addedEmails.filter(email => !roomMembers.includes(email));
+            
+            if (invalidEmails.length > 0) {
+                setSnackbar({
+                    open: true,
+                    message: `The following emails are not part of the room: ${invalidEmails.join(", ")}`,
+                    severity: "error",
+                });
+                return;
+            }
+            
             const payload = { new_channel_member_emails: addedEmails, room_id: roomId };
-            console.log(payload);
-            console.log("CHannel:" + channelId)
             const response = await axios.patch(
                 `http://localhost:8000/api/channels/${channelId}/`,
                 payload,
                 { headers: { Authorization: `Token ${token}` } }
             );
-
+    
             if (response.status === 201) {
                 setSnackbar({
                     open: true,
-                    message: "Successfully added to the roomsssss",
+                    message: "Successfully added to the channel",
                     severity: "success",
                 });
-
+    
                 setCurrentPage("members"); 
             }
         } catch (error) {
@@ -68,7 +89,7 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
             });
         }
     };
-
+    
     const handleBackToMembers = () => {
         setCurrentPage("members");
     };
@@ -109,11 +130,11 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId}) => {
                         roomId={roomId}
                         onClose={onClose}
                         user={user}
-                        channelId= {channelId}
+                        channelId={channelId}
                     />
                 ) : (
                     <AddMember
-                        emailDatabase={emailDatabase}
+                        emailDatabase={roomMembers}
                         onSubmit={handleAddMembers}
                         onBack={handleBackToMembers}
                     />

@@ -9,13 +9,21 @@ import {
     List,
     ListItem,
     ListItemText,
+    Snackbar,
+    Alert
 } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check'; 
+
 const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
     const [emailInput, setEmailInput] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [addedEmails, setAddedEmails] = useState([]);
-
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success",
+    });
+    
     const handleInputChange = (e) => {
         const input = e.target.value;
         setEmailInput(input);
@@ -55,10 +63,32 @@ const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
     };
 
     const handleSubmit = () => {
+        const invalidEmails = addedEmails.filter(
+            (email) => !emailDatabase.includes(email)
+        );
+
+        if (invalidEmails.length > 0) {
+            setSnackbar({
+                open: true,
+                message: `These members are not part of the room: ${invalidEmails.join(", ")}`,
+                severity: "error",
+            });
+            return;
+        }
+
         if (addedEmails.length > 0) {
             onSubmit(addedEmails);
             setAddedEmails([]);
+            setSnackbar({
+                open: true,
+                message: "Members added successfully!",
+                severity: "success",
+            });
         }
+    };
+
+    const handleSnackbarClose = () => {
+        setSnackbar({ ...snackbar, open: false });
     };
 
     return (
@@ -151,17 +181,19 @@ const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
                         ))
                     ) : (
                         <ListItem>
-                            <ListItemText  primary="No suggestions available" sx={{
-                                        color: "rgba(24, 111, 101, 0.4)",
-                                        fontStyle: "italic",
-                                    }} />
+                            <ListItemText
+                                primary="No suggestions available"
+                                sx={{
+                                    color: "rgba(24, 111, 101, 0.4)",
+                                    fontStyle: "italic",
+                                }}
+                            />
                         </ListItem>
-                        
                     )}
                 </List>
             </div>
 
-            <Box >
+            <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
                     <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
                     <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
@@ -170,7 +202,7 @@ const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
                     sx={{
                         display: "flex",
                         justifyContent: "center",
-                        alignContent:"center",
+                        alignContent: "center",
                         position: 'relative',
                         bottom: '20px',
                         gap: 2, 
@@ -206,6 +238,17 @@ const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
                         Add
                     </Button>
                 </Box>
+                
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={4000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                >
+                    <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
             </Box>
         </Box>
     );
