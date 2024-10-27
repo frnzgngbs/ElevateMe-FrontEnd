@@ -160,7 +160,10 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                                 {user.user_type !== "STUDENT" && (
                                     <Button
                                         onClick={() => handleDeleteClick(member)}
-                                        sx={{ color: "#000" }} 
+                                        sx={{  color: "rgba(0, 0, 0, 0.54)",
+                                            "&:hover": {
+                                              color: "#d32f2f",
+                                            }, }} 
                                     >
                                         <DeleteIcon />
                                     </Button>

@@ -149,73 +149,112 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
       </CardContent>
       
       <Box
-        sx={{
-          position: "absolute",
-          top: 8,
-          right: 8,
-          display: "flex",
-          alignItems: "center",
-        }}
+  sx={{
+    position: "absolute",
+    top: 8,
+    right: 8,
+    display: "flex",
+    alignItems: "center",
+  }}
+>
+  <Tooltip title="Options">
+    <Box
+      sx={{
+        backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+        borderRadius: "50%",
+
+      
+      }}
+    >
+      <IconButton
+        onClick={() => setShowOptions(!showOptions)}
+        sx={{ color: "white" }}
       >
-        <Tooltip title="Options">
+        <MoreHoriz />
+      </IconButton>
+    </Box>
+  </Tooltip>
+</Box>
+<Box
+  sx={{
+    position: "absolute",
+    top: 50,
+    right: showOptions ? 50 : 8,
+    display: "flex",
+    gap: 1,
+    transition: "right 0.3s ease",
+    justifyContent: "center",
+    left: 0,
+    right: 0,
+  }}
+>
+  {showOptions && (
+    <>
+      <Tooltip title="Show Channel List">
+        <Box
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+            borderRadius: "50%",
+         
+          }}
+        >
+          <IconButton onClick={handleShowChannelList} sx={{ color: "white" }}>
+            <People />
+          </IconButton>
+        </Box>
+      </Tooltip>
+      <Tooltip title="Copy Room Code">
+        <Box
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+            borderRadius: "50%",
+           
+          }}
+        >
+          <IconButton onClick={handleCopyRoomCode} sx={{ color: "white" }}>
+            <ContentCopy />
+          </IconButton>
+        </Box>
+      </Tooltip>
+      <Tooltip title="Members">
+        <Box
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+            borderRadius: "50%",
+         
+          }}
+        >
           <IconButton
-            onClick={() => setShowOptions(!showOptions)}
+            onClick={() => setOpenAddMemberPopup(true)}
             sx={{ color: "white" }}
           >
-            <MoreHoriz />
+            <GroupAdd />
           </IconButton>
+        </Box>
+      </Tooltip>
+      {user.user_type !== "STUDENT" && (
+        <Tooltip title="Delete Room">
+          <Box
+            sx={{
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+              borderRadius: "50%",
+              padding: "1px",
+            }}
+          >
+            <IconButton
+              onClick={() => setOpenDeleteDialog(true)}
+              sx={{ color: "white" }}
+              disabled={isDeleting}
+            >
+              <Delete />
+            </IconButton>
+          </Box>
         </Tooltip>
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          top: 50,
-          right: showOptions ? 50 : 8,
-          display: "flex",
-          gap: 1,
-          transition: "right 0.3s ease",
-          justifyContent: "center",
-          left: 0,
-          right: 0,
-        }}
-      >
-        {showOptions && (
-          <>
-            <Tooltip title="Show Channel List">
-              <IconButton
-                onClick={handleShowChannelList}
-                sx={{ color: "white" }}
-              >
-                <People />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Copy Room Code">
-              <IconButton onClick={handleCopyRoomCode} sx={{ color: "white" }}>
-                <ContentCopy />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Members">
-              <IconButton
-                onClick={() => setOpenAddMemberPopup(true)}
-                sx={{ color: "white" }}
-              >
-                <GroupAdd />
-              </IconButton>
-            </Tooltip>
-            {user.user_type !== "STUDENT" && (
-              <Tooltip title="Delete Room">
-                <IconButton
-                  onClick={() => setOpenDeleteDialog(true)}
-                  sx={{ color: "white" }}
-                  disabled={isDeleting}
-                >
-                  <Delete />
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
-        )}
-      </Box>
+      )}
+    </>
+  )}
+</Box>
+
       {isCopied && (
         <Typography
           sx={{
