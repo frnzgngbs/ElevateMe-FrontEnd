@@ -43,22 +43,18 @@ const ChannelPage = () => {
         { headers }
       );
 
-      console.log("Fetched submissions:", submissionsResponse.data);
 
       // Process each submission
       const postsWithMarks = await Promise.all(
         submissionsResponse.data.map(async (submission) => {
           try {
-            // Fetch votes for this submission
             const votesResponse = await axios.get(
               `http://localhost:8000/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
               { headers }
             );
 
             const votes = votesResponse.data;
-            console.log(`Votes for submission ${submission.id}:`, votes);
 
-            // Calculate averages for student votes
             const studentVotes = votes.filter(
               (vote) => vote.voter_type === "STUDENT"
             );
@@ -70,7 +66,6 @@ const ChannelPage = () => {
                   )
                 : 0;
 
-            // Calculate averages for teacher votes
             const teacherVotes = votes.filter(
               (vote) => vote.voter_type === "TEACHER"
             );
@@ -111,8 +106,6 @@ const ChannelPage = () => {
       // Filter out any failed submissions
       const validPosts = postsWithMarks.filter((post) => post !== null);
 
-      console.log("Processed submissions:", validPosts);
-
       // Sort rankings
       const teamRankings = validPosts
         .sort((a, b) => b.studentPoints - a.studentPoints)
@@ -131,8 +124,6 @@ const ChannelPage = () => {
           points: teacherPoints,
           profilePicture,
         }));
-
-      console.log("Final rankings:", { teamRankings, teacherRankings });
 
       setRankings({ teamRankings, teacherRankings });
     } catch (error) {
@@ -193,8 +184,6 @@ const ChannelPage = () => {
             },
           }
         );
-        console.log("Submissions response:", response.data);
-        // Add this debug log
         response.data.forEach((post) => {
           console.log("Post data:", {
             id: post.id,
@@ -288,10 +277,6 @@ const ChannelPage = () => {
           margin: "0 auto",
           padding: 4,
           textAlign: "center",
-          // Remove these properties from the parent Box since they're affecting children
-          // whiteSpace: "nowrap",
-          // overflow: "hidden",
-          // textOverflow: "ellipsis",
           maxWidth: "80%",
         }}
       >
