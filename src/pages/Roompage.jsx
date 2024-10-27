@@ -64,19 +64,49 @@ const RoomPage = () => {
     fetchCurrentlyLoggedInUser();
   }, []);
 
-  const handleRoomJoined = (joinedRoom) => {
-    setRooms((prevRooms) => [
-      ...prevRooms,
-      {
-        id: joinedRoom.id,
-        room_name: joinedRoom.room_name,
-        room_code: joinedRoom.room_code,
-        room_owner_id: joinedRoom.room_owner_id,
-        channels: joinedRoom.channels || [],
-      },
-    ]);
+
+  const handleRoomJoined = async () => {
     setShowSuccess(true);
+    await fetchRooms(); // Refresh rooms after successfully joining.
   };
+  const fetchRooms = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
+      const roomsResponse = await axios.get(
+        "http://localhost:8000/api/rooms/auth_rooms/",
+        {
+          headers: { Authorization: `Token ${token}` },
+        }
+      );
+
+      setRooms([...roomsResponse.data]);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+      if (error.response && error.response.status === 401) {
+        console.error(
+          "Unauthorized: Check if the token is valid and correctly formatted."
+        );
+      }
+    }
+  };
+
+  // const handleRoomJoined = (joinedRoom) => {
+  //   setRooms((prevRooms) => [
+  //     ...prevRooms,
+  //     {
+  //       id: joinedRoom.id,
+  //       room_name: joinedRoom.room_name,
+  //       room_code: joinedRoom.room_code,
+  //       room_owner_id: joinedRoom.room_owner_id,
+  //       channels: joinedRoom.channels || [],
+  //     },
+  //   ]);
+  //   setShowSuccess(true);
+  // };
 
   const handleOpenPopup = () => {
     setIsPopupOpen(true);
