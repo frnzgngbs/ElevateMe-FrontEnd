@@ -71,26 +71,10 @@ const PostCard = ({
 
   const handleFileDialogOpen = () => {
     setOpenFileDialog(true);
-    fetchFileFromServer();
   };
 
   const handleFileDialogClose = () => {
     setOpenFileDialog(false);
-  };
-
-  const fetchFileFromServer = async () => {
-    try {
-      const response = await axiosInstance.get(submittedWork.file_url, {
-        responseType: "blob",
-      });
-      const url = URL.createObjectURL(response.data);
-      setFileUrl(url);
-    } catch (error) {
-      console.error(
-        "Error fetching file:",
-        error.response?.data || error.message
-      );
-    }
   };
 
   const fetchComments = async () => {
@@ -107,7 +91,6 @@ const PostCard = ({
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`
       );
 
-      console.log("Comments response:", response.data);
 
       let commentsData = [];
       if (Array.isArray(response.data)) {
@@ -149,7 +132,6 @@ const PostCard = ({
         }
       );
 
-      console.log("Add comment response:", response.data);
 
       await fetchComments();
       return true;
@@ -162,6 +144,56 @@ const PostCard = ({
       return false;
     } finally {
       setLoadingComments(false);
+    }
+  };
+
+  const handleFileOpen = async () => {
+    try {
+
+      if (!submittedWork || !submittedWork.id) {
+        throw new Error("Invalid submission data");
+      }
+
+      const response = await fetch(
+        `http://localhost:8000/api/channels/${channelId}/submissions/${submittedWork.id}/download/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("File download failed");
+      }
+
+      const contentDisposition = response.headers.get("Content-Disposition");
+      let filename = submittedWork?.file_url
+        ? submittedWork.file_url.split("/").pop()
+        : "download";
+
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(
+          /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+        );
+        if (filenameMatch && filenameMatch[1]) {
+          filename = filenameMatch[1].replace(/['"]/g, "");
+        }
+      }
+
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
     }
   };
 
@@ -228,11 +260,11 @@ const PostCard = ({
                     backgroundColor: "#125B52",
                   },
                 }}
-                onClick={handleFileDialogOpen}
+                onClick={handleFileOpen}
                 disabled={!submittedWork}
                 startIcon={<VisibilityIcon />}
               >
-                View File
+                Download File
               </Button>
             </Grid>
           </Grid>
