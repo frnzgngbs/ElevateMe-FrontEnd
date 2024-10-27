@@ -18,7 +18,7 @@ import {
 } from "@mui/icons-material";
 import SampleImage from "../res/sampleImage.jpg";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import DeleteDialog from "./popupcards/deletedialogpopup/DeleteDialog";
 import ChannelListPopup from "./popupcards/channelListPopUp/ChannelListPopUp.jsx";
 import AddMemberPopup from "./popupcards/addmemberpopup/RoomMembersPopup";
@@ -31,11 +31,38 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [channelList, setChannelList] = useState([]);
   const [openAddMemberPopup, setOpenAddMemberPopup] = useState(false);
+  const [ownerName, setOwnerName] = useState("unknown");
 
   // Snackbar states
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+
+
+  useEffect(() => {
+    const fetchOwnerName = async () => {
+      try {
+        let token = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:8000/api/user/${ownerId}/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        const { first_name, last_name } = response.data;
+        setOwnerName(`${first_name} ${last_name}`);
+      } catch (error) {
+        console.error("Error fetching owner's name:", error);
+      }
+    };
+
+    if (ownerId) {
+      fetchOwnerName();
+    }
+  }, [ownerId]);
 
   const handleDelete = async () => {
     try {
@@ -112,78 +139,122 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Owner: {ownerId}
-        </Typography>
+        
+        {user.user_type === "STUDENT" && ownerName && (
+    <Typography variant="body2" color="textSecondary">
+      <span style={{ fontSize: "0.8rem" }}>Creator: </span>{" "}
+      <span style={{ fontWeight: "bold" }}>{ownerName}</span>
+    </Typography>
+  )}
       </CardContent>
+      
       <Box
-        sx={{
-          position: "absolute",
-          top: 8,
-          right: 8,
-          display: "flex",
-          alignItems: "center",
-        }}
+  sx={{
+    position: "absolute",
+    top: 8,
+    right: 8,
+    display: "flex",
+    alignItems: "center",
+  }}
+>
+  <Tooltip title="Options">
+    <Box
+      sx={{
+        backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+        borderRadius: "50%",
+
+      
+      }}
+    >
+      <IconButton
+        onClick={() => setShowOptions(!showOptions)}
+        sx={{ color: "white" }}
       >
-        <Tooltip title="Options">
+        <MoreHoriz />
+      </IconButton>
+    </Box>
+  </Tooltip>
+</Box>
+<Box
+  sx={{
+    position: "absolute",
+    top: 50,
+    right: showOptions ? 50 : 8,
+    display: "flex",
+    gap: 1,
+    transition: "right 0.3s ease",
+    justifyContent: "center",
+    left: 0,
+    right: 0,
+  }}
+>
+  {showOptions && (
+    <>
+      <Tooltip title="Show Channel List">
+        <Box
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+            borderRadius: "50%",
+         
+          }}
+        >
+          <IconButton onClick={handleShowChannelList} sx={{ color: "white" }}>
+            <People />
+          </IconButton>
+        </Box>
+      </Tooltip>
+      <Tooltip title="Copy Room Code">
+        <Box
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+            borderRadius: "50%",
+           
+          }}
+        >
+          <IconButton onClick={handleCopyRoomCode} sx={{ color: "white" }}>
+            <ContentCopy />
+          </IconButton>
+        </Box>
+      </Tooltip>
+      <Tooltip title="Members">
+        <Box
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+            borderRadius: "50%",
+         
+          }}
+        >
           <IconButton
-            onClick={() => setShowOptions(!showOptions)}
+            onClick={() => setOpenAddMemberPopup(true)}
             sx={{ color: "white" }}
           >
-            <MoreHoriz />
+            <GroupAdd />
           </IconButton>
+        </Box>
+      </Tooltip>
+      {user.user_type !== "STUDENT" && (
+        <Tooltip title="Delete Room">
+          <Box
+            sx={{
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark transparent background
+              borderRadius: "50%",
+              padding: "1px",
+            }}
+          >
+            <IconButton
+              onClick={() => setOpenDeleteDialog(true)}
+              sx={{ color: "white" }}
+              disabled={isDeleting}
+            >
+              <Delete />
+            </IconButton>
+          </Box>
         </Tooltip>
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          top: 50,
-          right: showOptions ? 50 : 8,
-          display: "flex",
-          gap: 1,
-          transition: "right 0.3s ease",
-          justifyContent: "center",
-          left: 0,
-          right: 0,
-        }}
-      >
-        {showOptions && (
-          <>
-            <Tooltip title="Show Channel List">
-              <IconButton
-                onClick={handleShowChannelList}
-                sx={{ color: "white" }}
-              >
-                <People />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Copy Room Code">
-              <IconButton onClick={handleCopyRoomCode} sx={{ color: "white" }}>
-                <ContentCopy />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Add Members">
-              <IconButton
-                onClick={() => setOpenAddMemberPopup(true)}
-                sx={{ color: "white" }}
-              >
-                <GroupAdd />
-              </IconButton>
-            </Tooltip>
-            {user.user_type !== "STUDENT" && (
-              <Tooltip title="Delete Room">
-                <IconButton
-                  onClick={() => setOpenDeleteDialog(true)}
-                  sx={{ color: "white" }}
-                  disabled={isDeleting}
-                >
-                  <Delete />
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
-        )}
-      </Box>
+      )}
+    </>
+  )}
+</Box>
+
       {isCopied && (
         <Typography
           sx={{
@@ -223,7 +294,6 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
         user={user}
       />
 
-      {/* Snackbar component */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}

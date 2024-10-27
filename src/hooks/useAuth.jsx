@@ -23,7 +23,7 @@ const useAuth = () => {
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
-        alert("Login successfully!");
+        // alert("Login successfully!");
         navigate("/home", { replace: true });
       }
     } catch (err) {
@@ -49,7 +49,7 @@ const useAuth = () => {
 
       localStorage.removeItem("token");
       sessionStorage.clear();
-      alert("Logout successful!");
+  
 
       navigate("/login", { replace: true });
     } catch (err) {
