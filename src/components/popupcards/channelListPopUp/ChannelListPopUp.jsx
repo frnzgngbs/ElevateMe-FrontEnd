@@ -178,7 +178,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
                   >
                     <ChannelCard
                       title={channel.channel_name}
-                      onClick={() => handleChannelClick(channel.id)} // Navigate on click
+                      onClick={() => handleChannelClick(channel.id)}
                       onDelete={() => handleDeleteChannel(channel.id)}
                       onAddMember={() => handleAddMemberToChannel(channel.id)}
                       user={user}
