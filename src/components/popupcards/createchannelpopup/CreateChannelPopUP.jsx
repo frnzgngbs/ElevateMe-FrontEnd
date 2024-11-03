@@ -23,7 +23,10 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
 	});
 
 	const handleCreate = async () => {
-		let memberEmails;
+		let memberEmails = null;
+
+		console.log(members);
+
 		if (members !== null) {
 			memberEmails = members.split(",").map((email) => email.trim());
 		}
@@ -31,8 +34,10 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
 		const payload = {
 			channel_name: channelName,
 			room_id: roomId,
-			channel_members: memberEmails ? memberEmails : [],
+			channel_members: memberEmails ?? [],
 		};
+
+		console.log(memberEmails);
 
 		try {
 			setLoading(true);
@@ -106,7 +111,14 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
 						label="Channel Name"
 						fullWidth
 						value={channelName}
-						onChange={(e) => setChannelName(e.target.value)}
+						onChange={(e) =>
+							setChannelName((prevValue) => {
+								if (e.target.value !== "") {
+									return e.target.value;
+								}
+								return prevValue;
+							})
+						}
 						margin="normal"
 						variant="outlined"
 						sx={{
