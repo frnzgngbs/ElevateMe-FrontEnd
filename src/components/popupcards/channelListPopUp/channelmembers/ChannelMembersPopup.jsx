@@ -28,20 +28,18 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId }) => {
                 const response = await axios.get(`http://localhost:8000/api/rooms/${roomId}/members/`,  { headers: { Authorization: `Token ${token}` } });
                 const roomMemberIds = response.data.map((member) => member.member_id);
 
-                // Use Promise.all to get member details
                 const memberDetails = await Promise.all(
                     roomMemberIds.map((memberId) => axios.get(`http://localhost:8000/api/user/${memberId}/`,  { headers: { Authorization: `Token ${token}` } }))
                 );
 
-                // Extract the emails of the room members
+                
                 const emails = memberDetails.map((res) => res.data.email);
                 setRoomMembers(emails);
-                setEmailDatabase(emails); // Use this as the source for suggestions
+                setEmailDatabase(emails); 
             } catch (error) {
                 console.error("Failed to fetch room members:", error);
             }
         };
-
         fetchRoomMembers();
     }, [roomId]);
 
@@ -49,7 +47,7 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId }) => {
         try {
             let token = localStorage.getItem("token");
             
-            // Validate emails before making the request
+
             const invalidEmails = addedEmails.filter(email => !roomMembers.includes(email));
             
             if (invalidEmails.length > 0) {

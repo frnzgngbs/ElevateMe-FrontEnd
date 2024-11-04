@@ -6,13 +6,13 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import useTheme from "@mui/material/styles/useTheme";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 const Register = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [userData, setUserData] = useState({
     email: "",
@@ -34,7 +34,7 @@ const Register = () => {
     e.preventDefault();
 
     if (userData.password !== userData.confirmPassword) {
-      alert("Passwords does not match.");
+      alert("Passwords do not match.");
       setUserData((prev) => ({
         ...prev,
         password: "",
@@ -44,10 +44,11 @@ const Register = () => {
     }
     if (userData.password.length < 6) {
       alert("Password must be at least 6 characters long.");
+      return;
     }
 
     try {
-      let response = await axios.post("http://localhost:8000/api/user/", {
+      const response = await axios.post("http://localhost:8000/api/user/", {
         email: userData.email,
         first_name: userData.first_name,
         last_name: userData.last_name,
@@ -65,10 +66,10 @@ const Register = () => {
           confirmPassword: "",
           user_type: "STUDENT",
         });
+        navigate("/login"); 
       }
     } catch (err) {
       console.error(err);
-
       if (err.response && err.response.status === 400) {
         const { data } = err.response;
         if (data.email) {
@@ -201,16 +202,18 @@ const Register = () => {
                 />
               </Box>
               <Box sx={inputFieldContainer}>
-                <Select
+                <TextField
+                  select
+                  InputProps={inputProps}
+                  sx={inputSx}
                   name="user_type"
                   value={userData.user_type}
                   onChange={handleChange}
-                  displayEmpty
-                  sx={{ width: "100%" }}
+                  required
                 >
                   <MenuItem value="STUDENT">Student</MenuItem>
                   <MenuItem value="TEACHER">Teacher</MenuItem>
-                </Select>
+                </TextField>
               </Box>
               <Button
                 type="submit"
