@@ -14,6 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 import DeleteDialog from ".././deletedialogpopup/DeleteDialog"; 
+import PendingCards from "./PendingCards";
 
 const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
     const [members, setMembers] = useState([]); 
@@ -173,6 +174,8 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                     </List>
                 </Box>
             )}
+            <PendingCards roomId={roomId} />
+
             {user?.user_type !== "STUDENT" && (
                 <Box>
                     <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', bottom: 55, left: 0, right: 0 }}>
