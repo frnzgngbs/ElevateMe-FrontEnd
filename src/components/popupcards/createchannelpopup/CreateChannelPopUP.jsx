@@ -75,7 +75,7 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
     };
 
     const handleCreate = async () => {
-        const memberEmails = members.split(',').map(email => email.trim());
+        const memberEmails =  members.trim() ? members.split(',').map(email => email.trim()).filter(email => email.length > 0) : [];
         const payload = {
             channel_name: channelName,
             room_id: roomId,

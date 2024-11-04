@@ -37,19 +37,14 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
         setMembers(input);
         setAnchorEl(memberInputRef.current);
 
-        // Get array of already selected emails
         const selectedEmails = input
             .split(',')
             .map(email => email.trim())
             .filter(email => email.length > 0);
         
-        // Get the partial email being typed (after the last comma)
         const lastEmailPart = input.split(',').pop().trim();
 
         if (lastEmailPart) {
-            // Filter emails that:
-            // 1. Match the current input
-            // 2. Haven't been selected yet
             const filtered = userEmails.filter(email => 
                 email.toLowerCase().includes(lastEmailPart.toLowerCase()) && 
                 !selectedEmails.includes(email)
@@ -61,12 +56,10 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
     };
 
     const handleEmailSelect = (email) => {
-        // Get all complete emails except the last partial one
         const emailArray = members.split(',').slice(0, -1)
             .map(item => item.trim())
             .filter(item => item.length > 0);
         
-        // Only add the email if it's not already in the list
         if (!emailArray.includes(email)) {
             if (emailArray.length > 0) {
                 setMembers(emailArray.join(', ') + ', ' + email + ', ');
