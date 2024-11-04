@@ -26,10 +26,8 @@ const PendingCards = ({ roomId }) => {
                     },
                 });
 
-                // Filter applicants by status "pending"
                 const pendingApplicants = response.data.filter(applicant => applicant.status === "pending");
 
-                // Fetch user email for each pending applicant
                 const applicantsWithUserData = await Promise.all(
                     pendingApplicants.map(async (applicant) => {
                         try {
@@ -111,11 +109,19 @@ const PendingCards = ({ roomId }) => {
                             >
                                 <ListItemText primary={`${member.email}`} />
                                 <Box>
-                                    <Button onClick={() => handleAction(member.id, "accept")} sx={{ color: "green" }}>
-                                        <CheckIcon />
+                                    <Button 
+                                        onClick={() => handleAction(member.id, "accept")} 
+                                        sx={{ color: "green",marginRight: .5, minWidth: 'auto' }} 
+                                        size="small" 
+                                    >
+                                        <CheckIcon sx={{ fontSize: 20 }} /> 
                                     </Button>
-                                    <Button onClick={() => handleAction(member.id, "reject")} sx={{ color: "red" }}>
-                                        <CloseIcon />
+                                    <Button 
+                                        onClick={() => handleAction(member.id, "reject")} 
+                                        sx={{ color: "red", padding: .5, minWidth: 'auto' }} 
+                                        size="small" 
+                                    >
+                                        <CloseIcon sx={{ fontSize: 20 }} /> 
                                     </Button>
                                 </Box>
                             </ListItem>

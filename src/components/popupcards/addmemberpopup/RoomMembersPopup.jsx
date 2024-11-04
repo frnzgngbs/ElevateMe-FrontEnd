@@ -93,7 +93,7 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
             <Box
                 sx={{
                     width: 500,
-                    height: 500,
+                    height: 650,
                     bgcolor: "background.paper",
                     boxShadow: 24,
                     p: 4,

@@ -129,7 +129,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
                 </Typography>
                 <List
                     sx={{
-                        height: 120,
+                        height: 220,
                         overflowY: "auto",
                         "&::-webkit-scrollbar": { display: "none" },
                     }}
@@ -163,7 +163,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
 
             <Box >
                 {/* Pagination Dots */}
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 0 }}>
                     <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
                     <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
                 </Box>
@@ -173,7 +173,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
                         justifyContent: "center",
                         alignContent:"center",
                         position: 'relative',
-                        bottom: '20px',
+                        bottom: '-10px',
                         gap: 2, // Added space from bottom
                     }}
                 >
