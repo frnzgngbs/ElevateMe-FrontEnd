@@ -44,7 +44,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
         setSuggestions([]);
     };
 
-    const handleDeleteEmail = (emailToDelete) => {
+    const handleDeleteEmail = (emailToDelete) => {  
         setAddedEmails(addedEmails.filter((email) => email !== emailToDelete));
     };
 

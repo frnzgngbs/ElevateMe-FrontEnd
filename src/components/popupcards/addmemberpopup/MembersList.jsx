@@ -133,9 +133,9 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                         color: "#888",
                         backgroundColor: "rgba(24, 111, 101, 0.05)",
                         borderRadius: "8px",
-                        height: "250px",
+                        height: "65px",
                         padding: 4,
-                        marginBottom: 8,
+                        marginBottom: 1,
                     }}
                 >
                     <Typography variant="body2">
@@ -143,7 +143,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                     </Typography>
                 </Box>
             ) : (
-                <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
+                <Box sx={{ flexGrow: 1, overflowY: "auto", height:"65px" }}>
                     <List>
                         {members.map((member) => (
                             <ListItem
@@ -161,10 +161,12 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                                 {user.user_type !== "STUDENT" && (
                                     <Button
                                         onClick={() => handleDeleteClick(member)}
-                                        sx={{  color: "rgba(0, 0, 0, 0.54)",
+                                        sx={{  color: "rgba(0, 0, 0, 0.54)", minWidth: 'auto',
                                             "&:hover": {
                                               color: "#d32f2f",
+                                              minWidth: 'auto'
                                             }, }} 
+                                        
                                     >
                                         <DeleteIcon />
                                     </Button>

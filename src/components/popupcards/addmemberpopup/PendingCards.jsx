@@ -129,7 +129,7 @@ const PendingCards = ({ roomId }) => {
                     </List>
                 )
             )}
-        </Box>
+        </Box>  
     );
 };
 
