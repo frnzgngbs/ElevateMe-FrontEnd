@@ -33,6 +33,8 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
 
         fetchEmails();
     }, []);
+   
+    
 
     const handleAddMembers = async (addedEmails) => {
              try {
@@ -66,6 +68,9 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
             });
         }
     };
+    
+
+   
 
     const handleBackToMembers = () => {
         setCurrentPage("members");

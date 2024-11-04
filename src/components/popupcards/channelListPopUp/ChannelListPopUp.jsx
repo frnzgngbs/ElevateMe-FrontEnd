@@ -35,7 +35,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
             headers: {
               Authorization: `Token ${token}`,
             },
-          }
+          } 
         );
         setChannels(response.data);
       } catch (error) {

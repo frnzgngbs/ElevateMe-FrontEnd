@@ -24,6 +24,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
     const [memberToDelete, setMemberToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+    const [roomOwnerId, setRoomOwnerId] = useState(null); // New state for room owner ID
 
     useEffect(() => {
         const fetchMembersEmails = async () => {
@@ -69,7 +70,31 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
             }
         };
 
+        const fetchRoomOwnerId = async () => {
+            try {
+                let token = localStorage.getItem("token");
+
+                if (!token) {
+                    throw new Error("No token found. Please log in.");
+                }
+
+                const roomResponse = await axios.get(
+                    `http://localhost:8000/api/rooms/${roomId}/`,
+                    {
+                        headers: {
+                            Authorization: `Token ${token}`,
+                        },
+                    }
+                );
+
+                setRoomOwnerId(roomResponse.data.room_owner_id);
+            } catch (err) {
+                console.error("Error fetching room owner ID:", err);
+            }
+        };
+
         fetchMembersEmails();
+        fetchRoomOwnerId(); // Fetch room owner ID
     }, [roomId]);
 
     const handleDeleteClick = (member) => {
@@ -158,7 +183,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                                 }}
                             >
                                 <ListItemText primary={member.email} sx={{ color: "#000" }} />
-                                {user.user_type !== "STUDENT" && (
+                                {user.user_type !== "STUDENT" && member.id !== roomOwnerId && (
                                     <Button
                                         onClick={() => handleDeleteClick(member)}
                                         sx={{  color: "rgba(0, 0, 0, 0.54)", minWidth: 'auto',
@@ -166,7 +191,6 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                                               color: "#d32f2f",
                                               minWidth: 'auto'
                                             }, }} 
-                                        
                                     >
                                        <DeleteIcon />     
                                     </Button>
@@ -227,7 +251,6 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                     </Box>
                 </Box>
             )}
-            {/* Only the Close button if user is a student */}
             {user?.user_type === "STUDENT" && (
                 <Box
                     sx={{
@@ -260,15 +283,13 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 onDelete={handleDelete}
-                title={memberToDelete?.email}
-                isDeleting={isDeleting}
+                loading={isDeleting}
             />
-
             <Snackbar
                 open={snackbar.open}
                 autoHideDuration={6000}
                 onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
                 <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
                     {snackbar.message}
