@@ -113,6 +113,7 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
                         emailDatabase={emailDatabase}
                         onSubmit={handleAddMembers}
                         onBack={handleBackToMembers}
+                        roomId={roomId}
                     />
                 )}
 

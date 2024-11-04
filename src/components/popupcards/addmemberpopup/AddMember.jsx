@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
     Box,
     Button,
@@ -11,10 +12,53 @@ import {
     ListItemText,
 } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check'; 
-const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
+
+const AddMember = ({ emailDatabase, onSubmit, onBack, roomId }) => {
     const [emailInput, setEmailInput] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [addedEmails, setAddedEmails] = useState([]);
+    const [currentMembers, setCurrentMembers] = useState([]);
+
+    useEffect(() => {
+        const fetchMembersEmails = async () => {
+            try {
+                let token = localStorage.getItem("token");
+
+                if (!token) {
+                    throw new Error("No token found. Please log in.");
+                }
+
+                const membersResponse = await axios.get(
+                    `http://localhost:8000/api/rooms/${roomId}/members/`,
+                    {
+                        headers: {
+                            Authorization: `Token ${token}`,
+                        },
+                    }
+                );
+
+                const membersData = await Promise.all(
+                    membersResponse.data.map(async (member) => {
+                        const userResponse = await axios.get(
+                            `http://localhost:8000/api/user/${member.member_id}/`,
+                            {
+                                headers: {
+                                    Authorization: `Token ${token}`,
+                                },
+                            }
+                        );
+                        return userResponse.data.email;
+                    })
+                );
+
+                setCurrentMembers(membersData);
+            } catch (err) {
+                console.error("Error fetching members:", err.message);
+            }
+        };
+
+        fetchMembersEmails();
+    }, [roomId]);
 
     const handleInputChange = (e) => {
         const input = e.target.value;
@@ -31,7 +75,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
     const updateSuggestions = (query) => {
         const filteredSuggestions = emailDatabase
             .filter((email) => email.toLowerCase().includes(query.toLowerCase()))
-            .filter((email) => !addedEmails.includes(email));
+            .filter((email) => !addedEmails.includes(email) && !currentMembers.includes(email));
 
         setSuggestions(filteredSuggestions);
     };
@@ -156,13 +200,11 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
                                         fontStyle: "italic",
                                     }} />
                         </ListItem>
-                        
                     )}
                 </List>
             </div>
 
             <Box >
-                {/* Pagination Dots */}
                 <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 0 }}>
                     <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ddd', margin: '0 4px' }} />
                     <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#187569', margin: '0 4px' }} />
@@ -174,7 +216,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack }) => {
                         alignContent:"center",
                         position: 'relative',
                         bottom: '-10px',
-                        gap: 2, // Added space from bottom
+                        gap: 2,
                     }}
                 >
                     <Button

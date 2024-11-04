@@ -168,7 +168,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                                             }, }} 
                                         
                                     >
-                                        <DeleteIcon />
+                                       <DeleteIcon />     
                                     </Button>
                                 )}
                             </ListItem>
