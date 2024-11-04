@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
     Box,
     Button,
@@ -12,18 +13,64 @@ import {
     Snackbar,
     Alert
 } from "@mui/material";
-import CheckIcon from '@mui/icons-material/Check'; 
+import CheckIcon from '@mui/icons-material/Check';
 
-const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
+const AddMemberChannel = ({ channelId, emailDatabase, onSubmit, onBack }) => {
     const [emailInput, setEmailInput] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [addedEmails, setAddedEmails] = useState([]);
+    const [members, setMembers] = useState([]);
     const [snackbar, setSnackbar] = useState({
         open: false,
         message: "",
         severity: "success",
     });
-    
+
+    // Fetch current members of the channel
+    useEffect(() => {
+        const fetchMembersEmails = async () => {
+            try {
+                let token = localStorage.getItem("token");
+
+                if (!token) {
+                    throw new Error("No token found. Please log in.");
+                }
+
+                const membersResponse = await axios.get(
+                    `http://localhost:8000/api/channels/${channelId}/members/`,
+                    {
+                        headers: {
+                            Authorization: `Token ${token}`,
+                        },
+                    }
+                );
+
+                const membersData = await Promise.all(
+                    membersResponse.data.map(async (member) => {
+                        const userResponse = await axios.get(
+                            `http://localhost:8000/api/user/${member.member_id}/`,
+                            {
+                                headers: {
+                                    Authorization: `Token ${token}`,
+                                },
+                            }
+                        );
+                        return {
+                            id: member.member_id,
+                            email: userResponse.data.email,
+                        };
+                    })
+                );
+
+                setMembers(membersData);
+            } catch (err) {
+                setSnackbar({ open: true, message: `Error: ${err.message}`, severity: 'error' });
+            }
+        };
+
+        fetchMembersEmails();
+    }, [channelId]);
+
     const handleInputChange = (e) => {
         const input = e.target.value;
         setEmailInput(input);
@@ -37,9 +84,10 @@ const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
     };
 
     const updateSuggestions = (query) => {
+        const membersEmails = members.map((member) => member.email);
         const filteredSuggestions = emailDatabase
             .filter((email) => email.toLowerCase().includes(query.toLowerCase()))
-            .filter((email) => !addedEmails.includes(email));
+            .filter((email) => !addedEmails.includes(email) && !membersEmails.includes(email));
 
         setSuggestions(filteredSuggestions);
     };
@@ -245,7 +293,7 @@ const AddMemberChannel = ({ emailDatabase, onSubmit, onBack }) => {
                     onClose={handleSnackbarClose}
                     anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 >
-                    <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
+                    <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
                         {snackbar.message}
                     </Alert>
                 </Snackbar>

@@ -135,6 +135,7 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId }) => {
                         emailDatabase={roomMembers}
                         onSubmit={handleAddMembers}
                         onBack={handleBackToMembers}
+                        channelId= {channelId}
                     />
                 )}
 
