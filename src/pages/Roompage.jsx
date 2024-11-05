@@ -48,7 +48,7 @@ const RoomPage = () => {
           }
         );
 
-        console.log("Room Response: ", roomsResponse.data);
+        
 
         setRooms([...roomsResponse.data]);
       } catch (error) {
@@ -67,7 +67,7 @@ const RoomPage = () => {
 
   const handleRoomJoined = async () => {
    
-    await fetchRooms(); // Refresh rooms after successfully joining.
+    await fetchRooms(); 
   };
 
   

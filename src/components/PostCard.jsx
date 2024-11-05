@@ -26,6 +26,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const PostCard = ({
+  authorId, 
+  user,
   author,
   content,
   submittedWork,
@@ -276,6 +278,8 @@ const PostCard = ({
                 >
                   Comment
                 </Button>
+
+                {user.id !== authorId && (
                 <Button
                   variant="text"
                   open={openVoteDialog}
@@ -286,13 +290,18 @@ const PostCard = ({
                 >
                   Vote
                 </Button>
+                )}
+
+
               </Box>
               <Box sx={{ display: "flex", gap: 2 }}>
+              {user.user_type === "TEACHER" && (
               <DeleteSubmission
                 channelId={Number(channelId)}
                 submissionId={submittedWork.id}
                 onDelete={handleDeleteSuccess} 
               />
+              )}
               <ViewFilepopup presignedUrl={presignedUrl} />
               
               </Box>

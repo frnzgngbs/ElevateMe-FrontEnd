@@ -11,7 +11,7 @@ import {
 import { useState, useRef } from "react";
 import axios from "axios";
 
-const UploadPSPopup = ({ channelId, onClose }) => {
+const UploadPSPopup = ({ channelId, onClose, onDone }) => {
   const [loading, setLoading] = useState(false);
   const [pStatement, setpStatement] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -47,6 +47,9 @@ const UploadPSPopup = ({ channelId, onClose }) => {
       } else {
         alert("Unexpected response from the server.");
       }
+
+      onClose();
+      onDone();
     } catch (error) {
       if (error.response) {
         console.error("Response data:", error.response.data);
