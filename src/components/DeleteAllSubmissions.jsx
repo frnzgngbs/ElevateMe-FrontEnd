@@ -68,10 +68,22 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
         color="error"
         fullWidth
         onClick={handleClickOpen}
-        startIcon={<AlertCircle />}
+        // startIcon={<AlertCircle />}
         disabled={isDeleting}
+        sx={{
+          borderRadius: '20px', 
+          padding: '8px 16px', 
+          backgroundColor: '#D32F2F', 
+          color: '#FFFFFF',
+          '&:hover': {
+            backgroundColor: '#B71C1C', 
+          },
+          '&:disabled': {
+            backgroundColor: '#E57373', 
+          },
+        }}
       >
-        {isDeleting ? "Deleting..." : "Delete All Submissions"}
+        {isDeleting ? "Deleting..." : "Delete All "}
       </Button>
 
       <Dialog

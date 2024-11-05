@@ -115,15 +115,27 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
 
   return (
     <>
-      <Button
-        variant="contained"
-        color="error"
-        onClick={handleClickOpen}
-        disabled={isDeleting}
-        startIcon={<Trash2 />}
-      >
-        Delete Submission
-      </Button>
+     <Button
+  variant="contained"
+  color="error"
+  onClick={handleClickOpen}
+  disabled={isDeleting}
+  
+  sx={{
+    borderRadius: '20px', 
+    padding: '8px 16px', 
+    backgroundColor: '#D32F2F', 
+    color: '#FFFFFF',
+    '&:hover': {
+      backgroundColor: '#B71C1C', 
+    },
+    '&:disabled': {
+      backgroundColor: '#E57373', 
+    },
+  }}
+>
+  Delete 
+</Button>
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Delete Submission</DialogTitle>

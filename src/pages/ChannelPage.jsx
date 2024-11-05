@@ -21,7 +21,6 @@ const ChannelPage = () => {
   });
 
   const handleDeleteSuccess = (deletedPostId) => {
-    // Update the posts state by filtering out the deleted post
     setPosts((prevPosts) =>
       prevPosts.filter((post) => post.id !== deletedPostId)
     );
@@ -110,10 +109,8 @@ const ChannelPage = () => {
         })
       );
 
-      // Filter out any failed submissions
       const validPosts = postsWithMarks.filter((post) => post !== null);
 
-      // Sort rankings
       const teamRankings = validPosts
         .sort((a, b) => b.studentPoints - a.studentPoints)
         .map(({ name, content, studentPoints, profilePicture }) => ({
@@ -159,7 +156,7 @@ const ChannelPage = () => {
   }, [channelId]);
 
   const handleVoteSuccess = () => {
-    fetchRankings(); // Refresh rankings after a vote
+    fetchRankings(); 
   };
 
   useEffect(() => {
@@ -245,8 +242,13 @@ const ChannelPage = () => {
           <Grid
             item
             xs={6}
-            sx={{ display: "flex", justifyContent: "flex-end" }}
+            sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
           >
+             <DeleteAllSubmissions
+            setPosts={setPosts}
+            channelId={channelId} 
+            onDeleteSuccess={handleDeleteSuccess}
+          />
             <Button
               variant="contained"
               onClick={openShareFile}
@@ -260,11 +262,7 @@ const ChannelPage = () => {
               Share File
             </Button>
           </Grid>
-          <DeleteAllSubmissions
-            setPosts={setPosts}
-            channelId={channelId}
-            onDeleteSuccess={handleDeleteSuccess}
-          />
+         
           {posts.map((post) => (
             <Grid item xs={12} key={post.id}>
               <PostCard
