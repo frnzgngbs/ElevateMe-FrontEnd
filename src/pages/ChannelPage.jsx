@@ -6,18 +6,26 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
+import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
 
 const ChannelPage = () => {
   const { roomId, channelId } = useParams();
   const [channelName, setChannelName] = useState("");
   const [posts, setPosts] = useState([]);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [submission, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [rankings, setRankings] = useState({
     teamRankings: [],
     teacherRankings: [],
   });
 
-  const [loading, setLoading] = useState(true);
+  const handleDeleteSuccess = (deletedPostId) => {
+    // Update the posts state by filtering out the deleted post
+    setPosts((prevPosts) =>
+      prevPosts.filter((post) => post.id !== deletedPostId)
+    );
+  };
 
   const openShareFile = () => {
     setShowUploadPopup(true);
@@ -42,7 +50,6 @@ const ChannelPage = () => {
         `http://localhost:8000/api/channels/${channelId}/submissions/`,
         { headers }
       );
-
 
       // Process each submission
       const postsWithMarks = await Promise.all(
@@ -253,7 +260,11 @@ const ChannelPage = () => {
               Share File
             </Button>
           </Grid>
-
+          <DeleteAllSubmissions
+            setPosts={setPosts}
+            channelId={channelId}
+            onDeleteSuccess={handleDeleteSuccess}
+          />
           {posts.map((post) => (
             <Grid item xs={12} key={post.id}>
               <PostCard
@@ -267,6 +278,7 @@ const ChannelPage = () => {
                 }}
                 channelId={channelId}
                 onVoteSuccess={fetchRankings}
+                onDeleteSuccess={handleDeleteSuccess}
               />
             </Grid>
           ))}
