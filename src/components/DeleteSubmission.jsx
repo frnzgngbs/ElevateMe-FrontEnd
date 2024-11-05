@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import {
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Alert,
   AlertTitle,
   Box,
@@ -86,7 +80,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
 
       if (response.status === 204) {
         if (onDelete) {
-          onDelete(numSubmissionId); // This will trigger the update in the parent
+          onDelete(numSubmissionId);
         }
         handleClose();
         if (onClose) {
@@ -118,7 +112,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
   }
 
   return (
-    <Modal>
+    <>
       <Button
         variant="text"
         color="error"
@@ -129,10 +123,11 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
         Delete
       </Button>
 
-      <Dialog
+      <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="delete-dialog-title"
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
         sx={{
           display: "flex",
           alignItems: "center",
@@ -145,29 +140,25 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
-            borderRadius: 4, // Apply border radius to the entire dialog
+            borderRadius: 4,
             textAlign: "center",
           }}
         >
-          <DialogTitle id="delete-dialog-title">
-            <Typography variant="h6" gutterBottom>
-              Delete Submission
-            </Typography>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Are you sure you want to delete this submission? This action cannot
-              be undone.
-            </DialogContentText>
+          <Typography id="delete-modal-title" variant="h6" gutterBottom>
+            Delete Submission
+          </Typography>
+          <Typography id="delete-modal-description" sx={{ mt: 2 }}>
+            Are you sure you want to delete this submission? This action cannot
+            be undone.
+          </Typography>
 
-            {error && (
-              <Alert severity="error" sx={{ mt: 2 }}>
-                {error}
-              </Alert>
-            )}
+          {error && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-          </DialogContent>
-          <DialogActions sx={{ justifyContent: "center", mt: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
             <Button
               onClick={handleClose}
               variant="contained"
@@ -178,6 +169,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
                 "&:hover": {
                   backgroundColor: "#155B54",
                 },
+                mr: 2,
               }}
               disabled={isDeleting}
             >
@@ -199,10 +191,10 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
             >
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
-          </DialogActions>
+          </Box>
         </Box>
-      </Dialog>
-    </Modal>
+      </Modal>
+    </>
   );
 };
 

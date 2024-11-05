@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, LinearProgress, Typography } from '@mui/material';
+import { Box, Button, LinearProgress, Typography, Modal, } from '@mui/material';
 import axios from 'axios';
 
 const DeleteAllSubmissions = ({ setPosts, channelId }) => {
@@ -54,9 +54,7 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
   };
 
   return (
-    <div style={{ marginBottom: '1rem', 
-           }}>
-      
+    <div style={{ marginBottom: '1rem' }}>
       <Button
         variant="contained"
         color="error"
@@ -79,16 +77,15 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
         {isDeleting ? "Deleting..." : "Delete All"}
       </Button>
 
-      <Dialog
+      <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="delete-dialog-title"
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          
-          
         }}
       >
         <Box
@@ -101,32 +98,29 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
             textAlign: 'center',
           }}
         >
-          <DialogTitle id="delete-dialog-title">
-            <Typography variant="h6" gutterBottom>
-              Are you absolutely sure?
-            </Typography>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              This action cannot be undone. This will permanently delete all submissions from this channel.
-            </DialogContentText>
+          <Typography id="delete-modal-title" variant="h6" gutterBottom>
+            Are you absolutely sure?
+          </Typography>
+          <Typography id="delete-modal-description" sx={{ mt: 2 }}>
+            This action cannot be undone. This will permanently delete all submissions from this channel.
+          </Typography>
 
-            {isDeleting && (
-              <Box sx={{ mt: 2 }}>
-                <LinearProgress variant="determinate" value={progress} color="error" />
-                <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
-                  {progress}% Complete
-                </Typography>
-              </Box>
-            )}
-
-            {error && (
-              <Typography variant="body2" sx={{ mt: 2, color: '#D32F2F' }}>
-                {error}
+          {isDeleting && (
+            <Box sx={{ mt: 2 }}>
+              <LinearProgress variant="determinate" value={progress} color="error" />
+              <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
+                {progress}% Complete
               </Typography>
-            )}
-          </DialogContent>
-          <DialogActions sx={{ justifyContent: 'center', mt: 2 }}>
+            </Box>
+          )}
+
+          {error && (
+            <Typography variant="body2" sx={{ mt: 2, color: '#D32F2F' }}>
+              {error}
+            </Typography>
+          )}
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
             <Button
               onClick={handleClose}
               variant="contained"
@@ -137,6 +131,7 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
                 '&:hover': {
                   backgroundColor: "#155B54",
                 },
+                mr: 2,
               }}
               disabled={isDeleting}
             >
@@ -158,9 +153,9 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
             >
               {isDeleting ? `Deleting (${progress}%)...` : "Delete All"}
             </Button>
-          </DialogActions>
+          </Box>
         </Box>
-      </Dialog>
+      </Modal>
     </div>
   );
 };

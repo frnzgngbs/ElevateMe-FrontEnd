@@ -7,6 +7,8 @@ import {
   Button,
   Box,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useState, useRef } from "react";
 import axios from "axios";
@@ -15,11 +17,12 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
   const [loading, setLoading] = useState(false);
   const [pStatement, setpStatement] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
   const fileInputRef = useRef(null);
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      alert("Please select a file to upload");
+      setSnackbar({ open: true, message: "Please select a file to upload", severity: "warning" });
       return;
     }
 
@@ -43,40 +46,45 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
       );
 
       if (response.status === 201) {
-        alert("File uploaded successfully!");
+        setSnackbar({ open: true, message: "File uploaded successfully!", severity: "success" });
       } else {
-        alert("Unexpected response from the server.");
+        setSnackbar({ open: true, message: "Unexpected response from the server.", severity: "error" });
       }
 
       onClose();
       onDone();
     } catch (error) {
       if (error.response) {
-        console.error("Response data:", error.response.data);
-        console.error("Response status:", error.response.status);
-        console.error("Response headers:", error.response.headers);
-        alert(`Error: ${error.response.data.detail || "File upload failed"}`);
+        setSnackbar({
+          open: true,
+          message: `Error: ${error.response.data.detail || "File upload failed"}`,
+          severity: "error",
+        });
       } else if (error.request) {
-        console.error("No response received:", error.request);
-        alert("No response received from the server.");
+        setSnackbar({
+          open: true,
+          message: "No response received from the server.",
+          severity: "error",
+        });
       } else {
-        console.error("Error:", error.message);
-        alert(`Error: ${error.message}`);
+        setSnackbar({
+          open: true,
+          message: `Error: ${error.message}`,
+          severity: "error",
+        });
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // Add logging to file selection
   const handleSelectedFile = (e) => {
     const file = e.target.files[0];
-    console.log("Selected file:", {
-      name: file?.name,
-      type: file?.type,
-      size: file?.size,
-    });
     setSelectedFile(file);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -108,7 +116,6 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
             target.style.height = "auto";
             target.style.height = `${target.scrollHeight}px`;
             setpStatement(e.target.value);
-            console.log("Problem statement updated:", e.target.value);
           }}
           sx={{
             "& .MuiOutlinedInput-root": {
@@ -169,6 +176,17 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
           </Button>
         </Box>
       </DialogActions>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 };
