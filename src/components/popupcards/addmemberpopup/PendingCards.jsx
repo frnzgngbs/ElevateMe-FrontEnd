@@ -4,7 +4,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 
-const PendingCards = ({ roomId }) => {
+const PendingCards = ({ roomId, onAccept }) => {
     const [pendingMembers, setPendingMembers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -69,7 +69,9 @@ const PendingCards = ({ roomId }) => {
                 }
             );
 
+           
             setPendingMembers(prev => prev.filter(member => member.id !== requestId));
+            onAccept();
         } catch (err) {
             console.error("Error updating member status:", err);
         }
