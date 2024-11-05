@@ -45,14 +45,18 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
         }
       );
 
+     
+
       if (response.status === 201) {
         setSnackbar({ open: true, message: "File uploaded successfully!", severity: "success" });
+        
+        setTimeout(() => {
+          onClose();
+          onDone();
+        }, 1000); 
       } else {
         setSnackbar({ open: true, message: "Unexpected response from the server.", severity: "error" });
       }
-
-      onClose();
-      onDone();
     } catch (error) {
       if (error.response) {
         setSnackbar({
@@ -77,7 +81,6 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
       setLoading(false);
     }
   };
-
   const handleSelectedFile = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
