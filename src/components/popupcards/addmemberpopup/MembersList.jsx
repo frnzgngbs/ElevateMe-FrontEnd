@@ -24,7 +24,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
     const [memberToDelete, setMemberToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
-    const [roomOwnerId, setRoomOwnerId] = useState(null); // New state for room owner ID
+    const [roomOwnerId, setRoomOwnerId] = useState(null); 
 
     useEffect(() => {
         const fetchMembersEmails = async () => {
@@ -69,7 +69,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 setLoading(false);
             }
         };
-
+       
         const fetchRoomOwnerId = async () => {
             try {
                 let token = localStorage.getItem("token");
@@ -94,8 +94,54 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
         };
 
         fetchMembersEmails();
-        fetchRoomOwnerId(); // Fetch room owner ID
+        fetchRoomOwnerId(); 
     }, [roomId]);
+
+    const handleRefetch = async () => {
+        await refetchMembers();
+    };
+
+
+
+    const refetchMembers = async () => {
+        try {
+            let token = localStorage.getItem("token");
+
+            const membersResponse = await axios.get(
+                `http://localhost:8000/api/rooms/${roomId}/members/`,
+                {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                }
+            );
+
+            const membersData = await Promise.all(
+                membersResponse.data.map(async (member) => {
+                    const userResponse = await axios.get(
+                        `http://localhost:8000/api/user/${member.member_id}/`,
+                        {
+                            headers: {
+                                Authorization: `Token ${token}`,
+                            },
+                        }
+                    );
+                    return {
+                        id: member.member_id,
+                        email: userResponse.data.email,
+                    };
+                })
+            );
+
+            setMembers(membersData);
+        } catch (err) {
+            setError(err.message);
+            setSnackbar({ open: true, message: `Error: ${err.message}`, severity: 'error' });
+        }finally {
+                setLoading(false);
+            }
+    };
+
 
     const handleDeleteClick = (member) => {
         setMemberToDelete(member);
@@ -198,10 +244,12 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                             </ListItem>
                         ))}
                     </List>
+                    
                 </Box>
             )}
-            <PendingCards roomId={roomId} />
+             <PendingCards roomId={roomId} onAccept={ handleRefetch } />
 
+       
             {user?.user_type !== "STUDENT" && (
                 <Box>
                     <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', bottom: 55, left: 0, right: 0 }}>
