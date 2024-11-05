@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Trash2 } from "lucide-react";
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Button,
   Dialog,
@@ -116,23 +116,24 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
   return (
     <>
      <Button
-  variant="contained"
+  variant="text"
   color="error"
   onClick={handleClickOpen}
   disabled={isDeleting}
+  startIcon={<DeleteIcon/>}
   
-  sx={{
-    borderRadius: '20px', 
-    padding: '8px 16px', 
-    backgroundColor: '#D32F2F', 
-    color: '#FFFFFF',
-    '&:hover': {
-      backgroundColor: '#B71C1C', 
-    },
-    '&:disabled': {
-      backgroundColor: '#E57373', 
-    },
-  }}
+  // sx={{
+  //   borderRadius: '20px', 
+  //   padding: '8px 16px', 
+  //   backgroundColor: '#D32F2F', 
+  //   color: '#FFFFFF',
+  //   '&:hover': {
+  //     backgroundColor: '#B71C1C', 
+  //   },
+  //   '&:disabled': {
+  //     backgroundColor: '#E57373', 
+  //   },
+  // }}
 >
   Delete 
 </Button>

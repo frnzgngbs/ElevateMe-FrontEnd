@@ -26,7 +26,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const PostCard = ({
-  authorId, 
+  authorId,
   user,
   author,
   content,
@@ -196,7 +196,7 @@ const PostCard = ({
       console.error("Error fetching comments:", error);
       setError(
         error.response?.data?.detail ||
-          "Unable to load comments. Please try again later."
+        "Unable to load comments. Please try again later."
       );
       setComments([]);
     } finally {
@@ -227,7 +227,7 @@ const PostCard = ({
       console.error("Error submitting comment:", error);
       setError(
         error.response?.data?.detail ||
-          "Failed to post comment. Please try again."
+        "Failed to post comment. Please try again."
       );
       return false;
     } finally {
@@ -249,14 +249,14 @@ const PostCard = ({
       >
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} sx={{ display: "flex", alignItems: "center", marginTop:"-10px"  }}>
-              <Avatar sx={{ marginRight: 2, backgroundColor: '#67A099 ',}}>{getAuthorInitial()}</Avatar>
-              <Typography variant="h6" sx={{ fontWeight: 500}}>
+            <Grid item xs={12} sx={{ display: "flex", alignItems: "center", marginTop: "-10px" }}>
+              <Avatar sx={{ marginRight: 2, backgroundColor: '#67A099 ', }}>{getAuthorInitial()}</Avatar>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 {getAuthorDisplayName()}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body2" color="text.secondary" sx={{textAlign: "left"}}>
+              <Typography variant="body2" color="text.secondary" sx={{ textAlign: "left" }}>
                 {content}
               </Typography>
             </Grid>
@@ -280,30 +280,30 @@ const PostCard = ({
                 </Button>
 
                 {user.id !== authorId && (
-                <Button
-                  variant="text"
-                  open={openVoteDialog}
-                  onClick={handleVoteDialogOpen}
-                  startIcon={
-                    <ThumbUpOutlinedIcon onClose={handleVoteDialogClose} />
-                  }
-                >
-                  Vote
-                </Button>
+                  <Button
+                    variant="text"
+                    open={openVoteDialog}
+                    onClick={handleVoteDialogOpen}
+                    startIcon={
+                      <ThumbUpOutlinedIcon onClose={handleVoteDialogClose} />
+                    }
+                  >
+                    Vote
+                  </Button>
                 )}
 
+                <ViewFilepopup presignedUrl={presignedUrl} />
 
               </Box>
               <Box sx={{ display: "flex", gap: 2 }}>
-              {user.user_type === "TEACHER" && (
-              <DeleteSubmission
-                channelId={Number(channelId)}
-                submissionId={submittedWork.id}
-                onDelete={handleDeleteSuccess} 
-              />
-              )}
-              <ViewFilepopup presignedUrl={presignedUrl} />
-              
+                {user.user_type === "TEACHER" && (
+                  <DeleteSubmission
+                    channelId={Number(channelId)}
+                    submissionId={submittedWork.id}
+                    onDelete={handleDeleteSuccess}
+                  />
+                )}
+
               </Box>
             </Grid>
           </Grid>
