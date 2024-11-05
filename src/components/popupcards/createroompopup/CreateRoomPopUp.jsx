@@ -1,14 +1,84 @@
-import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box } from "@mui/material";
-import { useState } from "react";
+import {
+    Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Box,
+    Popper, Paper, List, ListItem, ListItemText, ClickAwayListener
+} from "@mui/material";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
     const [roomName, setRoomName] = useState("");
     const [members, setMembers] = useState("");
     const [loading, setLoading] = useState(false);
+    const [userEmails, setUserEmails] = useState([]);
+    const [filteredEmails, setFilteredEmails] = useState([]);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const memberInputRef = useRef(null);
+
+    useEffect(() => {
+        if (open) {
+            setRoomName("");
+            setMembers("");
+            fetchUserEmails();
+        }
+    }, [open]);
+
+    const fetchUserEmails = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/user/');
+            const emails = response.data.map(user => user.email);
+            setUserEmails(emails);
+        } catch (error) {
+            console.error("Error fetching user emails:", error);
+        }
+    };
+
+    const handleMemberInputChange = (e) => {
+        const input = e.target.value;
+        setMembers(input);
+        setAnchorEl(memberInputRef.current);
+
+        const selectedEmails = input
+            .split(',')
+            .map(email => email.trim())
+            .filter(email => email.length > 0);
+        
+        const lastEmailPart = input.split(',').pop().trim();
+
+        if (lastEmailPart) {
+            const filtered = userEmails.filter(email => 
+                email.toLowerCase().includes(lastEmailPart.toLowerCase()) && 
+                !selectedEmails.includes(email)
+            );
+            setFilteredEmails(filtered);
+        } else {
+            setFilteredEmails([]);
+        }
+    };
+
+    const handleEmailSelect = (email) => {
+        const emailArray = members.split(',').slice(0, -1)
+            .map(item => item.trim())
+            .filter(item => item.length > 0);
+        
+        if (!emailArray.includes(email)) {
+            if (emailArray.length > 0) {
+                setMembers(emailArray.join(', ') + ', ' + email + ', ');
+            } else {
+                setMembers(email + ', ');
+            }
+        }
+        
+        setFilteredEmails([]);
+        setAnchorEl(null);
+    };
+
+    const handleClickAway = () => {
+        setFilteredEmails([]);
+        setAnchorEl(null);
+    };
 
     const handleCreate = async () => {
-        const memberEmails = members.split(',').map(email => email.trim());
+        const memberEmails = members.trim() ? members.split(',').map(email => email.trim()).filter(email => email.length > 0) : [];
         const payload = {
             new_room_member_emails: memberEmails,
             room_name: roomName,
@@ -26,13 +96,7 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
             });
 
             console.log("Room created successfully:", response.data);
-            
-            // Call the onRoomCreated callback with the new room data (if needed to update UI)
             onRoomCreated(response.data);
-            
-            // Reset fields and close the popup after successful creation
-            setRoomName("");
-            setMembers("");
             onClose();
         } catch (error) {
             console.error("Error creating room:", error);
@@ -74,21 +138,59 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
                         },
                     }}
                 />
-                <TextField
-                    label="Members"
-                    fullWidth
-                    value={members}
-                    onChange={(e) => setMembers(e.target.value)}
-                    margin="normal"
-                    variant="outlined"
-                    helperText="Enter member emails separated by commas"
-                    sx={{
-                        borderRadius: 4,
-                        '& .MuiOutlinedInput-root': {
-                            borderRadius: '20px',
-                        },
-                    }}
-                />
+                <Box sx={{ position: 'relative' }}>
+                    <TextField
+                        ref={memberInputRef}
+                        label="Members"
+                        fullWidth
+                        value={members}
+                        onChange={handleMemberInputChange}
+                        margin="normal"
+                        variant="outlined"
+                        helperText="Enter member emails separated by commas"
+                        sx={{
+                            borderRadius: 4,
+                            '& .MuiOutlinedInput-root': {
+                                borderRadius: '20px',
+                            },
+                        }}
+                    />
+                    <Popper
+                        open={Boolean(anchorEl) && filteredEmails.length > 0}
+                        anchorEl={anchorEl}
+                        placement="bottom-start"
+                        style={{ width: anchorEl ? anchorEl.clientWidth : undefined, zIndex: 1301 }}
+                    >
+                        <ClickAwayListener onClickAway={handleClickAway}>
+                            <Paper 
+                                elevation={3}
+                                sx={{
+                                    maxHeight: '200px',
+                                    overflow: 'auto',
+                                    mt: 1,
+                                    borderRadius: '10px',
+                                }}
+                            >
+                                <List>
+                                    {filteredEmails.map((email) => (
+                                        <ListItem
+                                            button
+                                            onClick={() => handleEmailSelect(email)}
+                                            key={email}
+                                            sx={{
+                                                '&:hover': {
+                                                    backgroundColor: 'rgba(24, 111, 101, 0.1)',
+                                                },
+                                            }}
+                                        >
+                                            <ListItemText primary={email} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Paper>
+                        </ClickAwayListener>
+                    </Popper>
+                </Box>
             </DialogContent>
             <DialogActions>
                 <Box

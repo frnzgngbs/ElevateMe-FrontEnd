@@ -22,7 +22,6 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
             const response = await axios.post(
                 "http://localhost:8000/api/rooms/join/",
                 {
-                    member_id: user.id, 
                     room_code: roomCode,
                 },
                 {

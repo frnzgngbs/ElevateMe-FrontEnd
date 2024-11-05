@@ -14,6 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 import DeleteDialog from ".././deletedialogpopup/DeleteDialog"; 
+import PendingCards from "./PendingCards";
 
 const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
     const [members, setMembers] = useState([]); 
@@ -23,6 +24,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
     const [memberToDelete, setMemberToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+    const [roomOwnerId, setRoomOwnerId] = useState(null); // New state for room owner ID
 
     useEffect(() => {
         const fetchMembersEmails = async () => {
@@ -68,7 +70,31 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
             }
         };
 
+        const fetchRoomOwnerId = async () => {
+            try {
+                let token = localStorage.getItem("token");
+
+                if (!token) {
+                    throw new Error("No token found. Please log in.");
+                }
+
+                const roomResponse = await axios.get(
+                    `http://localhost:8000/api/rooms/${roomId}/`,
+                    {
+                        headers: {
+                            Authorization: `Token ${token}`,
+                        },
+                    }
+                );
+
+                setRoomOwnerId(roomResponse.data.room_owner_id);
+            } catch (err) {
+                console.error("Error fetching room owner ID:", err);
+            }
+        };
+
         fetchMembersEmails();
+        fetchRoomOwnerId(); // Fetch room owner ID
     }, [roomId]);
 
     const handleDeleteClick = (member) => {
@@ -132,9 +158,9 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                         color: "#888",
                         backgroundColor: "rgba(24, 111, 101, 0.05)",
                         borderRadius: "8px",
-                        height: "250px",
+                        height: "65px",
                         padding: 4,
-                        marginBottom: 8,
+                        marginBottom: 1,
                     }}
                 >
                     <Typography variant="body2">
@@ -142,7 +168,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                     </Typography>
                 </Box>
             ) : (
-                <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
+                <Box sx={{ flexGrow: 1, overflowY: "auto", height:"65px" }}>
                     <List>
                         {members.map((member) => (
                             <ListItem
@@ -157,15 +183,16 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                                 }}
                             >
                                 <ListItemText primary={member.email} sx={{ color: "#000" }} />
-                                {user.user_type !== "STUDENT" && (
+                                {user.user_type !== "STUDENT" && member.id !== roomOwnerId && (
                                     <Button
                                         onClick={() => handleDeleteClick(member)}
-                                        sx={{  color: "rgba(0, 0, 0, 0.54)",
+                                        sx={{  color: "rgba(0, 0, 0, 0.54)", minWidth: 'auto',
                                             "&:hover": {
                                               color: "#d32f2f",
+                                              minWidth: 'auto'
                                             }, }} 
                                     >
-                                        <DeleteIcon />
+                                       <DeleteIcon />     
                                     </Button>
                                 )}
                             </ListItem>
@@ -173,6 +200,8 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                     </List>
                 </Box>
             )}
+            <PendingCards roomId={roomId} />
+
             {user?.user_type !== "STUDENT" && (
                 <Box>
                     <Box sx={{ position: 'absolute', display: 'flex', justifyContent: 'center', bottom: 55, left: 0, right: 0 }}>
@@ -222,7 +251,6 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                     </Box>
                 </Box>
             )}
-            {/* Only the Close button if user is a student */}
             {user?.user_type === "STUDENT" && (
                 <Box
                     sx={{
@@ -255,15 +283,13 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 onDelete={handleDelete}
-                title={memberToDelete?.email}
-                isDeleting={isDeleting}
+                loading={isDeleting}
             />
-
             <Snackbar
                 open={snackbar.open}
                 autoHideDuration={6000}
                 onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
                 <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
                     {snackbar.message}
