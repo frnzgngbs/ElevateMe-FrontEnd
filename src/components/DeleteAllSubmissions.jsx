@@ -1,12 +1,5 @@
 import React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import LinearProgress from '@mui/material/LinearProgress';
-import { AlertCircle } from 'lucide-react';
+import { Box, Button, LinearProgress, Typography, Modal, } from '@mui/material';
 import axios from 'axios';
 
 const DeleteAllSubmissions = ({ setPosts, channelId }) => {
@@ -47,7 +40,6 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
       for (let i = 0; i < submissions.length; i++) {
         const submission = submissions[i];
         await axiosInstance.delete(`/api/channels/${channelId}/submissions/${submission.id}/`);
-
         setProgress(Math.round(((i + 1) / totalSubmissions) * 100));
       }
 
@@ -68,69 +60,102 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
         color="error"
         fullWidth
         onClick={handleClickOpen}
-        startIcon={<AlertCircle />}
         disabled={isDeleting}
+        sx={{
+          borderRadius: '20px',
+          padding: '8px 16px',
+          backgroundColor: '#D32F2F',
+          color: '#FFFFFF',
+          '&:hover': {
+            backgroundColor: '#B71C1C',
+          },
+          '&:disabled': {
+            backgroundColor: '#E57373',
+          },
+        }}
       >
-        {isDeleting ? "Deleting..." : "Delete All Submissions"}
+        {isDeleting ? "Deleting..." : "Delete All"}
       </Button>
 
-      <Dialog
+      <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
-        <DialogTitle id="alert-dialog-title">
-          Are you absolutely sure?
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            This action cannot be undone. This will permanently delete all
-            submissions from this channel.
-          </DialogContentText>
-          
+        <Box
+          sx={{
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 10,
+            textAlign: 'center',
+          }}
+        >
+          <Typography id="delete-modal-title" variant="h6" gutterBottom>
+            Are you absolutely sure?
+          </Typography>
+          <Typography id="delete-modal-description" sx={{ mt: 2 }}>
+            This action cannot be undone. This will permanently delete all submissions from this channel.
+          </Typography>
+
           {isDeleting && (
-            <div style={{ marginTop: '1rem' }}>
-              <LinearProgress 
-                variant="determinate" 
-                value={progress} 
-                color="error"
-              />
-              <DialogContentText style={{ marginTop: '0.5rem', textAlign: 'center' }}>
+            <Box sx={{ mt: 2 }}>
+              <LinearProgress variant="determinate" value={progress} color="error" />
+              <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
                 {progress}% Complete
-              </DialogContentText>
-            </div>
+              </Typography>
+            </Box>
           )}
-          
+
           {error && (
-            <DialogContentText 
-              style={{ 
-                marginTop: '1rem', 
-                color: '#d32f2f'
+            <Typography variant="body2" sx={{ mt: 2, color: '#D32F2F' }}>
+              {error}
+            </Typography>
+          )}
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <Button
+              onClick={handleClose}
+              variant="contained"
+              sx={{
+                borderRadius: 4,
+                backgroundColor: "#186F65",
+                color: "white",
+                '&:hover': {
+                  backgroundColor: "#155B54",
+                },
+                mr: 2,
+              }}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDelete}
+              color="error"
+              variant="contained"
+              disabled={isDeleting}
+              sx={{
+                borderRadius: 4,
+                backgroundColor: "rgba(211, 47, 47, 0.8)",
+                color: "white",
+                '&:hover': {
+                  backgroundColor: "rgba(211, 47, 47, 1)",
+                },
               }}
             >
-              {error}
-            </DialogContentText>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button 
-            onClick={handleClose} 
-            disabled={isDeleting}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleDelete}
-            color="error"
-            variant="contained"
-            disabled={isDeleting}
-            autoFocus
-          >
-            {isDeleting ? `Deleting (${progress}%)...` : "Delete All"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+              {isDeleting ? `Deleting (${progress}%)...` : "Delete All"}
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </div>
   );
 };

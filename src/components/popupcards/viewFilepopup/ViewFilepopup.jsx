@@ -34,13 +34,26 @@ const ViewFilepopup = ({ presignedUrl }) => {
   return (
     <>
       <Button
-        variant="contained"
+        variant="text"
         onClick={handleOpen}
         disabled={!presignedUrl}
         startIcon={<VisibilityIcon />}
+        // sx={{
+        //   borderRadius: '20px', 
+        //   padding: '8px 16px', 
+        //   backgroundColor: '#186F65', 
+        //   color: '#FFFFFF', 
+        //   '&:hover': {
+        //     backgroundColor: '#145A54', 
+        //   },
+        //   '&:disabled': {
+        //     backgroundColor: '#A5A5A5', 
+        //   },
+        // }}
       >
         View File
       </Button>
+
 
       <Dialog
         open={open}

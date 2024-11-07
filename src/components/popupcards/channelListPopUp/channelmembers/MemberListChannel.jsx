@@ -180,7 +180,6 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                                 }}
                             >
                                 <ListItemText primary={member.email} sx={{ color: "#000" }} />
-                                {/* Hide delete button for students */}
                                 {user.user_type !== "STUDENT" && member.id !== roomOwnerId && (
                                     <Button
                                         onClick={() => handleDeleteClick(member)}

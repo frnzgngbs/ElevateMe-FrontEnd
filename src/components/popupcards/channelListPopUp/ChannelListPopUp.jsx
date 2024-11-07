@@ -74,7 +74,10 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
   };
 
   const handleChannelClick = (channelId) => {
-    navigate(`/roompage/${roomId}/channel/${channelId}`);
+
+    navigate("/roompage/channel/", {
+			state: { roomId: roomId, channelId: channelId },
+		});
     onClose(); 
   };
 

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Trash2 } from "lucide-react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Alert,
   AlertTitle,
+  Box,
+  Typography,
+  Modal,
 } from "@mui/material";
 
 const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
@@ -82,7 +80,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
 
       if (response.status === 204) {
         if (onDelete) {
-          onDelete(numSubmissionId); // This will trigger the update in the parent
+          onDelete(numSubmissionId);
         }
         handleClose();
         if (onClose) {
@@ -116,22 +114,43 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
   return (
     <>
       <Button
-        variant="contained"
+        variant="text"
         color="error"
         onClick={handleClickOpen}
         disabled={isDeleting}
-        startIcon={<Trash2 />}
+        startIcon={<DeleteIcon />}
       >
-        Delete Submission
+        Delete
       </Button>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Delete Submission</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="delete-modal-title"
+        aria-describedby="delete-modal-description"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 4,
+            textAlign: "center",
+          }}
+        >
+          <Typography id="delete-modal-title" variant="h6" gutterBottom>
+            Delete Submission
+          </Typography>
+          <Typography id="delete-modal-description" sx={{ mt: 2 }}>
             Are you sure you want to delete this submission? This action cannot
             be undone.
-          </DialogContentText>
+          </Typography>
 
           {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
@@ -139,34 +158,42 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
             </Alert>
           )}
 
-          {process.env.NODE_ENV === "development" && (
-            <pre
-              style={{
-                marginTop: "1rem",
-                padding: "0.5rem",
-                background: "#f5f5f5",
-                borderRadius: "4px",
-                fontSize: "0.75rem",
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+            <Button
+              onClick={handleClose}
+              variant="contained"
+              sx={{
+                borderRadius: 4,
+                backgroundColor: "#186F65",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "#155B54",
+                },
+                mr: 2,
+              }}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDelete}
+              color="error"
+              variant="contained"
+              disabled={isDeleting}
+              sx={{
+                borderRadius: 4,
+                backgroundColor: "rgba(211, 47, 47, 0.8)",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "rgba(211, 47, 47, 1)",
+                },
               }}
             >
-              {JSON.stringify(debugInfo, null, 2)}
-            </pre>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} disabled={isDeleting}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleDelete}
-            color="error"
-            variant="contained"
-            disabled={isDeleting}
-          >
-            {isDeleting ? "Deleting..." : "Delete"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </>
   );
 };
