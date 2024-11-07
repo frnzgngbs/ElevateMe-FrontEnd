@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography, Snackbar, Alert } from "@mui/material";
+import { Box, Button, Grid, Typography, Snackbar, Alert, CircularProgress } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import GridBackground from "../res/gridbackground.png";
 import RoomCard from "../components/RoomCards";
@@ -9,7 +9,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from '../helpers/constant';
 
-
 const RoomPage = () => {
   const [rooms, setRooms] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -18,6 +17,7 @@ const RoomPage = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [roomChannels, setRoomChannels] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(true); // Add loading state
   const [user, setCurrentlyLoginId] = useState({
     id: "",
     email: "",
@@ -43,16 +43,7 @@ const RoomPage = () => {
         );
         setCurrentlyLoginId(userResponse.data);
 
-        const roomsResponse = await axios.get(
-          `${API_BASE_URL}/api/rooms/auth_rooms/`,
-          {
-            headers: { Authorization: `Token ${token}` },
-          }
-        );
-
-        
-
-        setRooms([...roomsResponse.data]);
+        await fetchRooms(); // Call fetchRooms here
       } catch (error) {
         console.error("Error fetching rooms or user:", error);
         if (error.response && error.response.status === 401) {
@@ -66,13 +57,6 @@ const RoomPage = () => {
     fetchCurrentlyLoggedInUser();
   }, []);
 
-
-  const handleRoomJoined = async () => {
-   
-    await fetchRooms(); 
-  };
-
-  
   const fetchRooms = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -95,22 +79,14 @@ const RoomPage = () => {
           "Unauthorized: Check if the token is valid and correctly formatted."
         );
       }
+    } finally {
+      setLoading(false); // Set loading to false after fetch
     }
   };
 
-  // const handleRoomJoined = (joinedRoom) => {
-  //   setRooms((prevRooms) => [
-  //     ...prevRooms,
-  //     {
-  //       id: joinedRoom.id,
-  //       room_name: joinedRoom.room_name,
-  //       room_code: joinedRoom.room_code,
-  //       room_owner_id: joinedRoom.room_owner_id,
-  //       channels: joinedRoom.channels || [],
-  //     },
-  //   ]);
-  //   setShowSuccess(true);
-  // };
+  const handleRoomJoined = async () => {
+    await fetchRooms(); 
+  };
 
   const handleOpenPopup = () => {
     setIsPopupOpen(true);
@@ -251,26 +227,32 @@ const RoomPage = () => {
           )}
         </Grid>
 
-        {rooms.map((room) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-            key={room.room_id}
-            onClick={() => handleOpenChannelList(room)}
-          >
-            <RoomCard
-              title={room.room_name}
-              roomCode={room.room_code}
-              ownerId={room.room_owner_id}
-              roomId={room.id}
-              onDelete={handleDeleteRoom}
-              user={user}
-            />
+        {loading ? ( // Show loading spinner while loading
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <CircularProgress color="primary" />
           </Grid>
-        ))}
+        ) : (
+          rooms.map((room) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              key={room.room_id}
+              onClick={() => handleOpenChannelList(room)}
+            >
+              <RoomCard
+                title={room.room_name}
+                roomCode={room.room_code}
+                ownerId={room.room_owner_id}
+                roomId={room.id}
+                onDelete={handleDeleteRoom}
+                user={user}
+              />
+            </Grid>
+          ))
+        )}
       </Grid>
 
       <JoinRoomPopup
