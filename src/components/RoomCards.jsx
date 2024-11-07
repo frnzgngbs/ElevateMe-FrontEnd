@@ -22,7 +22,7 @@ import { useState, useEffect} from "react";
 import DeleteDialog from "./popupcards/deletedialogpopup/DeleteDialog";
 import ChannelListPopup from "./popupcards/channelListPopUp/ChannelListPopUp.jsx";
 import AddMemberPopup from "./popupcards/addmemberpopup/RoomMembersPopup";
-import { API_BASE_URL } from '../helpers/constant.jsx';
+import { API_BASE_URL } from '../helpers/constant';
 
 const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
   const [isDeleting, setIsDeleting] = useState(false);
