@@ -17,8 +17,7 @@ import HMWCard from "../components/HMWCard";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 import { Elevator } from "@mui/icons-material";
 import PrintIcon from "@mui/icons-material/Print";
-import { API_BASE_URL } from '../helpers/constant';
-
+import { API_BASE_URL } from "../helpers/constant";
 
 const HMW = () => {
 	const [open, setOpen] = React.useState(false);
@@ -60,11 +59,15 @@ const HMW = () => {
 	const ps_id =
 		location.state?.statement_id || sessionStorage.getItem("statement_id");
 
+	console.log("PS ID IN HMW: " + ps_id);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
 	const generateFiveHMW = async () => {
 		setIsLoading((prev) => !prev);
+		console.log("Selected Problem Statement: " + selected_statement);
+		console.log("List of Whys: " + list_of_whys);
+		console.log("Root Problem: " + generated_root);
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
@@ -159,7 +162,9 @@ const HMW = () => {
 			"report_elevator_pitch",
 			JSON.stringify(elevatorPitch)
 		);
-		window.open("/report", {
+		console.log("VENN IN HMW BEFORE PASSING TO REPORT PAGE:  ", venn);
+		console.log("PS ID IN HMW: ", ps_id);
+		navigate("/report", {
 			state: {
 				venn: venn,
 				statement_id: ps_id,
