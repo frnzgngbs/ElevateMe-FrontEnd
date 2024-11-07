@@ -16,8 +16,7 @@ import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; // Check
 import zIndex from "@mui/material/styles/zIndex";
 import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material/TextField";
-import { API_BASE_URL } from '../helpers/constant';
-
+import { API_BASE_URL } from "../helpers/constant";
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
@@ -285,9 +284,7 @@ function Venn() {
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
-					alert("PASOK");
 				} else {
-					alert("PASOK");
 					response = await axios.post(
 						`${API_BASE_URL}/api/three_venn_ps/`,
 						{
