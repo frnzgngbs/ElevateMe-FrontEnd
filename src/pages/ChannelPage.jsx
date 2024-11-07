@@ -374,9 +374,9 @@ const onDone = async () => {
       >
         <Typography
           variant="h3"
-          sx={{ fontWeight: "bold", marginBottom: 2, marginRight: "80px" }}
+          sx={{ fontWeight: "bold", marginBottom: 2,  }}
         >
-          Ranking
+          Ranking Section
         </Typography>
 
         <RankingSection

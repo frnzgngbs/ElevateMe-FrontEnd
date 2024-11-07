@@ -6,41 +6,67 @@ import {
   Avatar,
   Card,
   CardContent,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
-
 const RankingSection = ({ teamRankings, teacherRankings }) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Box sx={{ padding: 4 }}>
-      <Grid container spacing={2} alignItems="top">
+      <Grid container spacing={4} alignItems="flex-start">
         {/* Team's Ranking */}
-        <Grid item xs={5}>
-          <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+        <Grid item xs={12} md={5}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
             Team’s Ranking
           </Typography>
           {teamRankings.map((member) => (
             <Card
               key={member.name}
-              sx={{ mb: 2, boxShadow: 2, borderRadius: 4  }}
+              sx={{
+                mb: 2,
+                boxShadow: 2,
+                borderRadius: 4,
+                minWidth: "300px",
+                height: "120px",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
-              <CardContent sx={{ display: "flex", alignItems: "center" }}>
-                <Avatar
-                  alt={member.name}
-                  src={member.profilePicture}
-                  sx={{ width: 48, height: 48, mr: 2 }}
-                />
-                <Box sx={{ flex: 1, minWidth:"200px" }}>
-                  <Typography variant="h6" sx={{ textAlign: "left" }}>
+              <CardContent sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+              
+                <Box sx={{ flex: 1, minWidth: "200px" }}>
+                  <Box sx={{ display: "flex", flexDirection: "row", mb:.5 }}>
+                  <Avatar
+                  sx={{
+                    width: 30, 
+                    height: 30,
+                    backgroundColor: "#67A099",
+                    fontSize: "1rem",
+                    mr: 1,
+                  }}
+                >
+                  {member.name.charAt(0)}
+                </Avatar>
+                  <Typography variant="h6" sx={{ textAlign: "left", }}>
                     {member.name}
                   </Typography>
+                  </Box>
+             
                   <Typography
                     variant="body2"
                     sx={{
                       textAlign: "left",
-                      whiteSpace: "nowrap",
+                      fontSize: "0.875rem",
+                      lineHeight: 1.3,
+                      maxWidth: "330px",
                       overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      minWidth: "280px", 
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 2, 
+                      marginLeft: 1,
                     }}
                   >
                     {member.content}
@@ -48,7 +74,13 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                 </Box>
                 <Typography
                   variant="h6"
-                  sx={{ fontWeight: "bold", color: "#186F65", ml: 2 }}
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#186F65",
+                    ml: "auto",
+                    textAlign: "right",
+                    minWidth: "60px",
+                  }}
                 >
                   {member.points} pts
                 </Typography>
@@ -57,43 +89,71 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
           ))}
         </Grid>
 
-        <Grid item xs={2} sx={{ display: "flex", justifyContent: "center" }}>
-          <Divider
-            orientation="vertical"
-            flexItem
-            sx={{ borderColor: "#186F65", borderWidth: 2, height: "400px" }} // Adjusted styles for better visibility
-          />
+        {/* Divider */}
+        <Grid item xs={12} md={2} sx={{ display: "flex", justifyContent: "center" }}>
+          {isSmallScreen ? (
+            <Divider
+              flexItem
+              sx={{ borderColor: "#186F65", borderWidth: 2, width: "400px", my: 2 }}
+            />
+          ) : (
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ borderColor: "#186F65", borderWidth: 2, height: "400px" }}
+            />
+          )}
         </Grid>
 
         {/* Teacher's Ranking */}
-        <Grid item xs={5}>
-          <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+        <Grid item xs={12} md={5}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
             Teacher’s Ranking
           </Typography>
           {teacherRankings.map((member) => (
-            // TODO: Wrap the ranking inside a Card
             <Card
               key={member.name}
-              sx={{ mb: 2, boxShadow: 2, borderRadius: 4 }}
+              sx={{
+                mb: 2,
+                boxShadow: 2,
+                borderRadius: 4,
+                minWidth: "300px",
+                height: "120px",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
-              <CardContent sx={{ display: "flex", alignItems: "center" }}>
+              <CardContent sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+              <Box sx={{ flex: 1, minWidth: "200px" }}>
+                    <Box sx={{ display: "flex", flexDirection: "row", mb:.5 }}>
                 <Avatar
-                  alt={member.name}
-                  src={member.profilePicture}
-                  sx={{ width: 48, height: 48, mr: 2 }}
-                />
-                <Box sx={{ flex: 1 }}>
-                  <Typography variant="h6" sx={{ textAlign: "left" }}>
+                  sx={{
+                    width: 30, // Smaller size
+                    height: 30,
+                    backgroundColor: "#67A099",
+                    fontSize: "1rem",
+                    mr: .5,
+                  }}
+                >
+                  {member.name.charAt(0)}
+                </Avatar>
+                
+                  <Typography variant="h6" sx={{ textAlign: "left", mb: 0.5, }}>
                     {member.name}
                   </Typography>
+                  </Box>
                   <Typography
                     variant="body2"
                     sx={{
                       textAlign: "left",
-                      whiteSpace: "nowrap",
+                      fontSize: "0.875rem",
+                      lineHeight: 1.3,
+                      maxWidth: "320px",
                       overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "280px", // Adjust this width for better control
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      ml: 1,
+                      WebkitLineClamp: 2, // Limits to 2 lines with ellipsis
                     }}
                   >
                     {member.content}
@@ -101,7 +161,13 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                 </Box>
                 <Typography
                   variant="h6"
-                  sx={{ fontWeight: "bold", color: "#186F65", ml: 2 }}
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#186F65",
+                    ml: "auto",
+                    textAlign: "right",
+                    minWidth: "60px",
+                  }}
                 >
                   {member.points} pts
                 </Typography>
