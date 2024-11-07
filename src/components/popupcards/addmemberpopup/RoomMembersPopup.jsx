@@ -33,6 +33,8 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
 
         fetchEmails();
     }, []);
+   
+    
 
     const handleAddMembers = async (addedEmails) => {
              try {
@@ -66,6 +68,9 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
             });
         }
     };
+    
+
+   
 
     const handleBackToMembers = () => {
         setCurrentPage("members");
@@ -93,7 +98,7 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
             <Box
                 sx={{
                     width: 500,
-                    height: 500,
+                    height: 650,
                     bgcolor: "background.paper",
                     boxShadow: 24,
                     p: 4,
@@ -113,6 +118,7 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
                         emailDatabase={emailDatabase}
                         onSubmit={handleAddMembers}
                         onBack={handleBackToMembers}
+                        roomId={roomId}
                     />
                 )}
 

@@ -8,20 +8,32 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CommentDialog from "../components/popupcards/commentpopup/CommentDialog";
 import VotingDialog from "../components/popupcards/votingpopup/VotingDialog";
 import axios from "axios";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ViewFilepopup from "./popupcards/viewFilepopup/ViewFilepopup";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Document, Page } from "react-pdf";
+import { pdfjs } from "react-pdf";
+import DeleteSubmission from "../components/DeleteSubmission";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 const PostCard = ({
+  authorId,
+  user,
   author,
   content,
   submittedWork,
   channelId,
   onVoteSuccess,
+  onDeleteSuccess,
 }) => {
   const [openVoteDialog, setOpenVoteDialog] = useState(false);
   const [openCommentDialog, setOpenCommentDialog] = useState(false);
@@ -29,8 +41,51 @@ const PostCard = ({
   const [fileUrl, setFileUrl] = useState(null);
   const [comments, setComments] = useState([]);
   const [loadingComments, setLoadingComments] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
+  const [presignedUrl, setPresignedUrl] = useState(null);
+  const [showPdfViewer, setShowPdfViewer] = useState(false);
+  const [pdfViewerError, setPdfViewerError] = useState(null);
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [submission, setSubmissions] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [iserror, setisError] = useState(null);
 
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      iserror(null);
+
+      const url = `/api/channels/${channelId}/submissions/${submittedWork.id}/`;
+      const response = await axios.delete(url, {
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.status === 204) {
+        if (onDeleteSuccess) {
+          onDeleteSuccess(submittedWork.id);
+        }
+      }
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.detail ||
+        err.message ||
+        "Failed to delete submission. Please try again.";
+      setisError(errorMessage);
+      console.error("Delete error:", err);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteSuccess = (deletedSubmissionId) => {
+    if (onDeleteSuccess) {
+      onDeleteSuccess(deletedSubmissionId);
+    }
+  };
   const getAuthorDisplayName = () => {
     if (typeof author === "string") return author;
     if (author?.first_name && author?.last_name) {
@@ -51,6 +106,37 @@ const PostCard = ({
       "Content-Type": "application/json",
     },
   });
+
+  useEffect(() => {
+    const fetchPresignedUrl = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/api/presigned-url/${submittedWork.id}/`
+        );
+        setPresignedUrl(response.data.url);
+      } catch (error) {
+        console.error("Error fetching presigned URL:", error);
+      }
+    };
+
+    if (submittedWork.file_url) {
+      setPresignedUrl(submittedWork.file_url);
+    } else {
+      fetchPresignedUrl();
+    }
+  }, [submittedWork.id, submittedWork.file_url]);
+
+  const handleFileOpen = () => {
+    setShowPdfViewer(true);
+  };
+
+  const handlePdfViewerError = (error) => {
+    setPdfViewerError(error);
+  };
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
 
   const handleVoteDialogOpen = () => {
     setOpenVoteDialog(true);
@@ -75,6 +161,10 @@ const PostCard = ({
 
   const handleFileDialogClose = () => {
     setOpenFileDialog(false);
+    if (fileUrl) {
+      window.URL.revokeObjectURL(fileUrl);
+      setFileUrl(null);
+    }
   };
 
   const fetchComments = async () => {
@@ -91,7 +181,6 @@ const PostCard = ({
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`
       );
 
-
       let commentsData = [];
       if (Array.isArray(response.data)) {
         commentsData = response.data;
@@ -107,7 +196,7 @@ const PostCard = ({
       console.error("Error fetching comments:", error);
       setError(
         error.response?.data?.detail ||
-          "Unable to load comments. Please try again later."
+        "Unable to load comments. Please try again later."
       );
       setComments([]);
     } finally {
@@ -132,68 +221,17 @@ const PostCard = ({
         }
       );
 
-
       await fetchComments();
       return true;
     } catch (error) {
       console.error("Error submitting comment:", error);
       setError(
         error.response?.data?.detail ||
-          "Failed to post comment. Please try again."
+        "Failed to post comment. Please try again."
       );
       return false;
     } finally {
       setLoadingComments(false);
-    }
-  };
-
-  const handleFileOpen = async () => {
-    try {
-
-      if (!submittedWork || !submittedWork.id) {
-        throw new Error("Invalid submission data");
-      }
-
-      const response = await fetch(
-        `http://localhost:8000/api/channels/${channelId}/submissions/${submittedWork.id}/download/`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Token ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("File download failed");
-      }
-
-      const contentDisposition = response.headers.get("Content-Disposition");
-      let filename = submittedWork?.file_url
-        ? submittedWork.file_url.split("/").pop()
-        : "download";
-
-      if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(
-          /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
-        );
-        if (filenameMatch && filenameMatch[1]) {
-          filename = filenameMatch[1].replace(/['"]/g, "");
-        }
-      }
-
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-
-      link.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
     }
   };
 
@@ -211,14 +249,14 @@ const PostCard = ({
       >
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
-              <Avatar sx={{ marginRight: 2 }}>{getAuthorInitial()}</Avatar>
+            <Grid item xs={12} sx={{ display: "flex", alignItems: "center", marginTop: "-10px" }}>
+              <Avatar sx={{ marginRight: 2, backgroundColor: '#67A099 ', }}>{getAuthorInitial()}</Avatar>
               <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 {getAuthorDisplayName()}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" sx={{ textAlign: "left" }}>
                 {content}
               </Typography>
             </Grid>
@@ -229,6 +267,7 @@ const PostCard = ({
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                marginBottom: "-20px",
               }}
             >
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -239,33 +278,33 @@ const PostCard = ({
                 >
                   Comment
                 </Button>
-                <Button
-                  variant="text"
-                  open={openVoteDialog}
-                  onClick={handleVoteDialogOpen}
-                  startIcon={
-                    <ThumbUpOutlinedIcon onClose={handleVoteDialogClose} />
-                  }
-                >
-                  Vote
-                </Button>
+
+                {user.id !== authorId && (
+                  <Button
+                    variant="text"
+                    open={openVoteDialog}
+                    onClick={handleVoteDialogOpen}
+                    startIcon={
+                      <ThumbUpOutlinedIcon onClose={handleVoteDialogClose} />
+                    }
+                  >
+                    Vote
+                  </Button>
+                )}
+
+                <ViewFilepopup presignedUrl={presignedUrl} />
+
               </Box>
-              <Button
-                variant="contained"
-                sx={{
-                  borderRadius: 4,
-                  backgroundColor: "#186F65",
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "#125B52",
-                  },
-                }}
-                onClick={handleFileOpen}
-                disabled={!submittedWork}
-                startIcon={<VisibilityIcon />}
-              >
-                Download File
-              </Button>
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {user.user_type === "TEACHER" && (
+                  <DeleteSubmission
+                    channelId={Number(channelId)}
+                    submissionId={submittedWork.id}
+                    onDelete={handleDeleteSuccess}
+                  />
+                )}
+
+              </Box>
             </Grid>
           </Grid>
         </CardContent>
@@ -282,7 +321,7 @@ const PostCard = ({
       <VotingDialog
         open={openVoteDialog}
         onClose={handleVoteDialogClose}
-        channelId={channelId} // Make sure these are defined
+        channelId={channelId}
         submissionId={submittedWork.id}
         onVoteSuccess={onVoteSuccess}
       />
@@ -305,7 +344,7 @@ const PostCard = ({
             />
           ) : (
             <Typography variant="body2" color="text.secondary">
-              No file submitted.
+              No file available to view.
             </Typography>
           )}
         </Box>

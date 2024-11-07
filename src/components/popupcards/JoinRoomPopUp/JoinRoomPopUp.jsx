@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button, Modal, TextField, Typography, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
 
@@ -6,6 +6,14 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
     const [roomCode, setRoomCode] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [showError, setShowError] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+
+    useEffect(() => {
+        if (open) {
+            setRoomCode("");
+            setErrorMessage("");
+        }
+    }, [open]);
 
     const handleJoinRoom = async () => {
         if (!roomCode) {
@@ -18,20 +26,16 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
             if (!token) {
                 throw new Error("Token is missing. Please log in.");
             }
-    
-            const response = await axios.post(
+
+            await axios.post(
                 "http://localhost:8000/api/rooms/join/",
-                {
-                    member_id: user.id, 
-                    room_code: roomCode,
-                },
-                {
-                    headers: { Authorization: `Token ${token}` },
-                }
+                { room_code: roomCode },
+                { headers: { Authorization: `Token ${token}` } }
             );
-    
-            onJoin(response.data); // Pass the joined room data back to the RoomPage
-            onClose(); // Close the popup
+
+            setShowSuccess(true);
+            onJoin(); 
+            onClose();
         } catch (error) {
             console.error("Error joining room:", error);
             setErrorMessage(
@@ -40,7 +44,7 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
             setShowError(true);
         }
     };
-    
+
     return (
         <>
             <Modal
@@ -96,7 +100,6 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
                 </Box>
             </Modal>
 
-            {/* Error message display */}
             <Snackbar
                 open={showError}
                 autoHideDuration={3000}
@@ -109,6 +112,21 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
                     sx={{ width: "100%" }}
                 >
                     {errorMessage}
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={showSuccess}
+                autoHideDuration={3000}
+                onClose={() => setShowSuccess(false)}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert
+                    onClose={() => setShowSuccess(false)}
+                    severity="success"
+                    sx={{ width: "100%" }}
+                >
+                    Request to join the room was submitted successfully.
                 </Alert>
             </Snackbar>
         </>

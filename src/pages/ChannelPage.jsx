@@ -6,18 +6,68 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
+import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
+
 
 const ChannelPage = () => {
   const { roomId, channelId } = useParams();
   const [channelName, setChannelName] = useState("");
   const [posts, setPosts] = useState([]);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [submission, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [rankings, setRankings] = useState({
     teamRankings: [],
     teacherRankings: [],
   });
+  const [user, setCurrentlyLoginId] = useState({
+    id: "",
+    email: "",
+    first_name: "",
+    last_name: "",
+    user_type: "",
+  });
 
-  const [loading, setLoading] = useState(true);
+  const handleDeleteSuccess = (deletedPostId) => {
+    setPosts((prevPosts) =>
+      prevPosts.filter((post) => post.id !== deletedPostId)
+    );
+  };
+
+
+  useEffect(() => {
+    const fetchCurrentlyLoggedInUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          throw new Error("No token found. Please log in.");
+        }
+
+        const userResponse = await axios.get(
+          "http://localhost:8000/api/user/get_currently_login/",
+          {
+            headers: { Authorization: `Token ${token}` },
+          }
+        );
+        setCurrentlyLoginId(userResponse.data);
+
+        
+
+        
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        if (error.response && error.response.status === 401) {
+          console.error(
+            "Unauthorized: Check if the token is valid and correctly formatted."
+          );
+        }
+      }
+    };
+
+    fetchCurrentlyLoggedInUser();
+  }, []);
+
 
   const openShareFile = () => {
     setShowUploadPopup(true);
@@ -42,7 +92,6 @@ const ChannelPage = () => {
         `http://localhost:8000/api/channels/${channelId}/submissions/`,
         { headers }
       );
-
 
       // Process each submission
       const postsWithMarks = await Promise.all(
@@ -103,10 +152,8 @@ const ChannelPage = () => {
         })
       );
 
-      // Filter out any failed submissions
       const validPosts = postsWithMarks.filter((post) => post !== null);
 
-      // Sort rankings
       const teamRankings = validPosts
         .sort((a, b) => b.studentPoints - a.studentPoints)
         .map(({ name, content, studentPoints, profilePicture }) => ({
@@ -152,7 +199,7 @@ const ChannelPage = () => {
   }, [channelId]);
 
   const handleVoteSuccess = () => {
-    fetchRankings(); // Refresh rankings after a vote
+    fetchRankings(); 
   };
 
   useEffect(() => {
@@ -200,7 +247,37 @@ const ChannelPage = () => {
 
     fetchChannelDetails();
     fetchChannelSubmissions();
-  }, [channelId]);
+  }, [channelId ]);
+
+
+const onDone = async () => {
+  await fetchChannelSubmissions();
+};
+
+  const fetchChannelSubmissions = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `http://localhost:8000/api/channels/${channelId}/submissions/`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+      response.data.forEach((post) => {
+        console.log("Post data:", {
+          id: post.id,
+          member_id: post.member_id,
+          author: post.author,
+          problem_statement: post.problem_statement,
+        });
+      });
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching channel submissions:", error);
+    }
+  };
 
   return (
     <>
@@ -238,8 +315,17 @@ const ChannelPage = () => {
           <Grid
             item
             xs={6}
-            sx={{ display: "flex", justifyContent: "flex-end" }}
+            sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
           >
+            {user.user_type === "TEACHER" && (
+             <DeleteAllSubmissions
+            setPosts={setPosts}
+            channelId={channelId} 
+            onDeleteSuccess={handleDeleteSuccess}
+          />
+            )}
+
+          {user.user_type === "STUDENT" && (
             <Button
               variant="contained"
               onClick={openShareFile}
@@ -248,15 +334,19 @@ const ChannelPage = () => {
                 color: "white",
                 borderRadius: 4,
                 mb: 2,
+                padding: 1,
               }}
             >
               Share File
             </Button>
+          )}
           </Grid>
-
+         
           {posts.map((post) => (
             <Grid item xs={12} key={post.id}>
               <PostCard
+                user={user}
+                authorId = {post.member_id}
                 author={post.member_name || "Unknown User"}
                 content={
                   post.problem_statement || "No Problem Statement Available"
@@ -267,6 +357,7 @@ const ChannelPage = () => {
                 }}
                 channelId={channelId}
                 onVoteSuccess={fetchRankings}
+                onDeleteSuccess={handleDeleteSuccess}
               />
             </Grid>
           ))}
@@ -298,6 +389,7 @@ const ChannelPage = () => {
           roomId={roomId}
           channelId={channelId}
           onClose={closeShareFile}
+          onDone={onDone}
         />
       )}
     </>

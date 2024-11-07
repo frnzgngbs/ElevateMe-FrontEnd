@@ -137,7 +137,7 @@ const router = createBrowserRouter(
           <Route path="elevator" element={<ElevatorPitch />} />
           <Route path="roompage" element={<RoomPage />} />
           <Route
-            path="/roompage/:roomId/channel/:channelId"
+            path="/roompage/channel/"
             element={<ChannelPage />}
           />
         </Route>

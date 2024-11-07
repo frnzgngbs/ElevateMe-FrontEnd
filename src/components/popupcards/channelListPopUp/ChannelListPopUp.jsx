@@ -35,7 +35,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
             headers: {
               Authorization: `Token ${token}`,
             },
-          }
+          } 
         );
         setChannels(response.data);
       } catch (error) {
@@ -74,9 +74,11 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
   };
 
   const handleChannelClick = (channelId) => {
-    // Navigate to the specific channel within the room
-    navigate(`/roompage/${roomId}/channel/${channelId}`);
-    onClose(); // Close the modal popup
+
+    navigate("/roompage/channel/", {
+			state: { roomId: roomId, channelId: channelId },
+		});
+    onClose(); 
   };
 
   const handleAddChannel = () => {

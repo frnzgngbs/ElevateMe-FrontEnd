@@ -6,13 +6,15 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import useTheme from "@mui/material/styles/useTheme";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const Register = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [userData, setUserData] = useState({
     email: "",
@@ -22,7 +24,15 @@ const Register = () => {
     confirmPassword: "",
     user_type: "STUDENT",
   });
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
+  const capitalizeName = (name) => {
+    return name
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+  
   const handleChange = (e) => {
     setUserData((prev) => ({
       ...prev,
@@ -30,11 +40,12 @@ const Register = () => {
     }));
   };
 
+
   const handleRegistration = async (e) => {
     e.preventDefault();
-
+  
     if (userData.password !== userData.confirmPassword) {
-      alert("Passwords does not match.");
+      setSnackbar({ open: true, message: "Passwords do not match.", severity: "error" });
       setUserData((prev) => ({
         ...prev,
         password: "",
@@ -42,21 +53,23 @@ const Register = () => {
       }));
       return;
     }
+  
     if (userData.password.length < 6) {
-      alert("Password must be at least 6 characters long.");
+      setSnackbar({ open: true, message: "Password must be at least 6 characters long.", severity: "error" });
+      return;
     }
-
+  
     try {
-      let response = await axios.post("http://localhost:8000/api/user/", {
-        email: userData.email,
-        first_name: userData.first_name,
-        last_name: userData.last_name,
-        password: userData.password,
-        user_type: userData.user_type,
-      });
-
+      const formattedUserData = {
+        ...userData,
+        first_name: capitalizeName(userData.first_name),
+        last_name: capitalizeName(userData.last_name),
+      };
+  
+      const response = await axios.post("http://localhost:8000/api/user/", formattedUserData);
+  
       if (response.status === 201) {
-        alert("User created successfully!");
+        setSnackbar({ open: true, message: "User created successfully!", severity: "success" });
         setUserData({
           email: "",
           first_name: "",
@@ -65,14 +78,14 @@ const Register = () => {
           confirmPassword: "",
           user_type: "STUDENT",
         });
+        navigate("/login");
       }
     } catch (err) {
       console.error(err);
-
       if (err.response && err.response.status === 400) {
         const { data } = err.response;
         if (data.email) {
-          alert(data.email[0]);
+          setSnackbar({ open: true, message: data.email[0], severity: "error" });
           setUserData((prev) => ({
             ...prev,
             email: "",
@@ -81,6 +94,7 @@ const Register = () => {
       }
     }
   };
+  
 
   useEffect(() => {
     console.log(userData);
@@ -101,6 +115,10 @@ const Register = () => {
   const inputFieldContainer = {
     paddingTop: "15px",
     paddingBottom: "15px",
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -201,16 +219,18 @@ const Register = () => {
                 />
               </Box>
               <Box sx={inputFieldContainer}>
-                <Select
+                <TextField
+                  select
+                  InputProps={inputProps}
+                  sx={inputSx}
                   name="user_type"
                   value={userData.user_type}
                   onChange={handleChange}
-                  displayEmpty
-                  sx={{ width: "100%" }}
+                  required
                 >
                   <MenuItem value="STUDENT">Student</MenuItem>
                   <MenuItem value="TEACHER">Teacher</MenuItem>
-                </Select>
+                </TextField>
               </Box>
               <Button
                 type="submit"
@@ -243,6 +263,16 @@ const Register = () => {
           </Box>
         </Paper>
       </Grid>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 };

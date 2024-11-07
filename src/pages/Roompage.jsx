@@ -48,7 +48,7 @@ const RoomPage = () => {
           }
         );
 
-        console.log("Room Response: ", roomsResponse.data);
+        
 
         setRooms([...roomsResponse.data]);
       } catch (error) {
@@ -66,9 +66,11 @@ const RoomPage = () => {
 
 
   const handleRoomJoined = async () => {
-    setShowSuccess(true);
-    await fetchRooms(); // Refresh rooms after successfully joining.
+   
+    await fetchRooms(); 
   };
+
+  
   const fetchRooms = async () => {
     try {
       const token = localStorage.getItem("token");

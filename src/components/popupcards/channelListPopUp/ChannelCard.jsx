@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, IconButton, Typography, Box } from "@mui/material";
+import { Card, IconButton, Typography, Box } from "@mui/material";
 import { Delete, GroupAdd } from "@mui/icons-material";
 
 const ChannelCard = ({ title, onClick, onDelete, onAddMember, user }) => {
@@ -16,6 +16,11 @@ const ChannelCard = ({ title, onClick, onDelete, onAddMember, user }) => {
         justifyContent: "space-between",
         backgroundColor: "rgba(24, 111, 101, 0.1)",
         boxShadow: 0,
+        transition: "transform 0.2s, box-shadow 0.2s",
+        "&:hover": {
+          transform: "scale(1.02)",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+        },
       }}
       onClick={onClick}
     >

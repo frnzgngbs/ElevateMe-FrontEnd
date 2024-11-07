@@ -23,6 +23,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
     const [memberToDelete, setMemberToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+    const [roomOwnerId, setRoomOwnerId] = useState(null); 
 
     useEffect(() => {
         const fetchMembersEmails = async () => {
@@ -67,8 +68,31 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                 setLoading(false);
             }
         };
+        const fetchRoomOwnerId = async () => {
+            try {
+                let token = localStorage.getItem("token");
+
+                if (!token) {
+                    throw new Error("No token found. Please log in.");
+                }
+
+                const roomResponse = await axios.get(
+                    `http://localhost:8000/api/rooms/${roomId}/`,
+                    {
+                        headers: {
+                            Authorization: `Token ${token}`,
+                        },
+                    }
+                );
+
+                setRoomOwnerId(roomResponse.data.room_owner_id);
+            } catch (err) {
+                console.error("Error fetching room owner ID:", err);
+            }
+        };
 
         fetchMembersEmails();
+        fetchRoomOwnerId(); 
     }, [roomId]);
 
     const handleDeleteClick = (member) => {
@@ -156,13 +180,16 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                                 }}
                             >
                                 <ListItemText primary={member.email} sx={{ color: "#000" }} />
-                                {/* Hide delete button for students */}
-                                {user.user_type !== "STUDENT" && (
+                                {user.user_type !== "STUDENT" && member.id !== roomOwnerId && (
                                     <Button
                                         onClick={() => handleDeleteClick(member)}
-                                        sx={{ color: "#000" }} 
+                                        sx={{  color: "rgba(0, 0, 0, 0.54)", minWidth: 'auto',
+                                            "&:hover": {
+                                              color: "#d32f2f",
+                                              minWidth: 'auto'
+                                            }, }} 
                                     >
-                                        <DeleteIcon />
+                                       <DeleteIcon />     
                                     </Button>
                                 )}
                             </ListItem>
