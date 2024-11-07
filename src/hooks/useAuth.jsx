@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const useAuth = () => {
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ const useAuth = () => {
         password: user.password,
       });*/
 
-      let response = await axios.post("http://localhost:8000/api/user/login/", {
+      let response = await axios.post(`${API_BASE_URL}/api/user/login/`, {
         email: user.email,
         password: user.password,
       });
@@ -40,7 +42,7 @@ const useAuth = () => {
       let token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:8000/api/user/logout/",
+        `${API_BASE_URL}/api/user/logout/`,
         {},
         {
           headers: { Authorization: `Token ${token}` },

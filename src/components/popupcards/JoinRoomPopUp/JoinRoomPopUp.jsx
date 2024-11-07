@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Box, Button, Modal, TextField, Typography, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
     const [roomCode, setRoomCode] = useState("");
@@ -28,7 +30,7 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
             }
 
             await axios.post(
-                "http://localhost:8000/api/rooms/join/",
+                `${API_BASE_URL}/api/rooms/join/`,
                 { room_code: roomCode },
                 { headers: { Authorization: `Token ${token}` } }
             );

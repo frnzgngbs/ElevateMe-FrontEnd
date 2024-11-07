@@ -17,6 +17,8 @@ import HMWCard from "../components/HMWCard";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 import { Elevator } from "@mui/icons-material";
 import PrintIcon from "@mui/icons-material/Print";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const HMW = () => {
 	const [open, setOpen] = React.useState(false);
@@ -66,7 +68,7 @@ const HMW = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
-				"http://localhost:8000/api/ai/five_hmws/",
+				`${API_BASE_URL}/api/ai/five_hmws/`,
 				{
 					selected_statement: selected_statement,
 					list_of_whys: list_of_whys,
@@ -125,7 +127,7 @@ const HMW = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
-				"http://localhost:8000/api/ai/elevator_pitch/",
+				`${API_BASE_URL}/api/ai/elevator_pitch/`,
 				{
 					problem_statement: selected_statement,
 					list_of_whys: [...list_of_whys],

@@ -15,6 +15,8 @@ import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP";
 import ChannelMembersPopup from "./channelmembers/ChannelMembersPopup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const ChannelListPopup = ({ open, onClose, roomId, user }) => {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
 
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/rooms/${roomId}/channels`,
+          `${API_BASE_URL}/api/rooms/${roomId}/channels`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -54,7 +56,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
     let token = localStorage.getItem("token");
 
     try {
-      await axios.delete(`http://localhost:8000/api/channels/${channelId}`, {
+      await axios.delete(`${API_BASE_URL}/api/channels/${channelId}`, {
         headers: {
           Authorization: `Token ${token}`,
         },

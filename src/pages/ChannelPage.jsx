@@ -2,15 +2,17 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import PostCard from "../components/PostCard";
 import GridBackground from "../res/gridbackground.png";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
 import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
+import { API_BASE_URL } from '../helpers/constant';
 
 
 const ChannelPage = () => {
-  const { roomId, channelId } = useParams();
+  const [ roomId, setRoomId ] = useState();
+  const [ channelId, setChannelId ] = useState();
   const [channelName, setChannelName] = useState("");
   const [posts, setPosts] = useState([]);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
@@ -18,7 +20,7 @@ const ChannelPage = () => {
   const [loading, setLoading] = useState(true);
   const [rankings, setRankings] = useState({
     teamRankings: [],
-    teacherRankings: [],
+    teacherRankings: [],  
   });
   const [user, setCurrentlyLoginId] = useState({
     id: "",
@@ -33,6 +35,7 @@ const ChannelPage = () => {
       prevPosts.filter((post) => post.id !== deletedPostId)
     );
   };
+  const location = useLocation()
 
 
   useEffect(() => {
@@ -45,14 +48,20 @@ const ChannelPage = () => {
         }
 
         const userResponse = await axios.get(
-          "http://localhost:8000/api/user/get_currently_login/",
+          "http://  :8000/api/user/get_currently_login/",
           {
             headers: { Authorization: `Token ${token}` },
           }
         );
         setCurrentlyLoginId(userResponse.data);
 
-        
+        console.log(location.state?.roomId);
+        console.log(location.state?.channelId)
+
+        if(location.state && location.state.roomId && location.state.channelId) {
+          setRoomId(location.state.roomId);
+          setChannelId(location.state.channelId); 
+        }
 
         
       } catch (error) {
@@ -89,7 +98,7 @@ const ChannelPage = () => {
 
       // Get all submissions
       const submissionsResponse = await axios.get(
-        `http://localhost:8000/api/channels/${channelId}/submissions/`,
+        `${API_BASE_URL}/api/channels/${channelId}/submissions/`,
         { headers }
       );
 
@@ -98,7 +107,7 @@ const ChannelPage = () => {
         submissionsResponse.data.map(async (submission) => {
           try {
             const votesResponse = await axios.get(
-              `http://localhost:8000/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
+              `${API_BASE_URL}/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
               { headers }
             );
 
@@ -181,13 +190,11 @@ const ChannelPage = () => {
       setRankings({ teamRankings: [], teacherRankings: [] });
     }
   };
-  // Ensure fetchRankings is called when channelId changes
   useEffect(() => {
     if (channelId) {
       fetchRankings();
     }
   }, [channelId]);
-  // Call fetchRankings when component mounts
   useEffect(() => {
     if (channelId) {
       fetchRankings();
@@ -195,7 +202,7 @@ const ChannelPage = () => {
   }, [channelId]);
 
   useEffect(() => {
-    fetchRankings(); // Initial load
+    fetchRankings(); 
   }, [channelId]);
 
   const handleVoteSuccess = () => {
@@ -207,7 +214,7 @@ const ChannelPage = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:8000/api/channels/${channelId}/`,
+          `${API_BASE_URL}/api/channels/${channelId}/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -224,7 +231,7 @@ const ChannelPage = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:8000/api/channels/${channelId}/submissions/`,
+          `${API_BASE_URL}/api/channels/${channelId}/submissions/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -252,13 +259,14 @@ const ChannelPage = () => {
 
 const onDone = async () => {
   await fetchChannelSubmissions();
+  await fetchRankings();
 };
 
   const fetchChannelSubmissions = async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:8000/api/channels/${channelId}/submissions/`,
+        `${API_BASE_URL}/api/channels/${channelId}/submissions/`,
         {
           headers: {
             Authorization: `Token ${token}`,

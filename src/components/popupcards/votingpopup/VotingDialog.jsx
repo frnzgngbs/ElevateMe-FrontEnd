@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
+import { API_BASE_URL } from '../helpers/constant';
+
 const VotingDialog = ({
   open,
   onClose,
@@ -32,7 +34,7 @@ const VotingDialog = ({
       setError(null);
 
       await axios.post(
-        `http://localhost:8000/api/channels/${channelId}/submissions/${submissionId}/voting_marks/`,
+        `${API_BASE_URL}/api/channels/${channelId}/submissions/${submissionId}/voting_marks/`,
         {
           marks: rating,
           submission_id: submissionId,

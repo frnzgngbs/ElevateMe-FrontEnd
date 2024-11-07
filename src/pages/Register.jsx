@@ -11,6 +11,8 @@ import axios from "axios";
 import MenuItem from "@mui/material/MenuItem";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const Register = () => {
   const theme = useTheme();
@@ -66,7 +68,7 @@ const Register = () => {
         last_name: capitalizeName(userData.last_name),
       };
   
-      const response = await axios.post("http://localhost:8000/api/user/", formattedUserData);
+      const response = await axios.post(`${API_BASE_URL}/api/user/`, formattedUserData);
   
       if (response.status === 201) {
         setSnackbar({ open: true, message: "User created successfully!", severity: "success" });

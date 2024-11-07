@@ -6,6 +6,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { Avatar, IconButton, Menu, MenuItem, Divider } from "@mui/material";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const UserAppbar = () => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -34,7 +36,7 @@ const UserAppbar = () => {
                     throw new Error("No token found. Please log in.");
                 }
 
-                const response = await axios.get("http://localhost:8000/api/user/get_currently_login/", {
+                const response = await axios.get(`${API_BASE_URL} /api/user/get_currently_login/`, {
                     headers: {
                         Authorization: `Token ${token}`,
                     },

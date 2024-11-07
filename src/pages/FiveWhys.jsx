@@ -16,6 +16,8 @@ import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
 import WhysCard from "../components/WhysCard";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const FiveWhys = () => {
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -34,7 +36,7 @@ const FiveWhys = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
-				"http://localhost:8000/api/ai/five_whys/",
+				`${API_BASE_URL}/api/ai/five_why/`,
 				{
 					ranked_problem: statement,
 				},
@@ -107,7 +109,7 @@ const FiveWhys = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
-				"http://localhost:8000/api/ai/potential_root/",
+				`${API_BASE_URL}/api/ai/potential_root/`,
 				{
 					selected_statement: statement,
 					list_of_whys: [...selectedWhys],

@@ -8,10 +8,11 @@ import {
   CardContent,
 } from "@mui/material";
 
+
 const RankingSection = ({ teamRankings, teacherRankings }) => {
   return (
     <Box sx={{ padding: 4 }}>
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={2} alignItems="top">
         {/* Team's Ranking */}
         <Grid item xs={5}>
           <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
@@ -20,7 +21,7 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
           {teamRankings.map((member) => (
             <Card
               key={member.name}
-              sx={{ mb: 2, boxShadow: 2, borderRadius: 4 }}
+              sx={{ mb: 2, boxShadow: 2, borderRadius: 4  }}
             >
               <CardContent sx={{ display: "flex", alignItems: "center" }}>
                 <Avatar
@@ -28,7 +29,7 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                   src={member.profilePicture}
                   sx={{ width: 48, height: 48, mr: 2 }}
                 />
-                <Box sx={{ flex: 1 }}>
+                <Box sx={{ flex: 1, minWidth:"200px" }}>
                   <Typography variant="h6" sx={{ textAlign: "left" }}>
                     {member.name}
                   </Typography>
@@ -39,7 +40,7 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
-                      maxWidth: "280px", // Adjust this width for better control
+                      minWidth: "280px", 
                     }}
                   >
                     {member.content}
@@ -56,7 +57,7 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
           ))}
         </Grid>
 
-        <Grid item xs={1} sx={{ display: "flex", justifyContent: "center" }}>
+        <Grid item xs={2} sx={{ display: "flex", justifyContent: "center" }}>
           <Divider
             orientation="vertical"
             flexItem

@@ -8,6 +8,8 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 import { Card, CardContent, Grid } from "@mui/material";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const pitch = [
 	"For",
@@ -83,14 +85,14 @@ const Report = () => {
 			let token = localStorage.getItem("token");
 			if (venn.field3 === "") {
 				response = await axios.get(
-					`http://localhost:8000/api/two_venn_ps/${ps_id}/`,
+					`${API_BASE_URL}/api/two_venn_ps/${ps_id}/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
 			} else {
 				response = await axios.get(
-					`http://localhost:8000/api/three_venn_ps/${ps_id}/`,
+					`${API_BASE_URL}/api/three_venn_ps/${ps_id}/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
