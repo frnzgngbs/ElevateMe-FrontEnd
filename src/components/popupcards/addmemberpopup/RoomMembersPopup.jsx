@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 import MembersList from "./MembersList";
 import AddMember from "./AddMember";
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../helpers/constant';
 
 
 const AddMemberPopup = ({ open, onClose, roomId, user}) => {

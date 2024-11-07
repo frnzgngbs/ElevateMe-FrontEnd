@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 import MembersList from "./MemberListChannel";
 import AddMember from "./AddMemberChannel";
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../../helpers/constant';
 
 
 const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId }) => {

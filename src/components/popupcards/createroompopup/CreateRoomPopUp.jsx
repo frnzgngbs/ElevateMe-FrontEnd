@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../helpers/constant';
 
 
 const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {

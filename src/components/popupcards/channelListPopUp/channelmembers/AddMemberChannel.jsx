@@ -14,7 +14,7 @@ import {
     Alert
 } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../../helpers/constant';
 
 
 const AddMemberChannel = ({ channelId, emailDatabase, onSubmit, onBack }) => {

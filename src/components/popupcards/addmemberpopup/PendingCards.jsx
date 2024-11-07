@@ -3,7 +3,7 @@ import { Box, List, ListItem, ListItemText, Button, Typography, CircularProgress
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../helpers/constant';
 
 
 const PendingCards = ({ roomId, onAccept }) => {

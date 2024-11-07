@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Button, Modal, TextField, Typography, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../helpers/constant';
 
 
 const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {

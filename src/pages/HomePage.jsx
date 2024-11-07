@@ -139,7 +139,7 @@ const HomePage = () => {
 								transition: "transform 0.3s ease-in-out",
 							}}>
 							<Button
-								onClick={() => navigate("/roompage", { replace: true })}
+								onClick={() => navigate("/room", { replace: true })}
 								variant="contained"
 								sx={{ py: 1, px: 5, borderRadius: 4 }}>
 								Rooms

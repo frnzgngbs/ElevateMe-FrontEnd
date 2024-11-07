@@ -14,7 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 import DeleteDialog from "../../deletedialogpopup/DeleteDialog"; 
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../../helpers/constant';
 
 
 const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) => {

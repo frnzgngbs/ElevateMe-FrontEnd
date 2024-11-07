@@ -35,8 +35,7 @@ const UserAppbar = () => {
                 if (!token) {
                     throw new Error("No token found. Please log in.");
                 }
-
-                const response = await axios.get(`${API_BASE_URL} /api/user/get_currently_login/`, {
+                const response = await axios.get(`${API_BASE_URL}/api/user/get_currently_login/`, {
                     headers: {
                         Authorization: `Token ${token}`,
                     },

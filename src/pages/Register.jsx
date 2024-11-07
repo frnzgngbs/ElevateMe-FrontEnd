@@ -67,8 +67,9 @@ const Register = () => {
         first_name: capitalizeName(userData.first_name),
         last_name: capitalizeName(userData.last_name),
       };
-  
+      console.log(API_BASE_URL);
       const response = await axios.post(`${API_BASE_URL}/api/user/`, formattedUserData);
+
   
       if (response.status === 201) {
         setSnackbar({ open: true, message: "User created successfully!", severity: "success" });

@@ -15,7 +15,8 @@ import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP";
 import ChannelMembersPopup from "./channelmembers/ChannelMembersPopup";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../helpers/constant';
+
 
 
 const ChannelListPopup = ({ open, onClose, roomId, user }) => {
@@ -77,7 +78,7 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
 
   const handleChannelClick = (channelId) => {
 
-    navigate("/roompage/channel/", {
+    navigate("/room/channel/", {
 			state: { roomId: roomId, channelId: channelId },
 		});
     onClose(); 

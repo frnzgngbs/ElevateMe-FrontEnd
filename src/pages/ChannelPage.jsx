@@ -48,7 +48,7 @@ const ChannelPage = () => {
         }
 
         const userResponse = await axios.get(
-          "http://  :8000/api/user/get_currently_login/",
+          `${API_BASE_URL}/api/user/get_currently_login/`,
           {
             headers: { Authorization: `Token ${token}` },
           }
@@ -195,15 +195,7 @@ const ChannelPage = () => {
       fetchRankings();
     }
   }, [channelId]);
-  useEffect(() => {
-    if (channelId) {
-      fetchRankings();
-    }
-  }, [channelId]);
 
-  useEffect(() => {
-    fetchRankings(); 
-  }, [channelId]);
 
   const handleVoteSuccess = () => {
     fetchRankings(); 
@@ -254,7 +246,8 @@ const ChannelPage = () => {
 
     fetchChannelDetails();
     fetchChannelSubmissions();
-  }, [channelId ]);
+    // fetchRankings();
+  }, [channelId]);
 
 
 const onDone = async () => {

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../helpers/constant';
 
 const VotingDialog = ({
   open,

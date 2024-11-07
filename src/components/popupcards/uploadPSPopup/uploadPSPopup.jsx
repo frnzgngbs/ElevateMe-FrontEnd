@@ -12,7 +12,9 @@ import {
 } from "@mui/material";
 import { useState, useRef } from "react";
 import axios from "axios";
-import { API_BASE_URL } from '../helpers/constant';
+import { API_BASE_URL } from '../../../helpers/constant';
+
+
 
 
 const UploadPSPopup = ({ channelId, onClose, onDone }) => {
