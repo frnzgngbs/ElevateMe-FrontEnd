@@ -7,6 +7,8 @@ import CreateRoomPopup from "../components/popupcards/createroompopup/CreateRoom
 import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopUp.jsx";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 const RoomPage = () => {
   const [rooms, setRooms] = useState([]);
@@ -34,7 +36,7 @@ const RoomPage = () => {
         }
 
         const userResponse = await axios.get(
-          "http://localhost:8000/api/user/get_currently_login/",
+          `${API_BASE_URL}/api/user/get_currently_login/`,
           {
             headers: { Authorization: `Token ${token}` },
           }
@@ -42,7 +44,7 @@ const RoomPage = () => {
         setCurrentlyLoginId(userResponse.data);
 
         const roomsResponse = await axios.get(
-          "http://localhost:8000/api/rooms/auth_rooms/",
+          `${API_BASE_URL}/api/rooms/auth_rooms/`,
           {
             headers: { Authorization: `Token ${token}` },
           }
@@ -79,7 +81,7 @@ const RoomPage = () => {
       }
 
       const roomsResponse = await axios.get(
-        "http://localhost:8000/api/rooms/auth_rooms/",
+        `${API_BASE_URL}/api/rooms/auth_rooms/`,
         {
           headers: { Authorization: `Token ${token}` },
         }

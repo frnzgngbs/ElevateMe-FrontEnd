@@ -4,6 +4,8 @@ import { Stack, Typography } from "@mui/material";
 import SavedPSCard from "../components/SavedPSCard";
 import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
+import { API_BASE_URL } from '../helpers/constant';
+
 
 function problemStatementReducer(state, action) {
 	switch (action.type) {
@@ -66,7 +68,7 @@ const Saved = () => {
 				let token = localStorage.getItem("token");
 
 				let response1 = await axios.get(
-					"http://localhost:8000/api/two_venn_ps/",
+					`${API_BASE_URL}/api/two_venn_ps/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
@@ -77,7 +79,7 @@ const Saved = () => {
 				});
 
 				let response = await axios.get(
-					"http://localhost:8000/api/three_venn_ps/",
+					`${API_BASE_URL}/api/three_venn_ps/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
@@ -110,7 +112,7 @@ const Saved = () => {
 		if (setting === 2) {
 			try {
 				let response = await axios.put(
-					`http://localhost:8000/api/two_venn_ps/${id}/`,
+					`${API_BASE_URL}/api/two_venn_ps/${id}/`,
 					{
 						statement: statement,
 					},
@@ -129,7 +131,7 @@ const Saved = () => {
 		} else if (setting === 3) {
 			try {
 				let response = await axios.put(
-					`http://localhost:8000/api/three_venn_ps/${id}/`,
+					`${API_BASE_URL}/api/three_venn_ps/${id}/`,
 					{
 						statement: statement,
 					},
@@ -155,7 +157,7 @@ const Saved = () => {
 		if (setting === 2) {
 			try {
 				let token = localStorage.getItem("token");
-				await axios.delete(`http://localhost:8000/api/two_venn_ps/${id}/`, {
+				await axios.delete(`${API_BASE_URL}/api/two_venn_ps/${id}/`, {
 					headers: { Authorization: `Token ${token}` },
 				});
 				dispatch({ type: "DELETE_TWO_VENN", id });
@@ -165,7 +167,7 @@ const Saved = () => {
 		} else if (setting === 3) {
 			try {
 				let token = localStorage.getItem("token");
-				await axios.delete(`http://localhost:8000/api/three_venn_ps/${id}/`, {
+				await axios.delete(`${API_BASE_URL}/api/three_venn_ps/${id}/`, {
 					headers: { Authorization: `Token ${token}` },
 				});
 				dispatch({ type: "DELETE_THREE_VENN", id });

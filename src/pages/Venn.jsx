@@ -16,6 +16,7 @@ import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; // Check
 import zIndex from "@mui/material/styles/zIndex";
 import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material/TextField";
+import { API_BASE_URL } from "../helpers/constant";
 
 function problemStatementDispatch(state, action) {
 	switch (action.type) {
@@ -179,7 +180,7 @@ function Venn() {
 			setIsLoading((prev) => !prev);
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
-				"http://localhost:8000/api/ai/two_venn/",
+				`${API_BASE_URL}/api/ai/two_venn/`,
 				{
 					...groupLabel,
 				},
@@ -210,7 +211,7 @@ function Venn() {
 				}
 				// alert("HERE");
 				let two_response = await axios.post(
-					"http://localhost:8000/api/ai/two_venn/",
+					`${API_BASE_URL}/api/ai/two_venn/`,
 					{
 						...textFields,
 					},
@@ -229,7 +230,7 @@ function Venn() {
 					return;
 				}
 				let three_response = await axios.post(
-					"http://localhost:8000/api/ai/three_venn/",
+					`${API_BASE_URL}/api/ai/three_venn/`,
 					{
 						...textFields,
 					},
@@ -261,7 +262,7 @@ function Venn() {
 		try {
 			if (selectedButton === 2) {
 				response = await axios.post(
-					"http://localhost:8000/api/two_venn_ps/",
+					`${API_BASE_URL}/api/two_venn_ps/`,
 					{
 						venn: { ...textFields },
 						statement: text,
@@ -274,7 +275,7 @@ function Venn() {
 				console.log(hasCheckedCheckBox);
 				if (hasCheckedCheckBox) {
 					response = await axios.post(
-						"http://localhost:8000/api/two_venn_ps/",
+						`${API_BASE_URL}/api/two_venn_ps/`,
 						{
 							venn: { ...groupLabel },
 							statement: text,
@@ -283,11 +284,9 @@ function Venn() {
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
-					alert("PASOK");
 				} else {
-					alert("PASOK");
 					response = await axios.post(
-						"http://localhost:8000/api/three_venn_ps/",
+						`${API_BASE_URL}/api/three_venn_ps/`,
 						{
 							venn: { ...textFields },
 							statement: text,

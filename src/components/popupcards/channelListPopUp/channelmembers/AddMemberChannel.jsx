@@ -14,6 +14,8 @@ import {
     Alert
 } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
+import { API_BASE_URL } from '../../../../helpers/constant';
+
 
 const AddMemberChannel = ({ channelId, emailDatabase, onSubmit, onBack }) => {
     const [emailInput, setEmailInput] = useState("");
@@ -37,7 +39,7 @@ const AddMemberChannel = ({ channelId, emailDatabase, onSubmit, onBack }) => {
                 }
 
                 const membersResponse = await axios.get(
-                    `http://localhost:8000/api/channels/${channelId}/members/`,
+                    `${API_BASE_URL}/api/channels/${channelId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -48,7 +50,7 @@ const AddMemberChannel = ({ channelId, emailDatabase, onSubmit, onBack }) => {
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
                         const userResponse = await axios.get(
-                            `http://localhost:8000/api/user/${member.member_id}/`,
+                            `${API_BASE_URL}/api/user/${member.member_id}/`,
                             {
                                 headers: {
                                     Authorization: `Token ${token}`,

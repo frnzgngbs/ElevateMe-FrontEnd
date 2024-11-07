@@ -9,6 +9,8 @@ import {
 import axios from "axios";
 import MembersList from "./MemberListChannel";
 import AddMember from "./AddMemberChannel";
+import { API_BASE_URL } from '../../../../helpers/constant';
+
 
 const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId }) => {
     const [currentPage, setCurrentPage] = useState("members"); 
@@ -20,16 +22,17 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId }) => {
         severity: "success",
     });
     const [roomMembers, setRoomMembers] = useState([]);
+    
 
     useEffect(() => {
         const fetchRoomMembers = async () => {
             try {
                 let token = localStorage.getItem("token");
-                const response = await axios.get(`http://localhost:8000/api/rooms/${roomId}/members/`,  { headers: { Authorization: `Token ${token}` } });
+                const response = await axios.get(`${API_BASE_URL}/api/rooms/${roomId}/members/`,  { headers: { Authorization: `Token ${token}` } });
                 const roomMemberIds = response.data.map((member) => member.member_id);
 
                 const memberDetails = await Promise.all(
-                    roomMemberIds.map((memberId) => axios.get(`http://localhost:8000/api/user/${memberId}/`,  { headers: { Authorization: `Token ${token}` } }))
+                    roomMemberIds.map((memberId) => axios.get(`${API_BASE_URL}/api/user/${memberId}/`,  { headers: { Authorization: `Token ${token}` } }))
                 );
 
                 
@@ -61,7 +64,7 @@ const ChannelMembersPopup = ({ open, onClose, roomId, user, channelId }) => {
             
             const payload = { new_channel_member_emails: addedEmails, room_id: roomId };
             const response = await axios.patch(
-                `http://localhost:8000/api/channels/${channelId}/`,
+                `${API_BASE_URL}/api/channels/${channelId}/`,
                 payload,
                 { headers: { Authorization: `Token ${token}` } }
             );

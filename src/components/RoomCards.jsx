@@ -22,6 +22,7 @@ import { useState, useEffect} from "react";
 import DeleteDialog from "./popupcards/deletedialogpopup/DeleteDialog";
 import ChannelListPopup from "./popupcards/channelListPopUp/ChannelListPopUp.jsx";
 import AddMemberPopup from "./popupcards/addmemberpopup/RoomMembersPopup";
+import { API_BASE_URL } from '../helpers/constant.jsx';
 
 const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -45,7 +46,7 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
       try {
         let token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:8000/api/user/${ownerId}/`,
+          `${API_BASE_URL}/api/user/${ownerId}/`,
           {
             headers: {
               Authorization: `Token ${token}`,
@@ -69,7 +70,7 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
       setIsDeleting(true);
       let token = localStorage.getItem("token");
 
-      await axios.delete(`http://localhost:8000/api/rooms/${roomId}/`, {
+      await axios.delete(`${API_BASE_URL}/api/rooms/${roomId}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },

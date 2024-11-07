@@ -16,6 +16,7 @@ import axios from "axios";
 import LoadingScreen from "../components/LoadingScreen";
 import WhysCard from "../components/WhysCard";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
+import { API_BASE_URL } from "../helpers/constant";
 
 const FiveWhys = () => {
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -34,7 +35,7 @@ const FiveWhys = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
-				"http://localhost:8000/api/ai/five_whys/",
+				`${API_BASE_URL}/api/ai/five_whys/`,
 				{
 					ranked_problem: statement,
 				},
@@ -54,6 +55,8 @@ const FiveWhys = () => {
 		location.state?.statement ||
 		sessionStorage.getItem("whys_selected_statement") ||
 		"";
+
+	console.log("LOCATION STATE FROM FIVE WHYS: ", location.state?.venn);
 
 	const venn = location.state?.venn ||
 		JSON.parse(sessionStorage.getItem("whys_venn")) || {
@@ -107,7 +110,7 @@ const FiveWhys = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
-				"http://localhost:8000/api/ai/potential_root/",
+				`${API_BASE_URL}/api/ai/potential_root/`,
 				{
 					selected_statement: statement,
 					list_of_whys: [...selectedWhys],
@@ -118,6 +121,7 @@ const FiveWhys = () => {
 			);
 			console.log(response.data);
 			sessionStorage.setItem("root_five_whys", JSON.stringify(selectedWhys));
+			console.log("Venn in fivewhys: ", venn);
 			navigate("/hmw", {
 				state: {
 					potential_root: response.data,

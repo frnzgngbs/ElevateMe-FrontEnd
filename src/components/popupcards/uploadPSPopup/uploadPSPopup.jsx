@@ -12,6 +12,10 @@ import {
 } from "@mui/material";
 import { useState, useRef } from "react";
 import axios from "axios";
+import { API_BASE_URL } from '../../../helpers/constant';
+
+
+
 
 const UploadPSPopup = ({ channelId, onClose, onDone }) => {
   const [loading, setLoading] = useState(false);
@@ -35,7 +39,7 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
     try {
       let token = localStorage.getItem("token");
       const response = await axios.post(
-        `http://localhost:8000/api/channels/${channelId}/submissions/submit/`,
+        `${API_BASE_URL}/api/channels/${channelId}/submissions/submit/`,
         formData,
         {
           headers: {

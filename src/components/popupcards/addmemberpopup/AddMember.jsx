@@ -11,7 +11,9 @@ import {
     ListItem,
     ListItemText,
 } from "@mui/material";
-import CheckIcon from '@mui/icons-material/Check'; 
+import CheckIcon from '@mui/icons-material/Check';
+import { API_BASE_URL } from '../../../helpers/constant';
+
 
 const AddMember = ({ emailDatabase, onSubmit, onBack, roomId }) => {
     const [emailInput, setEmailInput] = useState("");
@@ -29,7 +31,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack, roomId }) => {
                 }
 
                 const membersResponse = await axios.get(
-                    `http://localhost:8000/api/rooms/${roomId}/members/`,
+                    `${API_BASE_URL}/api/rooms/${roomId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -40,7 +42,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack, roomId }) => {
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
                         const userResponse = await axios.get(
-                            `http://localhost:8000/api/user/${member.member_id}/`,
+                            `${API_BASE_URL}/api/user/${member.member_id}/`,
                             {
                                 headers: {
                                     Authorization: `Token ${token}`,

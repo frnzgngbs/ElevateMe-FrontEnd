@@ -14,6 +14,8 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 import DeleteDialog from "../../deletedialogpopup/DeleteDialog"; 
+import { API_BASE_URL } from '../../../../helpers/constant';
+
 
 const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) => {
     const [members, setMembers] = useState([]); 
@@ -35,7 +37,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                 }
 
                 const membersResponse = await axios.get(
-                    `http://localhost:8000/api/channels/${channelId}/members/`,
+                    `${API_BASE_URL}/api/channels/${channelId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -46,7 +48,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
                         const userResponse = await axios.get(
-                            `http://localhost:8000/api/user/${member.member_id}/`,
+                            `${API_BASE_URL}/api/user/${member.member_id}/`,
                             {
                                 headers: {
                                     Authorization: `Token ${token}`,
@@ -77,7 +79,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                 }
 
                 const roomResponse = await axios.get(
-                    `http://localhost:8000/api/rooms/${roomId}/`,
+                    `${API_BASE_URL}/api/rooms/${roomId}/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -105,7 +107,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
         let token = localStorage.getItem("token");
 
         try {
-            await axios.delete(`http://localhost:8000/api/channels/${channelId}/members/${memberToDelete.id}/`,
+            await axios.delete(`${API_BASE_URL}/api/channels/${channelId}/members/${memberToDelete.id}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`,

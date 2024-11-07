@@ -4,6 +4,8 @@ import {
 } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { API_BASE_URL } from '../../../helpers/constant';
+
 
 const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
     const [channelName, setChannelName] = useState("");
@@ -25,7 +27,7 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
 
     const fetchUserEmails = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/user/');
+            const response = await axios.get(`${API_BASE_URL}/api/user/`);
             const emails = response.data.map(user => user.email);
             setUserEmails(emails);
         } catch (error) {
@@ -86,7 +88,7 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
             setLoading(true);
             let token = localStorage.getItem("token");
 
-            const response = await axios.post(`http://localhost:8000/api/channels/`, payload, {
+            const response = await axios.post(`${API_BASE_URL}/api/channels/`, payload, {
                 headers: {
                     Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',

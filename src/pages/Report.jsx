@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 import { Card, CardContent, Grid } from "@mui/material";
+import { API_BASE_URL } from "../helpers/constant";
 
 const pitch = [
 	"For",
@@ -40,17 +41,20 @@ const Report = () => {
 	useEffect(() => {
 		// console.log(location.state?.list_of_hmws);
 		const venn = location.state?.venn ||
-			sessionStorage.getItem("hmw_venn") || {
+			JSON.parse(sessionStorage.getItem("hmw_venn")) || {
 				field1: "",
 				field2: "",
 				field3: "",
 				filter: "",
 			};
-		console.log(venn);
+		console.log(
+			"VENN IN REPORT: ",
+			JSON.parse(sessionStorage.getItem("hmw_venn"))
+		);
 		const ps_id =
-			location.state?.statement_id ||
-			sessionStorage.getItem("report_statement_id");
-		console.log(`ps_id: ${ps_id}`);
+			location.state?.ps_id ?? sessionStorage.getItem("statement_id");
+		console.log("PS ID SESSION STORAGE", ps_id);
+
 		const whys =
 			location.state?.list_of_whys ||
 			JSON.parse(sessionStorage.getItem("report_whys")) ||
@@ -65,38 +69,32 @@ const Report = () => {
 			sessionStorage.getItem("report_generated_root") ||
 			"";
 
-		console.log(hmws);
-
 		const elevator_pitch =
 			location.state?.elevatoor_pitch ||
 			JSON.parse(sessionStorage.getItem("report_elevator_pitch")) ||
 			[];
 
-		// console.log(ps_id);
 		const retrieveData = async () => {
 			if (ps_id === null) {
-				console.log(ps_id);
-				alert("ASDAS");
 				return;
 			}
 			let response;
 			let token = localStorage.getItem("token");
-			if (venn.field3 === "") {
+			if (!venn.field3 || venn.field3 === "") {
 				response = await axios.get(
-					`http://localhost:8000/api/two_venn_ps/${ps_id}/`,
+					`${API_BASE_URL}/api/two_venn_ps/${ps_id}/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
 			} else {
 				response = await axios.get(
-					`http://localhost:8000/api/three_venn_ps/${ps_id}/`,
+					`${API_BASE_URL}/api/three_venn_ps/${ps_id}/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
 			}
-			console.log(response.data.venn);
 			setDetails((prev) => ({
 				...prev,
 				whys: [...whys],
@@ -105,11 +103,13 @@ const Report = () => {
 				potential_root: potential_root,
 				statement: response.data.statement,
 			}));
+
+			console.log("FETCHING THE VENN: ", details);
 		};
-		console.log(typeof ps_id);
 		if (ps_id !== "null") {
 			retrieveData();
 		}
+		console.log("PS ID: ", ps_id);
 	}, []);
 
 	return (
@@ -142,7 +142,9 @@ const Report = () => {
 						justifyContent="center"
 						alignItems="center"
 						height="100%">
-						{details.venn && details.venn?.field3 !== "" ? (
+						{details.venn &&
+						details.venn.field3 !== undefined &&
+						details.venn.field3 !== "" ? (
 							<Venn3Paper venn={details.venn} />
 						) : (
 							<Venn2Paper venn={details.venn || { field1: "", field2: "" }} />
