@@ -70,10 +70,11 @@ const Report = () => {
 			"";
 
 		const elevator_pitch =
-			location.state?.elevatoor_pitch ||
+			location.state?.elevator_pitch ||
 			JSON.parse(sessionStorage.getItem("report_elevator_pitch")) ||
 			[];
 
+		console.log(location.state?.elevator_pitch);
 		const retrieveData = async () => {
 			if (ps_id === null) {
 				return;
@@ -102,6 +103,7 @@ const Report = () => {
 				venn: { ...response.data.venn },
 				potential_root: potential_root,
 				statement: response.data.statement,
+				elevator_pitch: elevator_pitch,
 			}));
 
 			console.log("FETCHING THE VENN: ", details);
@@ -154,7 +156,9 @@ const Report = () => {
 
 				{/* Right Div */}
 				<Box sx={{ flex: 1, marginLeft: 4, alignContent: "center" }}>
-					<Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+					<Typography
+						variant="h6"
+						sx={{ fontWeight: "bold", marginBottom: 2, color: "#186F65" }}>
 						Problem Statement
 					</Typography>
 					<Typography variant="body1" sx={{ marginBottom: 4 }}>
@@ -163,128 +167,156 @@ const Report = () => {
 				</Box>
 			</Box>
 
-			{/* Why Statements */}
+			<Grid>
+				<Grid item xs={12}>
+					<Box
+						sx={{
+							marginTop: 10,
+							marginBottom: 10,
+							width: "70%",
+							margin: "auto",
+							minWidth: "700px",
+							maxWidth: "900px",
+						}}>
+						<Typography
+							variant="h5"
+							color="#8E8E8E"
+							fontSize="18px"
+							sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
+							Why Statements
+						</Typography>
+						<Box>
+							{Array.isArray(details.whys) &&
+								details.whys.length > 0 &&
+								details.whys.map((statement, index) => (
+									<Paper
+										variant="outlined"
+										key={index}
+										sx={{
+											padding: 2,
+											marginBottom: 1,
+											borderRadius: 4,
+											minWidth: "600px",
+										}}>
+										<Typography variant="body1">{statement}</Typography>
+									</Paper>
+								))}
+						</Box>
+					</Box>
+				</Grid>
 
-			<Box
-				sx={{
-					marginTop: 10,
-					marginBottom: 10,
-					width: "70%",
-					margin: "auto",
-					minWidth: "700px",
-					maxWidth: "900px",
-				}}>
-				<Typography
-					variant="h5"
-					color="#8E8E8E"
-					fontSize="18px"
-					sx={{ fontWeight: "bold", marginBottom: 0.5 }}>
-					Why Statements
-				</Typography>
-				<Box>
-					{Array.isArray(details.whys) &&
-						details.whys.length > 0 &&
-						details.whys.map((statement, index) => (
+				<Grid item xs={12}>
+					<Box
+						sx={{
+							marginTop: 10,
+							marginBottom: 10,
+							width: "70%",
+							margin: "auto",
+							minWidth: "700px",
+							maxWidth: "900px",
+						}}>
+						<Typography
+							variant="h5"
+							color="#8E8E8E"
+							fontSize="18px"
+							sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
+							Potental Root Problem
+						</Typography>
+						<Box>
 							<Paper
-								key={index}
-								elevation={4}
+								variant="outlined"
 								sx={{
 									padding: 2,
-									marginBottom: 2,
+									marginBottom: 1,
 									borderRadius: 4,
 									minWidth: "600px",
 								}}>
-								<Typography variant="body1">{statement}</Typography>
+								<Typography variant="body1">
+									{details.potential_root}
+								</Typography>
 							</Paper>
-						))}
-				</Box>
-			</Box>
+						</Box>
+					</Box>
+				</Grid>
 
-			{/* HMW Statements */}
-			<Box
-				sx={{
-					width: "70%",
-					margin: "auto",
-					minWidth: "700px",
-					maxWidth: "900px",
-				}}>
+				<Grid item xs={12}>
+					<Box
+						sx={{
+							marginTop: 10,
+							marginBottom: 10,
+							width: "70%",
+							margin: "auto",
+							minWidth: "700px",
+							maxWidth: "900px",
+						}}>
+						<Typography
+							variant="h5"
+							color="#8E8E8E"
+							fontSize="18px"
+							sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
+							HMW Statement
+						</Typography>
+						<Box>
+							{Array.isArray(details.hmws) &&
+								details.hmws.length > 0 &&
+								details.hmws.map((statement, index) => (
+									<Paper
+										variant="outlined"
+										key={index}
+										sx={{
+											padding: 2,
+											marginBottom: 1,
+											borderRadius: 4,
+											minWidth: "600px",
+										}}>
+										<Typography variant="body1">{statement}</Typography>
+									</Paper>
+								))}
+						</Box>
+					</Box>
+				</Grid>
 				<Box
 					sx={{
 						marginTop: 10,
-						marginBottom: 10,
+						marginBottom: 12,
+						width: "70%",
 						margin: "auto",
-						minWidth: "900px",
+						minWidth: "700px",
 						maxWidth: "900px",
 					}}>
 					<Typography
 						variant="h5"
 						color="#8E8E8E"
 						fontSize="18px"
-						sx={{ fontWeight: "bold", marginBottom: 0.5 }}>
-						Potential Root Problem
+						sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
+						Elevator Pitch
 					</Typography>
-					<Paper
-						variant="outlined"
-						sx={{
-							padding: 2,
-							borderRadius: 4,
-							borderColor: "#8e8e8e",
-							marginBottom: 2,
-						}}>
-						<Typography variant="body1">{details.potential_root}</Typography>
-					</Paper>
-					<Typography
-						variant="h5"
-						color="#8E8E8E"
-						fontSize="18px"
-						sx={{ fontWeight: "bold", marginBottom: 2 }}>
-						How might we statements
-					</Typography>
-				</Box>
-				<Box>
-					{Array.isArray(details.hmws) &&
-						details.hmws.length > 0 &&
-						details.hmws.map((statement, index) => (
+					{pitch.map((value, index) => (
+						<Grid item xs={12} sm={6} md={4} key={index}>
 							<Paper
+								variant="outlined"
 								key={index}
-								elevation={4}
 								sx={{
 									padding: 2,
-									marginBottom: 2,
+									marginBottom: 1,
 									borderRadius: 4,
 									minWidth: "600px",
 								}}>
-								<Typography variant="body1">{statement}</Typography>
-							</Paper>
-						))}
-				</Box>
-
-				{/* <ElevatorPitch data={details.elevator_pitch} /> */}
-
-				{/* Elevator pitch */}
-				{/* <Grid container spacing={2}>
-					{pitch.map((value, index) => (
-						<Grid item xs={12} sm={6} md={4} key={index}>
-							<Card>
-								<CardContent>
-									<Grid container spacing={2} alignItems="center">
-										<Grid item xs={3}>
-											<Typography variant="h6">{value}</Typography>
-										</Grid>
-										<Grid item xs={9}>
-											{details.elevator_pitch[index] && (
-												<Typography variant="body1">
-													{details.elevator_pitch[index]}
-												</Typography>
-											)}
-										</Grid>
+								<Grid container spacing={2} alignItems="center">
+									<Grid item xs={2}>
+										<Typography variant="body2">{value}</Typography>
 									</Grid>
-								</CardContent>
-							</Card>
+									<Grid item xs={10}>
+										{details.elevator_pitch[index] && (
+											<Typography>{details.elevator_pitch[index]}</Typography>
+										)}
+									</Grid>
+								</Grid>
+							</Paper>
 						</Grid>
-					))} */}
-				{/* </Grid> */}
-			</Box>
+					))}
+				</Box>
+			</Grid>
 		</Box>
 	);
 };
