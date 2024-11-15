@@ -126,7 +126,7 @@ function Venn() {
 				return;
 			}
 		} else if (index === 1) {
-			console.log(textFields);
+			// console.log(textFields);
 			if (
 				textFields.field1 === null ||
 				textFields.field3 === "" ||
@@ -175,7 +175,7 @@ function Venn() {
 				filter: textFields.filter,
 			});
 		}
-		console.log(groupLabel);
+		// console.log(groupLabel);
 		try {
 			setIsLoading((prev) => !prev);
 			let token = localStorage.getItem("token");
@@ -200,7 +200,7 @@ function Venn() {
 	};
 
 	const handleGenerateButtonClick = async () => {
-		console.log(selectedCheckButton);
+		// console.log(selectedCheckButton);
 		setIsLoading(true);
 		let token = localStorage.getItem("token");
 		try {
@@ -223,7 +223,7 @@ function Venn() {
 					type: "SET_PROBLEM_STATEMENT",
 					ps_list: two_response.data.response,
 				});
-				console.log(two_response.data.response);
+				// console.log(two_response.data.response);
 			} else if (selectedButton === 3) {
 				if (!checkFields(textFields, selectedButton)) {
 					alert("Cannot generate when other fields are empty.");
@@ -245,15 +245,15 @@ function Venn() {
 				});
 			}
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
 	const handleSaveProblemStatement = async (text) => {
-		console.log(selectedButton);
-		console.log(text);
+		// console.log(selectedButton);
+		// console.log(text);
 		const hasCheckedCheckBox = selectedCheckButton.some(
 			(item) => item === true
 		);
@@ -272,7 +272,7 @@ function Venn() {
 					}
 				);
 			} else if (selectedButton === 3) {
-				console.log(hasCheckedCheckBox);
+				// console.log(hasCheckedCheckBox);
 				if (hasCheckedCheckBox) {
 					response = await axios.post(
 						`${API_BASE_URL}/api/two_venn_ps/`,
@@ -302,7 +302,7 @@ function Venn() {
 				statement: text,
 			});
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 		}
 	};
 	return (

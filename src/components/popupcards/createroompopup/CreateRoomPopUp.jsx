@@ -97,7 +97,7 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
                 },
             });
 
-            console.log("Room created successfully:", response.data);
+            // console.log("Room created successfully:", response.data);
             onRoomCreated(response.data);
             onClose();
         } catch (error) {

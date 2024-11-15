@@ -47,13 +47,13 @@ const Report = () => {
 				field3: "",
 				filter: "",
 			};
-		console.log(
-			"VENN IN REPORT: ",
-			JSON.parse(sessionStorage.getItem("hmw_venn"))
-		);
+		// console.log(
+		// 	"VENN IN REPORT: ",
+		// 	JSON.parse(sessionStorage.getItem("hmw_venn"))
+		// );
 		const ps_id =
 			location.state?.ps_id ?? sessionStorage.getItem("statement_id");
-		console.log("PS ID SESSION STORAGE", ps_id);
+		// console.log("PS ID SESSION STORAGE", ps_id);
 
 		const whys =
 			location.state?.list_of_whys ||
@@ -104,12 +104,12 @@ const Report = () => {
 				statement: response.data.statement,
 			}));
 
-			console.log("FETCHING THE VENN: ", details);
+			// console.log("FETCHING THE VENN: ", details);
 		};
 		if (ps_id !== "null") {
 			retrieveData();
 		}
-		console.log("PS ID: ", ps_id);
+		// console.log("PS ID: ", ps_id);
 	}, []);
 
 	return (
@@ -224,14 +224,14 @@ const Report = () => {
 						Potential Root Problem
 					</Typography>
 					<Paper
-						variant="outlined"
-						sx={{
-							padding: 2,
-							borderRadius: 4,
-							borderColor: "#8e8e8e",
-							marginBottom: 2,
-						}}>
-						<Typography variant="body1">{details.potential_root}</Typography>
+						elevation={4}
+								sx={{
+									padding: 2,
+									marginBottom: 2,
+									borderRadius: 4,
+									minWidth: "600px",
+								}}>
+						<Typography variant="body1" >{details.potential_root}</Typography>
 					</Paper>
 					<Typography
 						variant="h5"

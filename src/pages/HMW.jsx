@@ -59,15 +59,15 @@ const HMW = () => {
 	const ps_id =
 		location.state?.statement_id || sessionStorage.getItem("statement_id");
 
-	console.log("PS ID IN HMW: " + ps_id);
+	// console.log("PS ID IN HMW: " + ps_id);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
 	const generateFiveHMW = async () => {
 		setIsLoading((prev) => !prev);
-		console.log("Selected Problem Statement: " + selected_statement);
-		console.log("List of Whys: " + list_of_whys);
-		console.log("Root Problem: " + generated_root);
+		// console.log("Selected Problem Statement: " + selected_statement);
+		// console.log("List of Whys: " + list_of_whys);
+		// console.log("Root Problem: " + generated_root);
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axios.post(
@@ -162,8 +162,8 @@ const HMW = () => {
 			"report_elevator_pitch",
 			JSON.stringify(elevatorPitch)
 		);
-		console.log("VENN IN HMW BEFORE PASSING TO REPORT PAGE:  ", venn);
-		console.log("PS ID IN HMW: ", ps_id);
+		// console.log("VENN IN HMW BEFORE PASSING TO REPORT PAGE:  ", venn);
+		// console.log("PS ID IN HMW: ", ps_id);
 		navigate("/report", {
 			state: {
 				venn: venn,

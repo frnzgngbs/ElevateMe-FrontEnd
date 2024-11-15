@@ -47,7 +47,7 @@ const ChannelPage = () => {
           throw new Error("No token found. Please log in.");
         }
 
-        const userResponse = await axios.get(
+        const userResponse = await axios.get( 
           `${API_BASE_URL}/api/user/get_currently_login/`,
           {
             headers: { Authorization: `Token ${token}` },
@@ -55,17 +55,19 @@ const ChannelPage = () => {
         );
         setCurrentlyLoginId(userResponse.data);
 
-        console.log(location.state?.roomId);
-        console.log(location.state?.channelId)
+      //  console.log(location.state?.roomId);
+        
 
         if(location.state && location.state.roomId && location.state.channelId) {
           setRoomId(location.state.roomId);
           setChannelId(location.state.channelId); 
+         // console.log( "channelID" + location.state?.channelId);
         }
 
         
       } catch (error) {
-        console.error("Error fetching user:", error);
+        // console.error("Error fetching user:", error);
+        console.error("Error fetching user:");
         if (error.response && error.response.status === 401) {
           console.error(
             "Unauthorized: Check if the token is valid and correctly formatted."
@@ -75,7 +77,7 @@ const ChannelPage = () => {
     };
 
     fetchCurrentlyLoggedInUser();
-  }, []);
+  }, [channelId]);
 
 
   const openShareFile = () => {
@@ -135,13 +137,13 @@ const ChannelPage = () => {
                   )
                 : 0;
 
-            console.log(`Submission ${submission.id} scores:`, {
-              studentPoints: Math.round(studentPoints * 10) / 10,
-              teacherPoints: Math.round(teacherPoints * 10) / 10,
-              totalVotes: votes.length,
-              studentVotes: studentVotes.length,
-              teacherVotes: teacherVotes.length,
-            });
+            // console.log(`Submission ${submission.id} scores:`, {
+            //   studentPoints: Math.round(studentPoints * 10) / 10,
+            //   teacherPoints: Math.round(teacherPoints * 10) / 10,
+            //   totalVotes: votes.length,
+            //   studentVotes: studentVotes.length,
+            //   teacherVotes: teacherVotes.length,
+            // });
 
             return {
               id: submission.id,
@@ -184,8 +186,7 @@ const ChannelPage = () => {
       setRankings({ teamRankings, teacherRankings });
     } catch (error) {
       console.error(
-        "Failed to fetch rankings:",
-        error.response?.data || error.message
+        "Failed to fetch rankings:"
       );
       setRankings({ teamRankings: [], teacherRankings: [] });
     }
@@ -215,7 +216,7 @@ const ChannelPage = () => {
         );
         setChannelName(response.data.channel_name);
       } catch (error) {
-        console.error("Error fetching channel details:", error);
+        console.error("Error fetching channel details:");
       }
     };
 
@@ -231,16 +232,16 @@ const ChannelPage = () => {
           }
         );
         response.data.forEach((post) => {
-          console.log("Post data:", {
-            id: post.id,
-            member_id: post.member_id,
-            author: post.author,
-            problem_statement: post.problem_statement,
-          });
+          // console.log("Post data:", {
+          //   id: post.id,
+          //   member_id: post.member_id,
+          //   author: post.author,
+          //   problem_statement: post.problem_statement,
+          // });
         });
         setPosts(response.data);
       } catch (error) {
-        console.error("Error fetching channel submissions:", error);
+        console.error("Error fetching channel submissions:");
       }
     };
 
@@ -267,16 +268,16 @@ const onDone = async () => {
         }
       );
       response.data.forEach((post) => {
-        console.log("Post data:", {
-          id: post.id,
-          member_id: post.member_id,
-          author: post.author,
-          problem_statement: post.problem_statement,
-        });
+        // console.log("Post data:", {
+        //   id: post.id,
+        //   member_id: post.member_id,
+        //   author: post.author,
+        //   problem_statement: post.problem_statement,
+        // });
       });
       setPosts(response.data);
     } catch (error) {
-      console.error("Error fetching channel submissions:", error);
+      console.error("Error fetching channel submissions:", );
     }
   };
 
