@@ -1,65 +1,84 @@
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from '../helpers/constant';
-
+import { API_BASE_URL } from "../helpers/constant";
 
 const useAuth = () => {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const Login = async (user) => {
-    if (!user.email || !user.password) {
-      alert("Please enter both email and password");
-      return;
-    }
-    try {
-      /*console.log("Login attempt with payload:", {
+	const Login = async (user) => {
+		if (!user.email || !user.password) {
+			alert("Please enter both email and password");
+			return;
+		}
+		try {
+			/*console.log("Login attempt with payload:", {
         email: user.email,
         password: user.password,
       });*/
 
-      let response = await axios.post(`${API_BASE_URL}/api/user/login/`, {
-        email: user.email,
-        password: user.password,
-      });
+			let response = await axios.post(`${API_BASE_URL}/api/user/login/`, {
+				email: user.email,
+				password: user.password,
+			});
 
-      if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
-        // alert("Login successfully!");
-        navigate("/home", { replace: true });
-      }
-    } catch (err) {
-      if (err.code === "ERR_BAD_REQUEST") {
-        alert(err.response.data.error);
-      } else {
-        alert("Not connected with the back-end server");
-      }
-    }
-  };
+			if (response.status === 200) {
+				localStorage.setItem("token", response.data.token);
+				// alert("Login successfully!");
+				navigate("/home", { replace: true });
+			}
+		} catch (err) {
+			if (err.code === "ERR_BAD_REQUEST") {
+				alert(err.response.data.error);
+			} else {
+				alert("Not connected with the back-end server");
+			}
+		}
+	};
 
-  const Logout = async () => {
-    try {
-      let token = localStorage.getItem("token");
+	const Logout = async () => {
+		try {
+			let token = localStorage.getItem("token");
 
-      await axios.post(
-        `${API_BASE_URL}/api/user/logout/`,
-        {},
-        {
-          headers: { Authorization: `Token ${token}` },
-        }
-      );
+			await axios.post(
+				`${API_BASE_URL}/api/user/logout/`,
+				{},
+				{
+					headers: { Authorization: `Token ${token}` },
+				}
+			);
 
-      localStorage.removeItem("token");
-      sessionStorage.clear();
-  
+			localStorage.removeItem("token");
+			sessionStorage.clear();
 
-      navigate("/login", { replace: true });
-    } catch (err) {
-      // console.log(err);
-    }
-  };
+			navigate("/login", { replace: true });
+		} catch (err) {
+			// console.log(err);
+		}
+	};
 
-  return { Login, Logout };
+	const getCurrentlyLogin = async () => {
+		try {
+			const token = localStorage.getItem("token");
+
+			if (!token) {
+				throw new Error("No token found. Please log in.");
+			}
+			const response = await axios.get(
+				`${API_BASE_URL}/api/user/get_currently_login/`,
+				{
+					headers: {
+						Authorization: `Token ${token}`,
+					},
+				}
+			);
+			return response.data;
+		} catch (error) {
+			console.error("Error fetching user info:", error);
+		}
+	};
+
+	return { Login, Logout, getCurrentlyLogin };
 };
 
 export default useAuth;
