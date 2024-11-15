@@ -126,7 +126,7 @@ const Ranking = () => {
 		[]
 	);
 
-	console.log(queuedProblemStatement);
+	// console.log(queuedProblemStatement);
 	const [selectedButton, setSelectedButton] = useState(3);
 	const navigate = useNavigate();
 

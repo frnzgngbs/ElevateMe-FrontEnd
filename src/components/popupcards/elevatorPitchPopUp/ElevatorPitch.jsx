@@ -63,13 +63,13 @@ const ElevatorPitch = ({ data, setOpenElevator, setElevatorPitch }) => {
 		if (event.key === "Enter") {
 			setDataState((prevDataState) => {
 				const newDataState = [...prevDataState];
-				console.log(newDataState);
+				// console.log(newDataState);
 				newDataState[index] = false;
 				return newDataState;
 			});
 			setElevator((prevElevator) => {
 				const newElevator = [...prevElevator]; // Reset elevator state to the original data
-				console.log();
+				// console.log();
 				return newElevator;
 			});
 			setElevatorPitch(elevator); // Update the parent component's data

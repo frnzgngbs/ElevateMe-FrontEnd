@@ -3,7 +3,7 @@ import { Typography, Box } from "@mui/material";
 import Venn3 from "../../res/venn.png";
 
 const VennDiagramPaper = ({ venn }) => {
-	console.log(venn);
+	// console.log(venn);
 	return (
 		<Box
 			sx={{

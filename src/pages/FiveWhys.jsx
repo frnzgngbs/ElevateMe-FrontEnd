@@ -44,7 +44,7 @@ const FiveWhys = () => {
 				}
 			);
 			setFiveWhys((prev) => [...response.data.response]);
-			console.log(response.data);
+			// console.log(response.data);
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -56,7 +56,7 @@ const FiveWhys = () => {
 		sessionStorage.getItem("whys_selected_statement") ||
 		"";
 
-	console.log("LOCATION STATE FROM FIVE WHYS: ", location.state?.venn);
+	// console.log("LOCATION STATE FROM FIVE WHYS: ", location.state?.venn);
 
 	const venn = location.state?.venn ||
 		JSON.parse(sessionStorage.getItem("whys_venn")) || {
@@ -96,7 +96,7 @@ const FiveWhys = () => {
 
 	// NOTE: Only used for debugging purposes
 	useEffect(() => {
-		console.log(selectedWhys);
+		// console.log(selectedWhys);
 	}, [selectedWhys]);
 
 	const generatePotentialRootProb = async () => {
@@ -119,9 +119,9 @@ const FiveWhys = () => {
 					headers: { Authorization: `Token ${token}` },
 				}
 			);
-			console.log(response.data);
+			// console.log(response.data);
 			sessionStorage.setItem("root_five_whys", JSON.stringify(selectedWhys));
-			console.log("Venn in fivewhys: ", venn);
+			// console.log("Venn in fivewhys: ", venn);
 			navigate("/hmw", {
 				state: {
 					potential_root: response.data,

@@ -284,7 +284,7 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
         open={openChannelList}
         onClose={() => setOpenChannelList(false)}
         roomId={roomId}
-        onAddChannel={() => console.log("Add new channel logic goes here.")}
+        //onAddChannel={() => console.log("Add new channel logic goes here.")}
         user={user}
       />
 
