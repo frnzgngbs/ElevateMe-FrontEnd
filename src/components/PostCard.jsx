@@ -58,7 +58,7 @@ const PostCard = ({
       iserror(null);
 
       const url = `/api/channels/${channelId}/submissions/${submittedWork.id}/`;
-      const response = await axios.delete(url, {
+      const response = await axiosInstance.delete(url, {
         headers: {
           Authorization: `Token ${localStorage.getItem("token")}`,
         },

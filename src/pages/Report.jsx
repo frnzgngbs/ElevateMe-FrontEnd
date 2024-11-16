@@ -291,33 +291,11 @@ const Report = () => {
 						sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
 						Elevator Pitch
 					</Typography>
- report-branch
+
 					{pitch.map((value, index) => (
 						<Grid item xs={12} sm={6} md={4} key={index}>
 
-					<Paper
-						elevation={4}
-								sx={{
-									padding: 2,
-									marginBottom: 2,
-									borderRadius: 4,
-									minWidth: "600px",
-								}}>
-						<Typography variant="body1" >{details.potential_root}</Typography>
-					</Paper>
-					<Typography
-						variant="h5"
-						color="#8E8E8E"
-						fontSize="18px"
-						sx={{ fontWeight: "bold", marginBottom: 2 }}>
-						How might we statements
-					</Typography>
-				</Box>
-				<Box>
-					{Array.isArray(details.hmws) &&
-						details.hmws.length > 0 &&
-						details.hmws.map((statement, index) => (
- main
+
 							<Paper
 								variant="outlined"
 								key={index}

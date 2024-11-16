@@ -43,7 +43,7 @@ const WhysCard = ({ value, addHMWToList, setFiveHMW }) => {
 						setIsSelected((prev) => !prev);
 						addHMWToList(value);
 					}}>
-					{isSelected ? <CheckCircleIcon /> : <CheckCircleOutlinedIcon />}
+					{isSelected ? <CheckCircleIcon sx={{color:"#00000"}}/> : <CheckCircleOutlinedIcon />}
 				</IconButton>
 				{isEditing ? (
 					<InputBase
@@ -66,7 +66,7 @@ const WhysCard = ({ value, addHMWToList, setFiveHMW }) => {
 							mt: 1,
 							minWidth: "100px",
 							minHeight: "20px",
-							color: "#8e8e8e",
+							color: "#00000",
 							cursor: "pointer",
 							ml: 2,
 						}}

@@ -316,8 +316,18 @@ const Ranking = () => {
 				<Typography variant="h1" sx={{ textAlign: "center", width: "400px" }}>
 					Ranking List
 				</Typography>
+				
 			</Box>
-			<Box sx={{ mx: 13.3, mb: 0.5, mt: 3 }}>
+			<Box sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
+			<Typography variant="body1" textAlign={"center"} width={"1000px"}>
+							Choose a problem statement to be ranked from either the list of saved 2 field venn diagrams or 3 field venn diagram - by clicking the radio button
+							2 or 3. Click the + icon to select the problem statement of your choice. When selected, you can now rank that problem statement based on the criteria 
+							defined below.
+
+							
+						</Typography>
+			</Box>
+			<Box sx={{ mx: 13.3, mb: 0, mt: 3 }}>
 				<Typography variant="h3">Problem Statement List</Typography>
 			</Box>
 
@@ -434,13 +444,13 @@ const Ranking = () => {
 						<Grid
 							container
 							sx={{ justifyContent: "space-between" }}
-							spacing={2}>
-							<Grid item xs={4}>
-								<Typography sx={{ textAlign: "center", alignItem: "center" }}>
+							spacing={0}>
+							<Grid item xs={4}     sx={{marginRight:5}}>
+								<Typography sx={{ textAlign: "center", alignItem: "center"}}>
 									Problem Statement
 								</Typography>
 							</Grid>
-							<Grid item xs>
+							<Grid item xs sx={{maxWidth:"30px"}}>
 								<Typography textAlign={"center"}>Impact</Typography>
 							</Grid>
 							<Grid item xs>
@@ -492,7 +502,7 @@ const Ranking = () => {
 									sx={{
 										display: "flex",
 										alignItems: "center",
-										width: "100%",
+										width: "90%",
 										borderRadius: 5,
 									}}>
 									<Grid
@@ -516,8 +526,9 @@ const Ranking = () => {
 												key={colIndex}
 												item
 												xs
-												sx={{ display: "flex", justifyContent: "center" }}>
-												<FormControl sx={{ justifyContent: "center" }}>
+												sx={{ display: "flex", justifyContent: "center" }}
+												>
+												<FormControl sx={{ justifyContent: "center", marginLeft:4 }}>
 													<Select
 														required
 														value={selectedValues[rowIndex][colIndex]}
