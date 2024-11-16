@@ -1,7 +1,7 @@
 import axios from "axios";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../helpers/constant";
+import axiosInstance from "../helpers/axios";
 
 const useAuth = () => {
 	const navigate = useNavigate();
@@ -17,10 +17,13 @@ const useAuth = () => {
         password: user.password,
       });*/
 
-			let response = await axios.post(`${API_BASE_URL}/api/user/login/`, {
-				email: user.email,
-				password: user.password,
-			});
+			let response = await axiosInstance.post(
+				`${API_BASE_URL}/api/user/login/`,
+				{
+					email: user.email,
+					password: user.password,
+				}
+			);
 
 			if (response.status === 200) {
 				localStorage.setItem("token", response.data.token);
@@ -40,7 +43,7 @@ const useAuth = () => {
 		try {
 			let token = localStorage.getItem("token");
 
-			await axios.post(
+			await axiosInstance.post(
 				`${API_BASE_URL}/api/user/logout/`,
 				{},
 				{
@@ -64,7 +67,7 @@ const useAuth = () => {
 			if (!token) {
 				throw new Error("No token found. Please log in.");
 			}
-			const response = await axios.get(
+			const response = await axiosInstance.get(
 				`${API_BASE_URL}/api/user/get_currently_login/`,
 				{
 					headers: {

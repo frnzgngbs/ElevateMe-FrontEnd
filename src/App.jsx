@@ -1,9 +1,9 @@
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-  Route,
-  Navigate,
+	createBrowserRouter,
+	createRoutesFromElements,
+	RouterProvider,
+	Route,
+	Navigate,
 } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -29,62 +29,63 @@ import UploadPSPopup from "./components/popupcards/uploadPSPopup/uploadPSPopup";
 
 // This is the theme for the web app
 var theme = createTheme({
-  typography: {
-    fontFamily: '"Lexend Deca", "Lexend", sans-serif',
-    button: {
-      textTransform: "none",
-    },
-    h1: {
-      fontSize: "3rem",
-      fontWeight: "bold",
-      color: "#186F65",
-    },
-    h2: {
-      fontSize: "2.7rem",
-      fontWeight: "bold",
-      color: "#186F65",
-    },
-    h3: {
-      fontSize: "2rem",
-      fontWeight: "bold",
-      color: "#186F65",
-    },
-    h4: {
-      color: "#186F65",
-      fontSize: "1.5rem",
-      fontWeight: "bold",
-    },
-    h5: {
-      color: "#6A6A6A",
-      fontSize: "1.3rem",
-      fontWeight: "bold",
-    },
-    body1: {
-      fontSize: "1rem",
-      color: "#071C29",
-    },
-    body2: {
-      fontSize: "0.93rem",
-      color: "#071C29",
-    },
-  },
-  palette: {
-    background: {
-      default: "white",
-    },
-    primary: {
-      main: "#186F65",
-    },
-    secondary: {
-      main: "#C5DCC2",
-    },
-    stroke: {
-      main: "#035082",
-    },
-    gray: {
-      main: "#DADADA",
-    },
-  },
+	typography: {
+		fontFamily: '"Lexend Deca", "Lexend", sans-serif',
+		button: {
+			textTransform: "none",
+		},
+		h1: {
+			fontSize: "3rem",
+			fontWeight: "bold",
+			color: "#186F65",
+		},
+		h2: {
+			fontSize: "2.7rem",
+			fontWeight: "bold",
+			color: "#186F65",
+		},
+		h3: {
+			fontSize: "2rem",
+			fontWeight: "bold",
+			color: "#186F65",
+		},
+		h4: {
+			color: "#186F65",
+			fontSize: "1.5rem",
+			fontWeight: "bold",
+		},
+		h5: {
+			color: "#6A6A6A",
+			fontSize: "1.3rem",
+			fontWeight: "bold",
+		},
+		body1: {
+			fontSize: "1rem",
+			color: "#071C29",
+		},
+		body2: {
+			fontSize: "0.98rem",
+			color: "#186F65",
+			fontWeight: "bold",
+		},
+	},
+	palette: {
+		background: {
+			default: "white",
+		},
+		primary: {
+			main: "#186F65",
+		},
+		secondary: {
+			main: "#C5DCC2",
+		},
+		stroke: {
+			main: "#035082",
+		},
+		gray: {
+			main: "#DADADA",
+		},
+	},
 });
 
 // const entry = createTheme({
@@ -151,12 +152,12 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  );
+	return (
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			<RouterProvider router={router} />
+		</ThemeProvider>
+	);
 }
 
 export default App;
