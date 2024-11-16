@@ -47,13 +47,13 @@ const Report = () => {
 				field3: "",
 				filter: "",
 			};
-		console.log(
-			"VENN IN REPORT: ",
-			JSON.parse(sessionStorage.getItem("hmw_venn"))
-		);
+		// console.log(
+		// 	"VENN IN REPORT: ",
+		// 	JSON.parse(sessionStorage.getItem("hmw_venn"))
+		// );
 		const ps_id =
 			location.state?.ps_id ?? sessionStorage.getItem("statement_id");
-		console.log("PS ID SESSION STORAGE", ps_id);
+		// console.log("PS ID SESSION STORAGE", ps_id);
 
 		const whys =
 			location.state?.list_of_whys ||
@@ -106,12 +106,12 @@ const Report = () => {
 				elevator_pitch: elevator_pitch,
 			}));
 
-			console.log("FETCHING THE VENN: ", details);
+			// console.log("FETCHING THE VENN: ", details);
 		};
 		if (ps_id !== "null") {
 			retrieveData();
 		}
-		console.log("PS ID: ", ps_id);
+		// console.log("PS ID: ", ps_id);
 	}, []);
 
 	return (
@@ -291,8 +291,33 @@ const Report = () => {
 						sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
 						Elevator Pitch
 					</Typography>
+ report-branch
 					{pitch.map((value, index) => (
 						<Grid item xs={12} sm={6} md={4} key={index}>
+
+					<Paper
+						elevation={4}
+								sx={{
+									padding: 2,
+									marginBottom: 2,
+									borderRadius: 4,
+									minWidth: "600px",
+								}}>
+						<Typography variant="body1" >{details.potential_root}</Typography>
+					</Paper>
+					<Typography
+						variant="h5"
+						color="#8E8E8E"
+						fontSize="18px"
+						sx={{ fontWeight: "bold", marginBottom: 2 }}>
+						How might we statements
+					</Typography>
+				</Box>
+				<Box>
+					{Array.isArray(details.hmws) &&
+						details.hmws.length > 0 &&
+						details.hmws.map((statement, index) => (
+ main
 							<Paper
 								variant="outlined"
 								key={index}

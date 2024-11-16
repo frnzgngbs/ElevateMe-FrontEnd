@@ -89,7 +89,7 @@ const Saved = () => {
 					statements: memoizedMapData(response.data),
 				});
 			} catch (err) {
-				console.log("Error fetching saved problem statements:", err);
+				// console.log("Error fetching saved problem statements:", err);
 			} finally {
 				setLoading((prev) => !prev);
 			}
@@ -139,7 +139,7 @@ const Saved = () => {
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
-				console.log(response);
+				// console.log(response);
 				dispatch({
 					type: "UPDATE_THREE_VENN_STATEMENT",
 					payload: {
@@ -148,7 +148,7 @@ const Saved = () => {
 					},
 				});
 			} catch (err) {
-				console.log(err);
+				// console.log(err);
 			}
 		}
 	};
@@ -162,7 +162,7 @@ const Saved = () => {
 				});
 				dispatch({ type: "DELETE_TWO_VENN", id });
 			} catch (err) {
-				console.log("Error deleting problem statement:", err);
+				// console.log("Error deleting problem statement:", err);
 			}
 		} else if (setting === 3) {
 			try {
@@ -172,7 +172,7 @@ const Saved = () => {
 				});
 				dispatch({ type: "DELETE_THREE_VENN", id });
 			} catch (err) {
-				console.log("Error deleting problem statement:", err);
+				// console.log("Error deleting problem statement:", err);
 			}
 		}
 	};

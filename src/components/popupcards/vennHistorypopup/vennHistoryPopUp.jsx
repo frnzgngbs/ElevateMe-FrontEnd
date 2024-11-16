@@ -17,11 +17,11 @@ import Venn3Paper from "../../venndiagram/VennDiagramPaper3";
 import Venn2Paper from "../../venndiagram/VennDiagramPaper2";
 
 const VennSettingsHistoryPopup = ({ venn, open, onClose }) => {
-	console.log(venn);
+	// console.log(venn);
 	const [inputValues, setInputValues] = useState({ ...venn });
 
 	useEffect(() => {
-		console.log(venn);
+		// console.log(venn);
 		setInputValues({ ...venn });
 	}, [venn]);
 
