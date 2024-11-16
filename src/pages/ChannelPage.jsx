@@ -54,8 +54,8 @@ const ChannelPage = () => {
 				);
 				setCurrentlyLoginId(userResponse.data);
 
-				console.log(location.state?.roomId);
-				console.log(location.state?.channelId);
+				// console.log(location.state?.roomId);
+				// console.log(location.state?.channelId);
 
 				if (
 					location.state &&
@@ -135,13 +135,13 @@ const ChannelPage = () => {
 								  )
 								: 0;
 
-						console.log(`Submission ${submission.id} scores:`, {
-							studentPoints: Math.round(studentPoints * 10) / 10,
-							teacherPoints: Math.round(teacherPoints * 10) / 10,
-							totalVotes: votes.length,
-							studentVotes: studentVotes.length,
-							teacherVotes: teacherVotes.length,
-						});
+						// console.log(`Submission ${submission.id} scores:`, {
+						// 	studentPoints: Math.round(studentPoints * 10) / 10,
+						// 	teacherPoints: Math.round(teacherPoints * 10) / 10,
+						// 	totalVotes: votes.length,
+						// 	studentVotes: studentVotes.length,
+						// 	teacherVotes: teacherVotes.length,
+						// });
 
 						return {
 							id: submission.id,
@@ -224,12 +224,12 @@ const ChannelPage = () => {
 					}
 				);
 				response.data.forEach((post) => {
-					console.log("Post data:", {
-						id: post.id,
-						member_id: post.member_id,
-						author: post.author,
-						problem_statement: post.problem_statement,
-					});
+					// console.log("Post data:", {
+					// 	id: post.id,
+					// 	member_id: post.member_id,
+					// 	author: post.author,
+					// 	problem_statement: post.problem_statement,
+					// });
 				});
 				setPosts(response.data);
 			} catch (error) {
@@ -261,12 +261,12 @@ const ChannelPage = () => {
 				}
 			);
 			response.data.forEach((post) => {
-				console.log("Post data:", {
-					id: post.id,
-					member_id: post.member_id,
-					author: post.author,
-					problem_statement: post.problem_statement,
-				});
+				// console.log("Post data:", {
+				// 	id: post.id,
+				// 	member_id: post.member_id,
+				// 	author: post.author,
+				// 	problem_statement: post.problem_statement,
+				// });
 			});
 			setPosts(response.data);
 		} catch (error) {
