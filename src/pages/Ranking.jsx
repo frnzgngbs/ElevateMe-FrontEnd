@@ -322,7 +322,7 @@ const Ranking = () => {
 			<Typography variant="body1" textAlign={"center"} width={"1000px"}>
 							Choose a problem statement to be ranked from either the list of saved 2 field venn diagrams or 3 field venn diagram - by clicking the radio button
 							2 or 3. Click the + icon to select the problem statement of your choice. When selected, you can now rank that problem statement based on the criteria 
-							defined below. After ranking, you can choose what problem statement you want for the next process -Five whys.
+							defined below. After ranking, you can choose what problem statement (by clicking the check icon) you want for the next process -Five whys.
 
 							
 						</Typography>

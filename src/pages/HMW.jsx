@@ -208,7 +208,7 @@ const HMW = () => {
 					<Typography
 						variant="body1"
 						textAlign={"center"}
-						fontSize="14px"
+					
 						width="800px"
 						margin="auto"
 						marginBottom={"50px"}
@@ -259,7 +259,7 @@ const HMW = () => {
 									<CardActions>
 										<Button
 											variant="contained"
-											sx={{ borderRadius: 5, color: "#FFFB" }}
+											sx={{ borderRadius: 5, color: "#FFFF" }}
 											onClick={handleOpen}>
 											Show
 										</Button>
@@ -276,7 +276,7 @@ const HMW = () => {
 									px: 2.3,
 									py: 1.2,
 									borderRadius: 5.6,
-									color: "#FFFB",
+									color: "#FFFF",
 								}}>
 								Generate 5 HMW's
 							</Button>
@@ -287,13 +287,15 @@ const HMW = () => {
 						<Box sx={{ mt: 1, ml: 7 }}>
 							<Box>
 								<Typography
-									variant="body2"
+									variant="body1"
 									textAlign="justify"
-									sx={{ color: "#000000" }}
+									
 								>
-									Enumerate 5 HMW statement(s) by specifying an ACTION (what you
-									want to achieve), a SUBJECT (to be influenced or affected),
-									and a WHAT (outcome or what you like to achieve).
+									ElevateMe will provide you 5 How Might We statement based on what is your potential root problem. Select a How Might We statement
+									you want your Elevator pitch to be based on, then click generate Elevator pitch. Show the generated elevator pitch by clicking the show elevator pitch icon.
+									 If everything is final, click the print button to save your whole Ideation process.
+
+
 								</Typography>
 
 
@@ -396,7 +398,7 @@ const HMW = () => {
 													"&:hover": { backgroundColor: "#6b7373", cursor: "pointer" },
 												}}
 											>
-												Generate Elevator's Pitch
+												Generate Elevator Pitch
 											</Button>
 										</Box>
 									</Box>

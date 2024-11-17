@@ -63,7 +63,7 @@ const WhysCard = ({ value, addWhysToList, setFiveWhys }) => {
 							mt: 1,
 							minWidth: "100px",
 							minHeight: "20px",
-							color: "#8e8e8e",
+							color: "#000000",
 							cursor: "pointer",
 							ml: 2,
 						}}

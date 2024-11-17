@@ -60,10 +60,10 @@ const FiveWhys = () => {
 
 	const venn = location.state?.venn ||
 		JSON.parse(sessionStorage.getItem("whys_venn")) || {
-			field1: "",
-			field2: "",
-			field3: "",
-		};
+		field1: "",
+		field2: "",
+		field3: "",
+	};
 
 	const statement_id = location.state?.id || null;
 
@@ -169,7 +169,7 @@ const FiveWhys = () => {
 					<Typography
 						variant="body1"
 						textAlign={"center"}
-						fontSize="14px"
+						
 						width="800px"
 						margin="auto"
 						marginBottom={"50px"}
@@ -184,8 +184,8 @@ const FiveWhys = () => {
 						<Grid item xs={12}>
 							<Typography variant="h4">Selected Problem Statement</Typography>
 							<Box sx={{ mt: 3, ml: 7 }}>
-								<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-									Below, is your selected ranked problem statement.
+								<Typography variant="body3" sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+									Below, is your selected ranked problem statement. 
 								</Typography>
 								<Grid
 									container
@@ -217,12 +217,15 @@ const FiveWhys = () => {
 													alignItems: "center",
 													justifyContent: "center",
 												}}>
-												<Typography variant="body2">{statement}</Typography>
+												<Typography variant="body3" style={{ color: 'black' }}>
+													{statement}
+												</Typography>
+
 											</CardContent>
 											<CardActions>
 												<Button
 													variant="contained"
-													sx={{ borderRadius: 5, color: "#FFFB" }}
+													sx={{ borderRadius: 5, color: "#FFFF" }}
 													onClick={handleShowPopup}>
 													Show
 												</Button>
@@ -238,7 +241,7 @@ const FiveWhys = () => {
 										sx={{
 											height: "50px",
 											borderRadius: 5.6,
-											color: "#FFFB",
+											color: "#FFFF",
 										}}>
 										Generate Whys
 									</Button>
@@ -253,10 +256,12 @@ const FiveWhys = () => {
 							<Typography variant="h4">Generated 5 Why's</Typography>
 							<Box sx={{ mt: 1, ml: 7 }}>
 								<Box>
-									<Typography variant="body2" textAlign={"justify"}>
-										Enumerate 5 HMW statement(s) by specifying an ACTION (what
-										you want to achieve), a SUBJECT (to be influenced or
-										affected), and a WHAT (outcome or what you like to achieve).
+									<Typography variant="body1" textAlign={"justify"} style={{ color: 'black' }}>
+										In this part, ElevateMe will generate you 5 HMW statement(s) based on what to achieve, a 
+										subject to be influenced for and what could be the expected outcomes. You can freely edit 
+										those statements by clicking the statement itself.  Select a 'why' statement that you would like to base your potential root problem on.
+
+
 									</Typography>
 									<Box sx={{ my: 5 }}>
 										<Box>
@@ -286,10 +291,11 @@ const FiveWhys = () => {
 														px: 2.3,
 														py: 1.2,
 														borderRadius: 5.6,
-														color: "#FFFB",
+														color: "#FFFF",
 														height: "50px",
 													}}>
 													Generate Root
+
 												</Button>
 											</Box>
 										</Box>
