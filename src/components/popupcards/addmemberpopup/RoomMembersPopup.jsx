@@ -6,7 +6,7 @@ import {
     Snackbar,
     Alert,
 } from "@mui/material";
-import axiosInstance from '../../../../helpers/axios';
+import axiosInstance from '../../../helpers/axios';
 import MembersList from "./MembersList";
 import AddMember from "./AddMember";
 import { API_BASE_URL } from '../../../helpers/constant';

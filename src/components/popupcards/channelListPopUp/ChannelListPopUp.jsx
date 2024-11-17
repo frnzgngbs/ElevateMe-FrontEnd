@@ -14,7 +14,7 @@ import ChannelCard from "./ChannelCard";
 import CreateChannelPopup from "../createchannelpopup/CreateChannelPopUP";
 import ChannelMembersPopup from "./channelmembers/ChannelMembersPopup";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from '../../../../helpers/axios';
+import axiosInstance from '../../../helpers/axios';
 import { API_BASE_URL } from '../../../helpers/constant';
 
 

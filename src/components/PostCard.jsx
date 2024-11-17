@@ -18,7 +18,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import DeleteSubmission from "../components/DeleteSubmission";
-import axiosInstance from '../../sr';
+import axiosInstance from '../helpers/axios';
+
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -100,7 +101,7 @@ const PostCard = ({
     return displayName.charAt(0) || "U";
   };
 
-  const axiosInstance = axiosInstance.create({
+  const axiosInstances = axiosInstance.create({
     baseURL: "https://babyjoy456.pythonanywhere.com",
     headers: {
       Authorization: `Token ${localStorage.getItem("token")}`,
@@ -111,7 +112,7 @@ const PostCard = ({
   useEffect(() => {
     const fetchPresignedUrl = async () => {
       try {
-        const response = await axiosInstance.get(
+        const response = await axiosInstances.get(
           `/api/presigned-url/${submittedWork.id}/`
         );
         setPresignedUrl(response.data.url);
@@ -178,7 +179,7 @@ const PostCard = ({
     setError(null);
 
     try {
-      const response = await axiosInstance.get(
+      const response = await axiosInstances.get(
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`
       );
 
@@ -214,7 +215,7 @@ const PostCard = ({
     setError(null);
 
     try {
-      const response = await axiosInstance.post(
+      const response = await axiosInstances.post(
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`,
         {
           content: commentContent.trim(),
