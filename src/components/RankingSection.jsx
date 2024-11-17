@@ -104,7 +104,7 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ borderColor: "#186F65", borderWidth: 2, height: "400px", marginLeft:0, marginRight: 0 }}
+              sx={{ borderColor: "#186F65", borderWidth: 2, height: "500px", marginLeft:0, marginRight: 0 }}
             />
           )}
         </Grid>

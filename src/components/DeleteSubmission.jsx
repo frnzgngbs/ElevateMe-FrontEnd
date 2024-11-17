@@ -11,7 +11,7 @@ import {
   Modal,
 } from "@mui/material";
 
-const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
+const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose, onDeleteFetch }) => {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
 
   useEffect(() => {
     const debug = {
-      submissionId,
+      submissionId,    
       channelId,
       submissionIdType: typeof submissionId,
       channelIdType: typeof channelId,
@@ -87,6 +87,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
         if (onClose) {
           onClose();
         }
+        onDeleteFetch();
       }
     } catch (err) {
       const errorMessage =
@@ -114,15 +115,17 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
 
   return (
     <>
-      <Button
-        variant="text"
-        color="error"
-        onClick={handleClickOpen}
-        disabled={isDeleting}
-        startIcon={<DeleteIcon />}
-      >
-        Delete
-      </Button>
+     <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems:'right', marginLeft:'100px' }}>
+  <Button
+    variant="text"
+    color="error"
+    onClick={handleClickOpen}
+    disabled={isDeleting}
+    startIcon={<DeleteIcon />}
+  >
+    Delete
+  </Button>
+</Box>  
 
       <Modal
         open={open}

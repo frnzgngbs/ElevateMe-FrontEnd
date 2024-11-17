@@ -4,7 +4,7 @@ import { Box, Button, LinearProgress, Typography, Modal, } from '@mui/material';
 import { API_BASE_URL }  from '../helpers/constant'
 import axiosInstance from '../helpers/axios';
 
-const DeleteAllSubmissions = ({ setPosts, channelId }) => {
+const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
   const [open, setOpen] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [error, setError] = React.useState(null);
@@ -41,11 +41,13 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
 
       for (let i = 0; i < submissions.length; i++) {
         const submission = submissions[i];
-        await axiosInstance.delete(`/api/channels/${channelId}/submissions/${submission.id}/`);
+        await axiosInstances.delete(`/api/channels/${channelId}/submissions/${submission.id}/`);
         setProgress(Math.round(((i + 1) / totalSubmissions) * 100));
       }
 
       setPosts([]);
+      onDeleteFetch();
+      
       handleClose();
     } catch (err) {
       setError("Failed to delete submissions. Please try again.");

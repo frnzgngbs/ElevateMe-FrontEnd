@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, CircularProgress } from "@mui/material";
 import PostCard from "../components/PostCard";
 import GridBackground from "../res/gridbackground.png";
 import { useState, useEffect } from "react";
@@ -40,6 +40,12 @@ const ChannelPage = () => {
 		);
 	};
 	const location = useLocation();
+	useEffect(() => {
+		setLoading(true);
+		setTimeout(() => {
+		  setLoading(false); // Replace this with actual fetch logic
+		}, 1000);
+	  }, [posts]);
 
 	useEffect(() => {
 		const fetchCurrentlyLoggedInUser = async () => {
@@ -278,133 +284,147 @@ const ChannelPage = () => {
 		}
 	};
 
-	return (
-		<>
-			<Box
-				sx={{
-					minHeight: "100vh",
-					backgroundImage: `url(${GridBackground})`,
-					backgroundSize: "cover",
-					backgroundPosition: "center",
-					backgroundRepeat: "no-repeat",
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					textAlign: "center",
-					padding: 4,
-				}}>
-				<Typography variant="h2" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-					Channel - {channelName}
-				</Typography>
-
-				<Grid
-					container
-					spacing={2}
+		return (
+			<>
+				<Box
 					sx={{
-						maxWidth: "900px",
-						margin: "0 auto",
+						minHeight: "100vh",
+						backgroundImage: `url(${GridBackground})`,
+						backgroundSize: "cover",
+						backgroundPosition: "center",
+						backgroundRepeat: "no-repeat",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+						textAlign: "center",
+						padding: 4,
 					}}>
-					<Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-						<Typography variant="h5" sx={{ mb: 2 }}>
-							File Proposals
-						</Typography>
-					</Grid>
+					<Typography variant="h2" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+						Channel - {channelName}
+					</Typography>
+
 					<Grid
-						item
-						xs={6}
-						sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-						{user.user_type === "TEACHER" && (
-							<DeleteAllSubmissions
-								setPosts={setPosts}
-								channelId={channelId}
-								onDeleteSuccess={handleDeleteSuccess}
-							/>
-						)}
+						container
+						spacing={2}
+						sx={{
+							maxWidth: "900px",
+							margin: "0 auto",
+						}}>
+						<Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
+							<Typography variant="h5" sx={{ mb: 2 }}>
+								File Proposals
+							</Typography>
+						</Grid>
+						<Grid
+							item
+							xs={6}
+							sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+							{user.user_type === "TEACHER" && (
+								<DeleteAllSubmissions
+									setPosts={setPosts}
+									channelId={channelId}
+									onDeleteSuccess={handleDeleteSuccess}
+									onDeleteFetch = {fetchRankings}
+								/>
+							)}
 
-					
+						
 
-						{user.user_type === "STUDENT" && (
-							<Button
+							{user.user_type === "STUDENT" && (
+								<Button
+									variant="contained"
+									onClick={openShareFile}
+									sx={{
+										backgroundColor: "#186F65",
+										color: "white",
+										borderRadius: 4,
+										mb: 2,
+										padding: 1,
+									}}>
+									Share File
+								</Button>
+							)}
+
+	<Button
 								variant="contained"
-								onClick={openShareFile}
+
+								onClick={() => navigate('/room')}
 								sx={{
 									backgroundColor: "#186F65",
 									color: "white",
 									borderRadius: 4,
 									mb: 2,
 									padding: 1,
-								}}>
-								Share File
-							</Button>
-						)}
 
-<Button
-							variant="contained"
-
-							onClick={() => navigate('/room')}
-							sx={{
-								backgroundColor: "#186F65",
-								color: "white",
-								borderRadius: 4,
-								mb: 2,
-								padding: 1,
-
-							}}
-						>
-							Back
-						</Button>
-					</Grid>
-
-					{posts.map((post) => (
-						<Grid item xs={12} key={post.id}>
-							<PostCard
-								user={user}
-								authorId={post.member_id}
-								author={post.member_name || "Unknown User"}
-								content={
-									post.problem_statement || "No Problem Statement Available"
-								}
-								submittedWork={{
-									id: post.id,
-									file_url: post.submitted_work,
 								}}
-								channelId={channelId}
-								onVoteSuccess={fetchRankings}
-								onDeleteSuccess={handleDeleteSuccess}
-							/>
+							>
+								Back
+							</Button>
 						</Grid>
-					))}
-				</Grid>
-			</Box>
-			<Box
-				sx={{
-					margin: "0 auto",
-					padding: 4,
-					textAlign: "center",
-					maxWidth: "80%",
-				}}>
-				<Typography
-					variant="h3"
-					sx={{ fontWeight: "bold", marginBottom: 2, textAlign: "center" }}>
-					Ranking Section
-				</Typography>
 
-				<RankingSection
-					teamRankings={rankings.teamRankings}
-					teacherRankings={rankings.teacherRankings}
-				/>
-			</Box>
+						{loading ? (
+            <Grid item xs={12} sx={{ textAlign: "center" }}>
+              <CircularProgress color="primary" />
+            </Grid>
+          ) : posts.length === 0 ? (
+            <Grid item xs={12} sx={{ textAlign: "center" }}>
+              <Typography variant="h6" color="textSecondary">
+                No posts available. Start by sharing your first file!
+              </Typography>
+            </Grid>
+          ) : (
+            posts.map((post) => (
+              <Grid item xs={12} key={post.id}>
+                <PostCard
+                  user={user}
+                  authorId={post.member_id}
+                  author={post.member_name || "Unknown User"}
+                  content={
+                    post.problem_statement || "No Problem Statement Available"
+                  }
+                  submittedWork={{
+                    id: post.id,
+                    file_url: post.submitted_work,
+                  }}
+                  channelId={channelId}
+                  onVoteSuccess={fetchRankings}
+                  onDeleteSuccess={fetchRankings}
+                  onDeleteFetch={fetchRankings}
+                />
+              </Grid>
+            ))
+          )}
+					</Grid>
+				</Box>
+				<Box
+					sx={{
+						margin: "0 auto",
+						padding: 4,
+						textAlign: "center",
+						maxWidth: "80%",
+					}}>
+					<Typography
+						variant="h3"
+						sx={{ fontWeight: "bold", marginBottom: 2, textAlign: "center" }}>
+						Ranking Section
+					</Typography>
 
-			{showUploadPopup && (
-				<UploadPSPopup
-					roomId={roomId}
-					channelId={channelId}
-					onClose={closeShareFile}
-					onDone={onDone}
-				/>
-			)}
-		</>
-	);
-};
+					<RankingSection
+						teamRankings={rankings.teamRankings}
+						teacherRankings={rankings.teacherRankings}
+					/>
+				</Box>
 
-export default ChannelPage;
+				{showUploadPopup && (
+					<UploadPSPopup
+						roomId={roomId}
+						channelId={channelId}
+						onClose={closeShareFile}
+						onDone={onDone}
+					/>
+				)}
+			</>
+		);
+	};
+
+	export default ChannelPage;

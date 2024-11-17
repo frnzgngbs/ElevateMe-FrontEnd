@@ -36,6 +36,7 @@ const PostCard = ({
   channelId,
   onVoteSuccess,
   onDeleteSuccess,
+  fetchrankings,
 }) => {
   const [openVoteDialog, setOpenVoteDialog] = useState(false);
   const [openCommentDialog, setOpenCommentDialog] = useState(false);
@@ -252,13 +253,15 @@ const PostCard = ({
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} sx={{ display: "flex", alignItems: "center", marginTop: "-10px" }}>
-              <Avatar sx={{ marginRight: 2, backgroundColor: '#67A099 ', fontWeight: "bold" }}>{getAuthorInitial()}</Avatar>
+              <Avatar sx={{ marginRight: 2, backgroundColor: '#67A099 ', fontWeight: "bold" }}>
+                {getAuthorInitial()}
+              </Avatar>
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                 {getAuthorDisplayName()}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body2" color="text.secondary" sx={{ textAlign: "left", fontWeight: 'medium'}}>
+              <Typography variant="body2" color="text.secondary" sx={{ textAlign: "left", fontWeight: 'medium' }}>
                 {content}
               </Typography>
             </Grid>
@@ -286,31 +289,30 @@ const PostCard = ({
                     variant="text"
                     open={openVoteDialog}
                     onClick={handleVoteDialogOpen}
-                    startIcon={
-                      <ThumbUpOutlinedIcon onClose={handleVoteDialogClose} />
-                    }
+                    startIcon={<ThumbUpOutlinedIcon onClose={handleVoteDialogClose} />}
                   >
                     Vote
                   </Button>
                 )}
 
                 <ViewFilepopup presignedUrl={presignedUrl} />
-
               </Box>
-              <Box sx={{ display: "flex", gap: 2 }}>
+
+              <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", alignItems: "right" }}>
                 {user.user_type === "TEACHER" && (
                   <DeleteSubmission
                     channelId={Number(channelId)}
                     submissionId={submittedWork.id}
                     onDelete={handleDeleteSuccess}
+                    onDeleteFetch={fetchrankings}
                   />
                 )}
-
               </Box>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
+
 
       <CommentDialog
         open={openCommentDialog}
