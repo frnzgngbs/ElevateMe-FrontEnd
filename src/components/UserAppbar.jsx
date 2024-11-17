@@ -32,7 +32,7 @@ const UserAppbar = () => {
 			setUser(loginUser);
 		};
 		fetchUser();
-	}, [getCurrentlyLogin]);
+	}, []);
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);

@@ -122,28 +122,33 @@ var theme = createTheme({
 // https://stackoverflow.com/questions/61600091/react-router-and-material-ui-applying-custom-themes-depending-on-route
 
 const router = createBrowserRouter(
-	createRoutesFromElements(
-		<Route element={<AppRoute />}>
-			<Route path="/" element={<Navigate to="/login" />} />
-			<Route path="/login" element={<Login />} />
-			<Route path="/register" element={<Register />} />
-			<Route path="" element={<ProtectedRoute />}>
-				<Route path="" element={<UserAppbar />}>
-					<Route path="home" element={<Home />} />
-					<Route path="saved" element={<Saved />} />
-					<Route path="venn" element={<Venn />} />
-					<Route path="rank" element={<Ranking />} />
-					<Route path="five_whys" element={<FiveWhys />} />
-					<Route path="hmw" element={<HMW />} />
-					<Route path="elevator" element={<ElevatorPitch />} />
-					<Route path="report" element={<Report />} />
-					<Route path="room" element={<RoomPage />} />
-					<Route path="/room/channel/" element={<ChannelPage />} />
-				</Route>
-			</Route>
-			<Route path="*" element={<PageNotFound />} />
-		</Route>
-	)
+  createRoutesFromElements(
+    <Route element={<AppRoute />}>
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="" element={<ProtectedRoute />}>
+        <Route path="" element={<UserAppbar />}>
+          <Route path="home" element={<Home />} />
+          <Route path="saved" element={<Saved />} />
+          <Route path="venn" element={<Venn />} />
+          <Route path="rank" element={<Ranking />} />
+          <Route path="five_whys" element={<FiveWhys />} />
+          <Route path="hmw" element={<HMW />} />
+          <Route path="elevator" element={<ElevatorPitch />} />
+          <Route path="room" element={<RoomPage />} />
+          <Route path="report" element={<Report />} />
+
+          <Route
+            path="/room/channel/"
+            element={<ChannelPage />}
+          />
+        </Route>
+        <Route path="report" element={<Report />} />
+      </Route>
+      <Route path="*" element={<PageNotFound />} />
+    </Route>
+  )
 );
 
 function App() {

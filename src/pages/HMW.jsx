@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import DocumentIcon from '@mui/icons-material/Description';
+import Tooltip from '@mui/material/Tooltip';
+
+
 import {
 	Grid,
 	Typography,
@@ -282,11 +286,16 @@ const HMW = () => {
 						<Typography variant="h4">Generated 5 HMW's</Typography>
 						<Box sx={{ mt: 1, ml: 7 }}>
 							<Box>
-								<Typography variant="body2" textAlign={"justify"}>
+								<Typography
+									variant="body2"
+									textAlign="justify"
+									sx={{ color: "#000000" }}
+								>
 									Enumerate 5 HMW statement(s) by specifying an ACTION (what you
 									want to achieve), a SUBJECT (to be influenced or affected),
 									and a WHAT (outcome or what you like to achieve).
 								</Typography>
+
 
 								<Box sx={{ mb: 5 }}>
 									<Box component={"form"}>
@@ -300,63 +309,93 @@ const HMW = () => {
 												/>
 											</Box>
 										))}
-										<Box
-											sx={{
-												display: "flex",
-												justifyContent: "flex-end",
-												marginRight: "23px",
-											}}>
-											<Button
-												variant="contained"
-												disabled={elevatorPitch.length === 0 ? true : false}
-												onClick={generateReport}
+										{/* <Box
 												sx={{
-													mt: 2,
 													display: "flex",
-													alignItems: "center",
-													borderRadius: 3,
-													color: "#FFFB",
-													backgroundColor: "#888E8E",
-													hieght: "20px",
-													width: "80px",
-													padding: 1,
+													justifyContent: "flex-end",
+													marginRight: "23px",
 												}}>
-												<PrintIcon sx={{ mr: 1 }} />
-												Print
-											</Button>
-										</Box>
-										<Box
-											sx={{
-												display: "flex",
-												justifyContent: "flex-end",
-												mt: 2,
-											}}>
-											<Box sx={{ mr: 2 }}>
 												<Button
 													variant="contained"
 													disabled={elevatorPitch.length === 0 ? true : false}
-													onClick={() => {
-														setOpenElevator((prev) => !prev);
-													}}
+													onClick={generateReport}
 													sx={{
-														px: 2.3,
-														py: 1.2,
-														borderRadius: 5.6,
+														mt: 2,
+														display: "flex",
+														alignItems: "center",
+														borderRadius: 3,
 														color: "#FFFB",
+														backgroundColor: "#888E8E",
+														hieght: "20px",
+														width: "80px",
+														padding: 1,
 													}}>
-													Show Elevator Pitch
+													<PrintIcon sx={{ mr: 1 }} />
+													Print
 												</Button>
+											</Box> */}
+										<Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, marginRight: 2, marginLeft: 3, alignItems: "center" }}>
+
+
+											<Box sx={{ display: "flex", alignItems: "center" }}>
+												{/* Print Button with Icon */}
+												<Tooltip title="Print">
+													<Button
+														variant="contained"
+														disabled={elevatorPitch.length === 0}
+														onClick={generateReport}
+														sx={{
+															display: "flex",
+															alignItems: "center",
+															justifyContent: "center",
+															borderRadius: 3,
+															color: "#FFFF",
+															backgroundColor: "#186F65",
+															width: "40px",
+															height: "40px",
+															mr: 2,
+														}}
+													>
+														<PrintIcon />
+													</Button>
+												</Tooltip>
+
+												{/* Show Elevator Pitch Button with Icon */}
+												<Tooltip title="Show Elevator Pitch">
+													<Button
+														variant="contained"
+														disabled={elevatorPitch.length === 0}
+														onClick={() => setOpenElevator((prev) => !prev)}
+														sx={{
+															display: "flex",
+															alignItems: "center",
+															justifyContent: "center",
+															borderRadius: 3,
+															color: "#FFFF",
+															backgroundColor: "#186F65",
+															width: "40px",
+															height: "40px",
+														}}
+													>
+														<DocumentIcon />
+													</Button>
+												</Tooltip>
 											</Box>
+
+
+											{/* Generate Elevator Pitch Button */}
 											<Button
 												variant="contained"
-												disabled={selectedHMW.length === 0 ? true : false}
+												disabled={selectedHMW.length === 0}
 												onClick={generateElevatorPitch}
 												sx={{
 													px: 2.3,
 													py: 1.2,
 													borderRadius: 5.6,
-													color: "#FFFB",
-												}}>
+													color: "#FF",
+													"&:hover": { backgroundColor: "#6b7373", cursor: "pointer" },
+												}}
+											>
 												Generate Elevator's Pitch
 											</Button>
 										</Box>
