@@ -17,7 +17,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import PSListCard from "../components/RankingPSCard";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
 import { API_BASE_URL } from '../helpers/constant';
@@ -180,7 +180,7 @@ const Ranking = () => {
 			try {
 				if (selectedButton === 2) {
 					let token = localStorage.getItem("token");
-					let response = await axios.get(
+					let response = await axiosInstance.get(
 						`${API_BASE_URL}/api/two_venn_ps/`,
 						{
 							headers: { Authorization: `Token ${token}` },
@@ -193,7 +193,7 @@ const Ranking = () => {
 					});
 				} else if (selectedButton === 3) {
 					let token = localStorage.getItem("token");
-					let response = await axios.get(
+					let response = await axiosInstance.get(
 						`${API_BASE_URL}/api/three_venn_ps/`,
 						{
 							headers: { Authorization: `Token ${token}` },

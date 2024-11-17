@@ -6,7 +6,7 @@ import {
     Snackbar,
     Alert,
 } from "@mui/material";
-import axios from "axios";
+import axiosInstance from '../../../../helpers/axios';
 import MembersList from "./MembersList";
 import AddMember from "./AddMember";
 import { API_BASE_URL } from '../../../helpers/constant';
@@ -25,7 +25,7 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
     useEffect(() => {
         const fetchEmails = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/user/`);
+                const response = await axiosInstance.get(`${API_BASE_URL}/api/user/`);
                 const emails = response.data.map((user) => user.email);
                 setEmailDatabase(emails);
             } catch (error) {
@@ -43,7 +43,7 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
         let token = localStorage.getItem("token");
 
             const payload = { new_room_members: addedEmails };
-            const response = await axios.patch(
+            const response = await axiosInstance.patch(
                 `${API_BASE_URL}/api/rooms/${roomId}/`,
                 payload,
                 { headers: { Authorization: `Token ${token}` } }

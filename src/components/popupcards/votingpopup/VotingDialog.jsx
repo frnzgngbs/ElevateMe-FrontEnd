@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { API_BASE_URL } from '../../../helpers/constant';
+import axiosInstance from '../../../helpers/axios';
 
 const VotingDialog = ({
   open,
@@ -33,7 +34,7 @@ const VotingDialog = ({
       setIsSubmitting(true);
       setError(null);
 
-      await axios.post(
+      await axiosInstance.post(
         `${API_BASE_URL}/api/channels/${channelId}/submissions/${submissionId}/voting_marks/`,
         {
           marks: rating,

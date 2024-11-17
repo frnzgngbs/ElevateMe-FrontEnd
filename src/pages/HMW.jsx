@@ -15,7 +15,7 @@ import {
 import RootProblemHistoryPopup from "../components/popupcards/potentialRootHistoryPopup/potentialRootHistoryPopup";
 import { useLocation, useNavigate } from "react-router-dom";
 import WhysCard from "../components/WhysCard";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import LoadingScreen from "../components/LoadingScreen";
 import HMWCard from "../components/HMWCard";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
@@ -74,7 +74,7 @@ const HMW = () => {
 		// console.log("Root Problem: " + generated_root);
 		try {
 			let token = localStorage.getItem("token");
-			let response = await axios.post(
+			let response = await axiosInstance.post(
 				`${API_BASE_URL}/api/ai/five_hmws/`,
 				{
 					selected_statement: selected_statement,
@@ -133,7 +133,7 @@ const HMW = () => {
 		setIsLoading((prev) => !prev);
 		try {
 			let token = localStorage.getItem("token");
-			let response = await axios.post(
+			let response = await axiosInstance.post(
 				`${API_BASE_URL}/api/ai/elevator_pitch/`,
 				{
 					problem_statement: selected_statement,

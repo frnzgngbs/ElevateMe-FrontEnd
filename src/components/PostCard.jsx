@@ -11,7 +11,6 @@ import {
 import { useState, useEffect } from "react";
 import CommentDialog from "../components/popupcards/commentpopup/CommentDialog";
 import VotingDialog from "../components/popupcards/votingpopup/VotingDialog";
-import axios from "axios";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ViewFilepopup from "./popupcards/viewFilepopup/ViewFilepopup";
@@ -19,6 +18,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import DeleteSubmission from "../components/DeleteSubmission";
+import axiosInstance from '../../sr';
+
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -99,7 +100,7 @@ const PostCard = ({
     return displayName.charAt(0) || "U";
   };
 
-  const axiosInstance = axios.create({
+  const axiosInstance = axiosInstance.create({
     baseURL: "https://babyjoy456.pythonanywhere.com",
     headers: {
       Authorization: `Token ${localStorage.getItem("token")}`,

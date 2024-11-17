@@ -17,7 +17,7 @@ import {
   People,
 } from "@mui/icons-material";
 import SampleImage from "../res/sampleImage.jpg";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import { useState, useEffect} from "react";
 import DeleteDialog from "./popupcards/deletedialogpopup/DeleteDialog";
 import ChannelListPopup from "./popupcards/channelListPopUp/ChannelListPopUp.jsx";
@@ -45,7 +45,7 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
     const fetchOwnerName = async () => {
       try {
         let token = localStorage.getItem("token");
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `${API_BASE_URL}/api/user/${ownerId}/`,
           {
             headers: {
@@ -70,7 +70,7 @@ const RoomCards = ({ title, roomCode, ownerId, roomId, onDelete, user }) => {
       setIsDeleting(true);
       let token = localStorage.getItem("token");
 
-      await axios.delete(`${API_BASE_URL}/api/rooms/${roomId}/`, {
+      await axiosInstance.delete(`${API_BASE_URL}/api/rooms/${roomId}/`, {
         headers: {
           Authorization: `Token ${token}`,
         },

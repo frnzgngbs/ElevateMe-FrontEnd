@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
@@ -32,7 +33,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
     }
   }, [submissionId, channelId]);
 
-  const axiosInstance = axios.create({
+  const axiosInstance = axiosInstance.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL || "https://babyjoy456.pythonanywhere.com",
     headers: {
       Authorization: `Token ${localStorage.getItem("token")}`,

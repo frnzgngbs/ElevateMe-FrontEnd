@@ -6,8 +6,9 @@ import JoinRoomPopup from "../components/popupcards/JoinRoomPopUp/JoinRoomPopUp"
 import CreateRoomPopup from "../components/popupcards/createroompopup/CreateRoomPopUp";
 import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopUp.jsx";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { API_BASE_URL } from '../helpers/constant';
+import axiosInstance from '../helpers/axios';
+
 
 const RoomPage = () => {
   const [rooms, setRooms] = useState([]);
@@ -35,7 +36,7 @@ const RoomPage = () => {
           throw new Error("No token found. Please log in.");
         }
 
-        const userResponse = await axios.get(
+        const userResponse = await axiosInstance.get(
           `${API_BASE_URL}/api/user/get_currently_login/`,
           {
             headers: { Authorization: `Token ${token}` },
@@ -64,7 +65,7 @@ const RoomPage = () => {
         throw new Error("No token found. Please log in.");
       }
 
-      const roomsResponse = await axios.get(
+      const roomsResponse = await axiosInstance.get(
         `${API_BASE_URL}/api/rooms/auth_rooms/`,
         {
           headers: { Authorization: `Token ${token}` },

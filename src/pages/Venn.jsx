@@ -6,7 +6,7 @@ import Venn2 from "../res/venn2.png";
 import Venn3 from "../res/venn.png";
 import { useEffect, useReducer, useState } from "react";
 import VennSettings from "../components/VennSettings";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import LoadingScreen from "../components/LoadingScreen";
 import GridBackground from "../res/gridbackground.png";
 import Checkbox from "@mui/material/Checkbox";
@@ -179,7 +179,7 @@ function Venn() {
 		try {
 			setIsLoading((prev) => !prev);
 			let token = localStorage.getItem("token");
-			let response = await axios.post(
+			let response = await axiosInstance.post(
 				`${API_BASE_URL}/api/ai/two_venn/`,
 				{
 					...groupLabel,
@@ -210,7 +210,7 @@ function Venn() {
 					return;
 				}
 				// alert("HERE");
-				let two_response = await axios.post(
+				let two_response = await axiosInstance.post(
 					`${API_BASE_URL}/api/ai/two_venn/`,
 					{
 						...textFields,
@@ -229,7 +229,7 @@ function Venn() {
 					alert("Cannot generate when other fields are empty.");
 					return;
 				}
-				let three_response = await axios.post(
+				let three_response = await axiosInstance.post(
 					`${API_BASE_URL}/api/ai/three_venn/`,
 					{
 						...textFields,
@@ -261,7 +261,7 @@ function Venn() {
 		let response;
 		try {
 			if (selectedButton === 2) {
-				response = await axios.post(
+				response = await axiosInstance.post(
 					`${API_BASE_URL}/api/two_venn_ps/`,
 					{
 						venn: { ...textFields },
@@ -274,7 +274,7 @@ function Venn() {
 			} else if (selectedButton === 3) {
 				// console.log(hasCheckedCheckBox);
 				if (hasCheckedCheckBox) {
-					response = await axios.post(
+					response = await axiosInstance.post(
 						`${API_BASE_URL}/api/two_venn_ps/`,
 						{
 							venn: { ...groupLabel },
@@ -285,7 +285,7 @@ function Venn() {
 						}
 					);
 				} else {
-					response = await axios.post(
+					response = await axiosInstance.post(
 						`${API_BASE_URL}/api/three_venn_ps/`,
 						{
 							venn: { ...textFields },

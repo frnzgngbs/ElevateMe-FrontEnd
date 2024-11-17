@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from '../../../../helpers/axios';
 import {
     Box,
     Button,
@@ -38,7 +38,7 @@ const AddMemberChannel = ({ channelId, emailDatabase, onSubmit, onBack }) => {
                     throw new Error("No token found. Please log in.");
                 }
 
-                const membersResponse = await axios.get(
+                const membersResponse = await axiosInstance.get(
                     `${API_BASE_URL}/api/channels/${channelId}/members/`,
                     {
                         headers: {
@@ -49,7 +49,7 @@ const AddMemberChannel = ({ channelId, emailDatabase, onSubmit, onBack }) => {
 
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
-                        const userResponse = await axios.get(
+                        const userResponse = await axiosInstance.get(
                             `${API_BASE_URL}/api/user/${member.member_id}/`,
                             {
                                 headers: {

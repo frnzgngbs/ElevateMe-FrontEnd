@@ -3,7 +3,7 @@ import PostCard from "../components/PostCard";
 import GridBackground from "../res/gridbackground.png";
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
 import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
@@ -46,7 +46,7 @@ const ChannelPage = () => {
 					throw new Error("No token found. Please log in.");
 				}
 
-				const userResponse = await axios.get(
+				const userResponse = await axiosInstance.get(
 					`${API_BASE_URL}/api/user/get_currently_login/`,
 					{
 						headers: { Authorization: `Token ${token}` },
@@ -97,7 +97,7 @@ const ChannelPage = () => {
 			const headers = { Authorization: `Token ${token}` };
 
 			// Get all submissions
-			const submissionsResponse = await axios.get(
+			const submissionsResponse = await axiosInstance.get(
 				`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
 				{ headers }
 			);
@@ -106,7 +106,7 @@ const ChannelPage = () => {
 			const postsWithMarks = await Promise.all(
 				submissionsResponse.data.map(async (submission) => {
 					try {
-						const votesResponse = await axios.get(
+						const votesResponse = await axiosInstance.get(
 							`${API_BASE_URL}/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
 							{ headers }
 						);
@@ -198,7 +198,7 @@ const ChannelPage = () => {
 		const fetchChannelDetails = async () => {
 			try {
 				const token = localStorage.getItem("token");
-				const response = await axios.get(
+				const response = await axiosInstance.get(
 					`${API_BASE_URL}/api/channels/${channelId}/`,
 					{
 						headers: {
@@ -215,7 +215,7 @@ const ChannelPage = () => {
 		const fetchChannelSubmissions = async () => {
 			try {
 				const token = localStorage.getItem("token");
-				const response = await axios.get(
+				const response = await axiosInstance.get(
 					`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
 					{
 						headers: {
@@ -252,7 +252,7 @@ const ChannelPage = () => {
 	const fetchChannelSubmissions = async () => {
 		try {
 			const token = localStorage.getItem("token");
-			const response = await axios.get(
+			const response = await axiosInstance.get(
 				`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
 				{
 					headers: {

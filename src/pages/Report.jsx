@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import Venn3Paper from "../components/venndiagramreport/VennDiagramPaper3";
 import Venn2Paper from "../components/venndiagramreport/VennDiagramPaper2";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
 import { Card, CardContent, Grid } from "@mui/material";
 import { API_BASE_URL } from "../helpers/constant";
@@ -82,14 +82,14 @@ const Report = () => {
 			let response;
 			let token = localStorage.getItem("token");
 			if (!venn.field3 || venn.field3 === "") {
-				response = await axios.get(
+				response = await axiosInstance.get(
 					`${API_BASE_URL}/api/two_venn_ps/${ps_id}/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
 			} else {
-				response = await axios.get(
+				response = await axiosInstance.get(
 					`${API_BASE_URL}/api/three_venn_ps/${ps_id}/`,
 					{
 						headers: { Authorization: `Token ${token}` },

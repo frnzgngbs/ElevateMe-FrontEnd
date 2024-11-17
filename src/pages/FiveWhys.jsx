@@ -12,7 +12,7 @@ import {
 import PSCard from "../components/PSCard";
 import PopupVennHistory from "../components/popupcards/vennHistorypopup/vennHistoryPopUp";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import LoadingScreen from "../components/LoadingScreen";
 import WhysCard from "../components/WhysCard";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
@@ -34,7 +34,7 @@ const FiveWhys = () => {
 		setIsLoading((prev) => !prev);
 		try {
 			let token = localStorage.getItem("token");
-			let response = await axios.post(
+			let response = await axiosInstance.post(
 				`${API_BASE_URL}/api/ai/five_whys/`,
 				{
 					ranked_problem: statement,
@@ -109,7 +109,7 @@ const FiveWhys = () => {
 		setIsLoading((prev) => !prev);
 		try {
 			let token = localStorage.getItem("token");
-			let response = await axios.post(
+			let response = await axiosInstance.post(
 				`${API_BASE_URL}/api/ai/potential_root/`,
 				{
 					selected_statement: statement,

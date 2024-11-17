@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useReducer, useState } from "react";
 import Box from "@mui/material/Box";
 import { Stack, Typography } from "@mui/material";
 import SavedPSCard from "../components/SavedPSCard";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import LoadingScreen from "../components/LoadingScreen";
 import { API_BASE_URL } from '../helpers/constant';
 
@@ -67,7 +67,7 @@ const Saved = () => {
 			try {
 				let token = localStorage.getItem("token");
 
-				let response1 = await axios.get(
+				let response1 = await axiosInstance.get(
 					`${API_BASE_URL}/api/two_venn_ps/`,
 					{
 						headers: { Authorization: `Token ${token}` },
@@ -78,7 +78,7 @@ const Saved = () => {
 					statements: memoizedMapData(response1.data),
 				});
 
-				let response = await axios.get(
+				let response = await axiosInstance.get(
 					`${API_BASE_URL}/api/three_venn_ps/`,
 					{
 						headers: { Authorization: `Token ${token}` },
@@ -111,7 +111,7 @@ const Saved = () => {
 		alert("CLICKED HERE");
 		if (setting === 2) {
 			try {
-				let response = await axios.put(
+				let response = await axiosInstance.put(
 					`${API_BASE_URL}/api/two_venn_ps/${id}/`,
 					{
 						statement: statement,
@@ -130,7 +130,7 @@ const Saved = () => {
 			} catch (error) {}
 		} else if (setting === 3) {
 			try {
-				let response = await axios.put(
+				let response = await axiosInstance.put(
 					`${API_BASE_URL}/api/three_venn_ps/${id}/`,
 					{
 						statement: statement,
@@ -157,7 +157,7 @@ const Saved = () => {
 		if (setting === 2) {
 			try {
 				let token = localStorage.getItem("token");
-				await axios.delete(`${API_BASE_URL}/api/two_venn_ps/${id}/`, {
+				await axiosInstance.delete(`${API_BASE_URL}/api/two_venn_ps/${id}/`, {
 					headers: { Authorization: `Token ${token}` },
 				});
 				dispatch({ type: "DELETE_TWO_VENN", id });
@@ -167,7 +167,7 @@ const Saved = () => {
 		} else if (setting === 3) {
 			try {
 				let token = localStorage.getItem("token");
-				await axios.delete(`${API_BASE_URL}/api/three_venn_ps/${id}/`, {
+				await axiosInstance.delete(`${API_BASE_URL}/api/three_venn_ps/${id}/`, {
 					headers: { Authorization: `Token ${token}` },
 				});
 				dispatch({ type: "DELETE_THREE_VENN", id });

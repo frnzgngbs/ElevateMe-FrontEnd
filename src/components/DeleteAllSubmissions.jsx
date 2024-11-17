@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box, Button, LinearProgress, Typography, Modal, } from '@mui/material';
-import axios from 'axios';
+
 import { API_BASE_URL }  from '../helpers/constant'
+import axiosInstance from '../helpers/axios';
 
 const DeleteAllSubmissions = ({ setPosts, channelId }) => {
   const [open, setOpen] = React.useState(false);
@@ -9,7 +10,7 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
   const [error, setError] = React.useState(null);
   const [progress, setProgress] = React.useState(0);
 
-  const axiosInstance = axios.create({
+  const axiosInstance = axiosInstance.create({
     baseURL: "https://babyjoy456.pythonanywhere.com",
     headers: {
       Authorization: `Token ${localStorage.getItem("token")}`,
