@@ -20,8 +20,8 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
-import { API_BASE_URL } from '../helpers/constant';
-
+import { API_BASE_URL } from "../helpers/constant";
+import { Visibility } from "@mui/icons-material";
 
 const PS_action = {
 	SET_PROBLEM_STATEMENT: "SET_PROBLEM_STATEMENT",
@@ -126,7 +126,6 @@ const Ranking = () => {
 		[]
 	);
 
-
 	const [selectedButton, setSelectedButton] = useState(3);
 	const navigate = useNavigate();
 
@@ -180,12 +179,9 @@ const Ranking = () => {
 			try {
 				if (selectedButton === 2) {
 					let token = localStorage.getItem("token");
-					let response = await axios.get(
-						`${API_BASE_URL}/api/two_venn_ps/`,
-						{
-							headers: { Authorization: `Token ${token}` },
-						}
-					);
+					let response = await axios.get(`${API_BASE_URL}/api/two_venn_ps/`, {
+						headers: { Authorization: `Token ${token}` },
+					});
 					listProblemStatementDispatch({
 						type: PS_action.SET_PROBLEM_STATEMENT,
 						statements: response.data,
@@ -193,12 +189,9 @@ const Ranking = () => {
 					});
 				} else if (selectedButton === 3) {
 					let token = localStorage.getItem("token");
-					let response = await axios.get(
-						`${API_BASE_URL}/api/three_venn_ps/`,
-						{
-							headers: { Authorization: `Token ${token}` },
-						}
-					);
+					let response = await axios.get(`${API_BASE_URL}/api/three_venn_ps/`, {
+						headers: { Authorization: `Token ${token}` },
+					});
 
 					listProblemStatementDispatch({
 						type: PS_action.SET_PROBLEM_STATEMENT,
@@ -316,16 +309,16 @@ const Ranking = () => {
 				<Typography variant="h1" sx={{ textAlign: "center", width: "400px" }}>
 					Ranking List
 				</Typography>
-				
 			</Box>
-			<Box sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
-			<Typography variant="body1" textAlign={"center"} width={"1000px"}>
-							Choose a problem statement to be ranked from either the list of saved 2 field venn diagrams or 3 field venn diagram - by clicking the radio button
-							2 or 3. Click the + icon to select the problem statement of your choice. When selected, you can now rank that problem statement based on the criteria 
-							defined below.
-
-							
-						</Typography>
+			<Box
+				sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
+				<Typography variant="body1" textAlign={"center"} width={"1000px"}>
+					Choose a problem statement to be ranked from either the list of saved
+					2 field venn diagrams or 3 field venn diagram - by clicking the radio
+					button 2 or 3. Click the + icon to select the problem statement of
+					your choice. When selected, you can now rank that problem statement
+					based on the criteria defined below.
+				</Typography>
 			</Box>
 			<Box sx={{ mx: 13.3, mb: 0, mt: 3 }}>
 				<Typography variant="h3">Problem Statement List</Typography>
@@ -426,61 +419,66 @@ const Ranking = () => {
 			</Box>
 
 			<Box sx={{ mr: 14, ml: 17, mb: 2 }}>
-				<Card
-					sx={{
-						background: "#D9D9D9",
-						borderRadius: 5,
-						width: "95%",
-						mb: 2,
-						ml: 5,
-					}}>
-					<CardContent
+				<Box sx={{ display: "flex", mb: 2 }}>
+					<IconButton sx={{ visibility: "hidden" }}>
+						<CheckCircleOutlineIcon />
+					</IconButton>
+					<Card
 						sx={{
-							display: "flex",
-							alignItems: "center",
-							width: "100%",
+							background: "#D9D9D9",
 							borderRadius: 5,
+							width: "100%",
 						}}>
-						<Grid
-							container
-							sx={{ justifyContent: "space-between" }}
-							spacing={0}>
-							<Grid item xs={4}     sx={{marginRight:5}}>
-								<Typography sx={{ textAlign: "center", alignItem: "center"}}>
-									Problem Statement
-								</Typography>
+						<CardContent
+							sx={{
+								display: "flex",
+								borderRadius: 5,
+								width: "100%",
+							}}>
+							<Grid
+								container
+								sx={{ justifyContent: "space-between" }}
+								spacing={0}>
+								<Grid item xs={4}>
+									<Typography sx={{ textAlign: "center" }}>
+										Problem Statement
+									</Typography>
+								</Grid>
+								<Grid item xs>
+									<Typography textAlign={"center"}>Impact</Typography>
+								</Grid>
+								<Grid item xs>
+									<Typography textAlign={"center"}>Capability</Typography>
+								</Grid>
+								<Grid item xs>
+									<Typography textAlign={"center"}>Dev Cost</Typography>
+								</Grid>
+								<Grid item xs>
+									<Typography sx={{ textAlign: "center" }}>
+										Urgency of Needs
+									</Typography>
+								</Grid>
+								<Grid item xs>
+									<Typography textAlign={"center"}>
+										Innovation Opportunity
+									</Typography>
+								</Grid>
+								<Grid item xs textAlign={"center"}>
+									<Typography>Market Size</Typography>
+								</Grid>
+								<Grid item xs textAlign={"center"}>
+									<Typography>Total</Typography>
+								</Grid>
+								<Grid item xs textAlign={"center"}>
+									<Typography>Rank</Typography>
+								</Grid>
 							</Grid>
-							<Grid item xs sx={{maxWidth:"30px"}}>
-								<Typography textAlign={"center"}>Impact</Typography>
-							</Grid>
-							<Grid item xs>
-								<Typography textAlign={"center"}>Capability</Typography>
-							</Grid>
-							<Grid item xs>
-								<Typography textAlign={"center"}>Dev Cost</Typography>
-							</Grid>
-							<Grid item xs>
-								<Typography sx={{ width: "100px", textAlign: "center" }}>
-									Urgency of Needs
-								</Typography>
-							</Grid>
-							<Grid item xs>
-								<Typography textAlign={"center"}>
-									Innovation Opportunity
-								</Typography>
-							</Grid>
-							<Grid item xs textAlign={"center"}>
-								<Typography>Market Size</Typography>
-							</Grid>
-							<Grid item xs textAlign={"center"}>
-								<Typography>Total</Typography>
-							</Grid>
-							<Grid item xs textAlign={"center"}>
-								<Typography>Rank</Typography>
-							</Grid>
-						</Grid>
-					</CardContent>
-				</Card>
+						</CardContent>
+					</Card>
+					<IconButton sx={{ visibility: "hidden" }}>
+						<CheckCircleOutlineIcon />
+					</IconButton>
+				</Box>
 
 				{queuedProblemStatement.length > 0 &&
 					selectedValues.length > 0 &&
@@ -496,22 +494,20 @@ const Ranking = () => {
 								sx={{
 									background: "#D9D9D9",
 									borderRadius: 5,
-									width: "95%",
 								}}>
 								<CardContent
 									sx={{
 										display: "flex",
-										alignItems: "center",
-										width: "90%",
 										borderRadius: 5,
+										width: "100%",
 									}}>
 									<Grid
 										container
 										sx={{ justifyContent: "space-between" }}
-										spacing={2}>
+										spacing={0}>
 										<Grid
 											item
-											xs={5}
+											xs={4}
 											sx={{
 												display: "flex",
 												alignItems: "center",
@@ -526,9 +522,12 @@ const Ranking = () => {
 												key={colIndex}
 												item
 												xs
-												sx={{ display: "flex", justifyContent: "center" }}
-												>
-												<FormControl sx={{ justifyContent: "center", marginLeft:4 }}>
+												sx={{
+													display: "flex",
+													justifyContent: "center",
+													alignItems: "center",
+												}}>
+												<FormControl>
 													<Select
 														required
 														value={selectedValues[rowIndex][colIndex]}
@@ -552,20 +551,22 @@ const Ranking = () => {
 										<Grid
 											item
 											xs
-											sx={{ display: "flex", justifyContent: "center" }}>
-											<Typography
-												sx={{ display: "flex", alignItems: "center" }}>
-												{totalsPerRow[rowIndex]}
-											</Typography>
+											sx={{
+												display: "flex",
+												justifyContent: "center",
+												alignItems: "center",
+											}}>
+											<Typography>{totalsPerRow[rowIndex]}</Typography>
 										</Grid>
 										<Grid
 											item
 											xs
-											sx={{ display: "flex", justifyContent: "center" }}>
-											<Typography
-												sx={{ display: "flex", alignItems: "center" }}>
-												{ranks[rowIndex]}
-											</Typography>
+											sx={{
+												display: "flex",
+												justifyContent: "center",
+												alignItems: "center",
+											}}>
+											<Typography>{ranks[rowIndex]}</Typography>
 										</Grid>
 									</Grid>
 								</CardContent>
