@@ -8,9 +8,13 @@ import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
 import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
 import { API_BASE_URL } from "../helpers/constant";
+import { Room } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom"; // For navigation
+
 
 const ChannelPage = () => {
 	const [roomId, setRoomId] = useState();
+	const navigate = useNavigate();
 	const [channelId, setChannelId] = useState();
 	const [channelName, setChannelName] = useState("");
 	const [posts, setPosts] = useState([]);
@@ -119,9 +123,9 @@ const ChannelPage = () => {
 						const studentPoints =
 							studentVotes.length > 0
 								? studentVotes.reduce(
-										(sum, vote) => sum + parseFloat(vote.marks),
-										0
-								  )
+									(sum, vote) => sum + parseFloat(vote.marks),
+									0
+								)
 								: 0;
 
 						const teacherVotes = votes.filter(
@@ -130,9 +134,9 @@ const ChannelPage = () => {
 						const teacherPoints =
 							teacherVotes.length > 0
 								? teacherVotes.reduce(
-										(sum, vote) => sum + parseFloat(vote.marks),
-										0
-								  )
+									(sum, vote) => sum + parseFloat(vote.marks),
+									0
+								)
 								: 0;
 
 						// console.log(`Submission ${submission.id} scores:`, {
@@ -317,6 +321,8 @@ const ChannelPage = () => {
 							/>
 						)}
 
+					
+
 						{user.user_type === "STUDENT" && (
 							<Button
 								variant="contained"
@@ -331,6 +337,22 @@ const ChannelPage = () => {
 								Share File
 							</Button>
 						)}
+
+<Button
+							variant="contained"
+
+							onClick={() => navigate('/room')}
+							sx={{
+								backgroundColor: "#186F65",
+								color: "white",
+								borderRadius: 4,
+								mb: 2,
+								padding: 1,
+
+							}}
+						>
+							Back
+						</Button>
 					</Grid>
 
 					{posts.map((post) => (
@@ -363,8 +385,8 @@ const ChannelPage = () => {
 				}}>
 				<Typography
 					variant="h3"
-					sx={{ fontWeight: "bold", marginBottom: 2, marginRight: "80px" }}>
-					Ranking
+					sx={{ fontWeight: "bold", marginBottom: 2, textAlign: "center" }}>
+					Ranking Section
 				</Typography>
 
 				<RankingSection

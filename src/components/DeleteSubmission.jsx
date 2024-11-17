@@ -33,7 +33,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
     }
   }, [submissionId, channelId]);
 
-  const axiosInstance = axiosInstance.create({
+  const axiosInstances = axiosInstance.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL || "https://babyjoy456.pythonanywhere.com",
     headers: {
       Authorization: `Token ${localStorage.getItem("token")}`,
@@ -77,7 +77,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
       setError(null);
 
       const url = `/api/channels/${numChannelId}/submissions/${numSubmissionId}/`;
-      const response = await axiosInstance.delete(url);
+      const response = await axiosInstances.delete(url);
 
       if (response.status === 204) {
         if (onDelete) {

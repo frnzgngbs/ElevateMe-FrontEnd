@@ -8,10 +8,14 @@ import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelL
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from '../helpers/constant';
 import axiosInstance from '../helpers/axios';
+import { Room } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom"; // For navigation
+
 
 
 const RoomPage = () => {
   const [rooms, setRooms] = useState([]);
+  const navigate = useNavigate();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isCreateRoomPopupOpen, setIsCreateRoomPopupOpen] = useState(false);
   const [isChannelListOpen, setIsChannelListOpen] = useState(false);
@@ -21,6 +25,7 @@ const RoomPage = () => {
   const [loading, setLoading] = useState(true); // Add loading state
   const [user, setCurrentlyLoginId] = useState({
     id: "",
+    
     email: "",
     first_name: "",
     last_name: "",

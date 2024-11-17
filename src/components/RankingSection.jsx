@@ -29,6 +29,7 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                 mb: 2,
                 boxShadow: 2,
                 borderRadius: 4,
+                fontWeight: "bold",
                 minWidth: "300px",
                 height: "120px",
                 display: "flex",
@@ -50,7 +51,8 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                 >
                   {member.name.charAt(0)}
                 </Avatar>
-                  <Typography variant="h6" sx={{ textAlign: "left", }}>
+                  <Typography variant="h6" sx={{ textAlign: "left",  fontWeight:"bold",
+ }}>
                     {member.name}
                   </Typography>
                   </Box>
@@ -61,12 +63,14 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                       textAlign: "left",
                       fontSize: "0.875rem",
                       lineHeight: 1.3,
-                      maxWidth: "330px",
+                      maxWidth: "360px",
                       overflow: "hidden",
                       display: "-webkit-box",
                       WebkitBoxOrient: "vertical",
                       WebkitLineClamp: 2, 
+                      fontWeight:'medium',
                       marginLeft: 1,
+                      color:"text.secondary"
                     }}
                   >
                     {member.content}
@@ -100,7 +104,7 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ borderColor: "#186F65", borderWidth: 2, height: "400px" }}
+              sx={{ borderColor: "#186F65", borderWidth: 2, height: "400px", marginLeft:0, marginRight: 0 }}
             />
           )}
         </Grid>
@@ -132,13 +136,14 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                     height: 30,
                     backgroundColor: "#67A099",
                     fontSize: "1rem",
+                    fontWeight: 'bold',
                     mr: .5,
                   }}
                 >
                   {member.name.charAt(0)}
                 </Avatar>
                 
-                  <Typography variant="h6" sx={{ textAlign: "left", mb: 0.5, }}>
+                  <Typography variant="h6" sx={{ textAlign: "left", mb: 0.5, fontWeight: 'bold' }}>
                     {member.name}
                   </Typography>
                   </Box>
@@ -148,10 +153,12 @@ const RankingSection = ({ teamRankings, teacherRankings }) => {
                       textAlign: "left",
                       fontSize: "0.875rem",
                       lineHeight: 1.3,
-                      maxWidth: "320px",
+                      maxWidth: "360px",
                       overflow: "hidden",
                       display: "-webkit-box",
                       WebkitBoxOrient: "vertical",
+                      fontWeight:"medium",
+                      color: "text.secondary",
                       ml: 1,
                       WebkitLineClamp: 2, // Limits to 2 lines with ellipsis
                     }}

@@ -94,6 +94,8 @@ const HomePage = () => {
 					backgroundSize: "cover",
 					backgroundRepeat: "no-repeat",
 					marginBottom: "50px",
+					
+					
 				}}>
 				<Grid item xs={10} md={5} pr={5}>
 					<div>

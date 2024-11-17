@@ -24,6 +24,7 @@ const UserAppbar = () => {
 		five_whys: "Five-Whys",
 		hmw: "How Might We",
 		report: "Report",
+		room: "Rooms",
 	};
 
 	useEffect(() => {

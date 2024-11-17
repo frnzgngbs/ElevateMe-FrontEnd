@@ -10,7 +10,7 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
   const [error, setError] = React.useState(null);
   const [progress, setProgress] = React.useState(0);
 
-  const axiosInstance = axiosInstance.create({
+  const axiosInstances = axiosInstance.create({
     baseURL: "https://babyjoy456.pythonanywhere.com",
     headers: {
       Authorization: `Token ${localStorage.getItem("token")}`,
@@ -35,7 +35,7 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
       setIsDeleting(true);
       setError(null);
 
-      const response = await axiosInstance.get(`/api/channels/${channelId}/submissions/`);
+      const response = await axiosInstances.get(`/api/channels/${channelId}/submissions/`);
       const submissions = response.data;
       const totalSubmissions = submissions.length;
 
