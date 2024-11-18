@@ -29,33 +29,42 @@ const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
     setError(null);
     setProgress(0);
   };
-
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
       setError(null);
-
+  
       const response = await axiosInstances.get(`/api/channels/${channelId}/submissions/`);
       const submissions = response.data;
       const totalSubmissions = submissions.length;
-
-      for (let i = 0; i < submissions.length; i++) {
-        const submission = submissions[i];
-        await axiosInstances.delete(`/api/channels/${channelId}/submissions/${submission.id}/`);
-        setProgress(Math.round(((i + 1) / totalSubmissions) * 100));
+  
+      if (totalSubmissions === 0) {
+        setPosts([]);
+        onDeleteFetch();
+        handleClose();
+        return;
       }
-
+  
+      const deleteRequests = submissions.map((submission, index) =>
+        axiosInstances.delete(`/api/channels/${channelId}/submissions/${submission.id}/`).then(() => {
+          setProgress(Math.round(((index + 1) / totalSubmissions) * 100));
+        })
+      );
+  
+      await Promise.all(deleteRequests);
+  
       setPosts([]);
       onDeleteFetch();
-      
+  
       handleClose();
     } catch (err) {
       setError("Failed to delete submissions. Please try again.");
-      console.error("Error deleting submissions:", err);
+      console.error("Error deleting submissions:");
     } finally {
       setIsDeleting(false);
     }
   };
+  
 
   return (
     <div style={{ marginBottom: '1rem' }}>
