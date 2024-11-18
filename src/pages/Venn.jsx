@@ -86,7 +86,7 @@ function Venn() {
 		false,
 	]);
 
-	const [groupLabel, setgroupLabel] = useState({});
+	const [groupLabel, setgroupLabel] = useState(null);
 
 	const toggleShowSetting = () => {
 		setShowSetting((prevState) => !prevState);
@@ -106,6 +106,36 @@ function Venn() {
 	}, [ProblemStatements]);
 
 	useEffect(() => {
+		const generateProblemStatement = async () => {
+			try {
+				setIsLoading((prev) => !prev);
+				let token = localStorage.getItem("token");
+				let response = await axios.post(
+					`${API_BASE_URL}/api/ai/two_venn/`,
+					{
+						...groupLabel,
+					},
+					{
+						headers: { Authorization: `Token ${token}` },
+					}
+				);
+				dispatch({
+					type: "SET_PROBLEM_STATEMENT",
+					ps_list: response.data.response,
+				});
+			} catch (err) {
+				console.error(err);
+			} finally {
+				setIsLoading((prev) => !prev);
+			}
+		};
+
+		if (groupLabel) {
+			generateProblemStatement();
+		}
+	}, [groupLabel]);
+
+	useEffect(() => {
 		sessionStorage.setItem("field1", textFields.field1);
 		sessionStorage.setItem("field2", textFields.field2);
 		sessionStorage.setItem("field3", textFields.field3);
@@ -113,6 +143,7 @@ function Venn() {
 	}, [textFields]);
 
 	const handleSelectCheckBox = async (index) => {
+		console.log(index);
 		if (index === 0) {
 			if (
 				textFields.field1 === null ||
@@ -157,6 +188,7 @@ function Venn() {
 
 		// First group which is field1 and field2
 		if (index === 0) {
+			console.log(groupLabel);
 			setgroupLabel({
 				field1: textFields.field1,
 				field2: textFields.field2,
