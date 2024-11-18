@@ -179,12 +179,14 @@ const Ranking = () => {
 			try {
 				if (selectedButton === 2) {
 					let token = localStorage.getItem("token");
+
 					let response = await axiosInstance.get(
 						`${API_BASE_URL}/api/two_venn_ps/`,
 						{
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
+
 					listProblemStatementDispatch({
 						type: PS_action.SET_PROBLEM_STATEMENT,
 						statements: response.data,
@@ -192,12 +194,14 @@ const Ranking = () => {
 					});
 				} else if (selectedButton === 3) {
 					let token = localStorage.getItem("token");
+
 					let response = await axiosInstance.get(
 						`${API_BASE_URL}/api/three_venn_ps/`,
 						{
 							headers: { Authorization: `Token ${token}` },
 						}
 					);
+
 
 					listProblemStatementDispatch({
 						type: PS_action.SET_PROBLEM_STATEMENT,
@@ -316,6 +320,7 @@ const Ranking = () => {
 					Ranking List
 				</Typography>
 			</Box>
+
 			<Box sx={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
 			<Typography variant="body1" textAlign={"center"} width={"1000px"}>
 							Choose a problem statement to be ranked from either the list of saved 2 field venn diagrams or 3 field venn diagram - by clicking the radio button
@@ -324,6 +329,7 @@ const Ranking = () => {
 
 							
 						</Typography>
+
 			</Box>
 			<Box sx={{ mx: 13.3, mb: 0, mt: 3 }}>
 				<Typography variant="h3">Problem Statement List</Typography>

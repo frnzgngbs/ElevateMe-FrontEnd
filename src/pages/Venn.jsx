@@ -207,6 +207,7 @@ function Venn() {
 				filter: textFields.filter,
 			});
 		}
+
 		// console.log(groupLabel);
 		try {
 			setIsLoading((prev) => !prev);
@@ -229,6 +230,7 @@ function Venn() {
 		} finally {
 			setIsLoading((prev) => !prev);
 		}
+
 	};
 
 	const handleGenerateButtonClick = async () => {
