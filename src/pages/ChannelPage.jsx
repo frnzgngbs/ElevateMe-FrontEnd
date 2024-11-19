@@ -1,16 +1,20 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, CircularProgress } from "@mui/material";
 import PostCard from "../components/PostCard";
 import GridBackground from "../res/gridbackground.png";
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
 import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
 import { API_BASE_URL } from "../helpers/constant";
+import { Room } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom"; // For navigation
+
 
 const ChannelPage = () => {
 	const [roomId, setRoomId] = useState();
+	const navigate = useNavigate();
 	const [channelId, setChannelId] = useState();
 	const [channelName, setChannelName] = useState("");
 	const [posts, setPosts] = useState([]);
@@ -36,6 +40,12 @@ const ChannelPage = () => {
 		);
 	};
 	const location = useLocation();
+	useEffect(() => {
+		setLoading(true);
+		setTimeout(() => {
+		  setLoading(false); // Replace this with actual fetch logic
+		}, 1000);
+	  }, [posts]);
 
 	useEffect(() => {
 		const fetchCurrentlyLoggedInUser = async () => {
@@ -46,8 +56,8 @@ const ChannelPage = () => {
 					throw new Error("No token found. Please log in.");
 				}
 
-				const userResponse = await axios.get(
-					`${API_BASE_URL}/api/user/get_currently_login/`,
+				const userResponse = await axiosInstance.get(
+					`/api/user/get_currently_login/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
@@ -97,8 +107,8 @@ const ChannelPage = () => {
 			const headers = { Authorization: `Token ${token}` };
 
 			// Get all submissions
-			const submissionsResponse = await axios.get(
-				`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
+			const submissionsResponse = await axiosInstance.get(
+				`/api/channels/${channelId}/submissions/`,
 				{ headers }
 			);
 
@@ -106,8 +116,8 @@ const ChannelPage = () => {
 			const postsWithMarks = await Promise.all(
 				submissionsResponse.data.map(async (submission) => {
 					try {
-						const votesResponse = await axios.get(
-							`${API_BASE_URL}/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
+						const votesResponse = await axiosInstance.get(
+							`/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
 							{ headers }
 						);
 
@@ -119,9 +129,9 @@ const ChannelPage = () => {
 						const studentPoints =
 							studentVotes.length > 0
 								? studentVotes.reduce(
-										(sum, vote) => sum + parseFloat(vote.marks),
-										0
-								  )
+									(sum, vote) => sum + parseFloat(vote.marks),
+									0
+								)
 								: 0;
 
 						const teacherVotes = votes.filter(
@@ -130,9 +140,9 @@ const ChannelPage = () => {
 						const teacherPoints =
 							teacherVotes.length > 0
 								? teacherVotes.reduce(
-										(sum, vote) => sum + parseFloat(vote.marks),
-										0
-								  )
+									(sum, vote) => sum + parseFloat(vote.marks),
+									0
+								)
 								: 0;
 
 						// console.log(`Submission ${submission.id} scores:`, {
@@ -198,8 +208,8 @@ const ChannelPage = () => {
 		const fetchChannelDetails = async () => {
 			try {
 				const token = localStorage.getItem("token");
-				const response = await axios.get(
-					`${API_BASE_URL}/api/channels/${channelId}/`,
+				const response = await axiosInstance.get(
+					`/api/channels/${channelId}/`,
 					{
 						headers: {
 							Authorization: `Token ${token}`,
@@ -215,8 +225,8 @@ const ChannelPage = () => {
 		const fetchChannelSubmissions = async () => {
 			try {
 				const token = localStorage.getItem("token");
-				const response = await axios.get(
-					`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
+				const response = await axiosInstance.get(
+					`/api/channels/${channelId}/submissions/`,
 					{
 						headers: {
 							Authorization: `Token ${token}`,
@@ -252,8 +262,8 @@ const ChannelPage = () => {
 	const fetchChannelSubmissions = async () => {
 		try {
 			const token = localStorage.getItem("token");
-			const response = await axios.get(
-				`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
+			const response = await axiosInstance.get(
+				`/api/channels/${channelId}/submissions/`,
 				{
 					headers: {
 						Authorization: `Token ${token}`,
@@ -274,115 +284,147 @@ const ChannelPage = () => {
 		}
 	};
 
-	return (
-		<>
-			<Box
-				sx={{
-					minHeight: "100vh",
-					backgroundImage: `url(${GridBackground})`,
-					backgroundSize: "cover",
-					backgroundPosition: "center",
-					backgroundRepeat: "no-repeat",
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					textAlign: "center",
-					padding: 4,
-				}}>
-				<Typography variant="h2" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-					Channel - {channelName}
-				</Typography>
-
-				<Grid
-					container
-					spacing={2}
+		return (
+			<>
+				<Box
 					sx={{
-						maxWidth: "900px",
-						margin: "0 auto",
+						minHeight: "100vh",
+						backgroundImage: `url(${GridBackground})`,
+						backgroundSize: "cover",
+						backgroundPosition: "center",
+						backgroundRepeat: "no-repeat",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+						textAlign: "center",
+						padding: 4,
 					}}>
-					<Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-						<Typography variant="h5" sx={{ mb: 2 }}>
-							File Proposals
-						</Typography>
-					</Grid>
-					<Grid
-						item
-						xs={6}
-						sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-						{user.user_type === "TEACHER" && (
-							<DeleteAllSubmissions
-								setPosts={setPosts}
-								channelId={channelId}
-								onDeleteSuccess={handleDeleteSuccess}
-							/>
-						)}
+					<Typography variant="h2" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+						Channel - {channelName}
+					</Typography>
 
-						{user.user_type === "STUDENT" && (
-							<Button
+					<Grid
+						container
+						spacing={2}
+						sx={{
+							maxWidth: "900px",
+							margin: "0 auto",
+						}}>
+						<Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
+							<Typography variant="h5" sx={{ mb: 2 }}>
+								File Proposals
+							</Typography>
+						</Grid>
+						<Grid
+							item
+							xs={6}
+							sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+							{user.user_type === "TEACHER" && (
+								<DeleteAllSubmissions
+									setPosts={setPosts}
+									channelId={channelId}
+									onDeleteSuccess={handleDeleteSuccess}
+									onDeleteFetch = {fetchRankings}
+								/>
+							)}
+
+						
+
+							{user.user_type === "STUDENT" && (
+								<Button
+									variant="contained"
+									onClick={openShareFile}
+									sx={{
+										backgroundColor: "#186F65",
+										color: "white",
+										borderRadius: 4,
+										mb: 2,
+										padding: 1,
+									}}>
+									Share File
+								</Button>
+							)}
+
+	<Button
 								variant="contained"
-								onClick={openShareFile}
+
+								onClick={() => navigate('/room')}
 								sx={{
 									backgroundColor: "#186F65",
 									color: "white",
 									borderRadius: 4,
 									mb: 2,
 									padding: 1,
-								}}>
-								Share File
-							</Button>
-						)}
-					</Grid>
 
-					{posts.map((post) => (
-						<Grid item xs={12} key={post.id}>
-							<PostCard
-								user={user}
-								authorId={post.member_id}
-								author={post.member_name || "Unknown User"}
-								content={
-									post.problem_statement || "No Problem Statement Available"
-								}
-								submittedWork={{
-									id: post.id,
-									file_url: post.submitted_work,
 								}}
-								channelId={channelId}
-								onVoteSuccess={fetchRankings}
-								onDeleteSuccess={handleDeleteSuccess}
-							/>
+							>
+								Back
+							</Button>
 						</Grid>
-					))}
-				</Grid>
-			</Box>
-			<Box
-				sx={{
-					margin: "0 auto",
-					padding: 4,
-					textAlign: "center",
-					maxWidth: "80%",
-				}}>
-				<Typography
-					variant="h3"
-					sx={{ fontWeight: "bold", marginBottom: 2, marginRight: "80px" }}>
-					Ranking
-				</Typography>
 
-				<RankingSection
-					teamRankings={rankings.teamRankings}
-					teacherRankings={rankings.teacherRankings}
-				/>
-			</Box>
+						{loading ? (
+            <Grid item xs={12} sx={{ textAlign: "center" }}>
+              <CircularProgress color="primary" />
+            </Grid>
+          ) : posts.length === 0 ? (
+            <Grid item xs={12} sx={{ textAlign: "center" }}>
+              <Typography variant="h6" color="textSecondary">
+                No posts available. Start by sharing your first file!
+              </Typography>
+            </Grid>
+          ) : (
+            posts.map((post) => (
+              <Grid item xs={12} key={post.id}>
+                <PostCard
+                  user={user}
+                  authorId={post.member_id}
+                  author={post.member_name || "Unknown User"}
+                  content={
+                    post.problem_statement || "No Problem Statement Available"
+                  }
+                  submittedWork={{
+                    id: post.id,
+                    file_url: post.submitted_work,
+                  }}
+                  channelId={channelId}
+                  onVoteSuccess={fetchRankings}
+                  onDeleteSuccess={fetchRankings}
+                  onDeleteFetch={fetchRankings}
+                />
+              </Grid>
+            ))
+          )}
+					</Grid>
+				</Box>
+				<Box
+					sx={{
+						margin: "0 auto",
+						padding: 4,
+						textAlign: "center",
+						maxWidth: "80%",
+					}}>
+					<Typography
+						variant="h3"
+						sx={{ fontWeight: "bold", marginBottom: 2, textAlign: "center" }}>
+						Ranking Section
+					</Typography>
 
-			{showUploadPopup && (
-				<UploadPSPopup
-					roomId={roomId}
-					channelId={channelId}
-					onClose={closeShareFile}
-					onDone={onDone}
-				/>
-			)}
-		</>
-	);
-};
+					<RankingSection
+						teamRankings={rankings.teamRankings}
+						teacherRankings={rankings.teacherRankings}
+					/>
+				</Box>
 
-export default ChannelPage;
+				{showUploadPopup && (
+					<UploadPSPopup
+						roomId={roomId}
+						channelId={channelId}
+						onClose={closeShareFile}
+						onDone={onDone}
+					/>
+				)}
+			</>
+		);
+	};
+
+	export default ChannelPage;

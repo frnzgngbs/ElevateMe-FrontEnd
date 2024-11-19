@@ -6,13 +6,13 @@ import Venn2 from "../res/venn2.png";
 import Venn3 from "../res/venn.png";
 import { useEffect, useReducer, useState } from "react";
 import VennSettings from "../components/VennSettings";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import LoadingScreen from "../components/LoadingScreen";
 import GridBackground from "../res/gridbackground.png";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import CircleUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"; // Unchecked icon
-import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; // Checked icon
+import CircleUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"; 
+import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; 
 import zIndex from "@mui/material/styles/zIndex";
 import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material/TextField";
@@ -110,8 +110,8 @@ function Venn() {
 			try {
 				setIsLoading((prev) => !prev);
 				let token = localStorage.getItem("token");
-				let response = await axios.post(
-					`${API_BASE_URL}/api/ai/two_venn/`,
+				let response = await axiosInstance.post(
+					`/api/ai/two_venn/`,
 					{
 						...groupLabel,
 					},
@@ -207,6 +207,30 @@ function Venn() {
 				filter: textFields.filter,
 			});
 		}
+
+		// console.log(groupLabel);
+		try {
+			setIsLoading((prev) => !prev);
+			let token = localStorage.getItem("token");
+			let response = await axiosInstance.post(
+				`/api/ai/two_venn/`,
+				{
+					...groupLabel,
+				},
+				{
+					headers: { Authorization: `Token ${token}` },
+				}
+			);
+			dispatch({
+				type: "SET_PROBLEM_STATEMENT",
+				ps_list: response.data.response,
+			});
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading((prev) => !prev);
+		}
+
 	};
 
 	const handleGenerateButtonClick = async () => {
@@ -220,8 +244,8 @@ function Venn() {
 					return;
 				}
 				// alert("HERE");
-				let two_response = await axios.post(
-					`${API_BASE_URL}/api/ai/two_venn/`,
+				let two_response = await axiosInstance.post(
+					`/api/ai/two_venn/`,
 					{
 						...textFields,
 					},
@@ -239,8 +263,8 @@ function Venn() {
 					alert("Cannot generate when other fields are empty.");
 					return;
 				}
-				let three_response = await axios.post(
-					`${API_BASE_URL}/api/ai/three_venn/`,
+				let three_response = await axiosInstance.post(
+					`/api/ai/three_venn/`,
 					{
 						...textFields,
 					},
@@ -271,8 +295,8 @@ function Venn() {
 		let response;
 		try {
 			if (selectedButton === 2) {
-				response = await axios.post(
-					`${API_BASE_URL}/api/two_venn_ps/`,
+				response = await axiosInstance.post(
+					`/api/two_venn_ps/`,
 					{
 						venn: { ...textFields },
 						statement: text,
@@ -284,8 +308,8 @@ function Venn() {
 			} else if (selectedButton === 3) {
 				// console.log(hasCheckedCheckBox);
 				if (hasCheckedCheckBox) {
-					response = await axios.post(
-						`${API_BASE_URL}/api/two_venn_ps/`,
+					response = await axiosInstance.post(
+						`/api/two_venn_ps/`,
 						{
 							venn: { ...groupLabel },
 							statement: text,
@@ -295,8 +319,8 @@ function Venn() {
 						}
 					);
 				} else {
-					response = await axios.post(
-						`${API_BASE_URL}/api/three_venn_ps/`,
+					response = await axiosInstance.post(
+						`/api/three_venn_ps/`,
 						{
 							venn: { ...textFields },
 							statement: text,

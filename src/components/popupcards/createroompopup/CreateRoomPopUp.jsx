@@ -3,7 +3,7 @@ import {
     Popper, Paper, List, ListItem, ListItemText, ClickAwayListener
 } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axiosInstance from '../../../helpers/axios';
 import { API_BASE_URL } from '../../../helpers/constant';
 
 
@@ -26,7 +26,7 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
 
     const fetchUserEmails = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/api/user/`);
+            const response = await axiosInstance.get(`/api/user/`);
             const emails = response.data.map(user => user.email);
             setUserEmails(emails);
         } catch (error) {
@@ -90,7 +90,7 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
             setLoading(true);
             let token = localStorage.getItem("token");
 
-            const response = await axios.post(`${API_BASE_URL}/api/rooms/`, payload, {
+            const response = await axiosInstance.post(`/api/rooms/`, payload, {
                 headers: {
                     Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',

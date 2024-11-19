@@ -18,7 +18,7 @@ const useAuth = () => {
       });*/
 
 			let response = await axiosInstance.post(
-				`${API_BASE_URL}/api/user/login/`,
+				`/api/user/login/`,
 				{
 					email: user.email,
 					password: user.password,
@@ -44,7 +44,7 @@ const useAuth = () => {
 			let token = localStorage.getItem("token");
 
 			await axiosInstance.post(
-				`${API_BASE_URL}/api/user/logout/`,
+				`/api/user/logout/`,
 				{},
 				{
 					headers: { Authorization: `Token ${token}` },
@@ -68,7 +68,7 @@ const useAuth = () => {
 				throw new Error("No token found. Please log in.");
 			}
 			const response = await axiosInstance.get(
-				`${API_BASE_URL}/api/user/get_currently_login/`,
+				`/api/user/get_currently_login/`,
 				{
 					headers: {
 						Authorization: `Token ${token}`,

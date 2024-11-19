@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
+import { API_BASE_URL } from "../helpers/constant";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
@@ -10,7 +12,7 @@ import {
   Modal,
 } from "@mui/material";
 
-const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
+const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose, onDeleteFetch }) => {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState(null);
@@ -18,7 +20,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
 
   useEffect(() => {
     const debug = {
-      submissionId,
+      submissionId,    
       channelId,
       submissionIdType: typeof submissionId,
       channelIdType: typeof channelId,
@@ -32,13 +34,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
     }
   }, [submissionId, channelId]);
 
-  const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || "https://babyjoy456.pythonanywhere.com",
-    headers: {
-      Authorization: `Token ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-  });
+  
 
   const validateProps = () => {
     const numSubmissionId = Number(submissionId);
@@ -75,7 +71,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
       setIsDeleting(true);
       setError(null);
 
-      const url = `/api/channels/${numChannelId}/submissions/${numSubmissionId}/`;
+      const url = `/channels/${numChannelId}/submissions/${numSubmissionId}/`;
       const response = await axiosInstance.delete(url);
 
       if (response.status === 204) {
@@ -86,6 +82,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
         if (onClose) {
           onClose();
         }
+        onDeleteFetch();
       }
     } catch (err) {
       const errorMessage =
@@ -113,15 +110,17 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose }) => {
 
   return (
     <>
-      <Button
-        variant="text"
-        color="error"
-        onClick={handleClickOpen}
-        disabled={isDeleting}
-        startIcon={<DeleteIcon />}
-      >
-        Delete
-      </Button>
+     <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems:'right', marginLeft:'100px' }}>
+  <Button
+    variant="text"
+    color="error"
+    onClick={handleClickOpen}
+    disabled={isDeleting}
+    startIcon={<DeleteIcon />}
+  >
+    Delete
+  </Button>
+</Box>  
 
       <Modal
         open={open}

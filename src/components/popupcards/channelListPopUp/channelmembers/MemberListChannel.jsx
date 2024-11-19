@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import axios from "axios";
+import axiosInstance from '../../../../helpers/axios';
 import DeleteDialog from "../../deletedialogpopup/DeleteDialog"; 
 import { API_BASE_URL } from '../../../../helpers/constant';
 
@@ -36,8 +36,8 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                     throw new Error("No token found. Please log in.");
                 }
 
-                const membersResponse = await axios.get(
-                    `${API_BASE_URL}/api/channels/${channelId}/members/`,
+                const membersResponse = await axiosInstance.get(
+                    `/api/channels/${channelId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -47,8 +47,8 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
 
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
-                        const userResponse = await axios.get(
-                            `${API_BASE_URL}/api/user/${member.member_id}/`,
+                        const userResponse = await axiosInstance.get(
+                            `/api/user/${member.member_id}/`,
                             {
                                 headers: {
                                     Authorization: `Token ${token}`,
@@ -78,8 +78,8 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                     throw new Error("No token found. Please log in.");
                 }
 
-                const roomResponse = await axios.get(
-                    `${API_BASE_URL}/api/rooms/${roomId}/`,
+                const roomResponse = await axiosInstance.get(
+                    `/api/rooms/${roomId}/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -107,7 +107,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
         let token = localStorage.getItem("token");
 
         try {
-            await axios.delete(`${API_BASE_URL}/api/channels/${channelId}/members/${memberToDelete.id}/`,
+            await axiosInstance.delete(`/api/channels/${channelId}/members/${memberToDelete.id}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`,

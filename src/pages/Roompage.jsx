@@ -6,11 +6,16 @@ import JoinRoomPopup from "../components/popupcards/JoinRoomPopUp/JoinRoomPopUp"
 import CreateRoomPopup from "../components/popupcards/createroompopup/CreateRoomPopUp";
 import ChannelListPopup from "../components/popupcards/channelListPopUp/ChannelListPopUp.jsx";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { API_BASE_URL } from '../helpers/constant';
+import axiosInstance from '../helpers/axios';
+import { Room } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom"; // For navigation
+
+
 
 const RoomPage = () => {
   const [rooms, setRooms] = useState([]);
+  const navigate = useNavigate();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isCreateRoomPopupOpen, setIsCreateRoomPopupOpen] = useState(false);
   const [isChannelListOpen, setIsChannelListOpen] = useState(false);
@@ -20,6 +25,7 @@ const RoomPage = () => {
   const [loading, setLoading] = useState(true); // Add loading state
   const [user, setCurrentlyLoginId] = useState({
     id: "",
+    
     email: "",
     first_name: "",
     last_name: "",
@@ -35,8 +41,8 @@ const RoomPage = () => {
           throw new Error("No token found. Please log in.");
         }
 
-        const userResponse = await axios.get(
-          `${API_BASE_URL}/api/user/get_currently_login/`,
+        const userResponse = await axiosInstance.get(
+          `/api/user/get_currently_login/`,
           {
             headers: { Authorization: `Token ${token}` },
           }
@@ -64,8 +70,8 @@ const RoomPage = () => {
         throw new Error("No token found. Please log in.");
       }
 
-      const roomsResponse = await axios.get(
-        `${API_BASE_URL}/api/rooms/auth_rooms/`,
+      const roomsResponse = await axiosInstance.get(
+        `/api/rooms/auth_rooms/`,
         {
           headers: { Authorization: `Token ${token}` },
         }

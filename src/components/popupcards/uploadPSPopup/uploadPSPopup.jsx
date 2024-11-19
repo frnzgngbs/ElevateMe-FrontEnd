@@ -13,6 +13,7 @@ import {
 import { useState, useRef } from "react";
 import axios from "axios";
 import { API_BASE_URL } from '../../../helpers/constant';
+import axiosInstance from '../../../helpers/axios';
 
 
 
@@ -38,8 +39,8 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
 
     try {
       let token = localStorage.getItem("token");
-      const response = await axios.post(
-        `${API_BASE_URL}/api/channels/${channelId}/submissions/submit/`,
+      const response = await axiosInstance.post(
+        `/api/channels/${channelId}/submissions/submit/`,
         formData,
         {
           headers: {

@@ -1,21 +1,14 @@
 import React from 'react';
 import { Box, Button, LinearProgress, Typography, Modal, } from '@mui/material';
-import axios from 'axios';
-import { API_BASE_URL }  from '../helpers/constant'
 
-const DeleteAllSubmissions = ({ setPosts, channelId }) => {
+import axiosInstance from '../helpers/axios';
+
+const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
   const [open, setOpen] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [progress, setProgress] = React.useState(0);
 
-  const axiosInstance = axios.create({
-    baseURL: "https://babyjoy456.pythonanywhere.com",
-    headers: {
-      Authorization: `Token ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,26 +26,37 @@ const DeleteAllSubmissions = ({ setPosts, channelId }) => {
     try {
       setIsDeleting(true);
       setError(null);
-
+  
       const response = await axiosInstance.get(`/api/channels/${channelId}/submissions/`);
       const submissions = response.data;
       const totalSubmissions = submissions.length;
-
-      for (let i = 0; i < submissions.length; i++) {
-        const submission = submissions[i];
-        await axiosInstance.delete(`/api/channels/${channelId}/submissions/${submission.id}/`);
-        setProgress(Math.round(((i + 1) / totalSubmissions) * 100));
+  
+      if (totalSubmissions === 0) {
+        setPosts([]);
+        onDeleteFetch();
+        handleClose();
+        return;
       }
-
+  
+      const deleteRequests = submissions.map((submission, index) =>
+        axiosInstance.delete(`/api/channels/${channelId}/submissions/${submission.id}/`).then(() => {
+          setProgress(Math.round(((index + 1) / totalSubmissions) * 100));
+        })
+      );
+  
+      await Promise.all(deleteRequests);
+  
       setPosts([]);
+      onDeleteFetch();
       handleClose();
     } catch (err) {
       setError("Failed to delete submissions. Please try again.");
-      console.error("Error deleting submissions:", err);
+      console.error("Error deleting submissions:");
     } finally {
       setIsDeleting(false);
     }
   };
+  
 
   return (
     <div style={{ marginBottom: '1rem' }}>

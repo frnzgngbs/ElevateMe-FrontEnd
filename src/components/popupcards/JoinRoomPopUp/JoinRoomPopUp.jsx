@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Box, Button, Modal, TextField, Typography, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
 import { API_BASE_URL } from '../../../helpers/constant';
+import axiosInstance from '../../../helpers/axios';
 
 
 const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
@@ -29,8 +30,8 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
                 throw new Error("Token is missing. Please log in.");
             }
 
-            await axios.post(
-                `${API_BASE_URL}/api/rooms/join/`,
+            await axiosInstance.post(
+                `/api/rooms/join/`,
                 { room_code: roomCode },
                 { headers: { Authorization: `Token ${token}` } }
             );

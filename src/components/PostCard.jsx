@@ -11,7 +11,6 @@ import {
 import { useState, useEffect } from "react";
 import CommentDialog from "../components/popupcards/commentpopup/CommentDialog";
 import VotingDialog from "../components/popupcards/votingpopup/VotingDialog";
-import axios from "axios";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ViewFilepopup from "./popupcards/viewFilepopup/ViewFilepopup";
@@ -19,6 +18,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import DeleteSubmission from "../components/DeleteSubmission";
+import axiosInstance from '../helpers/axios';
+
+
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -34,6 +36,7 @@ const PostCard = ({
   channelId,
   onVoteSuccess,
   onDeleteSuccess,
+  fetchrankings,
 }) => {
   const [openVoteDialog, setOpenVoteDialog] = useState(false);
   const [openCommentDialog, setOpenCommentDialog] = useState(false);
@@ -99,7 +102,7 @@ const PostCard = ({
     return displayName.charAt(0) || "U";
   };
 
-  const axiosInstance = axios.create({
+  const axiosInstances = axiosInstance.create({
     baseURL: "https://babyjoy456.pythonanywhere.com",
     headers: {
       Authorization: `Token ${localStorage.getItem("token")}`,
@@ -110,7 +113,7 @@ const PostCard = ({
   useEffect(() => {
     const fetchPresignedUrl = async () => {
       try {
-        const response = await axiosInstance.get(
+        const response = await axiosInstances.get(
           `/api/presigned-url/${submittedWork.id}/`
         );
         setPresignedUrl(response.data.url);
@@ -177,7 +180,7 @@ const PostCard = ({
     setError(null);
 
     try {
-      const response = await axiosInstance.get(
+      const response = await axiosInstances.get(
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`
       );
 
@@ -213,7 +216,7 @@ const PostCard = ({
     setError(null);
 
     try {
-      const response = await axiosInstance.post(
+      const response = await axiosInstances.post(
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`,
         {
           content: commentContent.trim(),
@@ -250,13 +253,15 @@ const PostCard = ({
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} sx={{ display: "flex", alignItems: "center", marginTop: "-10px" }}>
-              <Avatar sx={{ marginRight: 2, backgroundColor: '#67A099 ', }}>{getAuthorInitial()}</Avatar>
-              <Typography variant="h6" sx={{ fontWeight: 500 }}>
+              <Avatar sx={{ marginRight: 2, backgroundColor: '#67A099 ', fontWeight: "bold" }}>
+                {getAuthorInitial()}
+              </Avatar>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                 {getAuthorDisplayName()}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body2" color="text.secondary" sx={{ textAlign: "left" }}>
+              <Typography variant="body2" color="text.secondary" sx={{ textAlign: "left", fontWeight: 'medium' }}>
                 {content}
               </Typography>
             </Grid>
@@ -284,31 +289,30 @@ const PostCard = ({
                     variant="text"
                     open={openVoteDialog}
                     onClick={handleVoteDialogOpen}
-                    startIcon={
-                      <ThumbUpOutlinedIcon onClose={handleVoteDialogClose} />
-                    }
+                    startIcon={<ThumbUpOutlinedIcon onClose={handleVoteDialogClose} />}
                   >
                     Vote
                   </Button>
                 )}
 
                 <ViewFilepopup presignedUrl={presignedUrl} />
-
               </Box>
-              <Box sx={{ display: "flex", gap: 2 }}>
+
+              <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", alignItems: "right" }}>
                 {user.user_type === "TEACHER" && (
                   <DeleteSubmission
                     channelId={Number(channelId)}
                     submissionId={submittedWork.id}
                     onDelete={handleDeleteSuccess}
+                    onDeleteFetch={fetchrankings}
                   />
                 )}
-
               </Box>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
+
 
       <CommentDialog
         open={openCommentDialog}

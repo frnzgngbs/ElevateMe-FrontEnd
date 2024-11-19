@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import useTheme from "@mui/material/styles/useTheme";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from '../helpers/axios';
 import MenuItem from "@mui/material/MenuItem";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -68,7 +68,7 @@ const Register = () => {
         last_name: capitalizeName(userData.last_name),
       };
       // console.log(API_BASE_URL);
-      const response = await axios.post(`${API_BASE_URL}/api/user/`, formattedUserData);
+      const response = await axiosInstance.post(`/api/user/`, formattedUserData);
 
   
       if (response.status === 201) {

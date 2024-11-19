@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from '../../../helpers/axios';
 import {
     Box,
     Button,
@@ -30,8 +30,8 @@ const AddMember = ({ emailDatabase, onSubmit, onBack, roomId }) => {
                     throw new Error("No token found. Please log in.");
                 }
 
-                const membersResponse = await axios.get(
-                    `${API_BASE_URL}/api/rooms/${roomId}/members/`,
+                const membersResponse = await axiosInstance.get(
+                    `/api/rooms/${roomId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -41,8 +41,8 @@ const AddMember = ({ emailDatabase, onSubmit, onBack, roomId }) => {
 
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
-                        const userResponse = await axios.get(
-                            `${API_BASE_URL}/api/user/${member.member_id}/`,
+                        const userResponse = await axiosInstance.get(
+                            `/api/user/${member.member_id}/`,
                             {
                                 headers: {
                                     Authorization: `Token ${token}`,
