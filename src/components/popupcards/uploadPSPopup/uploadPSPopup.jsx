@@ -40,7 +40,7 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
     try {
       let token = localStorage.getItem("token");
       const response = await axiosInstance.post(
-        `${API_BASE_URL}/api/channels/${channelId}/submissions/submit/`,
+        `/api/channels/${channelId}/submissions/submit/`,
         formData,
         {
           headers: {

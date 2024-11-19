@@ -22,7 +22,7 @@ const PendingCards = ({ roomId, onAccept }) => {
             }
 
             try {
-                const response = await axiosInstance.get(`${API_BASE_URL}/api/rooms/${roomId}/applicants/`, {
+                const response = await axiosInstance.get(`/api/rooms/${roomId}/applicants/`, {
                     headers: {
                         Authorization: `Token ${token}`,
                     },
@@ -33,7 +33,7 @@ const PendingCards = ({ roomId, onAccept }) => {
                 const applicantsWithUserData = await Promise.all(
                     pendingApplicants.map(async (applicant) => {
                         try {
-                            const userResponse = await axiosInstance.get(`${API_BASE_URL}/api/user/${applicant.user}`, {
+                            const userResponse = await axiosInstance.get(`/api/user/${applicant.user}`, {
                                 headers: {
                                     Authorization: `Token ${token}`,
                                 },
@@ -62,7 +62,7 @@ const PendingCards = ({ roomId, onAccept }) => {
 
         try {
             await axiosInstance.post(
-                `${API_BASE_URL}/api/rooms/${roomId}/manage_request/`,
+                `/api/rooms/${roomId}/manage_request/`,
                 { action, request_id: requestId },
                 {
                     headers: {

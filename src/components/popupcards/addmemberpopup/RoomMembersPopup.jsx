@@ -25,7 +25,7 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
     useEffect(() => {
         const fetchEmails = async () => {
             try {
-                const response = await axiosInstance.get(`${API_BASE_URL}/api/user/`);
+                const response = await axiosInstance.get(`/api/user/`);
                 const emails = response.data.map((user) => user.email);
                 setEmailDatabase(emails);
             } catch (error) {
@@ -44,7 +44,7 @@ const AddMemberPopup = ({ open, onClose, roomId, user}) => {
 
             const payload = { new_room_members: addedEmails };
             const response = await axiosInstance.patch(
-                `${API_BASE_URL}/api/rooms/${roomId}/`,
+                `/api/rooms/${roomId}/`,
                 payload,
                 { headers: { Authorization: `Token ${token}` } }
             );

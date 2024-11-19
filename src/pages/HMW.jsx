@@ -75,7 +75,7 @@ const HMW = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axiosInstance.post(
-				`${API_BASE_URL}/api/ai/five_hmws/`,
+				`/api/ai/five_hmws/`,
 				{
 					selected_statement: selected_statement,
 					list_of_whys: list_of_whys,
@@ -134,7 +134,7 @@ const HMW = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axiosInstance.post(
-				`${API_BASE_URL}/api/ai/elevator_pitch/`,
+				`/api/ai/elevator_pitch/`,
 				{
 					problem_statement: selected_statement,
 					list_of_whys: [...list_of_whys],

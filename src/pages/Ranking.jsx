@@ -181,7 +181,7 @@ const Ranking = () => {
 					let token = localStorage.getItem("token");
 
 					let response = await axiosInstance.get(
-						`${API_BASE_URL}/api/two_venn_ps/`,
+						`/api/two_venn_ps/`,
 						{
 							headers: { Authorization: `Token ${token}` },
 						}
@@ -196,7 +196,7 @@ const Ranking = () => {
 					let token = localStorage.getItem("token");
 
 					let response = await axiosInstance.get(
-						`${API_BASE_URL}/api/three_venn_ps/`,
+						`/api/three_venn_ps/`,
 						{
 							headers: { Authorization: `Token ${token}` },
 						}

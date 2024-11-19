@@ -35,7 +35,7 @@ const FiveWhys = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axiosInstance.post(
-				`${API_BASE_URL}/api/ai/five_whys/`,
+				`/api/ai/five_whys/`,
 				{
 					ranked_problem: statement,
 				},
@@ -110,7 +110,7 @@ const FiveWhys = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axiosInstance.post(
-				`${API_BASE_URL}/api/ai/potential_root/`,
+				`/api/ai/potential_root/`,
 				{
 					selected_statement: statement,
 					list_of_whys: [...selectedWhys],

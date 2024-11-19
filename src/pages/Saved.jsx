@@ -68,7 +68,7 @@ const Saved = () => {
 				let token = localStorage.getItem("token");
 
 				let response1 = await axiosInstance.get(
-					`${API_BASE_URL}/api/two_venn_ps/`,
+					`/api/two_venn_ps/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
@@ -79,7 +79,7 @@ const Saved = () => {
 				});
 
 				let response = await axiosInstance.get(
-					`${API_BASE_URL}/api/three_venn_ps/`,
+					`/api/three_venn_ps/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
@@ -112,7 +112,7 @@ const Saved = () => {
 		if (setting === 2) {
 			try {
 				let response = await axiosInstance.put(
-					`${API_BASE_URL}/api/two_venn_ps/${id}/`,
+					`/api/two_venn_ps/${id}/`,
 					{
 						statement: statement,
 					},
@@ -131,7 +131,7 @@ const Saved = () => {
 		} else if (setting === 3) {
 			try {
 				let response = await axiosInstance.put(
-					`${API_BASE_URL}/api/three_venn_ps/${id}/`,
+					`/api/three_venn_ps/${id}/`,
 					{
 						statement: statement,
 					},
@@ -157,7 +157,7 @@ const Saved = () => {
 		if (setting === 2) {
 			try {
 				let token = localStorage.getItem("token");
-				await axiosInstance.delete(`${API_BASE_URL}/api/two_venn_ps/${id}/`, {
+				await axiosInstance.delete(`/api/two_venn_ps/${id}/`, {
 					headers: { Authorization: `Token ${token}` },
 				});
 				dispatch({ type: "DELETE_TWO_VENN", id });
@@ -167,7 +167,7 @@ const Saved = () => {
 		} else if (setting === 3) {
 			try {
 				let token = localStorage.getItem("token");
-				await axiosInstance.delete(`${API_BASE_URL}/api/three_venn_ps/${id}/`, {
+				await axiosInstance.delete(`/api/three_venn_ps/${id}/`, {
 					headers: { Authorization: `Token ${token}` },
 				});
 				dispatch({ type: "DELETE_THREE_VENN", id });

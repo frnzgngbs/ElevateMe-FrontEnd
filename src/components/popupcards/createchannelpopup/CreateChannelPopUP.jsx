@@ -27,7 +27,7 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
 
     const fetchUserEmails = async () => {
         try {
-            const response = await axiosInstance.get(`${API_BASE_URL}/api/user/`);
+            const response = await axiosInstance.get(`/api/user/`);
             const emails = response.data.map(user => user.email);
             setUserEmails(emails);
         } catch (error) {
@@ -88,7 +88,7 @@ const CreateChannelPopup = ({ open, onClose, roomId, onChannelCreated }) => {
             setLoading(true);
             let token = localStorage.getItem("token");
 
-            const response = await axiosInstance.post(`${API_BASE_URL}/api/channels/`, payload, {
+            const response = await axiosInstance.post(`/api/channels/`, payload, {
                 headers: {
                     Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',

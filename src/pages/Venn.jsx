@@ -11,8 +11,8 @@ import LoadingScreen from "../components/LoadingScreen";
 import GridBackground from "../res/gridbackground.png";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import CircleUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"; // Unchecked icon
-import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; // Checked icon
+import CircleUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"; 
+import CircleCheckedIcon from "@mui/icons-material/CheckCircleOutline"; 
 import zIndex from "@mui/material/styles/zIndex";
 import { useLocation } from "react-router-dom";
 import { TextField } from "@mui/material/TextField";
@@ -110,8 +110,8 @@ function Venn() {
 			try {
 				setIsLoading((prev) => !prev);
 				let token = localStorage.getItem("token");
-				let response = await axios.post(
-					`${API_BASE_URL}/api/ai/two_venn/`,
+				let response = await axiosInstance.post(
+					`/api/ai/two_venn/`,
 					{
 						...groupLabel,
 					},
@@ -213,7 +213,7 @@ function Venn() {
 			setIsLoading((prev) => !prev);
 			let token = localStorage.getItem("token");
 			let response = await axiosInstance.post(
-				`${API_BASE_URL}/api/ai/two_venn/`,
+				`/api/ai/two_venn/`,
 				{
 					...groupLabel,
 				},
@@ -245,7 +245,7 @@ function Venn() {
 				}
 				// alert("HERE");
 				let two_response = await axiosInstance.post(
-					`${API_BASE_URL}/api/ai/two_venn/`,
+					`/api/ai/two_venn/`,
 					{
 						...textFields,
 					},
@@ -264,7 +264,7 @@ function Venn() {
 					return;
 				}
 				let three_response = await axiosInstance.post(
-					`${API_BASE_URL}/api/ai/three_venn/`,
+					`/api/ai/three_venn/`,
 					{
 						...textFields,
 					},
@@ -296,7 +296,7 @@ function Venn() {
 		try {
 			if (selectedButton === 2) {
 				response = await axiosInstance.post(
-					`${API_BASE_URL}/api/two_venn_ps/`,
+					`/api/two_venn_ps/`,
 					{
 						venn: { ...textFields },
 						statement: text,
@@ -309,7 +309,7 @@ function Venn() {
 				// console.log(hasCheckedCheckBox);
 				if (hasCheckedCheckBox) {
 					response = await axiosInstance.post(
-						`${API_BASE_URL}/api/two_venn_ps/`,
+						`/api/two_venn_ps/`,
 						{
 							venn: { ...groupLabel },
 							statement: text,
@@ -320,7 +320,7 @@ function Venn() {
 					);
 				} else {
 					response = await axiosInstance.post(
-						`${API_BASE_URL}/api/three_venn_ps/`,
+						`/api/three_venn_ps/`,
 						{
 							venn: { ...textFields },
 							statement: text,

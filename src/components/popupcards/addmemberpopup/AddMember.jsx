@@ -31,7 +31,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack, roomId }) => {
                 }
 
                 const membersResponse = await axiosInstance.get(
-                    `${API_BASE_URL}/api/rooms/${roomId}/members/`,
+                    `/api/rooms/${roomId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -42,7 +42,7 @@ const AddMember = ({ emailDatabase, onSubmit, onBack, roomId }) => {
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
                         const userResponse = await axiosInstance.get(
-                            `${API_BASE_URL}/api/user/${member.member_id}/`,
+                            `/api/user/${member.member_id}/`,
                             {
                                 headers: {
                                     Authorization: `Token ${token}`,

@@ -83,14 +83,14 @@ const Report = () => {
 			let token = localStorage.getItem("token");
 			if (!venn.field3 || venn.field3 === "") {
 				response = await axiosInstance.get(
-					`${API_BASE_URL}/api/two_venn_ps/${ps_id}/`,
+					`/api/two_venn_ps/${ps_id}/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
 				);
 			} else {
 				response = await axiosInstance.get(
-					`${API_BASE_URL}/api/three_venn_ps/${ps_id}/`,
+					`/api/three_venn_ps/${ps_id}/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}

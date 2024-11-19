@@ -31,7 +31,7 @@ const JoinRoomPopup = ({ open, onClose, onJoin, user }) => {
             }
 
             await axiosInstance.post(
-                `${API_BASE_URL}/api/rooms/join/`,
+                `/api/rooms/join/`,
                 { room_code: roomCode },
                 { headers: { Authorization: `Token ${token}` } }
             );

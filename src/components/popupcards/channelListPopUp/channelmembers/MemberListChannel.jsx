@@ -37,7 +37,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                 }
 
                 const membersResponse = await axiosInstance.get(
-                    `${API_BASE_URL}/api/channels/${channelId}/members/`,
+                    `/api/channels/${channelId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -48,7 +48,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
                         const userResponse = await axiosInstance.get(
-                            `${API_BASE_URL}/api/user/${member.member_id}/`,
+                            `/api/user/${member.member_id}/`,
                             {
                                 headers: {
                                     Authorization: `Token ${token}`,
@@ -79,7 +79,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                 }
 
                 const roomResponse = await axiosInstance.get(
-                    `${API_BASE_URL}/api/rooms/${roomId}/`,
+                    `/api/rooms/${roomId}/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -107,7 +107,7 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
         let token = localStorage.getItem("token");
 
         try {
-            await axiosInstance.delete(`${API_BASE_URL}/api/channels/${channelId}/members/${memberToDelete.id}/`,
+            await axiosInstance.delete(`/api/channels/${channelId}/members/${memberToDelete.id}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`,

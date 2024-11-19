@@ -35,7 +35,7 @@ const VotingDialog = ({
       setError(null);
 
       await axiosInstance.post(
-        `${API_BASE_URL}/api/channels/${channelId}/submissions/${submissionId}/voting_marks/`,
+        `/api/channels/${channelId}/submissions/${submissionId}/voting_marks/`,
         {
           marks: rating,
           submission_id: submissionId,

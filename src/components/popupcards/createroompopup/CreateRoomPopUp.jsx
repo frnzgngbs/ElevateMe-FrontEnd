@@ -26,7 +26,7 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
 
     const fetchUserEmails = async () => {
         try {
-            const response = await axiosInstance.get(`${API_BASE_URL}/api/user/`);
+            const response = await axiosInstance.get(`/api/user/`);
             const emails = response.data.map(user => user.email);
             setUserEmails(emails);
         } catch (error) {
@@ -90,7 +90,7 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
             setLoading(true);
             let token = localStorage.getItem("token");
 
-            const response = await axiosInstancepost(`${API_BASE_URL}/api/rooms/`, payload, {
+            const response = await axiosInstancepost(`/api/rooms/`, payload, {
                 headers: {
                     Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',

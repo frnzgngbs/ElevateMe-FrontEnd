@@ -57,7 +57,7 @@ const ChannelPage = () => {
 				}
 
 				const userResponse = await axiosInstance.get(
-					`${API_BASE_URL}/api/user/get_currently_login/`,
+					`/api/user/get_currently_login/`,
 					{
 						headers: { Authorization: `Token ${token}` },
 					}
@@ -108,7 +108,7 @@ const ChannelPage = () => {
 
 			// Get all submissions
 			const submissionsResponse = await axiosInstance.get(
-				`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
+				`/api/channels/${channelId}/submissions/`,
 				{ headers }
 			);
 
@@ -117,7 +117,7 @@ const ChannelPage = () => {
 				submissionsResponse.data.map(async (submission) => {
 					try {
 						const votesResponse = await axiosInstance.get(
-							`${API_BASE_URL}/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
+							`/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
 							{ headers }
 						);
 
@@ -209,7 +209,7 @@ const ChannelPage = () => {
 			try {
 				const token = localStorage.getItem("token");
 				const response = await axiosInstance.get(
-					`${API_BASE_URL}/api/channels/${channelId}/`,
+					`/api/channels/${channelId}/`,
 					{
 						headers: {
 							Authorization: `Token ${token}`,
@@ -226,7 +226,7 @@ const ChannelPage = () => {
 			try {
 				const token = localStorage.getItem("token");
 				const response = await axiosInstance.get(
-					`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
+					`/api/channels/${channelId}/submissions/`,
 					{
 						headers: {
 							Authorization: `Token ${token}`,
@@ -263,7 +263,7 @@ const ChannelPage = () => {
 		try {
 			const token = localStorage.getItem("token");
 			const response = await axiosInstance.get(
-				`${API_BASE_URL}/api/channels/${channelId}/submissions/`,
+				`/api/channels/${channelId}/submissions/`,
 				{
 					headers: {
 						Authorization: `Token ${token}`,

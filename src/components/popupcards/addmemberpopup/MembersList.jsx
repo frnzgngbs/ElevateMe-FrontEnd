@@ -40,7 +40,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 }
 
                 const membersResponse = await axiosInstance.get(
-                    `${API_BASE_URL}/api/rooms/${roomId}/members/`,
+                    `/api/rooms/${roomId}/members/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -51,7 +51,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 const membersData = await Promise.all(
                     membersResponse.data.map(async (member) => {
                         const userResponse = await axiosInstance.get(
-                            `${API_BASE_URL}/api/user/${member.member_id}/`,
+                            `/api/user/${member.member_id}/`,
                             {
                                 headers: {
                                     Authorization: `Token ${token}`,
@@ -83,7 +83,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 }
 
                 const roomResponse = await axiosInstance.get(
-                    `${API_BASE_URL}/api/rooms/${roomId}/`,
+                    `/api/rooms/${roomId}/`,
                     {
                         headers: {
                             Authorization: `Token ${token}`,
@@ -112,7 +112,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
             let token = localStorage.getItem("token");
 
             const membersResponse = await axiosInstance.get(
-                `${API_BASE_URL}/api/rooms/${roomId}/members/`,
+                `/api/rooms/${roomId}/members/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`,
@@ -123,7 +123,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
             const membersData = await Promise.all(
                 membersResponse.data.map(async (member) => {
                     const userResponse = await axiosInstance.get(
-                        `${API_BASE_URL}/api/user/${member.member_id}/`,
+                        `/api/user/${member.member_id}/`,
                         {
                             headers: {
                                 Authorization: `Token ${token}`,
@@ -158,7 +158,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
 
         try {
             await axiosInstance.delete(
-                `${API_BASE_URL}/api/rooms/${roomId}/members/${memberToDelete.id}/`,
+                `/api/rooms/${roomId}/members/${memberToDelete.id}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`,

@@ -42,7 +42,7 @@ const RoomPage = () => {
         }
 
         const userResponse = await axiosInstance.get(
-          `${API_BASE_URL}/api/user/get_currently_login/`,
+          `/api/user/get_currently_login/`,
           {
             headers: { Authorization: `Token ${token}` },
           }
@@ -71,7 +71,7 @@ const RoomPage = () => {
       }
 
       const roomsResponse = await axiosInstance.get(
-        `${API_BASE_URL}/api/rooms/auth_rooms/`,
+        `/api/rooms/auth_rooms/`,
         {
           headers: { Authorization: `Token ${token}` },
         }

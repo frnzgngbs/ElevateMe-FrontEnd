@@ -68,7 +68,7 @@ const Register = () => {
         last_name: capitalizeName(userData.last_name),
       };
       // console.log(API_BASE_URL);
-      const response = await axiosInstance.post(`${API_BASE_URL}/api/user/`, formattedUserData);
+      const response = await axiosInstance.post(`/api/user/`, formattedUserData);
 
   
       if (response.status === 201) {

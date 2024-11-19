@@ -21,6 +21,7 @@ const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
     setError(null);
     setProgress(0);
   };
+
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
@@ -47,7 +48,6 @@ const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
   
       setPosts([]);
       onDeleteFetch();
-  
       handleClose();
     } catch (err) {
       setError("Failed to delete submissions. Please try again.");
