@@ -187,18 +187,8 @@ const FiveWhys = () => {
 								<Typography variant="body3" sx={{ fontSize: "1rem", fontWeight: "bold" }}>
 									Below, is your selected ranked problem statement. 
 								</Typography>
-								<Grid
-									container
-									sx={{ display: "flex", justifyContent: "center" }}>
-									<Box
-										sx={{
-											display: "flex",
-											flexDirection: "column",
-											alignItems: "center",
-											mb: 2,
-											mt: 2,
-											width: "100%",
-										}}>
+								
+									
 										<Card
 											variant="outlined"
 											sx={{
@@ -209,6 +199,7 @@ const FiveWhys = () => {
 												borderRadius: 4,
 												boxShadow: "none",
 												margin: "auto",
+												
 											}}>
 											<CardContent
 												sx={{
@@ -231,9 +222,9 @@ const FiveWhys = () => {
 												</Button>
 											</CardActions>
 										</Card>
-									</Box>
-								</Grid>
-								<Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
+								
+						
+								<Box sx={{ display: "flex", flexDirection: "row-reverse" , mt: 2}}>
 									<Button
 										variant="contained"
 										disabled={statement === "" ? true : false}

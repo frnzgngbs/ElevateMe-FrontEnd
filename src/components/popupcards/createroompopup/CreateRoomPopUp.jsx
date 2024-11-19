@@ -90,7 +90,7 @@ const CreateRoomPopup = ({ open, onClose, onRoomCreated }) => {
             setLoading(true);
             let token = localStorage.getItem("token");
 
-            const response = await axiosInstancepost(`/api/rooms/`, payload, {
+            const response = await axiosInstance.post(`/api/rooms/`, payload, {
                 headers: {
                     Authorization: `Token ${token}`,
                     'Content-Type': 'application/json',

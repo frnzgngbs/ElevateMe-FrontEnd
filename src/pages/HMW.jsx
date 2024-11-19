@@ -75,7 +75,7 @@ const HMW = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axiosInstance.post(
-				`/api/ai/five_hmws/`,
+				`${API_BASE_URL}/api/ai/five_hmws/`,
 				{
 					selected_statement: selected_statement,
 					list_of_whys: list_of_whys,
@@ -134,7 +134,7 @@ const HMW = () => {
 		try {
 			let token = localStorage.getItem("token");
 			let response = await axiosInstance.post(
-				`/api/ai/elevator_pitch/`,
+				`${API_BASE_URL}/api/ai/elevator_pitch/`,
 				{
 					problem_statement: selected_statement,
 					list_of_whys: [...list_of_whys],
@@ -224,16 +224,7 @@ const HMW = () => {
 						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
 							Below, is your generated potential root problem.
 						</Typography>
-						<Grid container sx={{ display: "flex", justifyContent: "center" }}>
-							<Box
-								sx={{
-									display: "flex",
-									flexDirection: "column",
-									alignItems: "center",
-									mb: 2,
-									mt: 2,
-									width: "100%",
-								}}>
+					
 								<Card
 									variant="outlined"
 									sx={{
@@ -265,8 +256,8 @@ const HMW = () => {
 										</Button>
 									</CardActions>
 								</Card>
-							</Box>
-						</Grid>
+							
+					
 						<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
 							<Button
 								variant="contained"

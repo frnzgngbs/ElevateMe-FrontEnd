@@ -94,8 +94,8 @@ const HomePage = () => {
 					backgroundSize: "cover",
 					backgroundRepeat: "no-repeat",
 					marginBottom: "50px",
-					
-					
+
+
 				}}>
 				<Grid item xs={10} md={5} pr={5}>
 					<div>
@@ -149,7 +149,7 @@ const HomePage = () => {
 						</div>
 					</div>
 				</Grid>
-							{/* Right div remains unchanged */}
+				{/* Right div remains unchanged */}
 				<Grid item xs={10} md={5}>
 					<Box sx={{ display: "flex", justifyContent: "flex-end" }}>
 						<img
