@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Button, LinearProgress, Typography, Modal, } from '@mui/material';
 
-import { API_BASE_URL }  from '../helpers/constant'
 import axiosInstance from '../helpers/axios';
 
 const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
@@ -10,13 +9,6 @@ const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
   const [error, setError] = React.useState(null);
   const [progress, setProgress] = React.useState(0);
 
-  const axiosInstances = axiosInstance.create({
-    baseURL: "https://babyjoy456.pythonanywhere.com",
-    headers: {
-      Authorization: `Token ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -34,7 +26,7 @@ const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
       setIsDeleting(true);
       setError(null);
   
-      const response = await axiosInstances.get(`/api/channels/${channelId}/submissions/`);
+      const response = await axiosInstance.get(`/api/channels/${channelId}/submissions/`);
       const submissions = response.data;
       const totalSubmissions = submissions.length;
   
@@ -46,7 +38,7 @@ const DeleteAllSubmissions = ({ setPosts, channelId, onDeleteFetch }) => {
       }
   
       const deleteRequests = submissions.map((submission, index) =>
-        axiosInstances.delete(`/api/channels/${channelId}/submissions/${submission.id}/`).then(() => {
+        axiosInstance.delete(`/api/channels/${channelId}/submissions/${submission.id}/`).then(() => {
           setProgress(Math.round(((index + 1) / totalSubmissions) * 100));
         })
       );

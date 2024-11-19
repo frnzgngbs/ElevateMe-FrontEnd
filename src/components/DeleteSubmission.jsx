@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from '../helpers/axios';
+import { API_BASE_URL } from "../helpers/constant";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -33,13 +34,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose, onDelete
     }
   }, [submissionId, channelId]);
 
-  const axiosInstances = axiosInstance.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || "https://babyjoy456.pythonanywhere.com",
-    headers: {
-      Authorization: `Token ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-  });
+  
 
   const validateProps = () => {
     const numSubmissionId = Number(submissionId);
@@ -77,7 +72,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose, onDelete
       setError(null);
 
       const url = `/api/channels/${numChannelId}/submissions/${numSubmissionId}/`;
-      const response = await axiosInstances.delete(url);
+      const response = await axiosInstance.delete(url);
 
       if (response.status === 204) {
         if (onDelete) {

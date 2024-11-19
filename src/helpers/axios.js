@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
 	}
 );
 
-// Add response interceptor
+
 axiosInstance.interceptors.response.use(
 	(response) => {
 		return response;

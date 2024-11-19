@@ -25,7 +25,6 @@ const WhysCard = ({ value, addHMWToList, setFiveHMW }) => {
 		setFiveHMW((prev) =>
 			prev.map((hmw, index) => (hmw === value ? text : hmw))
 		);
-		// Call addWhysToList with the updated text
 	};
 
 	return (
