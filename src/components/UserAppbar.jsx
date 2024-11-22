@@ -128,6 +128,8 @@ const UserAppbar = () => {
 								alignItems: "center",
 								padding: 2,
 								borderBottom: "1px solid #f0f0f0",
+								width: '200px',
+							
 							}}>
 							<Avatar
 								sx={{
