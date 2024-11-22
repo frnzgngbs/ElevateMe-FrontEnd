@@ -7,6 +7,7 @@ import axiosInstance from '../helpers/axios';
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
 import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
+import useAuth from "../hooks/useAuth";
 
 import { useNavigate } from "react-router-dom"; // For navigation
 
@@ -19,6 +20,7 @@ const ChannelPage = () => {
 	const [posts, setPosts] = useState([]);
 	const [showUploadPopup, setShowUploadPopup] = useState(false);
 	const [submission, setSubmissions] = useState([]);
+	const { getCurrentlyLogin } = useAuth();
 	const [loading, setLoading] = useState(true);
 	const [rankings, setRankings] = useState({
 		teamRankings: [],
@@ -49,19 +51,8 @@ const ChannelPage = () => {
 	useEffect(() => {
 		const fetchCurrentlyLoggedInUser = async () => {
 			try {
-				const token = localStorage.getItem("token");
-
-				if (!token) {
-					throw new Error("No token found. Please log in.");
-				}
-
-				const userResponse = await axiosInstance.get(
-					`/api/user/get_currently_login/`,
-					{
-						headers: { Authorization: `Token ${token}` },
-					}
-				);
-				setCurrentlyLoginId(userResponse.data);
+				const loginUser = await getCurrentlyLogin();
+				setCurrentlyLoginId(loginUser);
 
 
 
@@ -102,11 +93,11 @@ const ChannelPage = () => {
 				throw new Error("Authentication required");
 			}
 
-			const headers = { Authorization: `Token ${token}` };
+		
 
 			const submissionsResponse = await axiosInstance.get(
-				`/api/channels/${channelId}/submissions/`,
-				{ headers }
+				`/api/channels/${channelId}/submissions/`
+			
 			);
 
 			// Process each submission
@@ -114,8 +105,8 @@ const ChannelPage = () => {
 				submissionsResponse.data.map(async (submission) => {
 					try {
 						const votesResponse = await axiosInstance.get(
-							`/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
-							{ headers }
+							`/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`
+							
 						);
 
 						const votes = votesResponse.data;
@@ -209,6 +200,10 @@ const ChannelPage = () => {
 				setChannelName(response.data.channel_name);
 			} catch (error) {
 				console.error("Error fetching channel details:", error);
+				if (error.response?.status === 403) {
+					console.error("User is not authorized to view submissions. Redirecting...");
+					navigate("/room");
+				}
 			}
 		};
 
@@ -229,6 +224,10 @@ const ChannelPage = () => {
 				setPosts(response.data);
 			} catch (error) {
 				console.error("Error fetching channel submissions:", error);
+				if (error.response?.status === 403) {
+					console.error("User is not authorized to view submissions. Redirecting...");
+					navigate("/room");
+				}
 			}
 		};
 
@@ -261,6 +260,10 @@ const ChannelPage = () => {
 			setPosts(response.data);
 		} catch (error) {
 			console.error("Error fetching channel submissions:", error);
+			if (error.response?.status === 403) {
+                console.error("User is not authorized to view submissions. Redirecting...");
+                navigate("/room");
+            }
 		}
 	};
 
