@@ -44,7 +44,7 @@ const UserAppbar = () => {
 
 		};
 		fetchUser();
-	}, [getCurrentlyLogin]);
+	}, []);
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);

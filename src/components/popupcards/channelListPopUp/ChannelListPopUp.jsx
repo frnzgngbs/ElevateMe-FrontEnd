@@ -54,14 +54,9 @@ const ChannelListPopup = ({ open, onClose, roomId, user }) => {
   }, [open, roomId]);
 
   const handleDeleteChannel = async (channelId) => {
-    let token = localStorage.getItem("token");
 
     try {
-      await axiosInstance.delete(`/api/channels/${channelId}`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
+      await axiosInstance.delete(`/api/channels/${channelId}`);
 
       setChannels((prevChannels) =>
         prevChannels.filter((channel) => channel.id !== channelId)

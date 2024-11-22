@@ -34,7 +34,7 @@ const PostCard = ({
   channelId,
   onVoteSuccess,
   onDeleteSuccess,
-  fetchrankings,
+  onDeleteFetch,
 }) => {
   const [openVoteDialog, setOpenVoteDialog] = useState(false);
   const [openCommentDialog, setOpenCommentDialog] = useState(false);
@@ -295,7 +295,7 @@ const PostCard = ({
                     channelId={Number(channelId)}
                     submissionId={submittedWork.id}
                     onDelete={handleDeleteSuccess}
-                    onDeleteFetch={fetchrankings}
+                    onDeleteFetch={onDeleteFetch}
                   />
                 )}
               </Box>

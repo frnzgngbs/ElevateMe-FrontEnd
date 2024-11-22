@@ -70,7 +70,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose, onDelete
       setIsDeleting(true);
       setError(null);
 
-      const url = `/channels/${numChannelId}/submissions/${numSubmissionId}/`;
+      const url = `api/channels/${numChannelId}/submissions/${numSubmissionId}/`;
       const response = await axiosInstance.delete(url);
 
       if (response.status === 204) {
