@@ -14,8 +14,6 @@ import VotingDialog from "../components/popupcards/votingpopup/VotingDialog";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ViewFilepopup from "./popupcards/viewFilepopup/ViewFilepopup";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import DeleteSubmission from "../components/DeleteSubmission";
 import axiosInstance from '../helpers/axios';
@@ -102,18 +100,11 @@ const PostCard = ({
     return displayName.charAt(0) || "U";
   };
 
-  const axiosInstances = axiosInstance.create({
-    baseURL: "https://babyjoy456.pythonanywhere.com",
-    headers: {
-      Authorization: `Token ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-  });
 
   useEffect(() => {
     const fetchPresignedUrl = async () => {
       try {
-        const response = await axiosInstances.get(
+        const response = await axiosInstance.get(
           `/api/presigned-url/${submittedWork.id}/`
         );
         setPresignedUrl(response.data.url);
@@ -180,7 +171,7 @@ const PostCard = ({
     setError(null);
 
     try {
-      const response = await axiosInstances.get(
+      const response = await axiosInstance.get(
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`
       );
 
@@ -216,7 +207,7 @@ const PostCard = ({
     setError(null);
 
     try {
-      const response = await axiosInstances.post(
+      const response = await axiosInstance.post(
         `/api/channels/${channelId}/submissions/${submittedWork.id}/comments/`,
         {
           content: commentContent.trim(),

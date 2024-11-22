@@ -7,8 +7,7 @@ import axiosInstance from '../helpers/axios';
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
 import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
-import { API_BASE_URL } from "../helpers/constant";
-import { Room } from "@mui/icons-material";
+
 import { useNavigate } from "react-router-dom"; // For navigation
 
 
@@ -64,8 +63,7 @@ const ChannelPage = () => {
 				);
 				setCurrentlyLoginId(userResponse.data);
 
-				// console.log(location.state?.roomId);
-				// console.log(location.state?.channelId);
+				
 
 				if (
 					location.state &&
