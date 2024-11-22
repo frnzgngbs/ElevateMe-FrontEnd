@@ -369,7 +369,7 @@ const ChannelPage = () => {
 									channelId={channelId}
 									onVoteSuccess={fetchRankings}
 									onDeleteSuccess={fetchRankings}
-									onDeleteFetch={fetchRankings}
+									onDeleteFetch={onDone}
 								/>
 							</Grid>
 						))
