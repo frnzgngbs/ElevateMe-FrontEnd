@@ -28,11 +28,21 @@ const UserAppbar = () => {
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const loginUser = await getCurrentlyLogin();
-			setUser(loginUser);
+
+			try {
+				const loginUser = await getCurrentlyLogin();
+				setUser(loginUser);
+
+
+			} catch (error) {
+				console.error("Error fetching user:", error);
+				setUser(null);
+			}
+
+
 		};
 		fetchUser();
-	}, []);
+	}, [getCurrentlyLogin]);
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -106,7 +116,7 @@ const UserAppbar = () => {
 										fontWeight: "bold",
 									}}
 									alt={user.first_name}>
-									{user.first_name.charAt(0).toUpperCase()}
+									{user.first_name?.charAt(0).toUpperCase()}
 								</Avatar>
 							</IconButton>
 						</Box>
@@ -129,7 +139,7 @@ const UserAppbar = () => {
 								padding: 2,
 								borderBottom: "1px solid #f0f0f0",
 								width: '200px',
-							
+
 							}}>
 							<Avatar
 								sx={{

@@ -78,6 +78,7 @@ const useAuth = () => {
 			return response.data;
 		} catch (error) {
 			console.error("Error fetching user info:", error);
+			return null;
 		}
 	};
 
