@@ -31,7 +31,9 @@ const UserAppbar = () => {
 
 			try {
 				const loginUser = await getCurrentlyLogin();
-				setUser(loginUser);
+				
+			setUser(loginUser);
+				
 
 
 			} catch (error) {
@@ -90,8 +92,8 @@ const UserAppbar = () => {
 						}}>
 						ElevateMe
 					</Typography>
-
-					{user && (
+	
+					{user ? (
 						<Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
 							<Box sx={{ textAlign: "right" }}>
 								<Typography
@@ -120,8 +122,12 @@ const UserAppbar = () => {
 								</Avatar>
 							</IconButton>
 						</Box>
+					) : (
+						<Typography variant="body1" sx={{ color: "#666" }}>
+							Loading user info...
+						</Typography>
 					)}
-
+	
 					<Menu
 						id="avatar-menu"
 						anchorEl={anchorEl}
@@ -131,35 +137,38 @@ const UserAppbar = () => {
 							"aria-labelledby": "avatar-menu-button",
 						}}
 						sx={{ mt: 1 }}>
-						<Box
-							sx={{
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "center",
-								padding: 2,
-								borderBottom: "1px solid #f0f0f0",
-								width: '200px',
-
-							}}>
-							<Avatar
+						{user && (
+							<Box
 								sx={{
-									bgcolor: "#186F65",
-									color: "white",
-									fontWeight: "bold",
-									width: 56,
-									height: 56,
-									mb: 1,
-								}}
-								alt={user.first_name}>
-								{user.first_name.charAt(0).toUpperCase()}
-							</Avatar>
-							<Typography variant="subtitle1" sx={{ fontWeight: "bold", color: "#444" }}>
-								Hi, {user.first_name} 	!
-							</Typography>
-							<Typography variant="caption" sx={{ color: "#666" }}>
-								{user.email}
-							</Typography>
-						</Box>
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									padding: 2,
+									borderBottom: "1px solid #f0f0f0",
+									width: "200px",
+								}}>
+								<Avatar
+									sx={{
+										bgcolor: "#186F65",
+										color: "white",
+										fontWeight: "bold",
+										width: 56,
+										height: 56,
+										mb: 1,
+									}}
+									alt={user.first_name}>
+									{user.first_name.charAt(0).toUpperCase()}
+								</Avatar>
+								<Typography
+									variant="subtitle1"
+									sx={{ fontWeight: "bold", color: "#444" }}>
+									Hi, {user.first_name}!
+								</Typography>
+								<Typography variant="caption" sx={{ color: "#666" }}>
+									{user.email}
+								</Typography>
+							</Box>
+						)}
 						{Object.entries(menuItems).map(([key, value]) => (
 							<MenuItem
 								key={key}
@@ -188,12 +197,12 @@ const UserAppbar = () => {
 							Log Out
 						</MenuItem>
 					</Menu>
-
 				</Box>
 			</AppBar>
 			<Outlet />
 		</Box>
 	);
+	
 };
 
 export default UserAppbar;

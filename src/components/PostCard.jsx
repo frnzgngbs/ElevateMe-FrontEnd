@@ -289,7 +289,7 @@ const PostCard = ({
                 <ViewFilepopup presignedUrl={presignedUrl} />
               </Box>
 
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", alignItems: "right" }}>
+              <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", alignItems: "right" , marginLeft: 10}}>
                 {user.user_type === "TEACHER" && (
                   <DeleteSubmission
                     channelId={Number(channelId)}

@@ -335,6 +335,7 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 onDelete={handleDelete}
+                content={`Do you want to remove ${memberToDelete?.email} from the room?`}
                 loading={isDeleting}
             />
             <Snackbar
