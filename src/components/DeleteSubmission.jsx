@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from '../helpers/axios';
-import { API_BASE_URL } from "../helpers/constant";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -71,7 +70,7 @@ const DeleteSubmission = ({ submissionId, channelId, onDelete, onClose, onDelete
       setIsDeleting(true);
       setError(null);
 
-      const url = `/channels/${numChannelId}/submissions/${numSubmissionId}/`;
+      const url = `/api/channels/${numChannelId}/submissions/${numSubmissionId}/`;
       const response = await axiosInstance.delete(url);
 
       if (response.status === 204) {

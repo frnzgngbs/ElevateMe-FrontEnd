@@ -335,6 +335,12 @@ const MembersList = ({ roomId, onAddMembers, onClose, user }) => {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 onDelete={handleDelete}
+                content={
+                    <>
+                        Do you want to remove <span style={{ fontWeight: 'bold' }}>{memberToDelete?.email}  </span> from this room?
+                    </>
+                }
+               
                 loading={isDeleting}
             />
             <Snackbar

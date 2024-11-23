@@ -7,8 +7,8 @@ import axiosInstance from '../helpers/axios';
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
 import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
-import { API_BASE_URL } from "../helpers/constant";
-import { Room } from "@mui/icons-material";
+import useAuth from "../hooks/useAuth";
+
 import { useNavigate } from "react-router-dom"; // For navigation
 
 
@@ -20,6 +20,7 @@ const ChannelPage = () => {
 	const [posts, setPosts] = useState([]);
 	const [showUploadPopup, setShowUploadPopup] = useState(false);
 	const [submission, setSubmissions] = useState([]);
+	const { getCurrentlyLogin } = useAuth();
 	const [loading, setLoading] = useState(true);
 	const [rankings, setRankings] = useState({
 		teamRankings: [],
@@ -43,29 +44,17 @@ const ChannelPage = () => {
 	useEffect(() => {
 		setLoading(true);
 		setTimeout(() => {
-		  setLoading(false); // Replace this with actual fetch logic
+			setLoading(false); // Replace this with actual fetch logic
 		}, 1000);
-	  }, [posts]);
+	}, [posts]);
 
 	useEffect(() => {
 		const fetchCurrentlyLoggedInUser = async () => {
 			try {
-				const token = localStorage.getItem("token");
+				const loginUser = await getCurrentlyLogin();
+				setCurrentlyLoginId(loginUser);
 
-				if (!token) {
-					throw new Error("No token found. Please log in.");
-				}
 
-				const userResponse = await axiosInstance.get(
-					`/api/user/get_currently_login/`,
-					{
-						headers: { Authorization: `Token ${token}` },
-					}
-				);
-				setCurrentlyLoginId(userResponse.data);
-
-				// console.log(location.state?.roomId);
-				// console.log(location.state?.channelId);
 
 				if (
 					location.state &&
@@ -104,12 +93,11 @@ const ChannelPage = () => {
 				throw new Error("Authentication required");
 			}
 
-			const headers = { Authorization: `Token ${token}` };
+		
 
-			// Get all submissions
 			const submissionsResponse = await axiosInstance.get(
-				`/api/channels/${channelId}/submissions/`,
-				{ headers }
+				`/api/channels/${channelId}/submissions/`
+			
 			);
 
 			// Process each submission
@@ -117,8 +105,8 @@ const ChannelPage = () => {
 				submissionsResponse.data.map(async (submission) => {
 					try {
 						const votesResponse = await axiosInstance.get(
-							`/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`,
-							{ headers }
+							`/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`
+							
 						);
 
 						const votes = votesResponse.data;
@@ -145,13 +133,6 @@ const ChannelPage = () => {
 								)
 								: 0;
 
-						// console.log(`Submission ${submission.id} scores:`, {
-						// 	studentPoints: Math.round(studentPoints * 10) / 10,
-						// 	teacherPoints: Math.round(teacherPoints * 10) / 10,
-						// 	totalVotes: votes.length,
-						// 	studentVotes: studentVotes.length,
-						// 	teacherVotes: teacherVotes.length,
-						// });
 
 						return {
 							id: submission.id,
@@ -219,6 +200,10 @@ const ChannelPage = () => {
 				setChannelName(response.data.channel_name);
 			} catch (error) {
 				console.error("Error fetching channel details:", error);
+				if (error.response?.status === 403) {
+					console.error("User is not authorized to view submissions. Redirecting...");
+					navigate("/room");
+				}
 			}
 		};
 
@@ -234,16 +219,15 @@ const ChannelPage = () => {
 					}
 				);
 				response.data.forEach((post) => {
-					// console.log("Post data:", {
-					// 	id: post.id,
-					// 	member_id: post.member_id,
-					// 	author: post.author,
-					// 	problem_statement: post.problem_statement,
-					// });
+					
 				});
 				setPosts(response.data);
 			} catch (error) {
 				console.error("Error fetching channel submissions:", error);
+				if (error.response?.status === 403) {
+					console.error("User is not authorized to view submissions. Redirecting...");
+					navigate("/room");
+				}
 			}
 		};
 
@@ -271,160 +255,159 @@ const ChannelPage = () => {
 				}
 			);
 			response.data.forEach((post) => {
-				// console.log("Post data:", {
-				// 	id: post.id,
-				// 	member_id: post.member_id,
-				// 	author: post.author,
-				// 	problem_statement: post.problem_statement,
-				// });
+				
 			});
 			setPosts(response.data);
 		} catch (error) {
 			console.error("Error fetching channel submissions:", error);
+			if (error.response?.status === 403) {
+                console.error("User is not authorized to view submissions. Redirecting...");
+                navigate("/room");
+            }
 		}
 	};
 
-		return (
-			<>
-				<Box
+	return (
+		<>
+			<Box
+				sx={{
+					minHeight: "100vh",
+					backgroundImage: `url(${GridBackground})`,
+					backgroundSize: "cover",
+					backgroundPosition: "center",
+					backgroundRepeat: "no-repeat",
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					textAlign: "center",
+					padding: 4,
+				}}>
+				<Typography variant="h2" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+					Channel - {channelName}
+				</Typography>
+
+				<Grid
+					container
+					spacing={2}
 					sx={{
-						minHeight: "100vh",
-						backgroundImage: `url(${GridBackground})`,
-						backgroundSize: "cover",
-						backgroundPosition: "center",
-						backgroundRepeat: "no-repeat",
-						display: "flex",
-						flexDirection: "column",
-						alignItems: "center",
-						textAlign: "center",
-						padding: 4,
+						maxWidth: "900px",
+						margin: "0 auto",
 					}}>
-					<Typography variant="h2" sx={{ fontWeight: "bold", marginBottom: 2 }}>
-						Channel - {channelName}
-					</Typography>
-
+					<Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
+						<Typography variant="h5" sx={{ mb: 2 }}>
+							File Proposals
+						</Typography>
+					</Grid>
 					<Grid
-						container
-						spacing={2}
-						sx={{
-							maxWidth: "900px",
-							margin: "0 auto",
-						}}>
-						<Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-							<Typography variant="h5" sx={{ mb: 2 }}>
-								File Proposals
-							</Typography>
-						</Grid>
-						<Grid
-							item
-							xs={6}
-							sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-							{user.user_type === "TEACHER" && (
-								<DeleteAllSubmissions
-									setPosts={setPosts}
-									channelId={channelId}
-									onDeleteSuccess={handleDeleteSuccess}
-									onDeleteFetch = {fetchRankings}
-								/>
-							)}
+						item
+						xs={6}
+						sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+						{user.user_type === "TEACHER" && (
+							<DeleteAllSubmissions
+								setPosts={setPosts}
+								channelId={channelId}
+								onDeleteSuccess={handleDeleteSuccess}
+								onDeleteFetch={fetchRankings}
+							/>
+						)}
 
-						
 
-							{user.user_type === "STUDENT" && (
-								<Button
-									variant="contained"
-									onClick={openShareFile}
-									sx={{
-										backgroundColor: "#186F65",
-										color: "white",
-										borderRadius: 4,
-										mb: 2,
-										padding: 1,
-									}}>
-									Share File
-								</Button>
-							)}
 
-	<Button
+						{user.user_type === "STUDENT" && (
+							<Button
 								variant="contained"
-
-								onClick={() => navigate('/room')}
+								onClick={openShareFile}
 								sx={{
 									backgroundColor: "#186F65",
 									color: "white",
 									borderRadius: 4,
 									mb: 2,
 									padding: 1,
-
-								}}
-							>
-								Back
+								}}>
+								Share File
 							</Button>
-						</Grid>
+						)}
 
-						{loading ? (
-            <Grid item xs={12} sx={{ textAlign: "center" }}>
-              <CircularProgress color="primary" />
-            </Grid>
-          ) : posts.length === 0 ? (
-            <Grid item xs={12} sx={{ textAlign: "center" }}>
-              <Typography variant="h6" color="textSecondary">
-                No posts available. Start by sharing your first file!
-              </Typography>
-            </Grid>
-          ) : (
-            posts.map((post) => (
-              <Grid item xs={12} key={post.id}>
-                <PostCard
-                  user={user}
-                  authorId={post.member_id}
-                  author={post.member_name || "Unknown User"}
-                  content={
-                    post.problem_statement || "No Problem Statement Available"
-                  }
-                  submittedWork={{
-                    id: post.id,
-                    file_url: post.submitted_work,
-                  }}
-                  channelId={channelId}
-                  onVoteSuccess={fetchRankings}
-                  onDeleteSuccess={fetchRankings}
-                  onDeleteFetch={fetchRankings}
-                />
-              </Grid>
-            ))
-          )}
+						<Button
+							variant="contained"
+
+							onClick={() => navigate('/room')}
+							sx={{
+								backgroundColor: "#186F65",
+								color: "white",
+								borderRadius: 4,
+								mb: 2,
+								padding: 1,
+
+							}}
+						>
+							Back
+						</Button>
 					</Grid>
-				</Box>
-				<Box
-					sx={{
-						margin: "0 auto",
-						padding: 4,
-						textAlign: "center",
-						maxWidth: "80%",
-					}}>
-					<Typography
-						variant="h3"
-						sx={{ fontWeight: "bold", marginBottom: 2, textAlign: "center" }}>
-						Ranking Section
-					</Typography>
 
-					<RankingSection
-						teamRankings={rankings.teamRankings}
-						teacherRankings={rankings.teacherRankings}
-					/>
-				</Box>
+					{loading ? (
+						<Grid item xs={12} sx={{ textAlign: "center" }}>
+							<CircularProgress color="primary" />
+						</Grid>
+					) : posts.length === 0 ? (
+						<Grid item xs={12} sx={{ textAlign: "center" }}>
+							<Typography variant="h6" color="textSecondary">
+								No posts available. Start by sharing your first file!
+							</Typography>
+						</Grid>
+					) : (
+						posts.map((post) => (
+							<Grid item xs={12} key={post.id}>
+								<PostCard
+									user={user}
+									authorId={post.member_id}
+									author={post.member_name || "Unknown User"}
+									content={
+										post.problem_statement || "No Problem Statement Available"
+									}
+									submittedWork={{
+										id: post.id,
+										file_url: post.submitted_work,
+									}}
+									channelId={channelId}
+									onVoteSuccess={fetchRankings}
+									onDeleteSuccess={fetchRankings}
+									onDeleteFetch={onDone}
+								/>
+							</Grid>
+						))
+					)}
+				</Grid>
+			</Box>
+			<Box
+				sx={{
+					margin: "0 auto",
+					padding: 4,
+					textAlign: "center",
+					maxWidth: "80%",
+				}}>
+				<Typography
+					variant="h3"
+					sx={{ fontWeight: "bold", marginBottom: 2, textAlign: "center" }}>
+					Ranking Section
+				</Typography>
 
-				{showUploadPopup && (
-					<UploadPSPopup
-						roomId={roomId}
-						channelId={channelId}
-						onClose={closeShareFile}
-						onDone={onDone}
-					/>
-				)}
-			</>
-		);
-	};
+				<RankingSection
+					teamRankings={rankings.teamRankings}
+					teacherRankings={rankings.teacherRankings}
+				/>
+			</Box>
 
-	export default ChannelPage;
+			{showUploadPopup && (
+				<UploadPSPopup
+					roomId={roomId}
+					channelId={channelId}
+					onClose={closeShareFile}
+					onDone={onDone}
+				/>
+			)}
+		</>
+	);
+};
+
+export default ChannelPage;

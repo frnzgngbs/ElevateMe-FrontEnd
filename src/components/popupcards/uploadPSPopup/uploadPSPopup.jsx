@@ -45,7 +45,7 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Token ${token}`, // Ensure the token is correct
+            Authorization: `Token ${token}`, 
           },
         }
       );
@@ -149,6 +149,7 @@ const UploadPSPopup = ({ channelId, onClose, onDone }) => {
             type="file"
             ref={fileInputRef}
             style={{ display: "none" }}
+             accept=".pdf"
             onChange={handleSelectedFile}
           />
           <Button

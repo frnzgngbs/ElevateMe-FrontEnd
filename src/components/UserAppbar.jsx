@@ -5,8 +5,7 @@ import Box from "@mui/material/Box";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Avatar, IconButton, Menu, MenuItem, Divider } from "@mui/material";
 import useAuth from "../hooks/useAuth";
-import axios from "axios";
-import { API_BASE_URL } from "../helpers/constant";
+
 
 const UserAppbar = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -29,8 +28,20 @@ const UserAppbar = () => {
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const loginUser = await getCurrentlyLogin();
+
+			try {
+				const loginUser = await getCurrentlyLogin();
+				
 			setUser(loginUser);
+				
+
+
+			} catch (error) {
+				console.error("Error fetching user:", error);
+				setUser(null);
+			}
+
+
 		};
 		fetchUser();
 	}, []);
@@ -81,8 +92,8 @@ const UserAppbar = () => {
 						}}>
 						ElevateMe
 					</Typography>
-
-					{user && (
+	
+					{user ? (
 						<Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
 							<Box sx={{ textAlign: "right" }}>
 								<Typography
@@ -107,12 +118,16 @@ const UserAppbar = () => {
 										fontWeight: "bold",
 									}}
 									alt={user.first_name}>
-									{user.first_name.charAt(0).toUpperCase()}
+									{user.first_name?.charAt(0).toUpperCase()}
 								</Avatar>
 							</IconButton>
 						</Box>
+					) : (
+						<Typography variant="body1" sx={{ color: "#666" }}>
+							Loading user info...
+						</Typography>
 					)}
-
+	
 					<Menu
 						id="avatar-menu"
 						anchorEl={anchorEl}
@@ -122,6 +137,38 @@ const UserAppbar = () => {
 							"aria-labelledby": "avatar-menu-button",
 						}}
 						sx={{ mt: 1 }}>
+						{user && (
+							<Box
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									padding: 2,
+									borderBottom: "1px solid #f0f0f0",
+									width: "200px",
+								}}>
+								<Avatar
+									sx={{
+										bgcolor: "#186F65",
+										color: "white",
+										fontWeight: "bold",
+										width: 56,
+										height: 56,
+										mb: 1,
+									}}
+									alt={user.first_name}>
+									{user.first_name.charAt(0).toUpperCase()}
+								</Avatar>
+								<Typography
+									variant="subtitle1"
+									sx={{ fontWeight: "bold", color: "#444" }}>
+									Hi, {user.first_name}!
+								</Typography>
+								<Typography variant="caption" sx={{ color: "#666" }}>
+									{user.email}
+								</Typography>
+							</Box>
+						)}
 						{Object.entries(menuItems).map(([key, value]) => (
 							<MenuItem
 								key={key}
@@ -155,6 +202,7 @@ const UserAppbar = () => {
 			<Outlet />
 		</Box>
 	);
+	
 };
 
 export default UserAppbar;

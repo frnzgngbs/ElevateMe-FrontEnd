@@ -280,7 +280,12 @@ const MembersListChannel = ({ roomId, onAddMembers, onClose, user, channelId }) 
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 onDelete={handleDelete}
-                title={memberToDelete?.email}
+               
+                content={
+                    <>
+                        Are you sure you want to remove: <span style={{ fontWeight: 'bold' }}>{memberToDelete?.email}</span> in this channel?
+                    </>
+                }
                 isDeleting={isDeleting}
             />
 

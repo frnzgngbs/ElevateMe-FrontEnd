@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 
-const DeleteDialog = ({ open, onClose, onDelete, title, isDeleting }) => {
+const DeleteDialog = ({ open, onClose, onDelete, content, isDeleting }) => {
     return (
         <Modal
             open={open}
@@ -27,7 +27,7 @@ const DeleteDialog = ({ open, onClose, onDelete, title, isDeleting }) => {
                     Confirm Delete
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                    Are you sure you want to delete the room "{title}"?
+                   {content}
                 </Typography>
                 <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 2 }}>
                     <Button

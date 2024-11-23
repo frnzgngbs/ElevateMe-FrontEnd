@@ -9,14 +9,11 @@ import {
 	CardContent,
 } from "@mui/material";
 
-import PSCard from "../components/PSCard";
 import PopupVennHistory from "../components/popupcards/vennHistorypopup/vennHistoryPopUp";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from '../helpers/axios';
 import LoadingScreen from "../components/LoadingScreen";
 import WhysCard from "../components/WhysCard";
-import { ConnectingAirportsOutlined } from "@mui/icons-material";
-import { API_BASE_URL } from "../helpers/constant";
 
 const FiveWhys = () => {
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
