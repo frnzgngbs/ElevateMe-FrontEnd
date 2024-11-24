@@ -3,14 +3,13 @@ import PostCard from "../components/PostCard";
 import GridBackground from "../res/gridbackground.png";
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import axiosInstance from '../helpers/axios';
+import axiosInstance from "../helpers/axios";
 import RankingSection from "../components/RankingSection";
 import UploadPSPopup from "../components/popupcards/uploadPSPopup/uploadPSPopup";
 import DeleteAllSubmissions from "../components/DeleteAllSubmissions";
 import useAuth from "../hooks/useAuth";
 
 import { useNavigate } from "react-router-dom"; // For navigation
-
 
 const ChannelPage = () => {
 	const [roomId, setRoomId] = useState();
@@ -50,31 +49,52 @@ const ChannelPage = () => {
 
 	useEffect(() => {
 		const fetchCurrentlyLoggedInUser = async () => {
+			if (
+				location.state &&
+				location.state.roomId &&
+				location.state.channelId
+			) {
+				setRoomId(location.state.roomId);
+				setChannelId(location.state.channelId);
+			}
+
 			try {
+				const token = localStorage.getItem("token");
 				const loginUser = await getCurrentlyLogin();
-				setCurrentlyLoginId(loginUser);
 
+				const { id } = loginUser;
+				try {
+					const isUserChannelMember = await axiosInstance.get(
+						`/api/channels/${location.state.channelId}/is-member/${id}`,
+						{
+							headers: {
+								Authorization: `Token ${token}`,
+							},
+						}
+					);
 
-
-				if (
-					location.state &&
-					location.state.roomId &&
-					location.state.channelId
-				) {
-					setRoomId(location.state.roomId);
-					setChannelId(location.state.channelId);
+					const { is_member } = isUserChannelMember.data;
+					if (is_member) {
+						setCurrentlyLoginId(loginUser);
+					} else {
+						navigate("/room");
+					}
+				} catch (err) {
+					if (err.response && err.response.status === 404) {
+						navigate("/room");
+					}
 				}
 			} catch (error) {
-				console.error("Error fetching user:", error);
 				if (error.response && error.response.status === 401) {
-					console.error(
-						"Unauthorized: Check if the token is valid and correctly formatted."
-					);
 				}
 			}
 		};
 
-		fetchCurrentlyLoggedInUser();
+		if (location.state) {
+			fetchCurrentlyLoggedInUser();
+		} else {
+			navigate("/room");
+		}
 	}, []);
 
 	const openShareFile = () => {
@@ -93,11 +113,8 @@ const ChannelPage = () => {
 				throw new Error("Authentication required");
 			}
 
-		
-
 			const submissionsResponse = await axiosInstance.get(
 				`/api/channels/${channelId}/submissions/`
-			
 			);
 
 			// Process each submission
@@ -106,7 +123,6 @@ const ChannelPage = () => {
 					try {
 						const votesResponse = await axiosInstance.get(
 							`/api/channels/${channelId}/submissions/${submission.id}/voting_marks/`
-							
 						);
 
 						const votes = votesResponse.data;
@@ -117,9 +133,10 @@ const ChannelPage = () => {
 						const studentPoints =
 							studentVotes.length > 0
 								? studentVotes.reduce(
-									(sum, vote) => sum + parseFloat(vote.marks),
-									0
-								)
+										(sum, vote) =>
+											sum + parseFloat(vote.marks),
+										0
+								  )
 								: 0;
 
 						const teacherVotes = votes.filter(
@@ -128,15 +145,17 @@ const ChannelPage = () => {
 						const teacherPoints =
 							teacherVotes.length > 0
 								? teacherVotes.reduce(
-									(sum, vote) => sum + parseFloat(vote.marks),
-									0
-								)
+										(sum, vote) =>
+											sum + parseFloat(vote.marks),
+										0
+								  )
 								: 0;
-
 
 						return {
 							id: submission.id,
-							name: submission.member_name || `User ${submission.member_id}`,
+							name:
+								submission.member_name ||
+								`User ${submission.member_id}`,
 							content: submission.problem_statement,
 							studentPoints: Math.round(studentPoints * 10) / 10,
 							teacherPoints: Math.round(teacherPoints * 10) / 10,
@@ -201,7 +220,6 @@ const ChannelPage = () => {
 			} catch (error) {
 				console.error("Error fetching channel details:", error);
 				if (error.response?.status === 403) {
-					console.error("User is not authorized to view submissions. Redirecting...");
 					navigate("/room");
 				}
 			}
@@ -218,14 +236,11 @@ const ChannelPage = () => {
 						},
 					}
 				);
-				response.data.forEach((post) => {
-					
-				});
+				response.data.forEach((post) => {});
 				setPosts(response.data);
 			} catch (error) {
 				console.error("Error fetching channel submissions:", error);
 				if (error.response?.status === 403) {
-					console.error("User is not authorized to view submissions. Redirecting...");
 					navigate("/room");
 				}
 			}
@@ -254,16 +269,12 @@ const ChannelPage = () => {
 					},
 				}
 			);
-			response.data.forEach((post) => {
-				
-			});
+			response.data.forEach((post) => {});
 			setPosts(response.data);
 		} catch (error) {
-			console.error("Error fetching channel submissions:", error);
 			if (error.response?.status === 403) {
-                console.error("User is not authorized to view submissions. Redirecting...");
-                navigate("/room");
-            }
+				navigate("/room");
+			}
 		}
 	};
 
@@ -282,7 +293,9 @@ const ChannelPage = () => {
 					textAlign: "center",
 					padding: 4,
 				}}>
-				<Typography variant="h2" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+				<Typography
+					variant="h2"
+					sx={{ fontWeight: "bold", marginBottom: 2 }}>
 					Channel - {channelName}
 				</Typography>
 
@@ -293,7 +306,10 @@ const ChannelPage = () => {
 						maxWidth: "900px",
 						margin: "0 auto",
 					}}>
-					<Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
+					<Grid
+						item
+						xs={6}
+						sx={{ display: "flex", alignItems: "center" }}>
 						<Typography variant="h5" sx={{ mb: 2 }}>
 							File Proposals
 						</Typography>
@@ -301,7 +317,11 @@ const ChannelPage = () => {
 					<Grid
 						item
 						xs={6}
-						sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+						sx={{
+							display: "flex",
+							justifyContent: "flex-end",
+							gap: 2,
+						}}>
 						{user.user_type === "TEACHER" && (
 							<DeleteAllSubmissions
 								setPosts={setPosts}
@@ -310,8 +330,6 @@ const ChannelPage = () => {
 								onDeleteFetch={fetchRankings}
 							/>
 						)}
-
-
 
 						{user.user_type === "STUDENT" && (
 							<Button
@@ -330,17 +348,14 @@ const ChannelPage = () => {
 
 						<Button
 							variant="contained"
-
-							onClick={() => navigate('/room')}
+							onClick={() => navigate("/room")}
 							sx={{
 								backgroundColor: "#186F65",
 								color: "white",
 								borderRadius: 4,
 								mb: 2,
 								padding: 1,
-
-							}}
-						>
+							}}>
 							Back
 						</Button>
 					</Grid>
@@ -352,7 +367,8 @@ const ChannelPage = () => {
 					) : posts.length === 0 ? (
 						<Grid item xs={12} sx={{ textAlign: "center" }}>
 							<Typography variant="h6" color="textSecondary">
-								No posts available. Start by sharing your first file!
+								No posts available. Start by sharing your first
+								file!
 							</Typography>
 						</Grid>
 					) : (
@@ -363,7 +379,8 @@ const ChannelPage = () => {
 									authorId={post.member_id}
 									author={post.member_name || "Unknown User"}
 									content={
-										post.problem_statement || "No Problem Statement Available"
+										post.problem_statement ||
+										"No Problem Statement Available"
 									}
 									submittedWork={{
 										id: post.id,
@@ -388,7 +405,11 @@ const ChannelPage = () => {
 				}}>
 				<Typography
 					variant="h3"
-					sx={{ fontWeight: "bold", marginBottom: 2, textAlign: "center" }}>
+					sx={{
+						fontWeight: "bold",
+						marginBottom: 2,
+						textAlign: "center",
+					}}>
 					Ranking Section
 				</Typography>
 
