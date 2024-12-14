@@ -11,7 +11,7 @@ import {
 
 import PopupVennHistory from "../components/popupcards/vennHistorypopup/vennHistoryPopUp";
 import { useLocation, useNavigate } from "react-router-dom";
-import axiosInstance from '../helpers/axios';
+import axiosInstance from "../helpers/axios";
 import LoadingScreen from "../components/LoadingScreen";
 import WhysCard from "../components/WhysCard";
 
@@ -53,21 +53,42 @@ const FiveWhys = () => {
 		sessionStorage.getItem("whys_selected_statement") ||
 		"";
 
-	// console.log("LOCATION STATE FROM FIVE WHYS: ", location.state?.venn);
-
 	const venn = location.state?.venn ||
 		JSON.parse(sessionStorage.getItem("whys_venn")) || {
-		field1: "",
-		field2: "",
-		field3: "",
-	};
+			field1: "",
+			field2: "",
+			field3: "",
+		};
 
 	const statement_id = location.state?.id || null;
+
+	const modifyFiveWhys = async (index) => {
+		try {
+			let token = localStorage.getItem("token");
+			setIsLoading((prev) => !prev);
+			const response = await axiosInstance.post(
+				`/api/ai/new_five_whys/`,
+				{
+					five_whys: fiveWhys,
+					start_index_to_be_modify: index,
+				},
+				{
+					Authorization: `Token ${token}`,
+				}
+			);
+
+			setFiveWhys([...response.data.five_whys]);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading((prev) => !prev);
+		}
+	};
 
 	useEffect(() => {
 		sessionStorage.setItem("whys_selected_statement", statement);
 		sessionStorage.setItem("whys_venn", JSON.stringify(venn));
-		sessionStorage.setItem("selected_whys", JSON.stringify(selectedWhys));
+		sessionStorage.setItem("selected_whys", JSON.stringify(fiveWhys));
 		sessionStorage.setItem("five_whys", JSON.stringify(fiveWhys));
 		sessionStorage.setItem("statement_id", statement_id);
 	}, [statement, venn, selectedWhys, fiveWhys, statement_id]);
@@ -85,24 +106,15 @@ const FiveWhys = () => {
 			if (!selectedWhys.includes(why)) {
 				return setSelectedWhys((curr) => [...curr, why]);
 			} else {
-				return setSelectedWhys(selectedWhys.filter((whys) => whys !== why));
+				return setSelectedWhys(
+					selectedWhys.filter((whys) => whys !== why)
+				);
 			}
 		}
 		return setSelectedWhys((prev) => [...prev, ...why]);
 	};
 
-	// NOTE: Only used for debugging purposes
-	useEffect(() => {
-		// console.log(selectedWhys);
-	}, [selectedWhys]);
-
 	const generatePotentialRootProb = async () => {
-		if (selectedWhys.length === 0) {
-			alert(
-				"Cannot generate a potential root problem withP no why's selected."
-			);
-			return;
-		}
 		setIsLoading((prev) => !prev);
 		try {
 			let token = localStorage.getItem("token");
@@ -110,14 +122,14 @@ const FiveWhys = () => {
 				`/api/ai/potential_root/`,
 				{
 					selected_statement: statement,
-					list_of_whys: [...selectedWhys],
+					list_of_whys: [...fiveWhys],
 				},
 				{
 					headers: { Authorization: `Token ${token}` },
 				}
 			);
 			// console.log(response.data);
-			sessionStorage.setItem("root_five_whys", JSON.stringify(selectedWhys));
+			sessionStorage.setItem("root_five_whys", JSON.stringify(fiveWhys));
 			// console.log("Venn in fivewhys: ", venn);
 			navigate("/hmw", {
 				state: {
@@ -125,7 +137,7 @@ const FiveWhys = () => {
 					statement_id: statement_id,
 					venn: venn,
 					statement: statement,
-					list_of_whys: [...selectedWhys],
+					list_of_whys: [...fiveWhys],
 				},
 			});
 		} catch (err) {
@@ -160,72 +172,92 @@ const FiveWhys = () => {
 						margin: "auto",
 						maxWidth: "1000px",
 					}}>
-					<Typography variant="h1" textAlign={"center"} fontSize="50px">
+					<Typography
+						variant="h1"
+						textAlign={"center"}
+						fontSize="50px">
 						5 Whys
 					</Typography>
 					<Typography
 						variant="body1"
 						textAlign={"center"}
-						
 						width="800px"
 						margin="auto"
 						marginBottom={"50px"}
 						marginTop="10px">
-						Now subject the selected problem statement to a 5-Why analysis. In
-						5-Whys, you ask "why" five times to uncover the underlying issue
-						behind a problem. Click the generate button to generate a 5 whys
-						statement
+						Now subject the selected problem statement to a 5-Why
+						analysis. In 5-Whys, you ask "why" five times to uncover
+						the underlying issue behind a problem. Click the
+						generate button to generate a 5 whys statement
 					</Typography>
 					{/* Top Part */}
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<Typography variant="h4">Selected Problem Statement</Typography>
+							<Typography variant="h4">
+								Selected Problem Statement
+							</Typography>
 							<Box sx={{ mt: 3, ml: 7 }}>
-								<Typography variant="body3" sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-									Below, is your selected ranked problem statement. 
+								<Typography
+									variant="body3"
+									sx={{
+										fontSize: "1rem",
+										fontWeight: "bold",
+									}}>
+									Below, is your selected ranked problem
+									statement.
 								</Typography>
-								
-									
-										<Card
-											variant="outlined"
-											sx={{
-												display: "flex",
-												flexDirection: "row",
-												justifyContent: "space-between",
-												border: "1px solid #8e8e8e",
-												borderRadius: 4,
-												boxShadow: "none",
-												margin: "auto",
-												
-											}}>
-											<CardContent
-												sx={{
-													display: "flex",
-													flexDirection: "column",
-													alignItems: "center",
-													justifyContent: "center",
-												}}>
-												<Typography variant="body3" style={{ color: 'black' }}>
-													{statement}
-												</Typography>
 
-											</CardContent>
-											<CardActions>
-												<Button
-													variant="contained"
-													sx={{ borderRadius: 5, color: "#FFFF" }}
-													onClick={handleShowPopup}>
-													Show
-												</Button>
-											</CardActions>
-										</Card>
-								
-						
-								<Box sx={{ display: "flex", flexDirection: "row-reverse" , mt: 2}}>
+								<Card
+									variant="outlined"
+									sx={{
+										display: "flex",
+										flexDirection: "row",
+										justifyContent: "space-between",
+										border: "1px solid #8e8e8e",
+										borderRadius: 4,
+										boxShadow: "none",
+										margin: "auto",
+									}}>
+									<CardContent
+										sx={{
+											display: "flex",
+											flexDirection: "column",
+											alignItems: "center",
+											justifyContent: "center",
+										}}>
+										<Typography
+											variant="body3"
+											style={{ color: "black" }}>
+											{statement}
+										</Typography>
+									</CardContent>
+									<CardActions>
+										<Button
+											variant="contained"
+											sx={{
+												borderRadius: 5,
+												color: "#FFFF",
+											}}
+											onClick={handleShowPopup}>
+											Show
+										</Button>
+									</CardActions>
+								</Card>
+
+								<Box
+									sx={{
+										display: "flex",
+										flexDirection: "row-reverse",
+										mt: 2,
+									}}>
 									<Button
 										variant="contained"
-										disabled={statement === "" ? true : false}
-										onClick={() => generateFiveWhys(statement)}
+										disabled={
+											statement === "" ? true : false
+										}
+										onClick={() =>
+											generateFiveWhys(statement)
+										}
 										sx={{
 											height: "50px",
 											borderRadius: 5.6,
@@ -241,15 +273,24 @@ const FiveWhys = () => {
 					{/* Bottom Part */}
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<Typography variant="h4">Generated 5 Why's</Typography>
+							<Typography variant="h4">
+								Generated 5 Why's
+							</Typography>
 							<Box sx={{ mt: 1, ml: 7 }}>
 								<Box>
-									<Typography variant="body1" textAlign={"justify"} style={{ color: 'black' }}>
-										In this part, ElevateMe will generate you 5 HMW statement(s) based on what to achieve, a 
-										subject to be influenced for and what could be the expected outcomes. You can freely edit 
-										those statements by clicking the statement itself.  Select a 'why' statement that you would like to base your potential root problem on.
-
-
+									<Typography
+										variant="body1"
+										textAlign={"justify"}
+										style={{ color: "black" }}>
+										In this section, ElevateMe will generate
+										five "Whys" based on the provided
+										problem statement. Each "Why" can be
+										adjusted to suit the user's needs. By
+										clicking the check icons, subsequent
+										"Whys" will automatically update to
+										reflect the changes. These five "Whys"
+										will then help identify potential root
+										causes of the problem.
 									</Typography>
 									<Box sx={{ my: 5 }}>
 										<Box>
@@ -257,9 +298,17 @@ const FiveWhys = () => {
 												<Box sx={{ mt: 2 }}>
 													<WhysCard
 														key={index}
+														index={index}
 														value={value}
-														addWhysToList={addWhysToList}
-														setFiveWhys={setFiveWhys}
+														addWhysToList={
+															addWhysToList
+														}
+														setFiveWhys={
+															setFiveWhys
+														}
+														modifyFiveWhys={
+															modifyFiveWhys
+														}
 													/>
 												</Box>
 											))}
@@ -272,9 +321,11 @@ const FiveWhys = () => {
 												<Button
 													variant="contained"
 													disabled={
-														fiveWhys.length === 0 || selectedWhys.length === 0
+														fiveWhys.length === 0
 													}
-													onClick={generatePotentialRootProb}
+													onClick={
+														generatePotentialRootProb
+													}
 													sx={{
 														px: 2.3,
 														py: 1.2,
@@ -283,7 +334,6 @@ const FiveWhys = () => {
 														height: "50px",
 													}}>
 													Generate Root
-
 												</Button>
 											</Box>
 										</Box>
