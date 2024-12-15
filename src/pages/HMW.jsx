@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import DocumentIcon from '@mui/icons-material/Description';
-import Tooltip from '@mui/material/Tooltip';
-
+import DocumentIcon from "@mui/icons-material/Description";
+import Tooltip from "@mui/material/Tooltip";
 
 import {
 	Grid,
@@ -15,7 +14,7 @@ import {
 import RootProblemHistoryPopup from "../components/popupcards/potentialRootHistoryPopup/potentialRootHistoryPopup";
 import { useLocation, useNavigate } from "react-router-dom";
 import WhysCard from "../components/WhysCard";
-import axiosInstance from '../helpers/axios';
+import axiosInstance from "../helpers/axios";
 import LoadingScreen from "../components/LoadingScreen";
 import HMWCard from "../components/HMWCard";
 import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
@@ -55,7 +54,8 @@ const HMW = () => {
 	const navigate = useNavigate();
 
 	const selected_statement =
-		location.state?.statement || sessionStorage.getItem("selected_statement");
+		location.state?.statement ||
+		sessionStorage.getItem("selected_statement");
 
 	const venn =
 		location.state?.venn || JSON.parse(sessionStorage.getItem("whys_venn"));
@@ -98,7 +98,9 @@ const HMW = () => {
 			if (!selectedHMW.includes(hmw)) {
 				return setSelectedHMW((curr) => [...curr, hmw]);
 			} else {
-				return setSelectedHMW(selectedHMW.filter((hmws) => hmws !== hmw));
+				return setSelectedHMW(
+					selectedHMW.filter((hmws) => hmws !== hmw)
+				);
 			}
 		}
 		return setSelectedHMW((prev) => [...prev, ...hmw]);
@@ -148,19 +150,29 @@ const HMW = () => {
 			console.error(err);
 		} finally {
 			setIsLoading((prev) => !prev);
-			sessionStorage.setItem("elevator_pitches", JSON.stringify(elevatorPitch));
+			sessionStorage.setItem(
+				"elevator_pitches",
+				JSON.stringify(elevatorPitch)
+			);
 			sessionStorage.removeItem("selected_hmws");
 			setsaveHMWsForReport(selectedHMW);
-			sessionStorage.setItem("report_hmws", JSON.stringify(saveHMWsForReport));
+			sessionStorage.setItem(
+				"report_hmws",
+				JSON.stringify(saveHMWsForReport)
+			);
 
 			setSelectedHMW([]);
 		}
 	};
 
 	const generateReport = () => {
+		sessionStorage.setItem("report_venn", JSON.stringify(venn));
 		sessionStorage.setItem("report_whys", JSON.stringify(list_of_whys));
 		sessionStorage.setItem("report_statement_id", ps_id);
-		sessionStorage.setItem("report_hmws", JSON.stringify(saveHMWsForReport));
+		sessionStorage.setItem(
+			"report_hmws",
+			JSON.stringify(saveHMWsForReport)
+		);
 		sessionStorage.setItem("report_generated_root", generated_root);
 		sessionStorage.setItem(
 			"report_elevator_pitch",
@@ -201,67 +213,78 @@ const HMW = () => {
 						margin: "auto",
 						maxWidth: "1000px",
 					}}>
-					<Typography variant="h1" textAlign={"center"} fontSize="50px">
+					<Typography
+						variant="h1"
+						textAlign={"center"}
+						fontSize="50px">
 						How Might We
 					</Typography>
 
 					<Typography
 						variant="body1"
 						textAlign={"center"}
-					
 						width="800px"
 						margin="auto"
 						marginBottom={"50px"}
 						marginTop="10px">
-						Now subject the selected problem statement to a 5-Why analysis. In
-						5-Whys, you ask "why" five times to uncover the underlying issue
-						behind a problem. Click the generate button to generate a 5 whys
-						statement
+						Now subject the selected problem statement to a 5-Why
+						analysis. In 5-Whys, you ask "why" five times to uncover
+						the underlying issue behind a problem. Click the
+						generate button to generate a 5 whys statement
 					</Typography>
 
 					<Typography variant="h4">Potential Root Problem</Typography>
 					<Box sx={{ mt: 3, ml: 7 }}>
-						<Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+						<Typography
+							sx={{ fontSize: "1rem", fontWeight: "bold" }}>
 							Below, is your generated potential root problem.
 						</Typography>
-					
-								<Card
-									variant="outlined"
-									sx={{
-										display: "flex",
-										flexDirection: "row",
-										justifyContent: "space-between",
-										border: "1px solid #8e8e8e",
-										borderRadius: 4,
-										boxShadow: "none",
-										margin: "auto",
-									}}>
-									<CardContent
-										sx={{
-											display: "flex",
-											flexDirection: "column",
-											alignItems: "center",
-											justifyContent: "center",
-										}}>
-										<Typography variant="body2">
-											{generated_root === "null" ? "" : generated_root}
-										</Typography>
-									</CardContent>
-									<CardActions>
-										<Button
-											variant="contained"
-											sx={{ borderRadius: 5, color: "#FFFF" }}
-											onClick={handleOpen}>
-											Show
-										</Button>
-									</CardActions>
-								</Card>
-							
-					
-						<Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+
+						<Card
+							variant="outlined"
+							sx={{
+								display: "flex",
+								flexDirection: "row",
+								justifyContent: "space-between",
+								border: "1px solid #8e8e8e",
+								borderRadius: 4,
+								boxShadow: "none",
+								margin: "auto",
+							}}>
+							<CardContent
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									justifyContent: "center",
+								}}>
+								<Typography variant="body1">
+									{generated_root === "null"
+										? ""
+										: generated_root}
+								</Typography>
+							</CardContent>
+							<CardActions>
+								<Button
+									variant="contained"
+									sx={{ borderRadius: 5, color: "#FFFF" }}
+									onClick={handleOpen}>
+									Show
+								</Button>
+							</CardActions>
+						</Card>
+
+						<Box
+							sx={{
+								display: "flex",
+								justifyContent: "flex-end",
+								mt: 2,
+							}}>
 							<Button
 								variant="contained"
-								disabled={generated_root === "null" ? true : false}
+								disabled={
+									generated_root === "null" ? true : false
+								}
 								onClick={generateFiveHMW}
 								sx={{
 									px: 2.3,
@@ -277,18 +300,17 @@ const HMW = () => {
 						<Typography variant="h4">Generated 5 HMW's</Typography>
 						<Box sx={{ mt: 1, ml: 7 }}>
 							<Box>
-								<Typography
-									variant="body1"
-									textAlign="justify"
-									
-								>
-									ElevateMe will provide you 5 How Might We statement based on what is your potential root problem. Select a How Might We statement
-									you want your Elevator pitch to be based on, then click generate Elevator pitch. Show the generated elevator pitch by clicking the show elevator pitch icon.
-									 If everything is final, click the print button to save your whole Ideation process.
-
-
+								<Typography variant="body1" textAlign="justify">
+									ElevateMe will provide you 5 How Might We
+									statement based on what is your potential
+									root problem. Select a How Might We
+									statement you want your Elevator pitch to be
+									based on, then click generate Elevator
+									pitch. Show the generated elevator pitch by
+									clicking the show elevator pitch icon. If
+									everything is final, click the print button
+									to save your whole Ideation process.
 								</Typography>
-
 
 								<Box sx={{ mb: 5 }}>
 									<Box component={"form"}>
@@ -327,28 +349,43 @@ const HMW = () => {
 													Print
 												</Button>
 											</Box> */}
-										<Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, marginRight: 2, marginLeft: 3, alignItems: "center" }}>
-
-
-											<Box sx={{ display: "flex", alignItems: "center" }}>
+										<Box
+											sx={{
+												display: "flex",
+												justifyContent: "space-between",
+												mt: 2,
+												marginRight: 2,
+												marginLeft: 3,
+												alignItems: "center",
+											}}>
+											<Box
+												sx={{
+													display: "flex",
+													alignItems: "center",
+												}}>
 												{/* Print Button with Icon */}
 												<Tooltip title="Print">
 													<Button
 														variant="contained"
-														disabled={elevatorPitch.length === 0}
+														disabled={
+															elevatorPitch.length ===
+															0
+														}
 														onClick={generateReport}
 														sx={{
 															display: "flex",
-															alignItems: "center",
-															justifyContent: "center",
+															alignItems:
+																"center",
+															justifyContent:
+																"center",
 															borderRadius: 3,
 															color: "#FFFF",
-															backgroundColor: "#186F65",
+															backgroundColor:
+																"#186F65",
 															width: "40px",
 															height: "40px",
 															mr: 2,
-														}}
-													>
+														}}>
 														<PrintIcon />
 													</Button>
 												</Tooltip>
@@ -357,38 +394,51 @@ const HMW = () => {
 												<Tooltip title="Show Elevator Pitch">
 													<Button
 														variant="contained"
-														disabled={elevatorPitch.length === 0}
-														onClick={() => setOpenElevator((prev) => !prev)}
+														disabled={
+															elevatorPitch.length ===
+															0
+														}
+														onClick={() =>
+															setOpenElevator(
+																(prev) => !prev
+															)
+														}
 														sx={{
 															display: "flex",
-															alignItems: "center",
-															justifyContent: "center",
+															alignItems:
+																"center",
+															justifyContent:
+																"center",
 															borderRadius: 3,
 															color: "#FFFF",
-															backgroundColor: "#186F65",
+															backgroundColor:
+																"#186F65",
 															width: "40px",
 															height: "40px",
-														}}
-													>
+														}}>
 														<DocumentIcon />
 													</Button>
 												</Tooltip>
 											</Box>
 
-
 											{/* Generate Elevator Pitch Button */}
 											<Button
 												variant="contained"
-												disabled={selectedHMW.length === 0}
+												disabled={
+													selectedHMW.length === 0
+												}
 												onClick={generateElevatorPitch}
 												sx={{
 													px: 2.3,
 													py: 1.2,
 													borderRadius: 5.6,
 													color: "#FF",
-													"&:hover": { backgroundColor: "#6b7373", cursor: "pointer" },
-												}}
-											>
+													"&:hover": {
+														backgroundColor:
+															"#6b7373",
+														cursor: "pointer",
+													},
+												}}>
 												Generate Elevator Pitch
 											</Button>
 										</Box>

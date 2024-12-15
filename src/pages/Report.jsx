@@ -5,10 +5,8 @@ import Paper from "@mui/material/Paper";
 import Venn3Paper from "../components/venndiagramreport/VennDiagramPaper3";
 import Venn2Paper from "../components/venndiagramreport/VennDiagramPaper2";
 import { useLocation } from "react-router-dom";
-import axiosInstance from '../helpers/axios';
-import ElevatorPitch from "./../components/popupcards/elevatorPitchPopUp/ElevatorPitch";
+import axiosInstance from "../helpers/axios";
 import { Card, CardContent, Grid } from "@mui/material";
-import { API_BASE_URL } from "../helpers/constant";
 
 const pitch = [
 	"For",
@@ -38,10 +36,12 @@ const Report = () => {
 		elevator_pitch: [],
 	});
 
+	console.log("Details: ", details);
+
 	useEffect(() => {
 		// console.log(location.state?.list_of_hmws);
 		const venn = location.state?.venn ||
-			JSON.parse(sessionStorage.getItem("hmw_venn")) || {
+			JSON.parse(sessionStorage.getItem("report_venn")) || {
 				field1: "",
 				field2: "",
 				field3: "",
@@ -52,26 +52,27 @@ const Report = () => {
 		// 	JSON.parse(sessionStorage.getItem("hmw_venn"))
 		// );
 		const ps_id =
-			location.state?.ps_id ?? sessionStorage.getItem("statement_id");
+			location.state?.ps_id ??
+			sessionStorage.getItem("report_statement_id");
 		// console.log("PS ID SESSION STORAGE", ps_id);
 
 		const whys =
-			location.state?.list_of_whys ||
 			JSON.parse(sessionStorage.getItem("report_whys")) ||
+			location.state?.list_of_whys ||
 			[];
 		const hmws =
-			location.state?.list_of_hmws ||
 			JSON.parse(sessionStorage.getItem("report_hmws")) ||
+			location.state?.list_of_hmws ||
 			[];
 
 		const potential_root =
-			location.state?.potential_root ||
 			sessionStorage.getItem("report_generated_root") ||
+			location.state?.potential_root ||
 			"";
 
 		const elevator_pitch =
-			location.state?.elevator_pitch ||
 			JSON.parse(sessionStorage.getItem("report_elevator_pitch")) ||
+			location.state?.elevator_pitch ||
 			[];
 
 		console.log(location.state?.elevator_pitch);
@@ -118,12 +119,18 @@ const Report = () => {
 		<Box sx={{ padding: 4 }}>
 			<Typography
 				variant="h2"
-				sx={{ fontWeight: "bold", textAlign: "center", marginBottom: 4 }}>
+				sx={{
+					fontWeight: "bold",
+					textAlign: "center",
+					marginBottom: 4,
+				}}>
 				Report Page
 			</Typography>
-			<Typography variant="body1" sx={{ textAlign: "center", marginBottom: 4 }}>
-				This page shows the entire process which to be saved as pdf by clicking
-				CTRL + P and selecting save as pdf
+			<Typography
+				variant="body1"
+				sx={{ textAlign: "center", marginBottom: 4 }}>
+				This page shows the entire process which to be saved as pdf by
+				clicking CTRL + P and selecting save as pdf
 			</Typography>
 
 			{/* Venn part */}
@@ -149,7 +156,11 @@ const Report = () => {
 						details.venn.field3 !== "" ? (
 							<Venn3Paper venn={details.venn} />
 						) : (
-							<Venn2Paper venn={details.venn || { field1: "", field2: "" }} />
+							<Venn2Paper
+								venn={
+									details.venn || { field1: "", field2: "" }
+								}
+							/>
 						)}
 					</Box>
 				</Box>
@@ -158,7 +169,11 @@ const Report = () => {
 				<Box sx={{ flex: 1, marginLeft: 4, alignContent: "center" }}>
 					<Typography
 						variant="h6"
-						sx={{ fontWeight: "bold", marginBottom: 2, color: "#186F65" }}>
+						sx={{
+							fontWeight: "bold",
+							marginBottom: 2,
+							color: "#186F65",
+						}}>
 						Problem Statement
 					</Typography>
 					<Typography variant="body1" sx={{ marginBottom: 4 }}>
@@ -182,7 +197,11 @@ const Report = () => {
 							variant="h5"
 							color="#8E8E8E"
 							fontSize="18px"
-							sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
+							sx={{
+								fontWeight: "bold",
+								marginBottom: 0.5,
+								color: "#186F65",
+							}}>
 							Why Statements
 						</Typography>
 						<Box>
@@ -198,7 +217,9 @@ const Report = () => {
 											borderRadius: 4,
 											minWidth: "600px",
 										}}>
-										<Typography variant="body1">{statement}</Typography>
+										<Typography variant="body1">
+											{statement}
+										</Typography>
 									</Paper>
 								))}
 						</Box>
@@ -219,7 +240,11 @@ const Report = () => {
 							variant="h5"
 							color="#8E8E8E"
 							fontSize="18px"
-							sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
+							sx={{
+								fontWeight: "bold",
+								marginBottom: 0.5,
+								color: "#186F65",
+							}}>
 							Potental Root Problem
 						</Typography>
 						<Box>
@@ -253,7 +278,11 @@ const Report = () => {
 							variant="h5"
 							color="#8E8E8E"
 							fontSize="18px"
-							sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
+							sx={{
+								fontWeight: "bold",
+								marginBottom: 0.5,
+								color: "#186F65",
+							}}>
 							HMW Statement
 						</Typography>
 						<Box>
@@ -269,7 +298,9 @@ const Report = () => {
 											borderRadius: 4,
 											minWidth: "600px",
 										}}>
-										<Typography variant="body1">{statement}</Typography>
+										<Typography variant="body1">
+											{statement}
+										</Typography>
 									</Paper>
 								))}
 						</Box>
@@ -288,14 +319,16 @@ const Report = () => {
 						variant="h5"
 						color="#8E8E8E"
 						fontSize="18px"
-						sx={{ fontWeight: "bold", marginBottom: 0.5, color: "#186F65" }}>
+						sx={{
+							fontWeight: "bold",
+							marginBottom: 0.5,
+							color: "#186F65",
+						}}>
 						Elevator Pitch
 					</Typography>
 
 					{pitch.map((value, index) => (
 						<Grid item xs={12} sm={6} md={4} key={index}>
-
-
 							<Paper
 								variant="outlined"
 								key={index}
@@ -307,11 +340,15 @@ const Report = () => {
 								}}>
 								<Grid container spacing={2} alignItems="center">
 									<Grid item xs={2}>
-										<Typography variant="body2">{value}</Typography>
+										<Typography variant="body2">
+											{value}
+										</Typography>
 									</Grid>
 									<Grid item xs={10}>
 										{details.elevator_pitch[index] && (
-											<Typography>{details.elevator_pitch[index]}</Typography>
+											<Typography>
+												{details.elevator_pitch[index]}
+											</Typography>
 										)}
 									</Grid>
 								</Grid>
